@@ -7,7 +7,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	if tbget.CheckSignature(bin, sig) {
+	if err := tbget.CheckSignature(bin, sig); err != nil {
 	} else {
 		panic("Signature check failed")
 	}
