@@ -13,7 +13,7 @@ CONSOLEPOSTNAME=Tor Binary Manager
 USER_GH=eyedeekay
 
 build: dep
-	go build $(ARG) -tags="netgo" -o $(BINARY)-$(GOOS)-$(GOARCH) ./cmd/$(BINARY)
+	go build $(ARG) -tags="netgo" -o $(BINARY)-$(GOOS)-$(GOARCH) .
 	make su3
 
 clean:
