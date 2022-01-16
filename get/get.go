@@ -125,7 +125,7 @@ func DownloadUpdater() (string, string, error) {
 	return binpath, sigpath, nil
 }
 
-func DownloadUpadterForLang(ietf string) (string, string, error) {
+func DownloadUpdaterForLang(ietf string) (string, string, error) {
 	binary, sig, err := GetUpdaterForLang(ietf)
 	if err != nil {
 		return "", "", err
