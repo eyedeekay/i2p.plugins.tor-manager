@@ -7,4 +7,4 @@ i2p.plugins.tor-manager*
 *.zip
 *.su3
 *-zip
-plugin
+pluginunpack

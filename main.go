@@ -9,7 +9,9 @@ import (
 )
 
 var (
-	lang = flag.String("lang", "", "Language to download")
+	lang     = flag.String("lang", "", "Language to download")
+	mirror   = flag.String("mirror", "", "Mirror to use")
+	bemirror = flag.Bool("bemirror", false, "Act as an in-I2P mirror when you're done downloading")
 )
 
 func main() {

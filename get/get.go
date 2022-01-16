@@ -1,6 +1,7 @@
 package tbget
 
 import (
+	"archive/tar"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -12,6 +13,7 @@ import (
 	"strings"
 
 	"github.com/cloudfoundry/jibber_jabber"
+	"github.com/ulikunitz/xz"
 
 	"github.com/jchavannes/go-pgp/pgp"
 	"golang.org/x/crypto/openpgp"
@@ -19,6 +21,7 @@ import (
 
 var wd, _ = os.Getwd()
 
+var UNPACK_URL = filepath.Join(wd, "unpack")
 var DOWNLOAD_PATH = filepath.Join(wd, "tor-browser")
 
 const TOR_UPDATES_URL string = "https://aus1.torproject.org/torbrowser/update_3/release/downloads.json"
@@ -170,6 +173,47 @@ func DownloadUpdaterForLang(ietf string) (string, string, error) {
 	return binpath, sigpath, nil
 }
 
+func UnpackUpdater(binpath string) error {
+	os.MkdirAll(UNPACK_URL, 0755)
+	UNPACK_DIRECTORY, err := os.Open(UNPACK_URL)
+	if err != nil {
+		return fmt.Errorf("UnpackUpdater: %s", err)
+	}
+	defer UNPACK_DIRECTORY.Close()
+	xzfile, err := os.Open(binpath)
+	if err != nil {
+		return fmt.Errorf("UnpackUpdater: %s", err)
+	}
+	defer xzfile.Close()
+	xzReader, err := xz.NewReader(xzfile)
+	if err != nil {
+		return fmt.Errorf("UnpackUpdater: %s", err)
+	}
+	tarReader := tar.NewReader(xzReader)
+	for {
+		header, err := tarReader.Next()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return fmt.Errorf("UnpackUpdater: %s", err)
+		}
+		if header.Typeflag == tar.TypeDir {
+			os.MkdirAll(filepath.Join(UNPACK_DIRECTORY.Name(), header.Name), 0755)
+			continue
+		}
+		filename := filepath.Join(UNPACK_DIRECTORY.Name(), header.Name)
+		file, err := os.Create(filename)
+		if err != nil {
+			return fmt.Errorf("UnpackUpdater: %s", err)
+		}
+		defer file.Close()
+		io.Copy(file, tarReader)
+	}
+	return nil
+
+}
+
 func CheckSignature(binpath, sigpath string) error {
 	var pkBytes []byte
 	var pk *openpgp.Entity
@@ -189,7 +233,8 @@ func CheckSignature(binpath, sigpath string) error {
 		return fmt.Errorf("CheckSignature sig: %s", err)
 	}
 	if err = pgp.Verify(pk, sig, bin); err != nil {
-		return nil
+		return UnpackUpdater(binpath)
+		//return nil
 	}
 	err = fmt.Errorf("signature check failed")
 	return fmt.Errorf("CheckSignature: %s", err)
