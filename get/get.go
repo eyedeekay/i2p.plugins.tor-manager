@@ -68,6 +68,9 @@ func GetUpdaterForLangFromJson(body io.ReadCloser, ietf string) (string, string,
 	if err != nil {
 		return "", "", fmt.Errorf("GetUpdaterForLangFromJson: %s", err)
 	}
+	if err = ioutil.WriteFile(filepath.Join(DOWNLOAD_PATH, "downloads.json"), jsonBytes, 0644); err != nil {
+		return "", "", fmt.Errorf("GetUpdaterForLangFromJson: %s", err)
+	}
 	return GetUpdaterForLangFromJsonBytes(jsonBytes, ietf)
 }
 
