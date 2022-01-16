@@ -1,0 +1,6 @@
+*.crt
+*.crl
+*.pem
+tor-browser/*.tar.xz
+tor-browser/*.tar.xz.asc
+i2p.plugins.tor-manager*

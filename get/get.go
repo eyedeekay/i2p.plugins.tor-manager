@@ -11,9 +11,10 @@ import (
 	"runtime"
 	"strings"
 
-	"aead.dev/minisign"
 	"github.com/cloudfoundry/jibber_jabber"
-	//"encoding/json"
+
+	"github.com/jchavannes/go-pgp/pgp"
+	"golang.org/x/crypto/openpgp"
 )
 
 var wd, _ = os.Getwd()
@@ -54,12 +55,9 @@ func GetUpdater() (string, string, error) {
 }
 
 func GetUpdaterForLang(ietf string) (string, string, error) {
-	if ietf == "" {
-		ietf = defaultIETFLang
-	}
 	jsonText, err := http.Get(TOR_UPDATES_URL)
 	if err != nil {
-		return "", "", err
+		return "", "", fmt.Errorf("GetUpdaterForLang: %s", err)
 	}
 	defer jsonText.Body.Close()
 	return GetUpdaterForLangFromJson(jsonText.Body, ietf)
@@ -68,7 +66,7 @@ func GetUpdaterForLang(ietf string) (string, string, error) {
 func GetUpdaterForLangFromJson(body io.ReadCloser, ietf string) (string, string, error) {
 	jsonBytes, err := io.ReadAll(body)
 	if err != nil {
-		return "", "", err
+		return "", "", fmt.Errorf("GetUpdaterForLangFromJson: %s", err)
 	}
 	return GetUpdaterForLangFromJsonBytes(jsonBytes, ietf)
 }
@@ -76,7 +74,7 @@ func GetUpdaterForLangFromJson(body io.ReadCloser, ietf string) (string, string,
 func GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf string) (string, string, error) {
 	var dat map[string]interface{}
 	if err := json.Unmarshal(jsonBytes, &dat); err != nil {
-		return "", "", err
+		return "", "", fmt.Errorf("FuncName: %s", err)
 	}
 	if platform, ok := dat["downloads"]; ok {
 		rtp := GetRuntimePair()
@@ -93,19 +91,19 @@ func GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf string) (string, stri
 			return GetUpdaterForLangFromJsonBytes(jsonBytes, defaultIETFLang)
 		}
 	}
-	return "", "", fmt.Errorf("no updater for language %s", ietf)
+	return "", "", fmt.Errorf("GetUpdaterForLangFromJsonBytes: no updater for language %s", ietf)
 }
 
 func SingleFileDownload(url, name string) (string, error) {
 	file, err := http.Get(url)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("SingleFileDownload: %s", err)
 	}
 	defer file.Body.Close()
 	path := filepath.Join(DOWNLOAD_PATH, name)
-	outFile, err := os.Create(name)
+	outFile, err := os.Create(path)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("SingleFileDownload: %s", err)
 	}
 	defer outFile.Close()
 	io.Copy(outFile, file.Body)
@@ -115,15 +113,15 @@ func SingleFileDownload(url, name string) (string, error) {
 func DownloadUpdater() (string, string, error) {
 	binary, sig, err := GetUpdater()
 	if err != nil {
-		return "", "", err
+		return "", "", fmt.Errorf("DownloadUpdater: %s", err)
 	}
 	sigpath, err := SingleFileDownload(sig, "tor-browser-"+GetRuntimePair()+"-"+defaultIETFLang+".tar.xz.asc")
 	if err != nil {
-		return "", "", err
+		return "", "", fmt.Errorf("DownloadUpdater: %s", err)
 	}
 	binpath, err := SingleFileDownload(binary, "tor-browser-"+GetRuntimePair()+"-"+defaultIETFLang+".tar.xz")
 	if err != nil {
-		return "", sigpath, err
+		return "", sigpath, fmt.Errorf("DownloadUpdater: %s", err)
 	}
 	return binpath, sigpath, nil
 }
@@ -131,42 +129,42 @@ func DownloadUpdater() (string, string, error) {
 func DownloadUpdaterForLang(ietf string) (string, string, error) {
 	binary, sig, err := GetUpdaterForLang(ietf)
 	if err != nil {
-		return "", "", err
+		return "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
 	sigpath, err := SingleFileDownload(sig, "tor-browser-"+GetRuntimePair()+"-"+ietf+".tar.xz.asc")
 	if err != nil {
-		return "", "", err
+		return "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
 	binpath, err := SingleFileDownload(binary, "tor-browser-"+GetRuntimePair()+"-"+ietf+".tar.xz")
 	if err != nil {
-		return "", sigpath, err
+		return "", sigpath, fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
 	return binpath, sigpath, nil
 }
 
 func CheckSignature(binpath, sigpath string) error {
-	var pk minisign.PublicKey
-	var sig minisign.Signature
+	var pkBytes []byte
+	var pk *openpgp.Entity
+	var sig []byte
 	var bin []byte
-	var sigBytes []byte
 	var err error
-	if pk, err = minisign.PublicKeyFromFile(filepath.Join(DOWNLOAD_PATH, "TPO-signing-key.pub")); err != nil {
-		return err
+	if pkBytes, err = ioutil.ReadFile(filepath.Join(DOWNLOAD_PATH, "TPO-signing-key.pub")); err != nil {
+		return fmt.Errorf("CheckSignature pkBytes: %s", err)
+	}
+	if pk, err = pgp.GetEntity(pkBytes, nil); err != nil {
+		return fmt.Errorf("CheckSignature pk: %s", err)
 	}
 	if bin, err = ioutil.ReadFile(binpath); err != nil {
-		return err
+		return fmt.Errorf("CheckSignature bin: %s", err)
 	}
-	if sig, err = minisign.SignatureFromFile(sigpath); err != nil {
-		return err
+	if sig, err = ioutil.ReadFile(sigpath); err != nil {
+		return fmt.Errorf("CheckSignature sig: %s", err)
 	}
-	if sigBytes, err = sig.MarshalText(); err != nil {
-		return err
-	}
-	if minisign.Verify(pk, bin, sigBytes) {
+	if err = pgp.Verify(pk, sig, bin); err != nil {
 		return nil
 	}
 	err = fmt.Errorf("signature check failed")
-	return err
+	return fmt.Errorf("CheckSignature: %s", err)
 }
 
 func BoolCheckSignature(binpath, sigpath string) bool {
