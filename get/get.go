@@ -114,7 +114,16 @@ func SingleFileDownload(url, name string) (string, error) {
 	return path, nil
 }
 
+func fileExists(path string) bool {
+	_, err := os.Stat(path)
+	return !os.IsNotExist(err)
+}
+
 func BotherToDownload(url, name string) bool {
+	path := filepath.Join(DOWNLOAD_PATH, name)
+	if !fileExists(path) {
+		return true
+	}
 	defer ioutil.WriteFile(filepath.Join(DOWNLOAD_PATH, name+".last-url"), []byte(url), 0644)
 	lastUrl, err := ioutil.ReadFile(filepath.Join(DOWNLOAD_PATH, name+".last-url"))
 	if err != nil {
