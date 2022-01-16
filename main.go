@@ -1,15 +1,26 @@
 package main
 
-import tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
+import (
+	"flag"
+	"log"
+
+	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
+)
+
+var (
+	lang = flag.String("lang", "", "Language to download")
+)
 
 func main() {
-	bin, sig, err := tbget.DownloadUpdaterForLang("")
+	flag.Parse()
+	bin, sig, err := tbget.DownloadUpdaterForLang(*lang)
 	if err != nil {
 		panic(err)
 	}
 	if err := tbget.CheckSignature(bin, sig); err != nil {
+		log.Fatal(err)
 	} else {
-		panic("Signature check failed")
+		log.Printf("Signature check passed")
 	}
 
 }
