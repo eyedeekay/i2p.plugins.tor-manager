@@ -1,4 +1,4 @@
-VERSION=0.0.08
+VERSION=0.0.01
 CGO_ENABLED=0
 export CGO_ENABLED=0
 
@@ -9,7 +9,7 @@ ARG=-v -tags netgo -ldflags '-w -extldflags "-static"'
 
 BINARY=i2p.plugins.tor-manager
 SIGNER=hankhill19580@gmail.com
-CONSOLEPOSTNAME=IRC
+CONSOLEPOSTNAME=Tor Binary Manager
 USER_GH=eyedeekay
 
 build: dep
@@ -36,8 +36,8 @@ osx:
 	GOOS=darwin GOARCH=arm64 make build su3
 
 bsd:
-	GOOS=freebsd GOARCH=amd64 make build su3
-	GOOS=openbsd GOARCH=amd64 make build su3
+#	GOOS=freebsd GOARCH=amd64 make build su3
+#	GOOS=openbsd GOARCH=amd64 make build su3
 
 dep:
 	cp "$(HOME)/Workspace/GIT_WORK/i2p.i2p/build/shellservice.jar" conf/lib/shellservice.jar -v
@@ -85,8 +85,8 @@ upload-osx:
 	GOOS=darwin GOARCH=arm64 make upload
 
 upload-bsd:
-	GOOS=freebsd GOARCH=amd64 make upload
-	GOOS=openbsd GOARCH=amd64 make upload
+#	GOOS=freebsd GOARCH=amd64 make upload
+#	GOOS=openbsd GOARCH=amd64 make upload
 
 upload-all: upload-windows upload-linux upload-osx upload-bsd
 
@@ -98,8 +98,8 @@ download-su3s:
 	GOOS=linux GOARCH=386 make download-single-su3
 	GOOS=darwin GOARCH=amd64 make download-single-su3
 	GOOS=darwin GOARCH=arm64 make download-single-su3
-	GOOS=freebsd GOARCH=amd64 make download-single-su3
-	GOOS=openbsd GOARCH=amd64 make download-single-su3
+#	GOOS=freebsd GOARCH=amd64 make download-single-su3
+#	GOOS=openbsd GOARCH=amd64 make download-single-su3
 
 download-single-su3:
 	wget -N -c "https://github.com/$(USER_GH)/$(BINARY)/releases/download/$(VERSION)/$(BINARY)-$(GOOS)-$(GOARCH).su3"
@@ -117,3 +117,13 @@ index:
 	pandoc README.md >> index.html
 	@echo "</body>" >> index.html
 	@echo "</html>" >> index.html
+
+refresh-tor-keys: clean-tor-keys tor-browser/TPO-signing-key.pub
+
+tor-keys: tor-browser/TPO-signing-key.pub
+
+clean-tor-keys:
+	rm -f tor-browser/TPO-signing-key.pub
+
+tor-browser/TPO-signing-key.pub:
+	gpg --armor --output ./tor-browser/TPO-signing-key.pub --export 0xEF6E286DDA85EA2A4BA7DE684E2C6E8793298290
