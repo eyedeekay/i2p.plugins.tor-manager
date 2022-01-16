@@ -40,7 +40,7 @@ bsd:
 #	GOOS=openbsd GOARCH=amd64 make build su3
 
 dep:
-	cp "$(HOME)/Workspace/GIT_WORK/i2p.i2p/build/shellservice.jar" conf/lib/shellservice.jar -v
+	cp "$(HOME)/Workspace/GIT_WORK/i2p.i2p/build/shellservice.jar" tor-browser/lib/shellservice.jar -v
 
 su3:
 	i2p.plugin.native -name=$(BINARY)-$(GOOS)-$(GOARCH) \
@@ -59,7 +59,7 @@ su3:
 		-website="http://idk.i2p/$(BINARY)/" \
 		-command="$(BINARY)-$(GOOS)-$(GOARCH)" \
 		-license=AGPL \
-		-res=conf/
+		-res=tor-browser/
 	unzip -o $(BINARY)-$(GOOS)-$(GOARCH).zip -d $(BINARY)-$(GOOS)-$(GOARCH)-zip
 
 sum:
