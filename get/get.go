@@ -54,6 +54,9 @@ func GetUpdater() (string, string, error) {
 }
 
 func GetUpdaterForLang(ietf string) (string, string, error) {
+	if ietf == "" {
+		ietf = defaultIETFLang
+	}
 	jsonText, err := http.Get(TOR_UPDATES_URL)
 	if err != nil {
 		return "", "", err
