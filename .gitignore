@@ -4,3 +4,6 @@
 tor-browser/*.tar.xz
 tor-browser/*.tar.xz.asc
 i2p.plugins.tor-manager*
+*.zip
+*.su3
+*-zip

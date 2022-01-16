@@ -95,12 +95,16 @@ func GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf string) (string, stri
 }
 
 func SingleFileDownload(url, name string) (string, error) {
+	path := filepath.Join(DOWNLOAD_PATH, name)
+	if !BotherToDownload(url, name) {
+		fmt.Printf("No updates required, skipping download of %s\n", name)
+		return path, nil
+	}
 	file, err := http.Get(url)
 	if err != nil {
 		return "", fmt.Errorf("SingleFileDownload: %s", err)
 	}
 	defer file.Body.Close()
-	path := filepath.Join(DOWNLOAD_PATH, name)
 	outFile, err := os.Create(path)
 	if err != nil {
 		return "", fmt.Errorf("SingleFileDownload: %s", err)
@@ -108,6 +112,18 @@ func SingleFileDownload(url, name string) (string, error) {
 	defer outFile.Close()
 	io.Copy(outFile, file.Body)
 	return path, nil
+}
+
+func BotherToDownload(url, name string) bool {
+	defer ioutil.WriteFile(filepath.Join(DOWNLOAD_PATH, name+".last-url"), []byte(url), 0644)
+	lastUrl, err := ioutil.ReadFile(filepath.Join(DOWNLOAD_PATH, name+".last-url"))
+	if err != nil {
+		return true
+	}
+	if string(lastUrl) == url {
+		return false
+	}
+	return true
 }
 
 func DownloadUpdater() (string, string, error) {
