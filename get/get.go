@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -27,11 +28,15 @@ var DOWNLOAD_PATH = filepath.Join(wd, "tor-browser")
 const TOR_UPDATES_URL string = "https://aus1.torproject.org/torbrowser/update_3/release/downloads.json"
 
 var (
-	defaultIETFLang, _ = jibber_jabber.DetectIETF()
+	DefaultIETFLang, _ = jibber_jabber.DetectIETF()
 )
 
+var OS, ARCH string
+
 func GetRuntimePair() string {
-	var OS, ARCH string
+	if OS != "" && ARCH != "" {
+		return fmt.Sprintf("%s%s", OS, ARCH)
+	}
 	switch runtime.GOOS {
 	case "darwin":
 		OS = "osx"
@@ -54,7 +59,7 @@ func GetRuntimePair() string {
 }
 
 func GetUpdater() (string, string, error) {
-	return GetUpdaterForLang(defaultIETFLang)
+	return GetUpdaterForLang(DefaultIETFLang)
 }
 
 func GetUpdaterForLang(ietf string) (string, string, error) {
@@ -87,17 +92,23 @@ func GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf string) (string, stri
 		if updater, ok := platform.(map[string]interface{})[rtp]; ok {
 			if langUpdater, ok := updater.(map[string]interface{})[ietf]; ok {
 				return langUpdater.(map[string]interface{})["binary"].(string), langUpdater.(map[string]interface{})["sig"].(string), nil
+			} else {
+				return "", "", fmt.Errorf("GetUpdaterForLangFromJsonBytes: no updater for language: %s", ietf)
 			}
 			// If we didn't find the language, try splitting at the hyphen
 			lang := strings.Split(ietf, "-")[0]
 			if langUpdater, ok := updater.(map[string]interface{})[lang]; ok {
 				return langUpdater.(map[string]interface{})["binary"].(string), langUpdater.(map[string]interface{})["sig"].(string), nil
+			} else {
+				return "", "", fmt.Errorf("GetUpdaterForLangFromJsonBytes: no updater for fallback language %s", ietf)
 			}
 			// If we didn't find the language after splitting at the hyphen, try the default
-			return GetUpdaterForLangFromJsonBytes(jsonBytes, defaultIETFLang)
+			return GetUpdaterForLangFromJsonBytes(jsonBytes, DefaultIETFLang)
+		} else {
+			return "", "", fmt.Errorf("GetUpdaterForLangFromJsonBytes: no updater for platform %s", rtp)
 		}
 	}
-	return "", "", fmt.Errorf("GetUpdaterForLangFromJsonBytes: no updater for language %s", ietf)
+	return "", "", fmt.Errorf("GetUpdaterForLangFromJsonBytes: %s", ietf)
 }
 
 func SingleFileDownload(url, name string) (string, error) {
@@ -141,16 +152,29 @@ func BotherToDownload(url, name string) bool {
 	return true
 }
 
+func NamePerPlatform(ietf string) string {
+	extension := "tar.xz"
+	windowsonly := ""
+	switch runtime.GOOS {
+	case "darwin":
+		extension = "dmg"
+	case "windows":
+		windowsonly = "-installer-"
+		extension = "exe"
+	}
+	return fmt.Sprintf("torbrowser%s-%s-%s.%s", windowsonly, GetRuntimePair(), ietf, extension)
+}
+
 func DownloadUpdater() (string, string, error) {
 	binary, sig, err := GetUpdater()
 	if err != nil {
 		return "", "", fmt.Errorf("DownloadUpdater: %s", err)
 	}
-	sigpath, err := SingleFileDownload(sig, "tor-browser-"+GetRuntimePair()+"-"+defaultIETFLang+".tar.xz.asc")
+	sigpath, err := SingleFileDownload(sig, NamePerPlatform(DefaultIETFLang)+".asc")
 	if err != nil {
 		return "", "", fmt.Errorf("DownloadUpdater: %s", err)
 	}
-	binpath, err := SingleFileDownload(binary, "tor-browser-"+GetRuntimePair()+"-"+defaultIETFLang+".tar.xz")
+	binpath, err := SingleFileDownload(binary, NamePerPlatform(DefaultIETFLang))
 	if err != nil {
 		return "", sigpath, fmt.Errorf("DownloadUpdater: %s", err)
 	}
@@ -162,11 +186,12 @@ func DownloadUpdaterForLang(ietf string) (string, string, error) {
 	if err != nil {
 		return "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
-	sigpath, err := SingleFileDownload(sig, "tor-browser-"+GetRuntimePair()+"-"+ietf+".tar.xz.asc")
+
+	sigpath, err := SingleFileDownload(sig, NamePerPlatform(ietf)+".asc")
 	if err != nil {
 		return "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
-	binpath, err := SingleFileDownload(binary, "tor-browser-"+GetRuntimePair()+"-"+ietf+".tar.xz")
+	binpath, err := SingleFileDownload(binary, NamePerPlatform(ietf))
 	if err != nil {
 		return "", sigpath, fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
@@ -174,6 +199,27 @@ func DownloadUpdaterForLang(ietf string) (string, string, error) {
 }
 
 func UnpackUpdater(binpath string) error {
+	if OS == "win" {
+		cmd := exec.Command("cmd", "/c", "start", "\""+UNPACK_URL+"\"", "\""+binpath+" /SD /D="+UNPACK_URL+"\"")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		err := cmd.Run()
+		if err != nil {
+			return fmt.Errorf("UnpackUpdater: windows exec fail %s", err)
+		}
+	}
+	if OS == "osx" {
+		cmd := exec.Command("open", "-W", "-n", "-a", "\""+UNPACK_URL+"\"", "\""+binpath+"\"")
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		err := cmd.Run()
+		if err != nil {
+			return fmt.Errorf("UnpackUpdater: osx open/mount fail %s", err)
+		}
+	}
+	if fileExists(UNPACK_URL) {
+		return nil
+	}
 	os.MkdirAll(UNPACK_URL, 0755)
 	UNPACK_DIRECTORY, err := os.Open(UNPACK_URL)
 	if err != nil {
