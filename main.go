@@ -40,6 +40,7 @@ func main() {
 	} else {
 		log.Printf("Signature check passed")
 	}
+	log.Println("Running Tor Browser")
 	if err := tbsupervise.RunTBWithLang(*lang); err != nil {
 		log.Fatal(err)
 	}

@@ -131,14 +131,14 @@ func SingleFileDownload(url, name string) (string, error) {
 	return path, nil
 }
 
-func fileExists(path string) bool {
+func FileExists(path string) bool {
 	_, err := os.Stat(path)
 	return !os.IsNotExist(err)
 }
 
 func BotherToDownload(url, name string) bool {
 	path := filepath.Join(DOWNLOAD_PATH, name)
-	if !fileExists(path) {
+	if !FileExists(path) {
 		return true
 	}
 	defer ioutil.WriteFile(filepath.Join(DOWNLOAD_PATH, name+".last-url"), []byte(url), 0644)
@@ -217,7 +217,7 @@ func UnpackUpdater(binpath string) error {
 			return fmt.Errorf("UnpackUpdater: osx open/mount fail %s", err)
 		}
 	}
-	if fileExists(UNPACK_URL) {
+	if FileExists(UNPACK_URL) {
 		return nil
 	}
 	os.MkdirAll(UNPACK_URL, 0755)
@@ -255,6 +255,9 @@ func UnpackUpdater(binpath string) error {
 		}
 		defer file.Close()
 		io.Copy(file, tarReader)
+		mode := header.FileInfo().Mode()
+		//remember to chmod the file afterwards
+		file.Chmod(mode)
 	}
 	return nil
 
