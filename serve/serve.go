@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"path/filepath"
 	"strings"
 
@@ -35,6 +36,23 @@ func NewClient(hostname string, lang string, os string, arch string) (*Client, e
 	}
 	m.TBS = TBSupervise.NewSupervisor(home, lang)
 	return m, nil
+}
+
+func (m *Client) ServeHTTP(rw http.ResponseWriter, rq http.Request) {
+	path := rq.URL.Path
+	switch path {
+	case "/start-tor-browser":
+	case "/start-i2p-browser":
+	case "/start-tor":
+	case "/stop-tor":
+	default:
+		b, e := m.Page()
+		if e != nil {
+			fmt.Fprintf(rw, "Error: %s", e)
+		}
+		rw.Write([]byte(b))
+	}
+	rw.Write([]byte("Hello, world!"))
 }
 
 func (m *Client) generateMirrorJSON() (map[string]interface{}, error) {
