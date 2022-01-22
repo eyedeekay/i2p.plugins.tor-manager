@@ -73,13 +73,13 @@ func (s *Supervisor) RunTBWithLang() error {
 			return fmt.Errorf("tor browser not found at %s", s.TBPath())
 		}
 	case "darwin":
-		cmd := exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
-		cmd.Dir = s.TBDirectory()
-		return cmd.Run()
+		s.cmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
+		s.cmd.Dir = s.TBDirectory()
+		return s.cmd.Run()
 	case "windows":
-		cmd := exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"Tor Browser.exe\"")
-		cmd.Dir = s.TBDirectory()
-		return cmd.Run()
+		s.cmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"Tor Browser.exe\"")
+		s.cmd.Dir = s.TBDirectory()
+		return s.cmd.Run()
 	default:
 	}
 
@@ -109,13 +109,13 @@ func (s *Supervisor) RunI2PBWithLang() error {
 			return fmt.Errorf("tor browser not found at %s", s.FirefoxPath())
 		}
 	case "darwin":
-		cmd := exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
-		cmd.Dir = s.TBDirectory()
-		return cmd.Run()
+		s.cmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
+		s.cmd.Dir = s.TBDirectory()
+		return s.cmd.Run()
 	case "windows":
-		cmd := exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"Tor Browser.exe\"")
-		cmd.Dir = s.TBDirectory()
-		return cmd.Run()
+		s.cmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"Tor Browser.exe\"")
+		s.cmd.Dir = s.TBDirectory()
+		return s.cmd.Run()
 	default:
 	}
 
