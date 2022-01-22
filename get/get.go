@@ -22,7 +22,7 @@ import (
 
 var wd, _ = os.Getwd()
 
-var UNPACK_URL = filepath.Join(wd, "unpack")
+var UNPACK_PATH = filepath.Join(wd, "unpack")
 var DOWNLOAD_PATH = filepath.Join(wd, "tor-browser")
 
 const TOR_UPDATES_URL string = "https://aus1.torproject.org/torbrowser/update_3/release/downloads.json"
@@ -31,89 +31,103 @@ var (
 	DefaultIETFLang, _ = jibber_jabber.DetectIETF()
 )
 
-var OS, ARCH string
+type TBDownloader struct {
+	UnpackPath   string
+	DownloadPath string
+	Lang         string
+	OS, ARCH     string
+}
 
-func GetRuntimePair() string {
-	if OS != "" && ARCH != "" {
-		return fmt.Sprintf("%s%s", OS, ARCH)
+var OS = "linux"
+var ARCH = "64"
+
+func NewTBDownloader(lang string, os, arch string) *TBDownloader {
+	return &TBDownloader{
+		Lang:         lang,
+		DownloadPath: DOWNLOAD_PATH,
+		UnpackPath:   UNPACK_PATH,
+		OS:           os,
+		ARCH:         arch,
+	}
+}
+
+func (t *TBDownloader) GetRuntimePair() string {
+	if t.OS != "" && t.ARCH != "" {
+		return fmt.Sprintf("%s%s", t.OS, t.ARCH)
 	}
 	switch runtime.GOOS {
 	case "darwin":
-		OS = "osx"
+		t.OS = "osx"
 	case "linux":
-		OS = "linux"
+		t.OS = "linux"
 	case "windows":
-		OS = "win"
+		t.OS = "win"
 	default:
-		OS = "unknown"
+		t.OS = "unknown"
 	}
 	switch runtime.GOARCH {
 	case "amd64":
-		ARCH = "64"
+		t.ARCH = "64"
 	case "386":
-		ARCH = "32"
+		t.ARCH = "32"
 	default:
-		ARCH = "unknown"
+		t.ARCH = "unknown"
 	}
-	return fmt.Sprintf("%s%s", OS, ARCH)
+	return fmt.Sprintf("%s%s", t.OS, t.ARCH)
 }
 
-func GetUpdater() (string, string, error) {
-	return GetUpdaterForLang(DefaultIETFLang)
+func (t *TBDownloader) GetUpdater() (string, string, error) {
+	return t.GetUpdaterForLang(t.Lang)
 }
 
-func GetUpdaterForLang(ietf string) (string, string, error) {
+func (t *TBDownloader) GetUpdaterForLang(ietf string) (string, string, error) {
 	jsonText, err := http.Get(TOR_UPDATES_URL)
 	if err != nil {
-		return "", "", fmt.Errorf("GetUpdaterForLang: %s", err)
+		return "", "", fmt.Errorf("t.GetUpdaterForLang: %s", err)
 	}
 	defer jsonText.Body.Close()
-	return GetUpdaterForLangFromJson(jsonText.Body, ietf)
+	return t.GetUpdaterForLangFromJson(jsonText.Body, ietf)
 }
 
-func GetUpdaterForLangFromJson(body io.ReadCloser, ietf string) (string, string, error) {
+func (t *TBDownloader) GetUpdaterForLangFromJson(body io.ReadCloser, ietf string) (string, string, error) {
 	jsonBytes, err := io.ReadAll(body)
 	if err != nil {
-		return "", "", fmt.Errorf("GetUpdaterForLangFromJson: %s", err)
+		return "", "", fmt.Errorf("t.GetUpdaterForLangFromJson: %s", err)
 	}
-	if err = ioutil.WriteFile(filepath.Join(DOWNLOAD_PATH, "downloads.json"), jsonBytes, 0644); err != nil {
-		return "", "", fmt.Errorf("GetUpdaterForLangFromJson: %s", err)
+	if err = ioutil.WriteFile(filepath.Join(t.DownloadPath, "downloads.json"), jsonBytes, 0644); err != nil {
+		return "", "", fmt.Errorf("t.GetUpdaterForLangFromJson: %s", err)
 	}
-	return GetUpdaterForLangFromJsonBytes(jsonBytes, ietf)
+	return t.GetUpdaterForLangFromJsonBytes(jsonBytes, ietf)
 }
 
-func GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf string) (string, string, error) {
+func (t *TBDownloader) GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf string) (string, string, error) {
 	var dat map[string]interface{}
 	if err := json.Unmarshal(jsonBytes, &dat); err != nil {
-		return "", "", fmt.Errorf("FuncName: %s", err)
+		return "", "", fmt.Errorf("func (t *TBDownloader)Name: %s", err)
 	}
 	if platform, ok := dat["downloads"]; ok {
-		rtp := GetRuntimePair()
+		rtp := t.GetRuntimePair()
 		if updater, ok := platform.(map[string]interface{})[rtp]; ok {
 			if langUpdater, ok := updater.(map[string]interface{})[ietf]; ok {
 				return langUpdater.(map[string]interface{})["binary"].(string), langUpdater.(map[string]interface{})["sig"].(string), nil
-			} else {
-				return "", "", fmt.Errorf("GetUpdaterForLangFromJsonBytes: no updater for language: %s", ietf)
 			}
 			// If we didn't find the language, try splitting at the hyphen
 			lang := strings.Split(ietf, "-")[0]
 			if langUpdater, ok := updater.(map[string]interface{})[lang]; ok {
 				return langUpdater.(map[string]interface{})["binary"].(string), langUpdater.(map[string]interface{})["sig"].(string), nil
-			} else {
-				return "", "", fmt.Errorf("GetUpdaterForLangFromJsonBytes: no updater for fallback language %s", ietf)
 			}
 			// If we didn't find the language after splitting at the hyphen, try the default
-			return GetUpdaterForLangFromJsonBytes(jsonBytes, DefaultIETFLang)
+			return t.GetUpdaterForLangFromJsonBytes(jsonBytes, t.Lang)
 		} else {
-			return "", "", fmt.Errorf("GetUpdaterForLangFromJsonBytes: no updater for platform %s", rtp)
+			return "", "", fmt.Errorf("t.GetUpdaterForLangFromJsonBytes: no updater for platform %s", rtp)
 		}
 	}
-	return "", "", fmt.Errorf("GetUpdaterForLangFromJsonBytes: %s", ietf)
+	return "", "", fmt.Errorf("t.GetUpdaterForLangFromJsonBytes: %s", ietf)
 }
 
-func SingleFileDownload(url, name string) (string, error) {
-	path := filepath.Join(DOWNLOAD_PATH, name)
-	if !BotherToDownload(url, name) {
+func (t *TBDownloader) SingleFileDownload(url, name string) (string, error) {
+	path := filepath.Join(t.DownloadPath, name)
+	if !t.BotherToDownload(url, name) {
 		fmt.Printf("No updates required, skipping download of %s\n", name)
 		return path, nil
 	}
@@ -136,13 +150,13 @@ func FileExists(path string) bool {
 	return !os.IsNotExist(err)
 }
 
-func BotherToDownload(url, name string) bool {
-	path := filepath.Join(DOWNLOAD_PATH, name)
+func (t *TBDownloader) BotherToDownload(url, name string) bool {
+	path := filepath.Join(t.DownloadPath, name)
 	if !FileExists(path) {
 		return true
 	}
-	defer ioutil.WriteFile(filepath.Join(DOWNLOAD_PATH, name+".last-url"), []byte(url), 0644)
-	lastUrl, err := ioutil.ReadFile(filepath.Join(DOWNLOAD_PATH, name+".last-url"))
+	defer ioutil.WriteFile(filepath.Join(t.DownloadPath, name+".last-url"), []byte(url), 0644)
+	lastUrl, err := ioutil.ReadFile(filepath.Join(t.DownloadPath, name+".last-url"))
 	if err != nil {
 		return true
 	}
@@ -152,7 +166,7 @@ func BotherToDownload(url, name string) bool {
 	return true
 }
 
-func NamePerPlatform(ietf string) string {
+func (t *TBDownloader) NamePerPlatform(ietf string) string {
 	extension := "tar.xz"
 	windowsonly := ""
 	switch runtime.GOOS {
@@ -162,78 +176,78 @@ func NamePerPlatform(ietf string) string {
 		windowsonly = "-installer-"
 		extension = "exe"
 	}
-	return fmt.Sprintf("torbrowser%s-%s-%s.%s", windowsonly, GetRuntimePair(), ietf, extension)
+	return fmt.Sprintf("torbrowser%s-%s-%s.%s", windowsonly, t.GetRuntimePair(), ietf, extension)
 }
 
-func DownloadUpdater() (string, string, error) {
-	binary, sig, err := GetUpdater()
+func (t *TBDownloader) DownloadUpdater() (string, string, error) {
+	binary, sig, err := t.GetUpdater()
 	if err != nil {
 		return "", "", fmt.Errorf("DownloadUpdater: %s", err)
 	}
-	sigpath, err := SingleFileDownload(sig, NamePerPlatform(DefaultIETFLang)+".asc")
+	sigpath, err := t.SingleFileDownload(sig, t.NamePerPlatform(t.Lang)+".asc")
 	if err != nil {
 		return "", "", fmt.Errorf("DownloadUpdater: %s", err)
 	}
-	binpath, err := SingleFileDownload(binary, NamePerPlatform(DefaultIETFLang))
+	binpath, err := t.SingleFileDownload(binary, t.NamePerPlatform(t.Lang))
 	if err != nil {
 		return "", sigpath, fmt.Errorf("DownloadUpdater: %s", err)
 	}
 	return binpath, sigpath, nil
 }
 
-func DownloadUpdaterForLang(ietf string) (string, string, error) {
-	binary, sig, err := GetUpdaterForLang(ietf)
+func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, error) {
+	binary, sig, err := t.GetUpdaterForLang(ietf)
 	if err != nil {
 		return "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
 
-	sigpath, err := SingleFileDownload(sig, NamePerPlatform(ietf)+".asc")
+	sigpath, err := t.SingleFileDownload(sig, t.NamePerPlatform(ietf)+".asc")
 	if err != nil {
 		return "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
-	binpath, err := SingleFileDownload(binary, NamePerPlatform(ietf))
+	binpath, err := t.SingleFileDownload(binary, t.NamePerPlatform(ietf))
 	if err != nil {
 		return "", sigpath, fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
 	return binpath, sigpath, nil
 }
 
-func UnpackUpdater(binpath string) error {
-	if OS == "win" {
-		cmd := exec.Command("cmd", "/c", "start", "\""+UNPACK_URL+"\"", "\""+binpath+" /SD /D="+UNPACK_URL+"\"")
+func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
+	if t.OS == "win" {
+		cmd := exec.Command("cmd", "/c", "start", "\""+t.UnpackPath+"\"", "\""+binpath+" /SD /D="+t.UnpackPath+"\"")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		err := cmd.Run()
 		if err != nil {
-			return fmt.Errorf("UnpackUpdater: windows exec fail %s", err)
+			return "", fmt.Errorf("UnpackUpdater: windows exec fail %s", err)
 		}
 	}
-	if OS == "osx" {
-		cmd := exec.Command("open", "-W", "-n", "-a", "\""+UNPACK_URL+"\"", "\""+binpath+"\"")
+	if t.OS == "osx" {
+		cmd := exec.Command("open", "-W", "-n", "-a", "\""+t.UnpackPath+"\"", "\""+binpath+"\"")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		err := cmd.Run()
 		if err != nil {
-			return fmt.Errorf("UnpackUpdater: osx open/mount fail %s", err)
+			return "", fmt.Errorf("UnpackUpdater: osx open/mount fail %s", err)
 		}
 	}
-	if FileExists(UNPACK_URL) {
-		return nil
+	if FileExists(t.UnpackPath) {
+		return filepath.Join(t.UnpackPath, "tor-browser_"+t.Lang), nil
 	}
-	os.MkdirAll(UNPACK_URL, 0755)
-	UNPACK_DIRECTORY, err := os.Open(UNPACK_URL)
+	os.MkdirAll(t.UnpackPath, 0755)
+	UNPACK_DIRECTORY, err := os.Open(t.UnpackPath)
 	if err != nil {
-		return fmt.Errorf("UnpackUpdater: %s", err)
+		return "", fmt.Errorf("UnpackUpdater: %s", err)
 	}
 	defer UNPACK_DIRECTORY.Close()
 	xzfile, err := os.Open(binpath)
 	if err != nil {
-		return fmt.Errorf("UnpackUpdater: %s", err)
+		return "", fmt.Errorf("UnpackUpdater: %s", err)
 	}
 	defer xzfile.Close()
 	xzReader, err := xz.NewReader(xzfile)
 	if err != nil {
-		return fmt.Errorf("UnpackUpdater: %s", err)
+		return "", fmt.Errorf("UnpackUpdater: %s", err)
 	}
 	tarReader := tar.NewReader(xzReader)
 	for {
@@ -242,7 +256,7 @@ func UnpackUpdater(binpath string) error {
 			break
 		}
 		if err != nil {
-			return fmt.Errorf("UnpackUpdater: %s", err)
+			return "", fmt.Errorf("UnpackUpdater: %s", err)
 		}
 		if header.Typeflag == tar.TypeDir {
 			os.MkdirAll(filepath.Join(UNPACK_DIRECTORY.Name(), header.Name), 0755)
@@ -251,7 +265,7 @@ func UnpackUpdater(binpath string) error {
 		filename := filepath.Join(UNPACK_DIRECTORY.Name(), header.Name)
 		file, err := os.Create(filename)
 		if err != nil {
-			return fmt.Errorf("UnpackUpdater: %s", err)
+			return "", fmt.Errorf("UnpackUpdater: %s", err)
 		}
 		defer file.Close()
 		io.Copy(file, tarReader)
@@ -259,37 +273,37 @@ func UnpackUpdater(binpath string) error {
 		//remember to chmod the file afterwards
 		file.Chmod(mode)
 	}
-	return nil
+	return t.UnpackPath, nil
 
 }
 
-func CheckSignature(binpath, sigpath string) error {
+func (t *TBDownloader) CheckSignature(binpath, sigpath string) (string, error) {
 	var pkBytes []byte
 	var pk *openpgp.Entity
 	var sig []byte
 	var bin []byte
 	var err error
-	if pkBytes, err = ioutil.ReadFile(filepath.Join(DOWNLOAD_PATH, "TPO-signing-key.pub")); err != nil {
-		return fmt.Errorf("CheckSignature pkBytes: %s", err)
+	if pkBytes, err = ioutil.ReadFile(filepath.Join(t.DownloadPath, "TPO-signing-key.pub")); err != nil {
+		return "", fmt.Errorf("CheckSignature pkBytes: %s", err)
 	}
 	if pk, err = pgp.GetEntity(pkBytes, nil); err != nil {
-		return fmt.Errorf("CheckSignature pk: %s", err)
+		return "", fmt.Errorf("CheckSignature pk: %s", err)
 	}
 	if bin, err = ioutil.ReadFile(binpath); err != nil {
-		return fmt.Errorf("CheckSignature bin: %s", err)
+		return "", fmt.Errorf("CheckSignature bin: %s", err)
 	}
 	if sig, err = ioutil.ReadFile(sigpath); err != nil {
-		return fmt.Errorf("CheckSignature sig: %s", err)
+		return "", fmt.Errorf("CheckSignature sig: %s", err)
 	}
 	if err = pgp.Verify(pk, sig, bin); err != nil {
-		return UnpackUpdater(binpath)
+		return t.UnpackUpdater(binpath)
 		//return nil
 	}
 	err = fmt.Errorf("signature check failed")
-	return fmt.Errorf("CheckSignature: %s", err)
+	return "", fmt.Errorf("CheckSignature: %s", err)
 }
 
-func BoolCheckSignature(binpath, sigpath string) bool {
-	err := CheckSignature(binpath, sigpath)
+func (t *TBDownloader) BoolCheckSignature(binpath, sigpath string) bool {
+	_, err := t.CheckSignature(binpath, sigpath)
 	return err == nil
 }

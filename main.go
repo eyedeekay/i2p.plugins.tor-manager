@@ -5,24 +5,22 @@ import (
 	"log"
 
 	"github.com/cloudfoundry/jibber_jabber"
-	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
-	tbsupervise "i2pgit.org/idk/i2p.plugins.tor-manager/supervise"
+	tbserve "i2pgit.org/idk/i2p.plugins.tor-manager/serve"
 )
 
-var runtimePair = tbget.GetRuntimePair()
+//var runtimePair = tbget.GetRuntimePair()
 
 var (
-	lang = flag.String("lang", "", "Language to download")
-	os   = flag.String("os", tbget.OS, "OS/arch to download")
-	arch = flag.String("arch", tbget.ARCH, "OS/arch to download")
+	lang   = flag.String("lang", "", "Language to download")
+	os     = flag.String("os", "linux", "OS/arch to download")
+	arch   = flag.String("arch", "64", "OS/arch to download")
+	browse = flag.Bool("browse", false, "Open the browser")
 	/*mirror   = flag.String("mirror", "", "Mirror to use")*/
 	bemirror = flag.Bool("bemirror", false, "Act as an in-I2P mirror when you're done downloading")
 )
 
 func main() {
 	flag.Parse()
-	tbget.OS = *os
-	tbget.ARCH = *arch
 	if *lang == "" {
 		var err error
 		*lang, err = jibber_jabber.DetectIETF()
@@ -31,18 +29,11 @@ func main() {
 		}
 		log.Println("Using auto-detected language", *lang)
 	}
-	bin, sig, err := tbget.DownloadUpdaterForLang(*lang)
+	client, err := tbserve.NewClient("", *lang, *os, *arch)
 	if err != nil {
-		panic(err)
+		log.Fatal("Couldn't create client", err)
 	}
-	if err := tbget.CheckSignature(bin, sig); err != nil {
-		log.Fatal(err)
-	} else {
-		log.Printf("Signature check passed")
-	}
-	log.Println("Running Tor Browser", *lang, runtimePair, bin)
-	supervisor := tbsupervise.NewSupervisor(bin, *lang)
-	if err := supervisor.RunTBWithLang(); err != nil {
+	if err := client.TBS.RunI2PBWithLang(); err != nil {
 		log.Fatal(err)
 	}
 }
