@@ -36,6 +36,7 @@ type TBDownloader struct {
 	DownloadPath string
 	Lang         string
 	OS, ARCH     string
+	Verbose      bool
 }
 
 var OS = "linux"
@@ -48,6 +49,7 @@ func NewTBDownloader(lang string, os, arch string) *TBDownloader {
 		UnpackPath:   UNPACK_PATH,
 		OS:           os,
 		ARCH:         arch,
+		Verbose:      false,
 	}
 }
 
@@ -213,6 +215,7 @@ func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, erro
 }
 
 func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
+
 	if t.OS == "win" {
 		cmd := exec.Command("cmd", "/c", "start", "\""+t.UnpackPath+"\"", "\""+binpath+" /SD /D="+t.UnpackPath+"\"")
 		cmd.Stdout = os.Stdout
@@ -231,9 +234,10 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 			return "", fmt.Errorf("UnpackUpdater: osx open/mount fail %s", err)
 		}
 	}
-	if FileExists(t.UnpackPath) {
+	if FileExists(filepath.Join(t.UnpackPath, "tor-browser_"+t.Lang)) {
 		return filepath.Join(t.UnpackPath, "tor-browser_"+t.Lang), nil
 	}
+	fmt.Printf("Unpacking %s %s\n", binpath, t.UnpackPath)
 	os.MkdirAll(t.UnpackPath, 0755)
 	UNPACK_DIRECTORY, err := os.Open(t.UnpackPath)
 	if err != nil {
@@ -272,6 +276,9 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 		mode := header.FileInfo().Mode()
 		//remember to chmod the file afterwards
 		file.Chmod(mode)
+		if t.Verbose {
+			fmt.Printf("Unpacked %s\n", header.Name)
+		}
 	}
 	return t.UnpackPath, nil
 
