@@ -40,23 +40,33 @@ func NewClient(hostname string, lang string, os string, arch string) (*Client, e
 
 func (m *Client) ServeHTTP(rw http.ResponseWriter, rq *http.Request) {
 	path := rq.URL.Path
+	log.Printf("ServeHTTP: '%s'", path)
 	switch path {
-	case "/start-tor-browser":
-		m.TBS.RunTBWithLang()
-	case "/start-i2p-browser":
-		m.TBS.RunI2PBWithLang()
+	case "/launch-tor-browser":
+		log.Println("Starting Tor Browser")
+		go m.TBS.RunTBWithLang()
+		http.Redirect(rw, rq, "/", http.StatusFound)
+	case "/launch-i2p-browser":
+		log.Println("Starting I2P Browser")
+		go m.TBS.RunI2PBWithLang()
+		http.Redirect(rw, rq, "/", http.StatusFound)
 	case "/start-tor":
-		m.TBS.RunTorWithLang()
+		log.Println("Starting Tor")
+		go m.TBS.RunTorWithLang()
+		http.Redirect(rw, rq, "/", http.StatusFound)
 	case "/stop-tor":
-		m.TBS.StopTor()
+		log.Println("Stopping Tor")
+		go m.TBS.StopTor()
+		http.Redirect(rw, rq, "/", http.StatusFound)
 	default:
 		b, e := m.Page()
 		if e != nil {
-			fmt.Fprintf(rw, "Error: %s", e)
+			log.Printf("Serve Error: %s", e)
 		}
+		//rw.WriteHeader("Content-Type", "text/html")
+		rw.Header().Set("Content-Type", "text/html")
 		rw.Write([]byte(b))
 	}
-	rw.Write([]byte("Hello, world!"))
 }
 
 func (m *Client) Serve() error {

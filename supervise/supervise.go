@@ -21,7 +21,9 @@ var (
 type Supervisor struct {
 	UnpackPath string
 	Lang       string
-	cmd        *exec.Cmd
+	torcmd     *exec.Cmd
+	tbcmd      *exec.Cmd
+	ibcmd      *exec.Cmd
 }
 
 func (s *Supervisor) TBPath() string {
@@ -50,6 +52,16 @@ func (s *Supervisor) I2PDataPath() string {
 	//}
 }
 
+func (s *Supervisor) tbbail() error {
+	if s.tbcmd != nil && s.tbcmd.Process != nil && s.tbcmd.ProcessState != nil {
+		if s.tbcmd.ProcessState.Exited() {
+			return nil
+		}
+		return fmt.Errorf("Already running")
+	}
+	return nil
+}
+
 func (s *Supervisor) RunTBWithLang() error {
 	tbget.ARCH = ARCH
 	if s.Lang == "" {
@@ -59,30 +71,44 @@ func (s *Supervisor) RunTBWithLang() error {
 		s.UnpackPath = UNPACK_URL
 	}
 
+	if s.tbbail() != nil {
+		return nil
+	}
+
 	log.Println("running tor browser with lang", s.Lang, s.UnpackPath)
 	switch OS {
 	case "linux":
 		if tbget.FileExists(s.UnpackPath) {
 			log.Println("running tor browser with lang", s.Lang, s.UnpackPath)
-			s.cmd = exec.Command(s.TBPath())
-			s.cmd.Stdout = os.Stdout
-			s.cmd.Stderr = os.Stderr
-			return s.cmd.Run()
+			s.tbcmd = exec.Command(s.TBPath())
+			s.tbcmd.Stdout = os.Stdout
+			s.tbcmd.Stderr = os.Stderr
+			return s.tbcmd.Run()
 		} else {
 			log.Println("tor browser not found at", s.TBPath())
 			return fmt.Errorf("tor browser not found at %s", s.TBPath())
 		}
 	case "darwin":
-		s.cmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
-		s.cmd.Dir = s.TBDirectory()
-		return s.cmd.Run()
+		s.tbcmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
+		s.tbcmd.Dir = s.TBDirectory()
+		return s.tbcmd.Run()
 	case "windows":
-		s.cmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"Tor Browser.exe\"")
-		s.cmd.Dir = s.TBDirectory()
-		return s.cmd.Run()
+		s.tbcmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"Tor Browser.exe\"")
+		s.tbcmd.Dir = s.TBDirectory()
+		return s.tbcmd.Run()
 	default:
 	}
 
+	return nil
+}
+
+func (s *Supervisor) ibbail() error {
+	if s.ibcmd != nil && s.ibcmd.Process != nil && s.ibcmd.ProcessState != nil {
+		if s.ibcmd.ProcessState.Exited() {
+			return nil
+		}
+		return fmt.Errorf("Already running")
+	}
 	return nil
 }
 
@@ -95,30 +121,44 @@ func (s *Supervisor) RunI2PBWithLang() error {
 		s.UnpackPath = UNPACK_URL
 	}
 
+	if s.ibbail() != nil {
+		return nil
+	}
+
 	log.Println("running tor browser with lang", s.Lang, s.UnpackPath)
 	switch OS {
 	case "linux":
 		if tbget.FileExists(s.UnpackPath) {
 			log.Println("running Tor browser with lang and I2P Profile", s.Lang, s.UnpackPath, s.FirefoxPath(), "--profile", s.I2PDataPath())
-			s.cmd = exec.Command(s.FirefoxPath(), "--profile", s.I2PDataPath())
-			s.cmd.Stdout = os.Stdout
-			s.cmd.Stderr = os.Stderr
-			return s.cmd.Run()
+			s.ibcmd = exec.Command(s.FirefoxPath(), "--profile", s.I2PDataPath())
+			s.ibcmd.Stdout = os.Stdout
+			s.ibcmd.Stderr = os.Stderr
+			return s.ibcmd.Run()
 		} else {
 			log.Println("tor browser not found at", s.FirefoxPath())
 			return fmt.Errorf("tor browser not found at %s", s.FirefoxPath())
 		}
 	case "darwin":
-		s.cmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
-		s.cmd.Dir = s.TBDirectory()
-		return s.cmd.Run()
+		s.ibcmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
+		s.ibcmd.Dir = s.TBDirectory()
+		return s.ibcmd.Run()
 	case "windows":
-		s.cmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"Tor Browser.exe\"")
-		s.cmd.Dir = s.TBDirectory()
-		return s.cmd.Run()
+		s.ibcmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"Tor Browser.exe\"")
+		s.ibcmd.Dir = s.TBDirectory()
+		return s.ibcmd.Run()
 	default:
 	}
 
+	return nil
+}
+
+func (s *Supervisor) torbail() error {
+	if s.torcmd != nil && s.torcmd.Process != nil && s.torcmd.ProcessState != nil {
+		if s.torcmd.ProcessState.Exited() {
+			return nil
+		}
+		return fmt.Errorf("Already running")
+	}
 	return nil
 }
 
@@ -130,28 +170,31 @@ func (s *Supervisor) RunTorWithLang() error {
 	if s.UnpackPath == "" {
 		s.UnpackPath = UNPACK_URL
 	}
+	if err := s.torbail(); err != nil {
+		return nil
+	}
 
 	log.Println("running tor with lang", s.Lang, s.UnpackPath)
 	switch OS {
 	case "linux":
 		if tbget.FileExists(s.UnpackPath) {
 			log.Println("running tor with lang", s.Lang, s.UnpackPath)
-			s.cmd = exec.Command(s.TorPath())
-			s.cmd.Stdout = os.Stdout
-			s.cmd.Stderr = os.Stderr
-			return s.cmd.Run()
+			s.torcmd = exec.Command(s.TorPath())
+			s.torcmd.Stdout = os.Stdout
+			s.torcmd.Stderr = os.Stderr
+			return s.torcmd.Run()
 		} else {
 			log.Println("tor not found at", s.TorPath())
 			return fmt.Errorf("tor not found at %s", s.TorPath())
 		}
 	case "darwin":
-		s.cmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
-		s.cmd.Dir = s.TBDirectory()
-		return s.cmd.Run()
+		s.torcmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
+		s.torcmd.Dir = s.TBDirectory()
+		return s.torcmd.Run()
 	case "windows":
-		s.cmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"Tor Browser.exe\"")
-		s.cmd.Dir = s.TBDirectory()
-		return s.cmd.Run()
+		s.torcmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"Tor Browser.exe\"")
+		s.torcmd.Dir = s.TBDirectory()
+		return s.torcmd.Run()
 	default:
 	}
 
@@ -159,7 +202,7 @@ func (s *Supervisor) RunTorWithLang() error {
 }
 
 func (s *Supervisor) StopTor() error {
-	return s.cmd.Process.Kill()
+	return s.torcmd.Process.Kill()
 }
 
 func NewSupervisor(tbPath, lang string) *Supervisor {
