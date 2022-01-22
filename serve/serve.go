@@ -38,13 +38,17 @@ func NewClient(hostname string, lang string, os string, arch string) (*Client, e
 	return m, nil
 }
 
-func (m *Client) ServeHTTP(rw http.ResponseWriter, rq http.Request) {
+func (m *Client) ServeHTTP(rw http.ResponseWriter, rq *http.Request) {
 	path := rq.URL.Path
 	switch path {
 	case "/start-tor-browser":
+		m.TBS.RunTBWithLang()
 	case "/start-i2p-browser":
+		m.TBS.RunI2PBWithLang()
 	case "/start-tor":
+		m.TBS.RunTorWithLang()
 	case "/stop-tor":
+		m.TBS.StopTor()
 	default:
 		b, e := m.Page()
 		if e != nil {
@@ -53,6 +57,11 @@ func (m *Client) ServeHTTP(rw http.ResponseWriter, rq http.Request) {
 		rw.Write([]byte(b))
 	}
 	rw.Write([]byte("Hello, world!"))
+}
+
+func (m *Client) Serve() error {
+	//http.Handle("/", m)
+	return http.ListenAndServe("127.0.0.1:7695", m)
 }
 
 func (m *Client) generateMirrorJSON() (map[string]interface{}, error) {

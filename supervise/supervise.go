@@ -145,17 +145,21 @@ func (s *Supervisor) RunTorWithLang() error {
 			return fmt.Errorf("tor not found at %s", s.TorPath())
 		}
 	case "darwin":
-		cmd := exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
-		cmd.Dir = s.TBDirectory()
-		return cmd.Run()
+		s.cmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
+		s.cmd.Dir = s.TBDirectory()
+		return s.cmd.Run()
 	case "windows":
-		cmd := exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"Tor Browser.exe\"")
-		cmd.Dir = s.TBDirectory()
-		return cmd.Run()
+		s.cmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"Tor Browser.exe\"")
+		s.cmd.Dir = s.TBDirectory()
+		return s.cmd.Run()
 	default:
 	}
 
 	return nil
+}
+
+func (s *Supervisor) StopTor() error {
+	return s.cmd.Process.Kill()
 }
 
 func NewSupervisor(tbPath, lang string) *Supervisor {

@@ -33,7 +33,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Couldn't create client", err)
 	}
-	if err := client.TBS.RunI2PBWithLang(); err != nil {
+	if err := client.Serve(); err != nil {
 		log.Fatal(err)
 	}
 }
