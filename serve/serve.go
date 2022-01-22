@@ -20,7 +20,8 @@ type Client struct {
 
 func NewClient(hostname string, lang string, os string, arch string) (*Client, error) {
 	m := &Client{
-		TBD: tbget.NewTBDownloader(lang, os, arch),
+		hostname: hostname,
+		TBD:      tbget.NewTBDownloader(lang, os, arch),
 	}
 	tgz, sig, err := m.TBD.DownloadUpdaterForLang(lang)
 	if err != nil {
