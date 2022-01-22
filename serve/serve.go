@@ -71,6 +71,7 @@ func (m *Client) ServeHTTP(rw http.ResponseWriter, rq *http.Request) {
 
 func (m *Client) Serve() error {
 	//http.Handle("/", m)
+	go m.TBS.RunTorWithLang()
 	return http.ListenAndServe("127.0.0.1:7695", m)
 }
 

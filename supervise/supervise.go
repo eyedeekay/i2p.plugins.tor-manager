@@ -3,6 +3,7 @@ package tbsupervise
 import (
 	"fmt"
 	"log"
+	"net"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -153,6 +154,10 @@ func (s *Supervisor) RunI2PBWithLang() error {
 }
 
 func (s *Supervisor) torbail() error {
+	_, err := net.Listen("TCP", "127.0.0.1:9050")
+	if err != nil {
+		return fmt.Errorf("Already running")
+	}
 	if s.torcmd != nil && s.torcmd.Process != nil && s.torcmd.ProcessState != nil {
 		if s.torcmd.ProcessState.Exited() {
 			return nil
