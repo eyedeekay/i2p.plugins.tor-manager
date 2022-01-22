@@ -280,8 +280,7 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 			fmt.Printf("Unpacked %s\n", header.Name)
 		}
 	}
-	return t.UnpackPath, nil
-
+	return filepath.Join(t.UnpackPath, "tor-browser_"+t.Lang), nil
 }
 
 func (t *TBDownloader) CheckSignature(binpath, sigpath string) (string, error) {
