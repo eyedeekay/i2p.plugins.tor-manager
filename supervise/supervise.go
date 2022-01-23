@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
+	"github.com/mitchellh/go-ps"
 	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
 )
 
@@ -210,8 +211,28 @@ func (s *Supervisor) StopTor() error {
 	return s.torcmd.Process.Kill()
 }
 
-func (s *Supervisor) TorIsAlive() bool {
-	return s.torcmd.ProcessState.Exited()
+func (s *Supervisor) TorIsAlive() (bool, bool) {
+	_, err := net.Listen("TCP", "127.0.0.1:9050")
+	if err != nil {
+		return true, false
+	}
+	if s.torcmd != nil && s.torcmd.Process != nil && s.torcmd.ProcessState != nil {
+		return !s.torcmd.ProcessState.Exited(), true
+	}
+	processes, err := ps.Processes()
+	if err != nil {
+		return false, true
+	}
+	for _, p := range processes {
+		if p.Executable() == s.TorPath() {
+			var err error
+			s.torcmd.Process, err = os.FindProcess(p.Pid())
+			if err == nil {
+				return true, true
+			}
+		}
+	}
+	return false, true
 }
 
 func NewSupervisor(tbPath, lang string) *Supervisor {

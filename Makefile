@@ -11,9 +11,16 @@ BINARY=i2p.plugins.tor-manager
 SIGNER=hankhill19580@gmail.com
 CONSOLEPOSTNAME=Tor Binary Manager
 USER_GH=eyedeekay
+PLUGIN=$(HOME)/.i2p/plugins/$(BINARY)-$(GOOS)-$(GOARCH)
 
-build: dep
+
+binary:
 	go build $(ARG) -tags="netgo" -o $(BINARY)-$(GOOS)-$(GOARCH) .
+
+install-binary: binary
+	cp -v $(BINARY)-$(GOOS)-$(GOARCH) $(PLUGIN)/lib
+
+build: dep binary
 	make su3
 
 clean:

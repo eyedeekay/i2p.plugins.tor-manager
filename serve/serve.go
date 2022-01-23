@@ -41,32 +41,51 @@ func NewClient(hostname string, lang string, os string, arch string) (*Client, e
 func (m *Client) ServeHTTP(rw http.ResponseWriter, rq *http.Request) {
 	path := rq.URL.Path
 	log.Printf("ServeHTTP: '%s'", path)
-	switch path {
-	case "/launch-tor-browser":
-		log.Println("Starting Tor Browser")
-		go m.TBS.RunTBWithLang()
-		http.Redirect(rw, rq, "/", http.StatusFound)
-	case "/launch-i2p-browser":
-		log.Println("Starting I2P Browser")
-		go m.TBS.RunI2PBWithLang()
-		http.Redirect(rw, rq, "/", http.StatusFound)
-	case "/start-tor":
-		log.Println("Starting Tor")
-		go m.TBS.RunTorWithLang()
-		http.Redirect(rw, rq, "/", http.StatusFound)
-	case "/stop-tor":
-		log.Println("Stopping Tor")
-		go m.TBS.StopTor()
-		http.Redirect(rw, rq, "/", http.StatusFound)
+	fileextension := filepath.Ext(path)
+	switch fileextension {
+	case ".json":
+		m.serveJSON(rw, rq)
+		return
+	case ".css":
+		m.serveCSS(rw, rq)
+		return
+	case ".js":
+		m.serveJS(rw, rq)
+		return
+	case ".png":
+		m.servePNG(rw, rq)
+		return
+	case ".ico":
+		m.serveICO(rw, rq)
+		return
+	case ".svg":
+		m.serveSVG(rw, rq)
+		return
 	default:
-		b, e := m.Page()
-		if e != nil {
-			log.Printf("Serve Error: %s", e)
+		switch path {
+		case "/launch-tor-browser":
+			log.Println("Starting Tor Browser")
+			go m.TBS.RunTBWithLang()
+			http.Redirect(rw, rq, "/", http.StatusFound)
+		case "/launch-i2p-browser":
+			log.Println("Starting I2P Browser")
+			go m.TBS.RunI2PBWithLang()
+			http.Redirect(rw, rq, "/", http.StatusFound)
+		case "/start-tor":
+			log.Println("Starting Tor")
+			go m.TBS.RunTorWithLang()
+			http.Redirect(rw, rq, "/", http.StatusFound)
+		case "/stop-tor":
+			log.Println("Stopping Tor")
+			go m.TBS.StopTor()
+			http.Redirect(rw, rq, "/", http.StatusFound)
+		default:
+			b, _ := m.Page()
+			rw.Header().Set("Content-Type", "text/html")
+			rw.Write([]byte(b))
 		}
-		//rw.WriteHeader("Content-Type", "text/html")
-		rw.Header().Set("Content-Type", "text/html")
-		rw.Write([]byte(b))
 	}
+
 }
 
 func (m *Client) Serve() error {
@@ -99,7 +118,7 @@ func (m *Client) generateMirrorJSON() (map[string]interface{}, error) {
 	return JSON, nil
 }
 
-func (m *Client) GenerateMirrorJSON(lang string) (string, error) {
+func (m *Client) GenerateMirrorJSON() (string, error) {
 	JSON, err := m.generateMirrorJSON()
 	if err != nil {
 		return "", err
@@ -123,7 +142,7 @@ func (m *Client) GenerateMirrorJSON(lang string) (string, error) {
 				delete(platform.(map[string]interface{}), k)
 			}
 			for k2 := range v.(map[string]interface{}) {
-				if k2 != lang {
+				if k2 != m.TBD.Lang {
 					delete(v.(map[string]interface{}), k2)
 				}
 
