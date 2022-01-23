@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>i2p.plugins.tor-manager - Tor Binary Manager</title>
+  <link rel="stylesheet" type="text/css" href ="/style.css" />
+</head>
+<body>
+<h1 id="i2p.plugins.tor-updater">i2p.plugins.tor-updater</h1>
+<p>A Tor package updater and runner as an I2P Plugin. This plugin is still being changed rapidly but it should be usable on most Linux distributions as of 23 Jan, 2022.</p>
+<h2 id="usage">Usage:</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">Usage</span> of ./i2p.plugins.tor-manager-linux-amd64:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="ex">-arch</span> string</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>        <span class="ex">OS/arch</span> to download (default <span class="st">&quot;64&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>  <span class="ex">-i2pbrowser</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>        <span class="ex">Open</span> I2P in Tor Browser</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>  <span class="ex">-lang</span> string</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>        <span class="ex">Language</span> to download</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>  <span class="ex">-os</span> string</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>        <span class="ex">OS/arch</span> to download (default <span class="st">&quot;linux&quot;</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>  <span class="ex">-torbrowser</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>        <span class="ex">Open</span> Tor Browser</span></code></pre></div>
+<h3 id="primary-goals">Primary Goals</h3>
+<ul>
+<li>Ship known-good public keys, download a current Tor for the platform in the background, authenticate it, and launch it only if necessary.</li>
+<li>Works on Windows, Linux, probably also OSX</li>
+<li>Supervise Tor as a ShellService plugin to I2P</li>
+<li>Works on Linux</li>
+<li>Keep Tor up-to-date</li>
+<li>Works on Windows, Linux, probably also OSX</li>
+<li>Work as an I2P Plugin OR as a freestanding app to be compatible with all I2P distributions</li>
+<li>Works on Linux</li>
+<li>Download Tor Browser from an in-I2P mirror(or one of a network of in-I2P mirrors)</li>
+<li>Not done</li>
+</ul>
+<h3 id="secondary-goals">Secondary Goals:</h3>
+<ul>
+<li>Launch Tor Browser</li>
+<li>Works on Linux</li>
+<li>Configure and launch Tor browser for use with I2P</li>
+<li>Works on Linux, probably also Windows, probably not OSX yet.</li>
+</ul>
+<h4 id="optional-features-i-might-add-if-there-is-interest">Optional Features I might add if there is interest</h4>
+<ul>
+<li>Mirror the files which it downloads to an I2P Site</li>
+<li>Mirror the files which it downloads to I2P torrents</li>
+<li>Set up an onion site which announces an I2P mirror exists</li>
+<li>Use Bittorrent-over-I2P to download the Tor Browser software</li>
+</ul>
+<h3 id="similar-projects">Similar Projects:</h3>
+<ul>
+<li>https://github.com/micahflee/torbrowser-launcher</li>
+<li>https://github.com/whonix/tb-updater</li>
+</ul>
+</body>
+</html>
