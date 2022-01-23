@@ -10,6 +10,7 @@ import (
 )
 
 //go:embed tor-browser/unpack/i2p.firefox/*
+//go:embed tor-browser/TPO-signing-key.pub
 var content embed.FS
 
 //var runtimePair = tbget.GetRuntimePair()
@@ -37,10 +38,11 @@ func main() {
 		}
 		log.Println("Using auto-detected language", *lang)
 	}
-	client, err := tbserve.NewClient("", *lang, *os, *arch)
+	client, err := tbserve.NewClient("", *lang, *os, *arch, &content)
 	if err != nil {
 		log.Fatal("Couldn't create client", err)
 	}
+	//client.TBD.Profile = &content
 	client.TBS.Profile = &content
 	if *i2pbrowser {
 		client.TBS.RunI2PBWithLang()

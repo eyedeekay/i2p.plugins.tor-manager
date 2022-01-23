@@ -2,10 +2,12 @@ package tbget
 
 import (
 	"archive/tar"
+	"embed"
 	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"os/exec"
@@ -37,12 +39,13 @@ type TBDownloader struct {
 	Lang         string
 	OS, ARCH     string
 	Verbose      bool
+	Profile      *embed.FS
 }
 
 var OS = "linux"
 var ARCH = "64"
 
-func NewTBDownloader(lang string, os, arch string) *TBDownloader {
+func NewTBDownloader(lang string, os, arch string, content *embed.FS) *TBDownloader {
 	return &TBDownloader{
 		Lang:         lang,
 		DownloadPath: DOWNLOAD_PATH,
@@ -50,6 +53,7 @@ func NewTBDownloader(lang string, os, arch string) *TBDownloader {
 		OS:           os,
 		ARCH:         arch,
 		Verbose:      false,
+		Profile:      content,
 	}
 }
 
@@ -96,14 +100,25 @@ func (t *TBDownloader) GetUpdaterForLangFromJson(body io.ReadCloser, ietf string
 	if err != nil {
 		return "", "", fmt.Errorf("t.GetUpdaterForLangFromJson: %s", err)
 	}
+	t.MakeTBDirectory()
 	if err = ioutil.WriteFile(filepath.Join(t.DownloadPath, "downloads.json"), jsonBytes, 0644); err != nil {
 		return "", "", fmt.Errorf("t.GetUpdaterForLangFromJson: %s", err)
 	}
 	return t.GetUpdaterForLangFromJsonBytes(jsonBytes, ietf)
 }
 
-func (t *TBDownloader) GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf string) (string, string, error) {
+func (t *TBDownloader) MakeTBDirectory() {
 	os.MkdirAll(t.DownloadPath, 0755)
+	path := filepath.Join("", "tor-browser", "TPO-signing-key.pub")
+	bytes, err := t.Profile.ReadFile(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	ioutil.WriteFile(filepath.Join(t.DownloadPath, "TPO-signing-key.pub"), bytes, 0644)
+}
+
+func (t *TBDownloader) GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf string) (string, string, error) {
+	t.MakeTBDirectory()
 	var dat map[string]interface{}
 	if err := json.Unmarshal(jsonBytes, &dat); err != nil {
 		return "", "", fmt.Errorf("func (t *TBDownloader)Name: %s", err)
@@ -129,7 +144,7 @@ func (t *TBDownloader) GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf str
 }
 
 func (t *TBDownloader) SingleFileDownload(url, name string) (string, error) {
-	os.MkdirAll(t.DownloadPath, 0755)
+	t.MakeTBDirectory()
 	path := filepath.Join(t.DownloadPath, name)
 	if !t.BotherToDownload(url, name) {
 		fmt.Printf("No updates required, skipping download of %s\n", name)

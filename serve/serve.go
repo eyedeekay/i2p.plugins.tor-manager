@@ -1,6 +1,7 @@
 package tbserve
 
 import (
+	"embed"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -20,11 +21,12 @@ type Client struct {
 	TBS      *TBSupervise.Supervisor
 }
 
-func NewClient(hostname string, lang string, os string, arch string) (*Client, error) {
+func NewClient(hostname string, lang string, os string, arch string, content *embed.FS) (*Client, error) {
 	m := &Client{
 		hostname: hostname,
-		TBD:      tbget.NewTBDownloader(lang, os, arch),
+		TBD:      tbget.NewTBDownloader(lang, os, arch, content),
 	}
+	m.TBD.MakeTBDirectory()
 	tgz, sig, err := m.TBD.DownloadUpdaterForLang(lang)
 	if err != nil {
 		panic(err)
