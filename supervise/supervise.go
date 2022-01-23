@@ -38,7 +38,14 @@ func (s *Supervisor) TBPath() string {
 }
 
 func (s *Supervisor) FirefoxPath() string {
-	return filepath.Join(s.UnpackPath, "Browser", "firefox.real")
+	switch OS {
+	case "linux":
+		return filepath.Join(s.UnpackPath, "Browser", "firefox.real")
+	case "windows":
+		return filepath.Join(s.UnpackPath, "Browser", "firefox.exe")
+	default:
+		return filepath.Join(s.UnpackPath, "Browser", "firefox")
+	}
 }
 
 func (s *Supervisor) TBDirectory() string {
@@ -133,7 +140,7 @@ func (s *Supervisor) RunTBWithLang() error {
 		s.tbcmd.Dir = s.TBDirectory()
 		return s.tbcmd.Run()
 	case "windows":
-		s.tbcmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"Tor Browser.exe\"")
+		s.tbcmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"firefox.exe\"")
 		s.tbcmd.Dir = s.TBDirectory()
 		return s.tbcmd.Run()
 	default:
@@ -183,7 +190,7 @@ func (s *Supervisor) RunI2PBWithLang() error {
 		s.ibcmd.Dir = s.TBDirectory()
 		return s.ibcmd.Run()
 	case "windows":
-		s.ibcmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"Tor Browser.exe\"")
+		s.ibcmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"firefox.exe "+"--profile "+s.I2PDataPath()+" \"")
 		s.ibcmd.Dir = s.TBDirectory()
 		return s.ibcmd.Run()
 	default:
@@ -236,7 +243,7 @@ func (s *Supervisor) RunTorWithLang() error {
 		s.torcmd.Dir = s.TBDirectory()
 		return s.torcmd.Run()
 	case "windows":
-		s.torcmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"Tor Browser.exe\"")
+		s.torcmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\TorBrowser\Tor\"", "\"tor.exe\"")
 		s.torcmd.Dir = s.TBDirectory()
 		return s.torcmd.Run()
 	default:
