@@ -11,9 +11,6 @@ import (
 )
 
 func (m *Client) generateMirrorJSON() (map[string]interface{}, error) {
-	if !strings.HasSuffix(m.hostname, "/") {
-		m.hostname += "/"
-	}
 	path := filepath.Join(tbget.DOWNLOAD_PATH, "downloads.json")
 	preBytes, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -25,13 +22,20 @@ func (m *Client) generateMirrorJSON() (map[string]interface{}, error) {
 	}
 	urlparts := strings.Split(binpath, "/")
 	replaceString := GenerateReplaceString(urlparts[:len(urlparts)-1])
-	fmt.Printf("Replacing: %s with %s\n", replaceString, m.hostname)
+	fmt.Printf("Replacing: %s with %s\n", replaceString, m.Hostname())
 	jsonBytes := []byte(strings.Replace(string(preBytes), replaceString, m.hostname, -1))
 	var JSON map[string]interface{}
 	if err := json.Unmarshal(jsonBytes, &JSON); err != nil {
 		panic(err)
 	}
 	return JSON, nil
+}
+
+func (m *Client) Hostname() string {
+	if !strings.HasSuffix(m.hostname, "/") {
+		return m.hostname + "/"
+	}
+	return m.hostname
 }
 
 func (m *Client) GenerateMirrorJSON() (string, error) {

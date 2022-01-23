@@ -54,8 +54,9 @@ func (s *Supervisor) TorDataPath() string {
 }
 
 func (s *Supervisor) I2PDataPath() string {
-	if tbget.FileExists(filepath.Join(s.UnpackPath, "i2p.firefox")) {
-		return filepath.Join(filepath.Dir(s.UnpackPath), "i2p.firefox")
+	fp := filepath.Join(filepath.Dir(s.UnpackPath), "i2p.firefox")
+	if tbget.FileExists(fp) {
+		return fp
 	} else {
 		//unpack the embedded profile
 		if s.Profile != nil {
@@ -63,7 +64,7 @@ func (s *Supervisor) I2PDataPath() string {
 				log.Fatal(err)
 			}
 		}
-		return filepath.Join(filepath.Dir(s.UnpackPath), "i2p.firefox")
+		return fp
 	}
 }
 
