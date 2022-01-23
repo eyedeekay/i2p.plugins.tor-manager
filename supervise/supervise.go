@@ -210,6 +210,10 @@ func (s *Supervisor) StopTor() error {
 	return s.torcmd.Process.Kill()
 }
 
+func (s *Supervisor) TorIsAlive() bool {
+	return s.torcmd.ProcessState.Exited()
+}
+
 func NewSupervisor(tbPath, lang string) *Supervisor {
 	return &Supervisor{
 		UnpackPath: tbPath,

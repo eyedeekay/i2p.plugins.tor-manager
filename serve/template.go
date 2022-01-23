@@ -18,9 +18,20 @@ configuration.
 
  - [Launch I2P in Tor Browser](/launch-i2p-browser)
  - [Launch Tor Browser](/launch-tor-browser)
- - [Start Tor](/start-tor)
- - [Stop Tor](/stop-tor)
+ 
+## Tor Controls
 
+`)
+
+var htmlhead []byte = []byte(`
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tor Binary Manager</title>
+<link rel="stylesheet" href="/style.css">
+</head>
 `)
 
 func (m *Client) Page() (string, error) {
@@ -30,6 +41,19 @@ func (m *Client) Page() (string, error) {
 	if err != nil {
 		return string(blackfriday.MarkdownCommon(defaultmd)), err
 	}
-	htmlbytes := blackfriday.MarkdownCommon(mdbytes)
+	htmlbytes := htmlhead
+	htmlbytes = append(htmlbytes, []byte("<body>")...)
+	htmlbytes = append(htmlbytes, blackfriday.MarkdownCommon(mdbytes)...)
+	if m.TBS.TorIsAlive() {
+		htmlbytes = append(htmlbytes, []byte(`
+- [Stop Tor](/stop-tor)
+`)...)
+	} else {
+		htmlbytes = append(htmlbytes, []byte(`
+- [Start Tor](/start-tor)
+`)...)
+	}
+	htmlbytes = append(htmlbytes, []byte(`</body>
+	<html>`)...)
 	return string(htmlbytes), nil
 }
