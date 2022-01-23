@@ -40,7 +40,7 @@ Usage of ./i2p.plugins.tor-manager-linux-amd64:
 - Launch Tor Browser
  - Works on Linux
 - Configure and launch Tor browser for use with I2P
- - Works on Linux
+ - Works on Linux, probably also Windows, probably not OSX yet.
 
 #### Optional Features I might add if there is interest
 

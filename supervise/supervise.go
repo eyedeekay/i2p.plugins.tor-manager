@@ -4,11 +4,13 @@ import (
 	"embed"
 	"fmt"
 	"io/fs"
+	"io/ioutil"
 	"log"
 	"net"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"github.com/mitchellh/go-ps"
 	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
@@ -67,17 +69,24 @@ func (s *Supervisor) I2PDataPath() string {
 
 func (s *Supervisor) UnpackI2PData() error {
 	return fs.WalkDir(s.Profile, ".", func(path string, d fs.DirEntry, err error) error {
+		fp := filepath.Join(filepath.Dir(s.UnpackPath), "i2p.firefox")
 		if err != nil {
-			return err
+			log.Fatal(err)
 		}
-		log.Printf("WALKING PROFILE DIRECTORY", d.Name())
-		/*if d.IsDir() {
-			os.MkdirAll(filepath.Join(s.I2PDataPath(), d.Name()), 0755)
+		fmt.Println(path, filepath.Join(fp, strings.Replace(path, "tor-browser/unpack/i2p.firefox", "", -1)))
+		if d.IsDir() {
+			os.MkdirAll(filepath.Join(fp, strings.Replace(path, "tor-browser/unpack/i2p.firefox", "", -1)), 0755)
 		} else {
-			if err := fs.CopyFile(filepath.Join(s.I2PDataPath(), d.Name()), filepath.Join(s.Profile.Path, d.Name())); err != nil {
+			fullpath := filepath.Join(path)
+			bytes, err := s.Profile.ReadFile(fullpath)
+			if err != nil {
 				return err
 			}
-		}*/
+			unpack := filepath.Join(fp, strings.Replace(path, "tor-browser/unpack/i2p.firefox", "", -1))
+			if err := ioutil.WriteFile(unpack, bytes, 0644); err != nil {
+				return err
+			}
+		}
 		return nil
 	})
 }
