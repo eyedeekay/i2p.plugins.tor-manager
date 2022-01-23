@@ -31,7 +31,7 @@ Usage of ./i2p.plugins.tor-manager-linux-amd64:
 3. Keep Tor up-to-date
  - Works on Windows, Linux, probably also OSX
 4. Work as an I2P Plugin OR as a freestanding app to be compatible with all I2P distributions
- - Works on Linux
+ - Works on Linux, probably works on Windows
 5. Download Tor Browser from an in-I2P mirror(or one of a network of in-I2P mirrors)
  - Not done
 

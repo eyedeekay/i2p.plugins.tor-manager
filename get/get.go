@@ -109,12 +109,15 @@ func (t *TBDownloader) GetUpdaterForLangFromJson(body io.ReadCloser, ietf string
 
 func (t *TBDownloader) MakeTBDirectory() {
 	os.MkdirAll(t.DownloadPath, 0755)
+
 	path := filepath.Join("", "tor-browser", "TPO-signing-key.pub")
-	bytes, err := t.Profile.ReadFile(path)
-	if err != nil {
-		log.Fatal(err)
+	if !FileExists(path) {
+		bytes, err := t.Profile.ReadFile(path)
+		if err != nil {
+			log.Fatal(err)
+		}
+		ioutil.WriteFile(filepath.Join(t.DownloadPath, "TPO-signing-key.pub"), bytes, 0644)
 	}
-	ioutil.WriteFile(filepath.Join(t.DownloadPath, "TPO-signing-key.pub"), bytes, 0644)
 }
 
 func (t *TBDownloader) GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf string) (string, string, error) {
