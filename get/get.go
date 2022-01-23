@@ -103,6 +103,7 @@ func (t *TBDownloader) GetUpdaterForLangFromJson(body io.ReadCloser, ietf string
 }
 
 func (t *TBDownloader) GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf string) (string, string, error) {
+	os.MkdirAll(t.DownloadPath, 0755)
 	var dat map[string]interface{}
 	if err := json.Unmarshal(jsonBytes, &dat); err != nil {
 		return "", "", fmt.Errorf("func (t *TBDownloader)Name: %s", err)
@@ -128,6 +129,7 @@ func (t *TBDownloader) GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf str
 }
 
 func (t *TBDownloader) SingleFileDownload(url, name string) (string, error) {
+	os.MkdirAll(t.DownloadPath, 0755)
 	path := filepath.Join(t.DownloadPath, name)
 	if !t.BotherToDownload(url, name) {
 		fmt.Printf("No updates required, skipping download of %s\n", name)
