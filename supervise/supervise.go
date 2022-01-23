@@ -1,7 +1,9 @@
 package tbsupervise
 
 import (
+	"embed"
 	"fmt"
+	"io/fs"
 	"log"
 	"net"
 	"os"
@@ -26,6 +28,7 @@ type Supervisor struct {
 	torcmd     *exec.Cmd
 	tbcmd      *exec.Cmd
 	ibcmd      *exec.Cmd
+	Profile    *embed.FS
 }
 
 func (s *Supervisor) TBPath() string {
@@ -49,9 +52,34 @@ func (s *Supervisor) TorDataPath() string {
 }
 
 func (s *Supervisor) I2PDataPath() string {
-	//if tbget.FileExists(filepath.Join(s.UnpackPath, "i2p.firefox")) {
-	return filepath.Join(filepath.Dir(s.UnpackPath), "i2p.firefox")
-	//}
+	if tbget.FileExists(filepath.Join(s.UnpackPath, "i2p.firefox")) {
+		return filepath.Join(filepath.Dir(s.UnpackPath), "i2p.firefox")
+	} else {
+		//unpack the embedded profile
+		if s.Profile != nil {
+			if err := s.UnpackI2PData(); err != nil {
+				log.Fatal(err)
+			}
+		}
+		return filepath.Join(filepath.Dir(s.UnpackPath), "i2p.firefox")
+	}
+}
+
+func (s *Supervisor) UnpackI2PData() error {
+	return fs.WalkDir(s.Profile, ".", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		log.Printf("WALKING PROFILE DIRECTORY", d.Name())
+		/*if d.IsDir() {
+			os.MkdirAll(filepath.Join(s.I2PDataPath(), d.Name()), 0755)
+		} else {
+			if err := fs.CopyFile(filepath.Join(s.I2PDataPath(), d.Name()), filepath.Join(s.Profile.Path, d.Name())); err != nil {
+				return err
+			}
+		}*/
+		return nil
+	})
 }
 
 func (s *Supervisor) tbbail() error {

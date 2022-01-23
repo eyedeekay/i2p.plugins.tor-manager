@@ -1,12 +1,16 @@
 package main
 
 import (
+	"embed"
 	"flag"
 	"log"
 
 	"github.com/cloudfoundry/jibber_jabber"
 	tbserve "i2pgit.org/idk/i2p.plugins.tor-manager/serve"
 )
+
+//go:embed tor-browser/unpack/i2p.firefox/*
+var content embed.FS
 
 //var runtimePair = tbget.GetRuntimePair()
 
@@ -37,6 +41,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Couldn't create client", err)
 	}
+	client.TBS.Profile = &content
 	if *i2pbrowser {
 		client.TBS.RunI2PBWithLang()
 	} else if *torbrowser {
