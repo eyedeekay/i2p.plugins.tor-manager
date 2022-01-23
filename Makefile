@@ -62,6 +62,7 @@ su3:
 		-desc="`cat desc`" \
 		-exename=$(BINARY)-$(GOOS)-$(GOARCH) \
 		-icondata=icon/icon.png \
+		-consoleurl="http://127.0.0.1:7695" \
 		-updateurl="http://idk.i2p/$(BINARY)/$(BINARY)-$(GOOS)-$(GOARCH).su3" \
 		-website="http://idk.i2p/$(BINARY)/" \
 		-command="$(BINARY)-$(GOOS)-$(GOARCH)" \

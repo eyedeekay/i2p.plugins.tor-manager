@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/justinas/nosurf"
 	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
 	TBSupervise "i2pgit.org/idk/i2p.plugins.tor-manager/supervise"
 )
@@ -91,7 +92,7 @@ func (m *Client) ServeHTTP(rw http.ResponseWriter, rq *http.Request) {
 func (m *Client) Serve() error {
 	//http.Handle("/", m)
 	go m.TBS.RunTorWithLang()
-	return http.ListenAndServe("127.0.0.1:7695", m)
+	return http.ListenAndServe("127.0.0.1:7695", nosurf.New(m))
 }
 
 func (m *Client) generateMirrorJSON() (map[string]interface{}, error) {

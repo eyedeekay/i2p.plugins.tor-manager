@@ -10,6 +10,7 @@ require (
 )
 
 require (
+	github.com/justinas/nosurf v1.1.1
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.17.0 // indirect
