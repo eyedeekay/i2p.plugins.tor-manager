@@ -243,7 +243,7 @@ func (s *Supervisor) RunTorWithLang() error {
 		s.torcmd.Dir = s.TBDirectory()
 		return s.torcmd.Run()
 	case "windows":
-		s.torcmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\TorBrowser\Tor\"", "\"tor.exe\"")
+		s.torcmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\\TorBrowser\\Tor\"", "\"tor.exe\"")
 		s.torcmd.Dir = s.TBDirectory()
 		return s.torcmd.Run()
 	default:
