@@ -36,7 +36,6 @@ The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
 
 ![Screenshot](screenshot.png)
 
-
 ### Primary Goals
 
 

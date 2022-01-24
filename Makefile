@@ -13,12 +13,18 @@ CONSOLEPOSTNAME=Tor Binary Manager
 USER_GH=eyedeekay
 PLUGIN=$(HOME)/.i2p/plugins/$(BINARY)-$(GOOS)-$(GOARCH)
 
+PREFIX?=/usr/local
 
 binary:
 	go build $(ARG) -tags="netgo" -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
 install-binary: binary
 	cp -v $(BINARY)-$(GOOS)-$(GOARCH) $(PLUGIN)/lib
+
+install:
+	install -m755 -v $(BINARY)-$(GOOS)-$(GOARCH) $(PREFIX)/bin/$(BINARY)-$(GOOS)-$(GOARCH)
+	ln -sf $(PREFIX)/bin/$(BINARY)-$(GOOS)-$(GOARCH) $(PREFIX)/bin/i2pbrowser
+	ln -sf $(PREFIX)/bin/$(BINARY)-$(GOOS)-$(GOARCH) $(PREFIX)/bin/torbrowser
 
 build: dep binary
 	make su3
