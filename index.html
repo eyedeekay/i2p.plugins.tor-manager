@@ -19,6 +19,9 @@
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>        <span class="ex">OS/arch</span> to download (default <span class="st">&quot;linux&quot;</span>)</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>  <span class="ex">-torbrowser</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>        <span class="ex">Open</span> Tor Browser</span></code></pre></div>
+<h2 id="status">Status:</h2>
+<p>Linux: Usable, most things work. Windows: Unstable, mostly usable, does not work in some important cirumstances, cannot run from a flash drive OSX: Unstable, untested, not usable, WIP.</p>
+<p>Other systems are not targeted and should use a Tor binary built from source, provided by TPO or, their prefered package management system and not this plugin. The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.</p>
 <h3 id="primary-goals">Primary Goals</h3>
 <ol type="1">
 <li>Ship known-good public keys, download a current Tor for the platform in the background, authenticate it, and launch it only if necessary.</li>

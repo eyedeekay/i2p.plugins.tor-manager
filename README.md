@@ -21,6 +21,17 @@ Usage of ./i2p.plugins.tor-manager-linux-amd64:
     	Open Tor Browser
 ```
 
+Status:
+-------
+
+Linux: Usable, most things work.
+Windows: Unstable, mostly usable, does not work in some important cirumstances, cannot run from a flash drive
+OSX: Unstable, untested, not usable, WIP.
+
+Other systems are not targeted and should use a Tor binary built from source,
+provided by TPO or, their prefered package management system and not this plugin.
+The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
+
 ### Primary Goals
 
 
