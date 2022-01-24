@@ -38,7 +38,6 @@ The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
 
 ### Primary Goals
 
-
 1. Ship known-good public keys, download a current Tor for the platform in the background, authenticate it, and launch it only if necessary.
  - Works on Windows, Linux, probably also OSX
 2. Supervise Tor as a ShellService plugin to I2P
