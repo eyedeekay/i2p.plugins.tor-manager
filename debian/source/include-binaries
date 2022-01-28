@@ -3,3 +3,4 @@ tor-browser/unpack/i2p.firefox/extensions/https-everywhere-eff@eff.org.xpi
 tor-browser/unpack/i2p.firefox/extensions/i2ppb@eyedeekay.github.io.xpi
 tor-browser/unpack/i2p.firefox/extensions/{73a6fe31-595d-460b-a920-fcc0f8843232}.xpi
 tor-browser/unpack/i2p.firefox/storage-sync.sqlite
+tor-browser/TPO-signing-key.pub
