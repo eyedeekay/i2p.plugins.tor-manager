@@ -149,6 +149,6 @@ deb:
 	gbp buildpackage --git-pbuilder --git-ignore-branch
 
 update-deb-pkg:
-	git pull --all
-	uscan --report-status
-	gbp import-orig --sign-tags --uscan
+#	git pull --all
+#	uscan --report-status
+	gbp import-orig --sign-tags --uscan --upstream-branch main
