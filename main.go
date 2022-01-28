@@ -46,6 +46,7 @@ var (
 	arch       = flag.String("arch", ARCH(), "OS/arch to download")
 	i2pbrowser = flag.Bool("i2pbrowser", false, "Open I2P in Tor Browser")
 	torbrowser = flag.Bool("torbrowser", false, "Open Tor Browser")
+	verbose    = flag.Bool("verbose", false, "Verbose output")
 	/*mirror   = flag.String("mirror", "", "Mirror to use")*/
 	/*bemirror = flag.Bool("bemirror", false, "Act as an in-I2P mirror when you're done downloading")*/
 )
@@ -76,6 +77,9 @@ func main() {
 		log.Fatal("Couldn't create client", err)
 	}
 	//client.TBD.Profile = &content
+	if *verbose {
+		client.TBD.Verbose = true
+	}
 	client.TBS.Profile = &content
 	if *i2pbrowser {
 		client.TBS.RunI2PBWithLang()
