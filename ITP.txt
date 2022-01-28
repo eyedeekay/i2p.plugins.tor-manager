@@ -1,0 +1,26 @@
+From: "idk" <hankhill19580@gmail.com>
+To: submit@bugs.debian.org
+Subject: ITP: i2p.plugins.tor-manager -- TODO
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-Debbugs-CC: debian-devel@lists.debian.org, debian-go@lists.debian.org
+
+Package: wnpp
+Severity: wishlist
+Owner: idk <hankhill19580@gmail.com>
+
+* Package name    : i2p.plugins.tor-manager
+  Version         : 0.0~git20220125.13c7d78-1
+  Upstream Author : hankhill19580@gmail.com
+* URL             : https://eyedeekay.github.io/i2p.plugins.tor-manager
+* License         : MIT
+  Programming Lang: Go
+  Description     : Manage a Tor Browser, configure Tor Browser for I2P
+
+A Tor Browser Bundle Manager which manages the Tor Browser in the working
+ directory by default or in a user-specified directory if specified. Also able
+ to configure Tor Browser to use I2P automatically and manage a background Tor
+ process longer than the lifetime of the Tor Browser, systemwide.
+
+
+TODO: perhaps reasoning
