@@ -33,7 +33,7 @@ p: dep binary make su3
 clean:
 	rm -f $(BINARY)-plugin plugin $(BINARY)-*zip -r $(BINARY)-$(GOOS)-$(GOARCH) $(BINARY)-$(GOOS)-$(GOARCH).exe tmp tor-browser/torbrowser-*.* $(BINARY) $(BINARY).exe
 	rm -f *.su3 *.zip $(BINARY)-$(GOOS)-$(GOARCH) $(BINARY)-*
-	git clean -xdf
+	git clean -df
 
 all: windows linux osx bsd
 
@@ -147,7 +147,7 @@ clean-tor-keys:
 tor-browser/TPO-signing-key.pub:
 	gpg --armor --output ./tor-browser/TPO-signing-key.pub --export 0xEF6E286DDA85EA2A4BA7DE684E2C6E8793298290
 
-deb:
+deb: clean
 	mv "hankhill19580_at_gmail.com.crl" ../; true
 	mv "hankhill19580_at_gmail.com.crt" ../; true
 	mv "hankhill19580_at_gmail.com.pem" ../; true
