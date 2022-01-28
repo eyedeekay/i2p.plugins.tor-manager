@@ -33,7 +33,7 @@ install:
 
 build: dep binary
 	
-p: dep binary make su3
+p: dep binary su3
 
 clean:
 	rm -f $(BINARY)-plugin plugin $(BINARY)-*zip -r $(BINARY)-$(GOOS)-$(GOARCH) $(BINARY)-$(GOOS)-$(GOARCH).exe tmp tor-browser/torbrowser-*.* $(BINARY) $(BINARY).exe
