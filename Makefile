@@ -151,4 +151,4 @@ deb:
 update-deb-pkg:
 #	git pull --all
 #	uscan --report-status
-	gbp import-orig --sign-tags --upstream-branch main
+	gbp import-orig --sign-tags --upstream-branch=main
