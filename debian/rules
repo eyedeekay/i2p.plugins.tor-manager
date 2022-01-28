@@ -1,8 +1,7 @@
 #!/usr/bin/make -f
 
 %:
-	#dh $@ --builddirectory=_build --buildsystem=golang --with=golang
-	make
+	dh $@ --builddirectory=_build --buildsystem=golang --with=golang
 
 override_dh_auto_install:
 	dh_auto_install -- --no-source
