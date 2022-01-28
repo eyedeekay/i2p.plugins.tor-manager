@@ -1,4 +1,4 @@
-VERSION=0.0.02
+VERSION=0.0.2
 CGO_ENABLED=0
 export CGO_ENABLED=0
 
@@ -146,9 +146,5 @@ tor-browser/TPO-signing-key.pub:
 	gpg --armor --output ./tor-browser/TPO-signing-key.pub --export 0xEF6E286DDA85EA2A4BA7DE684E2C6E8793298290
 
 deb:
-	gbp buildpackage --git-pbuilder --git-ignore-branch
-
-update-deb-pkg:
-#	git pull --all
-#	uscan --report-status
-	gbp import-orig --sign-tags --upstream-branch=main
+	tar --exclude="./.git" -cvzf ../i2p.plugins.tor-manager_$(VERSION).orig.tar.gz	.
+	dpkg-buildpackage -us -uc

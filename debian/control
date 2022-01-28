@@ -25,7 +25,7 @@ Depends: ${misc:Depends},
          ${shlibs:Depends}
 Built-Using: ${misc:Built-Using}
 Description: Downloads and manages a Tor Browser, also configures TB for I2P
-A Tor Browser Bundle Manager which manages the Tor Browser in the working
+ A Tor Browser Bundle Manager which manages the Tor Browser in the working
  directory by default or in a user-specified directory if specified. Also able
  to configure Tor Browser to use I2P automatically and manage a background Tor
  process longer than the lifetime of the Tor Browser, systemwide.

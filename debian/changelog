@@ -1,4 +1,4 @@
-i2p.plugins.tor-manager (0.0~git20220125.13c7d78-1) UNRELEASED; urgency=medium
+i2p.plugins.tor-manager (0.0.2-1) UNRELEASED; urgency=medium
 
   * Initial release
 
