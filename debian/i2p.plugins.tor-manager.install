@@ -1,4 +1,4 @@
-i2ptorbrowser.desktop /usr/share/applications
-torbrowser.desktop /usr/share/applications
+i2ptorbrowser.desktop /usr/share/applications/i2ptorbrowser.desktop
+torbrowser.desktop /usr/share/applications/torbrowser.desktop
 garliconion.png /var/lib/i2pbrowser/icons/garliconion.png
 onion.png /var/lib/i2pbrowser/icons/onion.png
