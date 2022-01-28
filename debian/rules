@@ -1,8 +1,8 @@
 #!/usr/bin/make -f
 
 %:
-	mkdir -p _build/src/i2pgit.org/idk/i2p.plugins.tor-manager && cp -rv ./* _build/src/i2pgit.org/idk/i2p.plugins.tor-manager
-	dh $@ --builddirectory=_build --buildsystem=golang --with=golang
+	#dh $@ --builddirectory=_build --buildsystem=golang --with=golang
+	make
 
 override_dh_auto_install:
 	dh_auto_install -- --no-source
