@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
+	"strings"
 )
 
 func (m *Client) Page() (string, error) {
@@ -66,6 +67,19 @@ func (m *Client) serveJS(rw http.ResponseWriter, rq *http.Request) {
 func (m *Client) servePNG(rw http.ResponseWriter, rq *http.Request) {
 	pngbytes, err := ioutil.ReadFile(filepath.Join(m.TBD.DownloadPath, rq.URL.Path))
 	if err != nil {
+		rw.Header().Set("Content-Type", "image/png")
+		if strings.HasSuffix(rq.URL.Path, "garliconion.png") {
+			if bytes, err := m.TBD.Profile.ReadFile("garliconion.png"); err == nil {
+				rw.Write(bytes)
+				return
+			}
+		}
+		if strings.HasSuffix(rq.URL.Path, "onion.png") {
+			if bytes, err := m.TBD.Profile.ReadFile("onion.png"); err == nil {
+				rw.Write(bytes)
+				return
+			}
+		}
 		return
 	}
 	rw.Header().Set("Content-Type", "image/png")

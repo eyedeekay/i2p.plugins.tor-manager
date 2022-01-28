@@ -14,6 +14,8 @@ import (
 
 //go:embed tor-browser/unpack/i2p.firefox/*
 //go:embed tor-browser/TPO-signing-key.pub
+//go:embed garliconion.png
+//go:embed onion.png
 var content embed.FS
 
 func OS() string {

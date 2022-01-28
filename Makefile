@@ -22,9 +22,14 @@ install-binary: binary
 	cp -v $(BINARY)-$(GOOS)-$(GOARCH) $(PLUGIN)/lib
 
 install:
+	mkdir -p /var/lib/i2pbrowser/icons
 	install -m755 -v $(BINARY)-$(GOOS)-$(GOARCH) $(PREFIX)/bin/$(BINARY)-$(GOOS)-$(GOARCH)
 	ln -sf $(PREFIX)/bin/$(BINARY)-$(GOOS)-$(GOARCH) $(PREFIX)/bin/i2pbrowser
 	ln -sf $(PREFIX)/bin/$(BINARY)-$(GOOS)-$(GOARCH) $(PREFIX)/bin/torbrowser
+	install i2ptorbrowser.desktop /usr/share/applications/i2ptorbrowser.desktop
+	install torbrowser.desktop /usr/share/applications/torbrowser.desktop
+	install garliconion.png /var/lib/i2pbrowser/icons/garliconion.png
+	install onion.png /var/lib/i2pbrowser/icons/onion.png
 
 build: dep binary
 	
