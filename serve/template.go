@@ -86,7 +86,7 @@ func (m *Client) TorOnStatusHTML(ours bool) []byte {
 			return htmlbytes
 		}
 	} else {
-		mdpath := filepath.Join(dir, m.TBD.Lang, "toron.md")
+		mdpath := filepath.Join(dir, m.TBD.Lang, "torstarted.md")
 		toron, err := ioutil.ReadFile(mdpath)
 		if err != nil {
 			htmlbytes := blackfriday.MarkdownCommon(torrunning)
@@ -101,7 +101,7 @@ func (m *Client) TorOnStatusHTML(ours bool) []byte {
 func (m *Client) TorOffStatusHTML(ours bool) []byte {
 	dir := filepath.Dir(m.TBD.DownloadPath)
 	if ours {
-		mdpath := filepath.Join(dir, m.TBD.Lang, "stoptor.md")
+		mdpath := filepath.Join(dir, m.TBD.Lang, "startor.md")
 		torbytes, err := ioutil.ReadFile(mdpath)
 		if err != nil {
 			htmlbytes := blackfriday.MarkdownCommon(torstart)
@@ -111,7 +111,7 @@ func (m *Client) TorOffStatusHTML(ours bool) []byte {
 			return htmlbytes
 		}
 	} else {
-		mdpath := filepath.Join(dir, m.TBD.Lang, "toron.md")
+		mdpath := filepath.Join(dir, m.TBD.Lang, "torstopped.md")
 		toroff, err := ioutil.ReadFile(mdpath)
 		if err != nil {
 			htmlbytes := blackfriday.MarkdownCommon(torstopped)
