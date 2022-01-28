@@ -146,24 +146,14 @@ tor-browser/TPO-signing-key.pub:
 	gpg --armor --output ./tor-browser/TPO-signing-key.pub --export 0xEF6E286DDA85EA2A4BA7DE684E2C6E8793298290
 
 deb:
-	tar --exclude="./.git" \
+	tar --exclude="./.git/" \
 		--exclude="hankhill19580_at_gmail.com.crl" \
 		--exclude="hankhill19580_at_gmail.com.crt" \
 		--exclude="hankhill19580_at_gmail.com.pem" \
 		--exclude="i2p.plugins.tor-manager" \
 		--exclude="i2p.plugins.tor-manager.exe" \
-		--exclude="./tmp" \
+		--exclude="./tmp/" \
 		--exclude="tor-browser/torbrowser-linux64-en-US.tar.xz" \
 		--exclude="tor-browser/torbrowser-linux64-en-US.tar.xz.asc" \
 		-cvzf ../i2p.plugins.tor-manager_$(VERSION).orig.tar.gz	.
-
-
 	dpkg-buildpackage -us -uc
-On branch debian/sid
-Ignored files:
-  (use "git add -f <file>..." to include in what will be committed)
-
-	
-
-
-nothing to commit, working tree clean
