@@ -1,7 +1,15 @@
 #!/usr/bin/make -f
 
+export DH_GOLANG_INSTALL_EXTRA := tor-browser/TPO-signing-key.pub tor-browser/unpack/i2p.firefox ../../../github.com/jchavannes/go-pgp/pgp ../../../github.com/justinas/nosurf
+
+
 %:
 	dh $@ --builddirectory=_build --buildsystem=golang --with=golang
+
+#override_dh_auto_configure:
+#	mkdir -p _build/src/github.com/jchavannes/go-pgp/ _build/src/github.com/justinas/
+#	ln -sf ../../../github.com/jchavannes/go-pgp/pgp _build/src/github.com/jchavannes/go-pgp/pgp
+#	ln -sf ../../../github.com/justinas/nosurf _build/src/github.com/justinas/nosurf
 
 override_dh_auto_install:
 	dh_auto_install -- --no-source
