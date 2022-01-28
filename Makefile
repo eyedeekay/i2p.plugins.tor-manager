@@ -144,3 +144,11 @@ clean-tor-keys:
 
 tor-browser/TPO-signing-key.pub:
 	gpg --armor --output ./tor-browser/TPO-signing-key.pub --export 0xEF6E286DDA85EA2A4BA7DE684E2C6E8793298290
+
+deb:
+	gbp buildpackage --git-pbuilder
+
+update-deb-pkg:
+	git pull --all
+	uscan --report-status
+	gbp import-orig --sign-tags --uscan
