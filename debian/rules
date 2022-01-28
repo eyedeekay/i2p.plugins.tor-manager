@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-export DH_GOLANG_INSTALL_EXTRA := tor-browser/TPO-signing-key.pub tor-browser/unpack/i2p.firefox ../../../github.com/jchavannes/go-pgp/pgp ../../../github.com/justinas/nosurf
+export DH_GOLANG_INSTALL_EXTRA := tor-browser/TPO-signing-key.pub tor-browser/unpack/i2p.firefox ../../../github.com/jchavannes/go-pgp/pgp ../../../github.com/justinas/nosurf onion.png garliconion.png
 
 
 %:
