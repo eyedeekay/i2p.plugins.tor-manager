@@ -7,7 +7,7 @@ import (
 	"github.com/russross/blackfriday"
 )
 
-var defaultmd []byte = []byte(`
+var dmd string = `
 # Tor Binary Manager
 
 This plugin manages the Tor Browser Bundle and a Tor binary
@@ -21,9 +21,10 @@ configuration.
  
 ## Tor Controls
 
-`)
+`
+var defaultmd []byte = []byte(dmd)
 
-var htmlhead []byte = []byte(`
+var hhd string = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,23 +33,33 @@ var htmlhead []byte = []byte(`
 <title>Tor Binary Manager</title>
 <link rel="stylesheet" href="/style.css">
 </head>
-`)
+`
 
-var torstart []byte = []byte(`
+var htmlhead []byte = []byte(hhd)
+
+var tstart string = `
 - [![Stop Tor](/stop-tor.png)](/stop-tor) 
-`)
+`
 
-var torstop []byte = []byte(`
+var torstart []byte = []byte(tstart)
+
+var tstop string = `
 - [![Start Tor](/start-tor.png)](/start-tor)
-`)
+`
 
-var torrunning []byte = []byte(`
+var torstop []byte = []byte(tstop)
+
+var trun string = `
 - Tor is Running as a System Service
-`)
+`
 
-var torstopped []byte = []byte(`
+var torrunning []byte = []byte(trun)
+
+var tstopped string = `
 - Tor is Stopped and there is no System Service
-`)
+`
+
+var torstopped []byte = []byte(tstopped)
 
 func (m *Client) PageHTML() []byte {
 	dir := filepath.Dir(m.TBD.DownloadPath)
