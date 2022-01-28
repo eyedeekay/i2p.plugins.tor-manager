@@ -146,6 +146,7 @@ tor-browser/TPO-signing-key.pub:
 	gpg --armor --output ./tor-browser/TPO-signing-key.pub --export 0xEF6E286DDA85EA2A4BA7DE684E2C6E8793298290
 
 deb:
+	rm ../i2p.plugins.tor-manager_$(VERSION).orig.tar.gz
 	tar --exclude=".git" \
 		--exclude="hankhill19580_at_gmail.com.crl" \
 		--exclude="hankhill19580_at_gmail.com.crt" \
