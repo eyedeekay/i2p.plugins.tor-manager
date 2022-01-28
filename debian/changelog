@@ -1,0 +1,5 @@
+i2p.plugins.tor-manager (0.0~git20220125.13c7d78-1) UNRELEASED; urgency=medium
+
+  * Initial release
+
+ -- idk <hankhill19580@gmail.com>  Thu, 27 Jan 2022 18:49:29 -0500
