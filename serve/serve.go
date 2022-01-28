@@ -15,6 +15,7 @@ type Client struct {
 	hostname string
 	TBD      *tbget.TBDownloader
 	TBS      *TBSupervise.Supervisor
+	DarkMode bool
 }
 
 func NewClient(hostname string, lang string, os string, arch string, content *embed.FS) (*Client, error) {

@@ -48,8 +48,14 @@ func (m *Client) serveJSON(rw http.ResponseWriter, rq *http.Request) {
 func (m *Client) serveCSS(rw http.ResponseWriter, rq *http.Request) {
 	cssbytes, err := ioutil.ReadFile(filepath.Join(m.TBD.DownloadPath, rq.URL.Path))
 	if err != nil {
+		if m.DarkMode {
+			rw.Header().Set("Content-Type", "text/css")
+			rw.Write(darkDefaultCSS)
+			return
+		}
 		rw.Header().Set("Content-Type", "text/css")
 		rw.Write(defaultCSS)
+		return
 	}
 	rw.Header().Set("Content-Type", "text/css")
 	rw.Write(cssbytes)
