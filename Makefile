@@ -156,7 +156,7 @@ deb: clean
 	mv "hankhill19580_at_gmail.com.crl" ../; true
 	mv "hankhill19580_at_gmail.com.crt" ../; true
 	mv "hankhill19580_at_gmail.com.pem" ../; true
-	rm ../i2p.plugins.tor-manager_$(VERSION).orig.tar.gz
+	rm ../i2p.plugins.tor-manager_$(VERSION).orig.tar.gz -f
 	tar --exclude=".git" \
 		--exclude="hankhill19580_at_gmail.com.crl" \
 		--exclude="hankhill19580_at_gmail.com.crt" \
@@ -174,7 +174,7 @@ debsrc: clean
 	mv "hankhill19580_at_gmail.com.crl" ../; true
 	mv "hankhill19580_at_gmail.com.crt" ../; true
 	mv "hankhill19580_at_gmail.com.pem" ../; true
-	rm ../i2p.plugins.tor-manager_$(VERSION).orig.tar.gz
+	rm ../i2p.plugins.tor-manager_$(VERSION).orig.tar.gz -f
 	tar --exclude=".git" \
 		--exclude="hankhill19580_at_gmail.com.crl" \
 		--exclude="hankhill19580_at_gmail.com.crt" \
