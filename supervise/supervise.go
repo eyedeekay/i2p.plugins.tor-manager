@@ -13,6 +13,7 @@ import (
 	"strings"
 
 	"github.com/mitchellh/go-ps"
+	cp "github.com/otiai10/copy"
 	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
 )
 
@@ -60,24 +61,38 @@ func (s *Supervisor) TorDataPath() string {
 	return filepath.Join(s.UnpackPath, "Browser", "TorBrowser", "Data")
 }
 
-func (s *Supervisor) I2PDataPath() string {
-	fp := filepath.Join(filepath.Dir(s.UnpackPath), "i2p.firefox")
-	if tbget.FileExists(fp) {
-		return fp
-	} else {
-		//unpack the embedded profile
+func (s *Supervisor) I2PProfilePath() string {
+	fp := filepath.Join(filepath.Dir(s.UnpackPath), ".i2p.firefox")
+	if !tbget.FileExists(fp) {
+		log.Printf("i2p data not found at %s, unpacking", fp)
 		if s.Profile != nil {
 			if err := s.UnpackI2PData(); err != nil {
 				log.Fatal(err)
 			}
 		}
-		return fp
+	}
+	return fp
+}
+
+func (s *Supervisor) I2PDataPath() string {
+	fp := s.I2PProfilePath()
+	up := filepath.Join(filepath.Dir(s.UnpackPath), "i2p.firefox")
+	if tbget.FileExists(up) {
+		return up
+	} else {
+		log.Printf("i2p workdir not found at %s, copying", up)
+		if s.Profile != nil {
+			if err := cp.Copy(fp, up); err != nil {
+				log.Fatal(err)
+			}
+		}
+		return up
 	}
 }
 
 func (s *Supervisor) UnpackI2PData() error {
 	return fs.WalkDir(s.Profile, ".", func(path string, d fs.DirEntry, err error) error {
-		fp := filepath.Join(filepath.Dir(s.UnpackPath), "i2p.firefox")
+		fp := filepath.Join(filepath.Dir(s.UnpackPath), ".i2p.firefox")
 		if err != nil {
 			log.Fatal(err)
 		}

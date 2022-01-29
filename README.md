@@ -11,14 +11,22 @@ Usage:
 Usage of ./i2p.plugins.tor-manager-linux-amd64:
   -arch string
     	OS/arch to download (default "64")
+  -directory string
+    	Directory operate in
+  -host string
+    	Host to serve on (default "127.0.0.1")
   -i2pbrowser
     	Open I2P in Tor Browser
   -lang string
     	Language to download
   -os string
     	OS/arch to download (default "linux")
+  -port int
+    	Port to serve on (default 7695)
   -torbrowser
     	Open Tor Browser
+  -verbose
+    	Verbose output
 ```
 
 Status:

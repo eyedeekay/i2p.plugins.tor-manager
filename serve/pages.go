@@ -10,7 +10,26 @@ import (
 func (m *Client) Page() (string, error) {
 
 	htmlbytes := htmlhead
-	htmlbytes = append(htmlbytes, []byte("<body>")...)
+
+	htmlbytes = append(htmlbytes, []byte(`<body>
+	<label class="switch">
+	  <input type="checkbox" onclick='handleClick(this);'>
+	  <span class="slider round"></span>
+	</label>`)...)
+	htmlbytes = append(htmlbytes, []byte(`<script>
+	function handleClick(cb) {
+		var xmlHttp = new XMLHttpRequest();
+		xmlHttp.open( "GET", "http://`)...)
+
+	htmlbytes = append(htmlbytes, []byte([]byte(m.GetAddress()))...)
+
+	htmlbytes = append(htmlbytes, []byte(`/switch-theme", false ); // false for synchronous request
+		xmlHttp.send( null );
+		location.reload();
+		return xmlHttp.responseText;
+	}
+	</script>
+	`)...)
 
 	mdbytes := m.PageHTML()
 	htmlbytes = append(htmlbytes, mdbytes...)
@@ -21,7 +40,7 @@ func (m *Client) Page() (string, error) {
 		htmlbytes = append(htmlbytes, m.TorOffStatusHTML(ours)...)
 	}
 	htmlbytes = append(htmlbytes, []byte(`</body>
-	<html>`)...)
+	</html>`)...)
 	return string(htmlbytes), nil
 }
 

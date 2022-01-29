@@ -9,6 +9,7 @@ import (
 	"runtime"
 
 	"github.com/cloudfoundry/jibber_jabber"
+	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
 	tbserve "i2pgit.org/idk/i2p.plugins.tor-manager/serve"
 )
 
@@ -49,13 +50,17 @@ var (
 	i2pbrowser = flag.Bool("i2pbrowser", false, "Open I2P in Tor Browser")
 	torbrowser = flag.Bool("torbrowser", false, "Open Tor Browser")
 	verbose    = flag.Bool("verbose", false, "Verbose output")
+	directory  = flag.String("directory", "", "Directory operate in")
+	host       = flag.String("host", "127.0.0.1", "Host to serve on")
+	port       = flag.Int("port", 7695, "Port to serve on")
 	/*mirror   = flag.String("mirror", "", "Mirror to use")*/
-	/*bemirror = flag.Bool("bemirror", false, "Act as an in-I2P mirror when you're done downloading")*/
+	bemirror = flag.Bool("bemirror", false, "Act as an in-I2P mirror when you're done downloading")
 )
 
 func main() {
 	filename := filepath.Base(os.Args[0])
 	flag.Parse()
+	tbget.WORKING_DIR = *directory
 	if filename == "i2pbrowser" {
 		log.Println("Starting I2P in Tor Browser")
 		*i2pbrowser = true
@@ -78,16 +83,18 @@ func main() {
 	if err != nil {
 		log.Fatal("Couldn't create client", err)
 	}
-	//client.TBD.Profile = &content
-	if *verbose {
-		client.TBD.Verbose = true
-	}
+	client.Host = *host
+	client.Port = *port
+	client.TBD.Verbose = *verbose
 	client.TBS.Profile = &content
 	if *i2pbrowser {
 		client.TBS.RunI2PBWithLang()
 	} else if *torbrowser {
 		client.TBS.RunTBWithLang()
 	} else {
+		if *bemirror {
+			go client.TBD.Serve()
+		}
 		if err := client.Serve(); err != nil {
 			log.Fatal(err)
 		}

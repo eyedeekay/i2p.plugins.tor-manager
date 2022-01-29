@@ -2,11 +2,15 @@ package tbserve
 
 import (
 	"embed"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"path/filepath"
+	"strconv"
+	"strings"
 
 	"github.com/justinas/nosurf"
+	cp "github.com/otiai10/copy"
 	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
 	TBSupervise "i2pgit.org/idk/i2p.plugins.tor-manager/supervise"
 )
@@ -16,6 +20,8 @@ type Client struct {
 	TBD      *tbget.TBDownloader
 	TBS      *TBSupervise.Supervisor
 	DarkMode bool
+	Host     string
+	Port     int
 }
 
 func NewClient(hostname string, lang string, os string, arch string, content *embed.FS) (*Client, error) {
@@ -38,8 +44,27 @@ func NewClient(hostname string, lang string, os string, arch string, content *em
 	return m, nil
 }
 
+func (m *Client) GetHost() string {
+	if m.Host == "" {
+		m.Host = "127.0.0.1"
+	}
+	return m.Host
+}
+
+func (m *Client) GetPort() string {
+	if m.Port == 0 {
+		m.Port = 7695
+	}
+	return strconv.Itoa(m.Port)
+}
+
+func (m *Client) GetAddress() string {
+	return m.GetHost() + ":" + m.GetPort()
+}
+
 func (m *Client) ServeHTTP(rw http.ResponseWriter, rq *http.Request) {
-	path := rq.URL.Path
+	path := strings.Replace(rq.URL.Path, "..", "", -1)
+	rq.URL.Path = path
 	log.Printf("ServeHTTP: '%s'", path)
 	fileextension := filepath.Ext(path)
 	switch fileextension {
@@ -79,6 +104,10 @@ func (m *Client) ServeHTTP(rw http.ResponseWriter, rq *http.Request) {
 			log.Println("Stopping Tor")
 			go m.TBS.StopTor()
 			http.Redirect(rw, rq, "/", http.StatusFound)
+		case "/switch-theme":
+			log.Println("Switching theme")
+			m.DarkMode = !m.DarkMode
+			http.Redirect(rw, rq, "/", http.StatusFound)
 		default:
 			b, _ := m.Page()
 			rw.Header().Set("Content-Type", "text/html")
@@ -90,6 +119,12 @@ func (m *Client) ServeHTTP(rw http.ResponseWriter, rq *http.Request) {
 
 func (m *Client) Serve() error {
 	//http.Handle("/", m)
+	mirrorjson, err := m.GenerateMirrorJSON()
+	if err != nil {
+		return err
+	}
+	ioutil.WriteFile(filepath.Join(m.TBD.DownloadPath, "mirror.json"), []byte(mirrorjson), 0644)
+	cp.Copy(m.TBS.I2PProfilePath(), filepath.Join(m.TBD.DownloadPath, "i2p.firefox"))
 	go m.TBS.RunTorWithLang()
-	return http.ListenAndServe("127.0.0.1:7695", nosurf.New(m))
+	return http.ListenAndServe(m.GetAddress(), nosurf.New(m))
 }

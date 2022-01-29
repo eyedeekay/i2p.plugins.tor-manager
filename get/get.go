@@ -16,16 +16,27 @@ import (
 	"strings"
 
 	"github.com/cloudfoundry/jibber_jabber"
+	sam "github.com/eyedeekay/sam3/helper"
 	"github.com/ulikunitz/xz"
 
 	"github.com/jchavannes/go-pgp/pgp"
 	"golang.org/x/crypto/openpgp"
 )
 
-var wd, _ = os.Getwd()
+var WORKING_DIR = ""
 
-var UNPACK_PATH = filepath.Join(wd, "unpack")
-var DOWNLOAD_PATH = filepath.Join(wd, "tor-browser")
+func DefaultDir() string {
+	if WORKING_DIR == "" {
+		WORKING_DIR, _ = os.Getwd()
+	}
+	if !FileExists(WORKING_DIR) {
+		os.MkdirAll(WORKING_DIR, 0755)
+	}
+	return WORKING_DIR
+}
+
+var UNPACK_PATH = filepath.Join(DefaultDir(), "unpack")
+var DOWNLOAD_PATH = filepath.Join(DefaultDir(), "tor-browser")
 
 const TOR_UPDATES_URL string = "https://aus1.torproject.org/torbrowser/update_3/release/downloads.json"
 
@@ -55,6 +66,30 @@ func NewTBDownloader(lang string, os, arch string, content *embed.FS) *TBDownloa
 		Verbose:      false,
 		Profile:      content,
 	}
+}
+
+func (t *TBDownloader) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	r.URL.Path = strings.Replace(r.URL.Path, "..", "", -1)
+	ext := filepath.Ext(r.URL.Path)
+	if ext == ".json" {
+		w.Header().Set("Content-Type", "application/json")
+		if FileExists(filepath.Join(t.DownloadPath, "mirror.json")) {
+			http.ServeFile(w, r, filepath.Join(t.DownloadPath, "mirror.json"))
+		}
+	}
+	if FileExists(filepath.Join(t.DownloadPath, r.URL.Path)) {
+		http.ServeFile(w, r, filepath.Join(t.DownloadPath, r.URL.Path))
+		return
+	}
+}
+
+func (t *TBDownloader) Serve() {
+	samlistener, err := sam.I2PListener("tor-mirror", "127.0.0.1:7656", "tor-mirror")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer samlistener.Close()
+	http.Serve(samlistener, t)
 }
 
 func (t *TBDownloader) GetRuntimePair() string {
