@@ -86,6 +86,9 @@ func main() {
 	client.Host = *host
 	client.Port = *port
 	client.TBD.Verbose = *verbose
+	if client.TBD.Verbose {
+		log.Println("Running in verbose mode")
+	}
 	client.TBS.Profile = &content
 	if *i2pbrowser {
 		client.TBS.RunI2PBWithLang()
