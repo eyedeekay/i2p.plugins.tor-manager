@@ -11,14 +11,22 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">Usage</span> of ./i2p.plugins.tor-manager-linux-amd64:</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="ex">-arch</span> string</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>        <span class="ex">OS/arch</span> to download (default <span class="st">&quot;64&quot;</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>  <span class="ex">-i2pbrowser</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>        <span class="ex">Open</span> I2P in Tor Browser</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>  <span class="ex">-lang</span> string</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>        <span class="ex">Language</span> to download</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>  <span class="ex">-os</span> string</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>        <span class="ex">OS/arch</span> to download (default <span class="st">&quot;linux&quot;</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>  <span class="ex">-torbrowser</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>        <span class="ex">Open</span> Tor Browser</span></code></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>  <span class="ex">-directory</span> string</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>        <span class="ex">Directory</span> operate in</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>  <span class="ex">-host</span> string</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>        <span class="ex">Host</span> to serve on (default <span class="st">&quot;127.0.0.1&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>  <span class="ex">-i2pbrowser</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>        <span class="ex">Open</span> I2P in Tor Browser</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>  <span class="ex">-lang</span> string</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>        <span class="ex">Language</span> to download</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>  <span class="ex">-os</span> string</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>        <span class="ex">OS/arch</span> to download (default <span class="st">&quot;linux&quot;</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>  <span class="ex">-port</span> int</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>        <span class="ex">Port</span> to serve on (default 7695)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>  <span class="ex">-torbrowser</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>        <span class="ex">Open</span> Tor Browser</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a>  <span class="ex">-verbose</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a>        <span class="ex">Verbose</span> output</span></code></pre></div>
 <h2 id="status">Status:</h2>
 <figure>
 <img src="screenshot-console.png" alt="" /><figcaption>Screenshot 2</figcaption>
@@ -39,7 +47,7 @@
 <li>Supervise Tor as a ShellService plugin to I2P</li>
 </ol>
 <ul>
-<li>Works on Linux</li>
+<li>Works on Linux, Windows</li>
 </ul>
 <ol start="3" type="1">
 <li>Keep Tor up-to-date</li>
@@ -51,7 +59,7 @@
 <li>Work as an I2P Plugin OR as a freestanding app to be compatible with all I2P distributions</li>
 </ol>
 <ul>
-<li>Works on Linux, probably works on Windows</li>
+<li>Works on Linux, Windows</li>
 </ul>
 <ol start="5" type="1">
 <li>Download Tor Browser from an in-I2P mirror(or one of a network of in-I2P mirrors)</li>
@@ -64,13 +72,13 @@
 <li>Launch Tor Browser</li>
 </ol>
 <ul>
-<li>Works on Linux</li>
+<li>Works on Linux, Windows, maybe OSX</li>
 </ul>
 <ol start="2" type="1">
 <li>Configure and launch Tor browser for use with I2P</li>
 </ol>
 <ul>
-<li>Works on Linux, probably also Windows, probably not OSX yet.</li>
+<li>Works on Linux, Windows.</li>
 </ul>
 <h4 id="optional-features-i-might-add-if-there-is-interest">Optional Features I might add if there is interest</h4>
 <ol type="1">
@@ -84,5 +92,6 @@
 <li>https://github.com/micahflee/torbrowser-launcher</li>
 <li>https://github.com/whonix/tb-updater</li>
 </ul>
+<p><a href="https://www.flaticon.com/free-icons/garlic" title="garlic icons">Garlic icons created by Icongeek26 - Flaticon</a> <a href="https://www.flaticon.com/free-icons/onion" title="onion icons">Onion icons created by Freepik - Flaticon</a></p>
 </body>
 </html>
