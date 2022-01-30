@@ -289,15 +289,17 @@ func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, erro
 func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 	t.Log("UnpackUpdater()", fmt.Sprintf("Unpacking %s", binpath))
 	if t.OS == "win" {
+		installPath := filepath.Join(t.UnpackPath, "tor-browser_"+t.Lang)
 		t.Log("UnpackUpdater()", "Windows updater, running silent NSIS installer")
-		t.Log("UnpackUpdater()", fmt.Sprintf("Running %s %s %s %s %s", "cmd", "/c", "start", "\""+t.UnpackPath+"\"", "\""+binpath+" /SD /D="+t.UnpackPath+"\""))
-		cmd := exec.Command("cmd", "/c", "start", "\""+t.UnpackPath+"\"", "\""+binpath+" /SD /D="+t.UnpackPath+"\"")
+		t.Log("UnpackUpdater()", fmt.Sprintf("Running %s %s %s", binpath, "/S", "/D="+installPath))
+		cmd := exec.Command(binpath, "/S", "/D="+installPath)
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		err := cmd.Run()
 		if err != nil {
 			return "", fmt.Errorf("UnpackUpdater: windows exec fail %s", err)
 		}
+		return installPath, nil
 	}
 	if t.OS == "osx" {
 		cmd := exec.Command("open", "-W", "-n", "-a", "\""+t.UnpackPath+"\"", "\""+binpath+"\"")
