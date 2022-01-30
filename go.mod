@@ -9,6 +9,8 @@ require (
 	golang.org/x/crypto v0.0.0-20220112180741-5e0467b6c7ce
 )
 
+require github.com/go-ole/go-ole v1.2.6 // indirect
+
 require (
 	github.com/eyedeekay/sam3 v0.32.32
 	github.com/justinas/nosurf v1.1.1

@@ -17,6 +17,8 @@ import (
 //go:embed tor-browser/TPO-signing-key.pub
 //go:embed garliconion.png
 //go:embed onion.png
+//go:embed torbrowser.desktop
+//go:embed i2ptorbrowser.desktop
 var content embed.FS
 
 func OS() string {
@@ -53,8 +55,9 @@ var (
 	directory  = flag.String("directory", "", "Directory operate in")
 	host       = flag.String("host", "127.0.0.1", "Host to serve on")
 	port       = flag.Int("port", 7695, "Port to serve on")
+	bemirror   = flag.Bool("bemirror", false, "Act as an in-I2P mirror when you're done downloading")
+	shortcuts  = flag.Bool("shortcuts", false, "Create desktop shortcuts")
 	/*mirror   = flag.String("mirror", "", "Mirror to use")*/
-	bemirror = flag.Bool("bemirror", false, "Act as an in-I2P mirror when you're done downloading")
 )
 
 func main() {
@@ -83,6 +86,12 @@ func main() {
 	if err != nil {
 		log.Fatal("Couldn't create client", err)
 	}
+	if *shortcuts {
+		err := CreateShortcuts()
+		if err != nil {
+			log.Fatal("Couldn't create desktop shortcuts", err)
+		}
+	}
 	client.Host = *host
 	client.Port = *port
 	client.TBS.Profile = &content
@@ -98,4 +107,16 @@ func main() {
 			log.Fatal(err)
 		}
 	}
+}
+
+func pathToMe() (string, error) {
+	ex, err := os.Executable()
+	if err != nil {
+		return "", err
+	}
+	exPath, err := filepath.Abs(ex)
+	if err != nil {
+		return "", err
+	}
+	return exPath, nil
 }
