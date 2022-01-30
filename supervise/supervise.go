@@ -21,10 +21,13 @@ import (
 var UNPACK_URL = tbget.UNPACK_PATH
 var DEFAULT_TB_LANG = tbget.DefaultIETFLang
 
-var (
-	OS   = tbget.OS
-	ARCH = tbget.ARCH
-)
+func OS() string {
+	return tbget.OS
+}
+
+func ARCH() string {
+	return tbget.ARCH
+}
 
 type Supervisor struct {
 	UnpackPath string
@@ -40,7 +43,7 @@ func (s *Supervisor) TBPath() string {
 }
 
 func (s *Supervisor) FirefoxPath() string {
-	switch OS {
+	switch OS() {
 	case "linux":
 		return filepath.Join(s.UnpackPath, "Browser", "firefox.real")
 	case "windows":
@@ -126,7 +129,7 @@ func (s *Supervisor) tbbail() error {
 }
 
 func (s *Supervisor) RunTBWithLang() error {
-	tbget.ARCH = ARCH
+	tbget.ARCH = ARCH()
 	if s.Lang == "" {
 		s.Lang = DEFAULT_TB_LANG
 	}
@@ -138,8 +141,8 @@ func (s *Supervisor) RunTBWithLang() error {
 		return nil
 	}
 
-	log.Println("running tor browser with lang", s.Lang, s.UnpackPath)
-	switch OS {
+	log.Println("running tor browser with lang", s.Lang, s.UnpackPath, OS())
+	switch OS() {
 	case "linux":
 		if tbget.FileExists(s.UnpackPath) {
 			log.Println("running tor browser with lang", s.Lang, s.UnpackPath)
@@ -155,8 +158,9 @@ func (s *Supervisor) RunTBWithLang() error {
 		s.tbcmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
 		s.tbcmd.Dir = s.TBDirectory()
 		return s.tbcmd.Run()
-	case "windows":
-		s.tbcmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"firefox.exe\"")
+	case "win":
+		log.Println("Running Windows EXE", s.TBDirectory(), "firefox.exe")
+		s.tbcmd = exec.Command(filepath.Join(s.TBDirectory(), "firefox.exe"))
 		s.tbcmd.Dir = s.TBDirectory()
 		return s.tbcmd.Run()
 	default:
@@ -176,7 +180,7 @@ func (s *Supervisor) ibbail() error {
 }
 
 func (s *Supervisor) RunI2PBWithLang() error {
-	tbget.ARCH = ARCH
+	tbget.ARCH = ARCH()
 	if s.Lang == "" {
 		s.Lang = DEFAULT_TB_LANG
 	}
@@ -188,8 +192,8 @@ func (s *Supervisor) RunI2PBWithLang() error {
 		return nil
 	}
 
-	log.Println("running tor browser with lang", s.Lang, s.UnpackPath)
-	switch OS {
+	log.Println("running i2p in tor browser with lang", s.Lang, s.UnpackPath, OS())
+	switch OS() {
 	case "linux":
 		if tbget.FileExists(s.UnpackPath) {
 			log.Println("running Tor browser with lang and I2P Profile", s.Lang, s.UnpackPath, s.FirefoxPath(), "--profile", s.I2PDataPath())
@@ -205,10 +209,11 @@ func (s *Supervisor) RunI2PBWithLang() error {
 		s.ibcmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
 		s.ibcmd.Dir = s.TBDirectory()
 		return s.ibcmd.Run()
-	case "windows":
-		s.ibcmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\"", "\"firefox.exe "+"--profile "+s.I2PDataPath()+" \"")
-		s.ibcmd.Dir = s.TBDirectory()
-		return s.ibcmd.Run()
+	case "win":
+		log.Println("Running Windows EXE", s.TBDirectory(), "firefox.exe", "--profile", s.I2PDataPath())
+		s.tbcmd = exec.Command(filepath.Join(s.TBDirectory(), "firefox.exe"), "--profile", s.I2PDataPath())
+		s.tbcmd.Dir = s.TBDirectory()
+		return s.tbcmd.Run()
 	default:
 	}
 
@@ -230,7 +235,7 @@ func (s *Supervisor) torbail() error {
 }
 
 func (s *Supervisor) RunTorWithLang() error {
-	tbget.ARCH = ARCH
+	tbget.ARCH = ARCH()
 	if s.Lang == "" {
 		s.Lang = DEFAULT_TB_LANG
 	}
@@ -242,7 +247,7 @@ func (s *Supervisor) RunTorWithLang() error {
 	}
 
 	log.Println("running tor with lang", s.Lang, s.UnpackPath)
-	switch OS {
+	switch OS() {
 	case "linux":
 		if tbget.FileExists(s.UnpackPath) {
 			log.Println("running tor with lang", s.Lang, s.UnpackPath)
@@ -258,10 +263,11 @@ func (s *Supervisor) RunTorWithLang() error {
 		s.torcmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
 		s.torcmd.Dir = s.TBDirectory()
 		return s.torcmd.Run()
-	case "windows":
-		s.torcmd = exec.Command("cmd", "/c", "start", "\""+s.TBDirectory()+"\\TorBrowser\\Tor\"", "\"tor.exe\"")
-		s.torcmd.Dir = s.TBDirectory()
-		return s.torcmd.Run()
+	case "win":
+		log.Println("Running Windows EXE", s.TBDirectory(), "firefox.exe", "--profile", s.I2PDataPath())
+		s.tbcmd = exec.Command(filepath.Join(s.TBDirectory(), "firefox.exe"), "--profile", s.I2PDataPath())
+		s.tbcmd.Dir = s.TBDirectory()
+		return s.tbcmd.Run()
 	default:
 	}
 

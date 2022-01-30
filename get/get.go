@@ -58,6 +58,8 @@ var OS = "linux"
 var ARCH = "64"
 
 func NewTBDownloader(lang string, os, arch string, content *embed.FS) *TBDownloader {
+	OS = os
+	ARCH = arch
 	return &TBDownloader{
 		Lang:         lang,
 		DownloadPath: DOWNLOAD_PATH,
@@ -291,14 +293,16 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 	t.Log("UnpackUpdater()", fmt.Sprintf("Unpacking %s", binpath))
 	if t.OS == "win" {
 		installPath := filepath.Join(t.UnpackPath, "tor-browser_"+t.Lang)
-		t.Log("UnpackUpdater()", "Windows updater, running silent NSIS installer")
-		t.Log("UnpackUpdater()", fmt.Sprintf("Running %s %s %s", binpath, "/S", "/D="+installPath))
-		cmd := exec.Command(binpath, "/S", "/D="+installPath)
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		err := cmd.Run()
-		if err != nil {
-			return "", fmt.Errorf("UnpackUpdater: windows exec fail %s", err)
+		if !FileExists(installPath) {
+			t.Log("UnpackUpdater()", "Windows updater, running silent NSIS installer")
+			t.Log("UnpackUpdater()", fmt.Sprintf("Running %s %s %s", binpath, "/S", "/D="+installPath))
+			cmd := exec.Command(binpath, "/S", "/D="+installPath)
+			cmd.Stdout = os.Stdout
+			cmd.Stderr = os.Stderr
+			err := cmd.Run()
+			if err != nil {
+				return "", fmt.Errorf("UnpackUpdater: windows exec fail %s", err)
+			}
 		}
 		return installPath, nil
 	}
