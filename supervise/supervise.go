@@ -9,6 +9,7 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -91,21 +92,21 @@ func (s *Supervisor) I2PDataPath() string {
 }
 
 func (s *Supervisor) UnpackI2PData() error {
-	return fs.WalkDir(s.Profile, ".", func(path string, d fs.DirEntry, err error) error {
+	return fs.WalkDir(s.Profile, ".", func(embedpath string, d fs.DirEntry, err error) error {
 		fp := filepath.Join(filepath.Dir(s.UnpackPath), ".i2p.firefox")
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(path, filepath.Join(fp, strings.Replace(path, "tor-browser/unpack/i2p.firefox", "", -1)))
+		fmt.Println(embedpath, filepath.Join(fp, strings.Replace(embedpath, "tor-browser/unpack/i2p.firefox", "", -1)))
 		if d.IsDir() {
-			os.MkdirAll(filepath.Join(fp, strings.Replace(path, "tor-browser/unpack/i2p.firefox", "", -1)), 0755)
+			os.MkdirAll(filepath.Join(fp, strings.Replace(embedpath, "tor-browser/unpack/i2p.firefox", "", -1)), 0755)
 		} else {
-			fullpath := filepath.Join(path)
+			fullpath := path.Join(embedpath)
 			bytes, err := s.Profile.ReadFile(fullpath)
 			if err != nil {
 				return err
 			}
-			unpack := filepath.Join(fp, strings.Replace(path, "tor-browser/unpack/i2p.firefox", "", -1))
+			unpack := filepath.Join(fp, strings.Replace(embedpath, "tor-browser/unpack/i2p.firefox", "", -1))
 			if err := ioutil.WriteFile(unpack, bytes, 0644); err != nil {
 				return err
 			}

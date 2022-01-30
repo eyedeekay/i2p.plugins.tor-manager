@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -151,7 +152,7 @@ func (t *TBDownloader) Log(function, message string) {
 func (t *TBDownloader) MakeTBDirectory() {
 	os.MkdirAll(t.DownloadPath, 0755)
 
-	path := filepath.Join("", "tor-browser", "TPO-signing-key.pub")
+	path := path.Join("tor-browser", "TPO-signing-key.pub")
 	if !FileExists(path) {
 		t.Log("MakeTBDirectory()", "Initial TPO signing key not found, using the one embedded in the executable")
 		bytes, err := t.Profile.ReadFile(path)
