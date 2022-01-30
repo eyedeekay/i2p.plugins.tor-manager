@@ -221,16 +221,20 @@ func (s *Supervisor) RunI2PBWithLang() error {
 }
 
 func (s *Supervisor) torbail() error {
-	_, err := net.Listen("TCP", "127.0.0.1:9050")
+	_, err := net.Listen("tcp", "127.0.0.1:9050")
 	if err != nil {
+		log.Println("Already Running on 9050", err)
 		return fmt.Errorf("Already running")
 	}
 	if s.torcmd != nil && s.torcmd.Process != nil && s.torcmd.ProcessState != nil {
 		if s.torcmd.ProcessState.Exited() {
+			log.Println("Tor exited, restarting")
 			return nil
 		}
+		log.Println("Already Running")
 		return fmt.Errorf("Already running")
 	}
+	log.Println("Starting Tor")
 	return nil
 }
 
@@ -264,10 +268,10 @@ func (s *Supervisor) RunTorWithLang() error {
 		s.torcmd.Dir = s.TBDirectory()
 		return s.torcmd.Run()
 	case "win":
-		log.Println("Running Windows EXE", s.TBDirectory(), "firefox.exe", "--profile", s.I2PDataPath())
-		s.tbcmd = exec.Command(filepath.Join(s.TBDirectory(), "firefox.exe"), "--profile", s.I2PDataPath())
-		s.tbcmd.Dir = s.TBDirectory()
-		return s.tbcmd.Run()
+		log.Println("Running Windows EXE", filepath.Join(s.TBDirectory(), "TorBrowser", "Tor", "tor.exe"))
+		s.torcmd = exec.Command(filepath.Join(s.TBDirectory(), "TorBrowser", "Tor", "tor.exe"))
+		s.torcmd.Dir = s.TBDirectory()
+		return s.torcmd.Run()
 	default:
 	}
 
