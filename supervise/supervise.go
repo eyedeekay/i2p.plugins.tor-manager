@@ -211,8 +211,8 @@ func (s *Supervisor) RunI2PBWithLang() error {
 		return s.ibcmd.Run()
 	case "win":
 		log.Println("Running Windows EXE", filepath.Join(s.TBDirectory(), "firefox.exe"), "--profile", s.I2PDataPath())
-		s.ibcmd = exec.Command(filepath.Join(s.TBDirectory(), "firefox.exe"), "--help") //, "--profile", s.I2PDataPath())
-		s.ibcmd.Dir = s.TBDirectory()
+		s.ibcmd = exec.Command(filepath.Join(s.TBDirectory(), "firefox.exe"), "--profile", ".")
+		s.ibcmd.Dir = s.I2PDataPath()
 		s.ibcmd.Stdout = os.Stdout
 		s.ibcmd.Stderr = os.Stderr
 		return s.ibcmd.Run()
