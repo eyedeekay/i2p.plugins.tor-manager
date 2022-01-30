@@ -126,7 +126,7 @@ download-su3s:
 download-single-su3:
 	wget -N -c "https://github.com/$(USER_GH)/$(BINARY)/releases/download/$(VERSION)/$(BINARY)-$(GOOS)-$(GOARCH).su3"
 
-linux-release: clean linux version upload-linux
+early-release: clean linux windows version upload-linux upload-windows
 
 release: clean all version upload-all
 
