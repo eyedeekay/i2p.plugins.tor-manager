@@ -42,7 +42,7 @@ Other systems are not targeted and should use a Tor binary built from source,
 provided by TPO or, their prefered package management system and not this plugin.
 The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
 
-![Screenshot](screenshot.png)
+![Screenshot](screenshot-i2pbrowser.png)
 
 ### Primary Goals
 
@@ -78,3 +78,8 @@ The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
 
 <a href="https://www.flaticon.com/free-icons/garlic" title="garlic icons">Garlic icons created by Icongeek26 - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/onion" title="onion icons">Onion icons created by Freepik - Flaticon</a>
+
+### More Screenshots:
+
+- ![Screenshot](screenshot.png)
+- ![Screenshot](screenshot-dark.png)
