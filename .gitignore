@@ -8,3 +8,4 @@ i2p.plugins.tor-manager*
 *.su3
 *-zip
 pluginunpack
+_build
