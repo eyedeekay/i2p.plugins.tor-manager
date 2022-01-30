@@ -142,37 +142,51 @@ func (t *TBDownloader) GetUpdaterForLangFromJson(body io.ReadCloser, ietf string
 	return t.GetUpdaterForLangFromJsonBytes(jsonBytes, ietf)
 }
 
+func (t *TBDownloader) Log(function, message string) {
+	if t.Verbose {
+		log.Println(fmt.Sprintf("%s: %s", function, message))
+	}
+}
+
 func (t *TBDownloader) MakeTBDirectory() {
 	os.MkdirAll(t.DownloadPath, 0755)
 
 	path := filepath.Join("", "tor-browser", "TPO-signing-key.pub")
 	if !FileExists(path) {
+		t.Log("MakeTBDirectory()", "Initial TPO signing key not found, using the one embedded in the executable")
 		bytes, err := t.Profile.ReadFile(path)
 		if err != nil {
 			log.Fatal(err)
 		}
+		t.Log("MakeTBDirectory()", "Writing TPO signing key to disk")
 		ioutil.WriteFile(filepath.Join(t.DownloadPath, "TPO-signing-key.pub"), bytes, 0644)
+		t.Log("MakeTBDirectory()", "Writing TPO signing key to disk complete")
 	}
 }
 
 func (t *TBDownloader) GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf string) (string, string, error) {
 	t.MakeTBDirectory()
 	var dat map[string]interface{}
+	t.Log("GetUpdaterForLangFromJsonBytes()", "Parsing JSON")
 	if err := json.Unmarshal(jsonBytes, &dat); err != nil {
 		return "", "", fmt.Errorf("func (t *TBDownloader)Name: %s", err)
 	}
+	t.Log("GetUpdaterForLangFromJsonBytes()", "Parsing JSON complete")
 	if platform, ok := dat["downloads"]; ok {
 		rtp := t.GetRuntimePair()
 		if updater, ok := platform.(map[string]interface{})[rtp]; ok {
 			if langUpdater, ok := updater.(map[string]interface{})[ietf]; ok {
+				t.Log("GetUpdaterForLangFromJsonBytes()", "Found updater for language")
 				return langUpdater.(map[string]interface{})["binary"].(string), langUpdater.(map[string]interface{})["sig"].(string), nil
 			}
 			// If we didn't find the language, try splitting at the hyphen
 			lang := strings.Split(ietf, "-")[0]
 			if langUpdater, ok := updater.(map[string]interface{})[lang]; ok {
+				t.Log("GetUpdaterForLangFromJsonBytes()", "Found updater for backup language")
 				return langUpdater.(map[string]interface{})["binary"].(string), langUpdater.(map[string]interface{})["sig"].(string), nil
 			}
 			// If we didn't find the language after splitting at the hyphen, try the default
+			t.Log("GetUpdaterForLangFromJsonBytes()", "Last attempt, trying default language")
 			return t.GetUpdaterForLangFromJsonBytes(jsonBytes, t.Lang)
 		} else {
 			return "", "", fmt.Errorf("t.GetUpdaterForLangFromJsonBytes: no updater for platform %s", rtp)
@@ -184,10 +198,12 @@ func (t *TBDownloader) GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf str
 func (t *TBDownloader) SingleFileDownload(url, name string) (string, error) {
 	t.MakeTBDirectory()
 	path := filepath.Join(t.DownloadPath, name)
+	t.Log("SingleFileDownload()", fmt.Sprintf("Checking for updates %s to %s", url, path))
 	if !t.BotherToDownload(url, name) {
-		fmt.Printf("No updates required, skipping download of %s\n", name)
+		t.Log("SingleFileDownload()", "File already exists, skipping download")
 		return path, nil
 	}
+	t.Log("SingleFileDownload()", "Downloading file")
 	file, err := http.Get(url)
 	if err != nil {
 		return "", fmt.Errorf("SingleFileDownload: %s", err)
@@ -199,6 +215,7 @@ func (t *TBDownloader) SingleFileDownload(url, name string) (string, error) {
 	}
 	defer outFile.Close()
 	io.Copy(outFile, file.Body)
+	t.Log("SingleFileDownload()", "Downloading file complete")
 	return path, nil
 }
 
@@ -230,7 +247,7 @@ func (t *TBDownloader) NamePerPlatform(ietf string) string {
 	case "darwin":
 		extension = "dmg"
 	case "windows":
-		windowsonly = "-installer-"
+		windowsonly = "-installer"
 		extension = "exe"
 	}
 	return fmt.Sprintf("torbrowser%s-%s-%s.%s", windowsonly, t.GetRuntimePair(), ietf, extension)
@@ -270,8 +287,10 @@ func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, erro
 }
 
 func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
-
+	t.Log("UnpackUpdater()", fmt.Sprintf("Unpacking %s", binpath))
 	if t.OS == "win" {
+		t.Log("UnpackUpdater()", "Windows updater, running silent NSIS installer")
+		t.Log("UnpackUpdater()", fmt.Sprintf("Running %s %s %s %s %s", "cmd", "/c", "start", "\""+t.UnpackPath+"\"", "\""+binpath+" /SD /D="+t.UnpackPath+"\""))
 		cmd := exec.Command("cmd", "/c", "start", "\""+t.UnpackPath+"\"", "\""+binpath+" /SD /D="+t.UnpackPath+"\"")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
