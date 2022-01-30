@@ -60,9 +60,9 @@ The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
 ### Secondary Goals:
 
 1. Launch Tor Browser
- - Works on Linux, Windows
+ - Works on Linux, Windows, maybe OSX
 2. Configure and launch Tor browser for use with I2P
- - Works on Linux, wierdly, not Windows yet.
+ - Works on Linux, Windows.
 
 #### Optional Features I might add if there is interest
 
