@@ -79,16 +79,12 @@ func main() {
 		}
 		log.Println("Using auto-detected language", *lang)
 	}
-	client, err := tbserve.NewClient("", *lang, *system, *arch, &content)
+	client, err := tbserve.NewClient(*verbose, *lang, *system, *arch, &content)
 	if err != nil {
 		log.Fatal("Couldn't create client", err)
 	}
 	client.Host = *host
 	client.Port = *port
-	client.TBD.Verbose = *verbose
-	if client.TBD.Verbose {
-		log.Println("Running in verbose mode")
-	}
 	client.TBS.Profile = &content
 	if *i2pbrowser {
 		client.TBS.RunI2PBWithLang()

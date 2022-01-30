@@ -24,11 +24,11 @@ type Client struct {
 	Port     int
 }
 
-func NewClient(hostname string, lang string, os string, arch string, content *embed.FS) (*Client, error) {
+func NewClient(verbose bool, lang string, os string, arch string, content *embed.FS) (*Client, error) {
 	m := &Client{
-		hostname: hostname,
-		TBD:      tbget.NewTBDownloader(lang, os, arch, content),
+		TBD: tbget.NewTBDownloader(lang, os, arch, content),
 	}
+	m.TBD.Verbose = verbose
 	m.TBD.MakeTBDirectory()
 	tgz, sig, err := m.TBD.DownloadUpdaterForLang(lang)
 	if err != nil {
