@@ -8,13 +8,16 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"os/exec"
 	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
 	"github.com/cloudfoundry/jibber_jabber"
 	sam "github.com/eyedeekay/sam3/helper"
@@ -404,4 +407,76 @@ func (t *TBDownloader) CheckSignature(binpath, sigpath string) (string, error) {
 func (t *TBDownloader) BoolCheckSignature(binpath, sigpath string) bool {
 	_, err := t.CheckSignature(binpath, sigpath)
 	return err == nil
+}
+
+func TestHTTPDefaultProxy() bool {
+	return TestHTTPProxy("127.0.0.1", "4444")
+}
+
+func Seconds(now int) int {
+	time.Sleep(time.Second)
+	if now == 10 {
+		return 0
+	}
+	return now + 1
+}
+
+func TestHTTPBackupProxy() bool {
+	now := 0
+	limit := 0
+	for {
+		_, err := net.Listen("tcp", "127.0.0.1:4444")
+		if err != nil {
+			log.Println("SAM HTTP proxy is open", err)
+			return true
+		} else {
+			if now == 0 {
+				log.Println("Waiting for HTTP Proxy", (10 - limit), "remaining attempts")
+				limit++
+			}
+			now = Seconds(now)
+		}
+		if limit == 10 {
+			break
+		}
+	}
+	return false
+}
+
+func TestHTTPProxy(host, port string) bool {
+	now := 0
+	limit := 0
+	for {
+		proxy := hTTPProxy(host, port)
+		if proxy {
+			return true
+		} else {
+			if now == 0 {
+				log.Println("Waiting for HTTP Proxy", (10 - limit), "remaining attempts")
+				limit++
+			}
+			now = Seconds(now)
+		}
+		if limit == 10 {
+			break
+		}
+	}
+	return false
+}
+
+func hTTPProxy(host, port string) bool {
+	proxyUrl, err := url.Parse("http://" + host + ":" + port)
+	if err != nil {
+		log.Panic(err)
+	}
+	myClient := &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyUrl)}}
+	resp, err := myClient.Get("http://proxy.i2p/")
+	if err == nil {
+		defer resp.Body.Close()
+		body, err := ioutil.ReadAll(resp.Body)
+		if err == nil {
+			return strings.Contains(string(body), "I2P HTTP proxy OK")
+		}
+	}
+	return false
 }

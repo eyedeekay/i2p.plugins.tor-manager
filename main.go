@@ -9,6 +9,7 @@ import (
 	"runtime"
 
 	"github.com/cloudfoundry/jibber_jabber"
+	i2cpcheck "github.com/eyedeekay/checki2cp"
 	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
 	tbserve "i2pgit.org/idk/i2p.plugins.tor-manager/serve"
 )
@@ -89,6 +90,27 @@ func main() {
 	client, err = tbserve.NewClient(*verbose, *lang, *system, *arch, &content)
 	if err != nil {
 		log.Fatal("Couldn't create client", err)
+	}
+	if tbget.TestHTTPDefaultProxy() {
+		log.Println("I2P HTTP proxy OK")
+	} else {
+		log.Println("I2P HTTP proxy not OK")
+		run, err := i2cpcheck.ConditionallyLaunchI2P()
+		if err != nil {
+			log.Fatal("Couldn't launch I2P", err)
+		}
+		if run {
+			if tbget.TestHTTPDefaultProxy() {
+				log.Println("I2P HTTP proxy OK after launching I2P")
+			} else {
+				go proxy()
+				if !tbget.TestHTTPBackupProxy() {
+					log.Fatal("Please set the I2P HTTP proxy on localhost:4444", err)
+				}
+			}
+		} else {
+			log.Fatal("Failed to run I2P", err)
+		}
 	}
 	if *apparmor {
 		err := GenerateAppArmor()
