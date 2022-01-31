@@ -9,6 +9,7 @@ Usage:
 
 ```sh
 Usage of ./i2p.plugins.tor-manager:
+
   -apparmor
     	Generate apparmor rules
   -arch string
