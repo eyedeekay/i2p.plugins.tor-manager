@@ -8,9 +8,13 @@ Usage:
 ------
 
 ```sh
-Usage of ./i2p.plugins.tor-manager-linux-amd64:
+Usage of ./i2p.plugins.tor-manager:
+  -apparmor
+    	Generate apparmor rules
   -arch string
     	OS/arch to download (default "64")
+  -bemirror
+    	Act as an in-I2P mirror when you're done downloading
   -directory string
     	Directory operate in
   -host string
@@ -23,6 +27,8 @@ Usage of ./i2p.plugins.tor-manager-linux-amd64:
     	OS/arch to download (default "linux")
   -port int
     	Port to serve on (default 7695)
+  -shortcuts
+    	Create desktop shortcuts
   -torbrowser
     	Open Tor Browser
   -verbose
