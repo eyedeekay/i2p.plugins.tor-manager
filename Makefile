@@ -63,14 +63,13 @@ dep:
 	cp "$(HOME)/Workspace/GIT_WORK/i2p.i2p/build/shellservice.jar" tor-browser/lib/shellservice.jar -v
 
 su3:
-	i2p.plugin.native -name=$(BINARY)-$(GOOS)-$(GOARCH) \
+	i2p.plugin.native -name=$(BINARY) \
 		-signer=$(SIGNER) \
 		-version "$(VERSION)" \
 		-author=$(SIGNER) \
 		-autostart=true \
-		-clientname=$(BINARY)-$(GOOS)-$(GOARCH) \
+		-clientname=$(BINARY) \
 		-consolename="$(BINARY) - $(CONSOLEPOSTNAME)" \
-		-name="$(BINARY)-$(GOOS)-$(GOARCH)" \
 		-delaystart="1" \
 		-desc="`cat desc`" \
 		-exename=$(BINARY)-$(GOOS)-$(GOARCH) \

@@ -57,8 +57,11 @@ var (
 	port       = flag.Int("port", 7695, "Port to serve on")
 	bemirror   = flag.Bool("bemirror", false, "Act as an in-I2P mirror when you're done downloading")
 	shortcuts  = flag.Bool("shortcuts", false, "Create desktop shortcuts")
+	apparmor   = flag.Bool("apparmor", false, "Generate apparmor rules")
 	/*mirror   = flag.String("mirror", "", "Mirror to use")*/
 )
+
+var client *tbserve.Client
 
 func main() {
 	filename := filepath.Base(os.Args[0])
@@ -82,9 +85,29 @@ func main() {
 		}
 		log.Println("Using auto-detected language", *lang)
 	}
-	client, err := tbserve.NewClient(*verbose, *lang, *system, *arch, &content)
+	var err error
+	client, err = tbserve.NewClient(*verbose, *lang, *system, *arch, &content)
 	if err != nil {
 		log.Fatal("Couldn't create client", err)
+	}
+	if *apparmor {
+		err := GenerateAppArmor()
+		if err != nil {
+			log.Fatal("Couldn't generate apparmor rules", err)
+		}
+		log.Println("################################################################")
+		log.Println("#             AppArmor rules generated successfully            #")
+		log.Println("################################################################")
+		log.Println("!IMPORTANT! You must now run the following commands:")
+		log.Println("sudo mkdir -p /etc/apparmor.d/tunables/")
+		log.Println("sudo cp tunables.torbrowser.apparmor /etc/apparmor.d/tunables/torbrowser")
+		log.Println("sudo cp torbrowser.Tor.tor.apparmor /etc/apparmor.d/torbrowser.Tor.tor")
+		log.Println("sudo cp torbrowser.Browser.firefox.apparmor /etc/apparmor.d/torbrowser.Browser.firefox")
+		log.Println("sudo apparmor_parser -r /etc/apparmor.d/tunables/torbrowser")
+		log.Println("sudo apparmor_parser -r /etc/apparmor.d/torbrowser.Tor.tor")
+		log.Println("sudo apparmor_parser -r /etc/apparmor.d/torbrowser.Browser.firefox")
+		log.Println("To copy them to apparmor profiles directory and reload AppArmor")
+		return
 	}
 	if *shortcuts {
 		err := CreateShortcuts()

@@ -11,7 +11,7 @@ import (
 )
 
 func (m *Client) generateMirrorJSON() (map[string]interface{}, error) {
-	path := filepath.Join(tbget.DOWNLOAD_PATH, "downloads.json")
+	path := filepath.Join(tbget.DOWNLOAD_PATH(), "downloads.json")
 	preBytes, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("GenerateMirrorJSON: %s", err)
@@ -43,7 +43,7 @@ func (m *Client) GenerateMirrorJSON() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	path := filepath.Join(tbget.DOWNLOAD_PATH, "downloads.json")
+	path := filepath.Join(tbget.DOWNLOAD_PATH(), "downloads.json")
 	preBytes, err := ioutil.ReadFile(path)
 	if err != nil {
 		return "", fmt.Errorf("GenerateMirrorJSONBytes: %s", err)

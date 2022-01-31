@@ -36,8 +36,15 @@ func DefaultDir() string {
 	return WORKING_DIR
 }
 
-var UNPACK_PATH = filepath.Join(DefaultDir(), "unpack")
-var DOWNLOAD_PATH = filepath.Join(DefaultDir(), "tor-browser")
+func UNPACK_PATH() string {
+	var UNPACK_PATH = path.Join(DefaultDir(), "unpack")
+	return UNPACK_PATH
+}
+
+func DOWNLOAD_PATH() string {
+	var DOWNLOAD_PATH = path.Join(DefaultDir(), "tor-browser")
+	return DOWNLOAD_PATH
+}
 
 const TOR_UPDATES_URL string = "https://aus1.torproject.org/torbrowser/update_3/release/downloads.json"
 
@@ -62,8 +69,8 @@ func NewTBDownloader(lang string, os, arch string, content *embed.FS) *TBDownloa
 	ARCH = arch
 	return &TBDownloader{
 		Lang:         lang,
-		DownloadPath: DOWNLOAD_PATH,
-		UnpackPath:   UNPACK_PATH,
+		DownloadPath: DOWNLOAD_PATH(),
+		UnpackPath:   UNPACK_PATH(),
 		OS:           os,
 		ARCH:         arch,
 		Verbose:      false,
@@ -287,6 +294,10 @@ func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, erro
 		return "", sigpath, fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
 	return binpath, sigpath, nil
+}
+
+func (t *TBDownloader) BrowserDir() string {
+	return filepath.Join(t.UnpackPath, "tor-browser_"+t.Lang)
 }
 
 func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {

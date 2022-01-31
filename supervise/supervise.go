@@ -134,7 +134,7 @@ func (s *Supervisor) RunTBWithLang() error {
 		s.Lang = DEFAULT_TB_LANG
 	}
 	if s.UnpackPath == "" {
-		s.UnpackPath = UNPACK_URL
+		s.UnpackPath = UNPACK_URL()
 	}
 
 	if s.tbbail() != nil {
@@ -185,7 +185,7 @@ func (s *Supervisor) RunI2PBWithLang() error {
 		s.Lang = DEFAULT_TB_LANG
 	}
 	if s.UnpackPath == "" {
-		s.UnpackPath = UNPACK_URL
+		s.UnpackPath = UNPACK_URL()
 	}
 
 	if s.ibbail() != nil {
@@ -246,7 +246,7 @@ func (s *Supervisor) RunTorWithLang() error {
 		s.Lang = DEFAULT_TB_LANG
 	}
 	if s.UnpackPath == "" {
-		s.UnpackPath = UNPACK_URL
+		s.UnpackPath = UNPACK_URL()
 	}
 	if err := s.torbail(); err != nil {
 		return nil

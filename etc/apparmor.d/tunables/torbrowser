@@ -1,0 +1,2 @@
+@{torbrowser_installation_dir} = @{HOME}/.i2p/plugins/i2p.plugins.tor-manager/unpack/tor-browser_en-US
+@{torbrowser_home_dir} = @{HOME}/.i2p/plugins/i2p.plugins.tor-manager/unpack/tor-browser_en-US/Browser
