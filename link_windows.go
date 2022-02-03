@@ -1,11 +1,17 @@
 package main
 
 import (
+	"log"
+
 	"github.com/go-ole/go-ole"
 	"github.com/go-ole/go-ole/oleutil"
 	"os/user"
 	"path/filepath"
 )
+
+func GenerateAppArmor() error {
+	return nil
+}
 
 func DesktopDirectory() (string, error) {
 	myself, error := user.Current()

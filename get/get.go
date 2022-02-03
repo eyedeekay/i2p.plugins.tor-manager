@@ -36,16 +36,20 @@ func DefaultDir() string {
 	if !FileExists(WORKING_DIR) {
 		os.MkdirAll(WORKING_DIR, 0755)
 	}
-	return WORKING_DIR
+	wd, err := filepath.Abs(WORKING_DIR)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return wd
 }
 
 func UNPACK_PATH() string {
-	var UNPACK_PATH = path.Join(DefaultDir(), "unpack")
+	var UNPACK_PATH = filepath.Join(DefaultDir(), "unpack")
 	return UNPACK_PATH
 }
 
 func DOWNLOAD_PATH() string {
-	var DOWNLOAD_PATH = path.Join(DefaultDir(), "tor-browser")
+	var DOWNLOAD_PATH = filepath.Join(DefaultDir(), "tor-browser")
 	return DOWNLOAD_PATH
 }
 
@@ -164,15 +168,16 @@ func (t *TBDownloader) Log(function, message string) {
 func (t *TBDownloader) MakeTBDirectory() {
 	os.MkdirAll(t.DownloadPath, 0755)
 
-	path := path.Join("tor-browser", "TPO-signing-key.pub")
+	empath := path.Join("tor-browser", "TPO-signing-key.pub")
+	path := filepath.Join(t.DownloadPath, "TPO-signing-key.pub")
 	if !FileExists(path) {
 		t.Log("MakeTBDirectory()", "Initial TPO signing key not found, using the one embedded in the executable")
-		bytes, err := t.Profile.ReadFile(path)
+		bytes, err := t.Profile.ReadFile(empath)
 		if err != nil {
 			log.Fatal(err)
 		}
 		t.Log("MakeTBDirectory()", "Writing TPO signing key to disk")
-		ioutil.WriteFile(filepath.Join(t.DownloadPath, "TPO-signing-key.pub"), bytes, 0644)
+		ioutil.WriteFile(path, bytes, 0644)
 		t.Log("MakeTBDirectory()", "Writing TPO signing key to disk complete")
 	}
 }
@@ -336,17 +341,17 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 	os.MkdirAll(t.UnpackPath, 0755)
 	UNPACK_DIRECTORY, err := os.Open(t.UnpackPath)
 	if err != nil {
-		return "", fmt.Errorf("UnpackUpdater: %s", err)
+		return "", fmt.Errorf("UnpackUpdater: directory error %s", err)
 	}
 	defer UNPACK_DIRECTORY.Close()
 	xzfile, err := os.Open(binpath)
 	if err != nil {
-		return "", fmt.Errorf("UnpackUpdater: %s", err)
+		return "", fmt.Errorf("UnpackUpdater: XZFile error %s", err)
 	}
 	defer xzfile.Close()
 	xzReader, err := xz.NewReader(xzfile)
 	if err != nil {
-		return "", fmt.Errorf("UnpackUpdater: %s", err)
+		return "", fmt.Errorf("UnpackUpdater: XZReader error %s", err)
 	}
 	tarReader := tar.NewReader(xzReader)
 	for {
@@ -355,7 +360,7 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 			break
 		}
 		if err != nil {
-			return "", fmt.Errorf("UnpackUpdater: %s", err)
+			return "", fmt.Errorf("UnpackUpdater: Tar looper Error %s", err)
 		}
 		if header.Typeflag == tar.TypeDir {
 			os.MkdirAll(filepath.Join(UNPACK_DIRECTORY.Name(), header.Name), 0755)
@@ -364,7 +369,7 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 		filename := filepath.Join(UNPACK_DIRECTORY.Name(), header.Name)
 		file, err := os.Create(filename)
 		if err != nil {
-			return "", fmt.Errorf("UnpackUpdater: %s", err)
+			return "", fmt.Errorf("UnpackUpdater: Tar unpacker error %s", err)
 		}
 		defer file.Close()
 		io.Copy(file, tarReader)
