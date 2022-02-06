@@ -30,12 +30,31 @@ func ARCH() string {
 }
 
 type Supervisor struct {
-	UnpackPath string
-	Lang       string
-	torcmd     *exec.Cmd
-	tbcmd      *exec.Cmd
-	ibcmd      *exec.Cmd
-	Profile    *embed.FS
+	UnpackPath      string
+	Lang            string
+	torcmd          *exec.Cmd
+	tbcmd           *exec.Cmd
+	ibcmd           *exec.Cmd
+	Profile         *embed.FS
+	PassThroughArgs []string
+}
+
+func (s *Supervisor) PTAS() []string {
+	// loop over the arguments and make sure that we remove any --profile, -P args
+	// and blank them out.
+	var args []string
+	for index, arg := range s.PassThroughArgs {
+		if arg == "--profile" || arg == "-P" {
+			continue
+		}
+		if index > 0 {
+			if s.PassThroughArgs[index-1] == "--profile" || s.PassThroughArgs[index-1] == "-P" {
+				continue
+			}
+		}
+		args = append(args, arg)
+	}
+	return args
 }
 
 func (s *Supervisor) TBPath() string {
@@ -118,6 +137,46 @@ func (s *Supervisor) UnpackI2PData() error {
 	})
 }
 
+func (s *Supervisor) I2PAppDataPath() string {
+	fp := s.I2PProfilePath()
+	up := filepath.Join(filepath.Dir(s.UnpackPath), "i2p.firefox.config")
+	if tbget.FileExists(up) {
+		return up
+	} else {
+		log.Printf("i2p workdir not found at %s, copying", up)
+		if s.Profile != nil {
+			if err := cp.Copy(fp, up); err != nil {
+				log.Fatal(err)
+			}
+		}
+		return up
+	}
+}
+
+func (s *Supervisor) UnpackI2PAppData() error {
+	return fs.WalkDir(s.Profile, ".", func(embedpath string, d fs.DirEntry, err error) error {
+		fp := filepath.Join(filepath.Dir(s.UnpackPath), ".i2p.firefox.config")
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(embedpath, filepath.Join(fp, strings.Replace(embedpath, "tor-browser/unpack/i2p.firefox.config", "", -1)))
+		if d.IsDir() {
+			os.MkdirAll(filepath.Join(fp, strings.Replace(embedpath, "tor-browser/unpack/i2p.firefox.config", "", -1)), 0755)
+		} else {
+			fullpath := path.Join(embedpath)
+			bytes, err := s.Profile.ReadFile(fullpath)
+			if err != nil {
+				return err
+			}
+			unpack := filepath.Join(fp, strings.Replace(embedpath, "tor-browser/unpack/i2p.firefox.config", "", -1))
+			if err := ioutil.WriteFile(unpack, bytes, 0644); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+}
+
 func (s *Supervisor) tbbail() error {
 	if s.tbcmd != nil && s.tbcmd.Process != nil && s.tbcmd.ProcessState != nil {
 		if s.tbcmd.ProcessState.Exited() {
@@ -146,7 +205,9 @@ func (s *Supervisor) RunTBWithLang() error {
 	case "linux":
 		if tbget.FileExists(s.UnpackPath) {
 			log.Println("running tor browser with lang", s.Lang, s.UnpackPath)
-			s.tbcmd = exec.Command(s.TBPath())
+			args := []string{}
+			args = append(args, s.PTAS()...)
+			s.tbcmd = exec.Command(s.TBPath(), args...)
 			s.tbcmd.Stdout = os.Stdout
 			s.tbcmd.Stderr = os.Stderr
 			return s.tbcmd.Run()
@@ -160,7 +221,9 @@ func (s *Supervisor) RunTBWithLang() error {
 		return s.tbcmd.Run()
 	case "win":
 		log.Println("Running Windows EXE", s.TBDirectory(), "firefox.exe")
-		s.tbcmd = exec.Command(filepath.Join(s.TBDirectory(), "firefox.exe"))
+		args := []string{}
+		args = append(args, s.PTAS()...)
+		s.tbcmd = exec.Command(filepath.Join(s.TBDirectory(), "firefox.exe"), args...)
 		s.tbcmd.Dir = s.TBDirectory()
 		return s.tbcmd.Run()
 	default:
@@ -197,7 +260,9 @@ func (s *Supervisor) RunI2PBWithLang() error {
 	case "linux":
 		if tbget.FileExists(s.UnpackPath) {
 			log.Println("running Tor browser with lang and I2P Profile", s.Lang, s.UnpackPath, s.FirefoxPath(), "--profile", s.I2PDataPath())
-			s.ibcmd = exec.Command(s.FirefoxPath(), "--profile", s.I2PDataPath())
+			args := []string{"--profile", s.I2PDataPath()}
+			args = append(args, s.PTAS()...)
+			s.ibcmd = exec.Command(s.FirefoxPath(), args...)
 			s.ibcmd.Stdout = os.Stdout
 			s.ibcmd.Stderr = os.Stderr
 			return s.ibcmd.Run()
@@ -211,8 +276,57 @@ func (s *Supervisor) RunI2PBWithLang() error {
 		return s.ibcmd.Run()
 	case "win":
 		log.Println("Running Windows EXE", filepath.Join(s.TBDirectory(), "firefox.exe"), "--profile", s.I2PDataPath())
-		s.ibcmd = exec.Command(filepath.Join(s.TBDirectory(), "firefox.exe"), "--profile", ".")
+		args := []string{"--profile", "."}
+		args = append(args, s.PTAS()...)
+		s.ibcmd = exec.Command(filepath.Join(s.TBDirectory(), "firefox.exe"), args...)
 		s.ibcmd.Dir = s.I2PDataPath()
+		s.ibcmd.Stdout = os.Stdout
+		s.ibcmd.Stderr = os.Stderr
+		return s.ibcmd.Run()
+	default:
+	}
+
+	return nil
+}
+
+func (s *Supervisor) RunI2PBAppWithLang() error {
+	tbget.ARCH = ARCH()
+	if s.Lang == "" {
+		s.Lang = DEFAULT_TB_LANG
+	}
+	if s.UnpackPath == "" {
+		s.UnpackPath = UNPACK_URL()
+	}
+
+	if s.ibbail() != nil {
+		return nil
+	}
+
+	log.Println("running i2p in tor browser with lang", s.Lang, s.UnpackPath, OS())
+	switch OS() {
+	case "linux":
+		if tbget.FileExists(s.UnpackPath) {
+			log.Println("running Tor browser with lang and I2P Profile", s.Lang, s.UnpackPath, s.FirefoxPath(), "--profile", s.I2PAppDataPath())
+			args := []string{"--profile", s.I2PAppDataPath()}
+			args = append(args, s.PTAS()...)
+			s.ibcmd = exec.Command(s.FirefoxPath(), args...)
+			s.ibcmd.Stdout = os.Stdout
+			s.ibcmd.Stderr = os.Stderr
+			return s.ibcmd.Run()
+		} else {
+			log.Println("tor browser not found at", s.FirefoxPath())
+			return fmt.Errorf("tor browser not found at %s", s.FirefoxPath())
+		}
+	case "darwin":
+		s.ibcmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
+		s.ibcmd.Dir = s.TBDirectory()
+		return s.ibcmd.Run()
+	case "win":
+		log.Println("Running Windows EXE", filepath.Join(s.TBDirectory(), "firefox.exe"), "--profile", s.I2PAppDataPath())
+		args := []string{"--profile", "."}
+		args = append(args, s.PTAS()...)
+		s.ibcmd = exec.Command(filepath.Join(s.TBDirectory(), "firefox.exe"), args...)
+		s.ibcmd.Dir = s.I2PAppDataPath()
 		s.ibcmd.Stdout = os.Stdout
 		s.ibcmd.Stderr = os.Stderr
 		return s.ibcmd.Run()

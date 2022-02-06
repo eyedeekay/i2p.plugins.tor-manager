@@ -141,6 +141,12 @@ index:
 	@echo "</body>" >> index.html
 	@echo "</html>" >> index.html
 
+tor-browser/unpack/i2p.firefox:
+	@echo "TODO"
+
+tor-browser/unpack/i2p.firefox.config:
+	@echo "TODO"
+
 refresh-tor-keys: clean-tor-keys tor-browser/TPO-signing-key.pub
 
 tor-keys: tor-browser/TPO-signing-key.pub

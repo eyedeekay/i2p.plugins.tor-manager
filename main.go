@@ -15,6 +15,7 @@ import (
 )
 
 //go:embed tor-browser/unpack/i2p.firefox/*
+//go:embed tor-browser/unpack/i2p.firefox.config/*
 //go:embed tor-browser/TPO-signing-key.pub
 //go:embed garliconion.png
 //go:embed onion.png
@@ -51,6 +52,7 @@ var (
 	system     = flag.String("os", OS(), "OS/arch to download")
 	arch       = flag.String("arch", ARCH(), "OS/arch to download")
 	i2pbrowser = flag.Bool("i2pbrowser", false, "Open I2P in Tor Browser")
+	i2pconfig  = flag.Bool("i2pconfig", false, "Open I2P routerconsole in Tor Browser with javscript enabled and non-routerconsole sites disabled")
 	torbrowser = flag.Bool("torbrowser", false, "Open Tor Browser")
 	verbose    = flag.Bool("verbose", false, "Verbose output")
 	directory  = flag.String("directory", "", "Directory operate in")
@@ -140,8 +142,12 @@ func main() {
 	client.Host = *host
 	client.Port = *port
 	client.TBS.Profile = &content
+	client.TBS.PassThroughArgs = flag.Args()
+	//	log.Fatalf("%s", client.TBS.PassThroughArgs)
 	if *i2pbrowser {
 		client.TBS.RunI2PBWithLang()
+	} else if *i2pconfig {
+		client.TBS.RunI2PBAppWithLang()
 	} else if *torbrowser {
 		client.TBS.RunTBWithLang()
 	} else {
