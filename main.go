@@ -16,6 +16,7 @@ import (
 
 //go:embed tor-browser/unpack/i2p.firefox/*
 //go:embed tor-browser/unpack/i2p.firefox.config/*
+//go:embed tor-browser/unpack/awo@eyedeekay.github.io.xpi
 //go:embed tor-browser/TPO-signing-key.pub
 //go:embed garliconion.png
 //go:embed onion.png
@@ -61,6 +62,7 @@ var (
 	bemirror   = flag.Bool("bemirror", false, "Act as an in-I2P mirror when you're done downloading")
 	shortcuts  = flag.Bool("shortcuts", false, "Create desktop shortcuts")
 	apparmor   = flag.Bool("apparmor", false, "Generate apparmor rules")
+	offline    = flag.Bool("offline", false, "Work offline")
 	profile    = flag.String("profile", "", "use a custom profile path, normally blank")
 	help       = flag.Bool("help", false, "Print help")
 	/*mirror   = flag.String("mirror", "", "Mirror to use")*/
@@ -102,7 +104,11 @@ func main() {
 		-verbose
 			  Verbose output
 		-watch-profiles string
-			  Monitor and control these Firefox profiles. Temporarily Unused.`)
+			  Monitor and control these Firefox profiles. Temporarily Unused.
+		-help
+			  Print help
+		-offline
+			  Work offline`)
 	}
 	flag.Parse()
 	tbget.WORKING_DIR = *directory
@@ -150,7 +156,7 @@ func main() {
 			} else {
 				log.Fatal("Failed to run I2P", err)
 				//TODO: Link libi2pd and start our own router if we cant find one anywhere.
-				//TODO: loop again until HTTPDefaultProxy is up
+				//TODO: loop again until TestHTTPDefaultProxy is up
 			}
 		}
 	}
