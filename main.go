@@ -61,6 +61,8 @@ var (
 	bemirror   = flag.Bool("bemirror", false, "Act as an in-I2P mirror when you're done downloading")
 	shortcuts  = flag.Bool("shortcuts", false, "Create desktop shortcuts")
 	apparmor   = flag.Bool("apparmor", false, "Generate apparmor rules")
+	profile    = flag.String("profile", "", "use a custom profile path, normally blank")
+	help       = flag.Bool("help", false, "Print help")
 	/*mirror   = flag.String("mirror", "", "Mirror to use")*/
 )
 
@@ -68,6 +70,40 @@ var client *tbserve.Client
 
 func main() {
 	filename := filepath.Base(os.Args[0])
+	flag.Usage = func() {
+		log.Println(`
+	Usage of ./i2p.plugins.tor-manager-linux-amd64:
+		-apparmor
+			  Generate apparmor rules
+		-arch string
+			  OS/arch to download (default "64")
+		-bemirror
+			  Act as an in-I2P mirror when you're done downloading
+		-directory string
+			  Directory operate in
+		-host string
+			  Host to serve on (default "127.0.0.1")
+		-i2pbrowser
+			  Open I2P in Tor Browser
+		-i2pconfig
+			  Open I2P routerconsole in Tor Browser with javscript enabled and non-routerconsole sites disabled
+		-lang string
+			  Language to download
+		-os string
+			  OS/arch to download (default "linux")
+		-port int
+			  Port to serve on (default 7695)
+		-profile string
+			  use a custom profile path, normally blank
+		-shortcuts
+			  Create desktop shortcuts
+		-torbrowser
+			  Open Tor Browser
+		-verbose
+			  Verbose output
+		-watch-profiles string
+			  Monitor and control these Firefox profiles. Temporarily Unused.`)
+	}
 	flag.Parse()
 	tbget.WORKING_DIR = *directory
 	if filename == "i2pbrowser" {
@@ -146,7 +182,16 @@ func main() {
 	client.TBS.Profile = &content
 	client.TBS.PassThroughArgs = flag.Args()
 	//	log.Fatalf("%s", client.TBS.PassThroughArgs)
-	if *i2pbrowser {
+	if *help {
+		flag.Usage()
+		client.TBS.RunTBHelpWithLang()
+		return
+	}
+	if *profile != "" {
+		if tbget.FileExists(*profile) {
+			client.TBS.RunTBBWithProfile(*profile)
+		}
+	} else if *i2pbrowser {
 		client.TBS.RunI2PBWithLang()
 	} else if *i2pconfig {
 		client.TBS.RunI2PBAppWithLang()
