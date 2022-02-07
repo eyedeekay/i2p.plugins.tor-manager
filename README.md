@@ -1,8 +1,7 @@
 # i2p.plugins.tor-updater
 
 A Tor package updater and runner as an I2P Plugin. This plugin is
-still being changed rapidly but it should be usable on most Linux
-distributions as of 23 Jan, 2022.
+usable on Windows and Linux for now. OSX support is planned soon.
 
 Usage:
 ------
@@ -74,9 +73,13 @@ The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
 #### Optional Features I might add if there is interest
 
 1. Mirror the files which it downloads to an I2P Site
+ - Probably works on everything
 2. Mirror the files which it downloads to I2P torrents
+ - Not done
 3. Set up an onion site which announces an I2P mirror exists
+ - Not done
 4. Use Bittorrent-over-I2P to download the Tor Browser software
+ - Not Done
 
 ### Usage as a Library
 
