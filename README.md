@@ -78,6 +78,37 @@ The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
 3. Set up an onion site which announces an I2P mirror exists
 4. Use Bittorrent-over-I2P to download the Tor Browser software
 
+### Usage as a Library
+
+[More information at the GoDoc](https://pkg.go.dev/i2pgit.org/idk/i2p.plugins.tor-manager)
+
+This is also useful as a library for downloading a Tor Browser Bundle. This API
+isn't really stable, more "stabilizing." Feel free to use it, but it may still
+change a little.
+
+To create a new instance, use:
+
+``` Go
+client, err = tbserve.NewClient(*verbose, *lang, *system, *arch, &content)
+```
+
+Customize the client using the exposed variables and methods:
+
+``` Go
+client.Host = *host
+client.Port = *port
+client.TBS.Profile = &content
+client.TBS.PassThroughArgs = flag.Args()
+```
+
+And serve the controller:
+
+``` Go
+if err := client.Serve(); err != nil {
+  log.Fatal(err)
+}
+```
+
 ### Similar Projects:
 
 - https://github.com/micahflee/torbrowser-launcher
