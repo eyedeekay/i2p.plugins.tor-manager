@@ -149,6 +149,8 @@ func main() {
 				}
 			} else {
 				log.Fatal("Failed to run I2P", err)
+				//TODO: Link libi2pd and start our own router if we cant find one anywhere.
+				//TODO: loop again until HTTPDefaultProxy is up
 			}
 		}
 	}
