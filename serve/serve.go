@@ -15,6 +15,7 @@ import (
 	TBSupervise "i2pgit.org/idk/i2p.plugins.tor-manager/supervise"
 )
 
+// Client manages and supervises a Tor Browser instance.
 type Client struct {
 	hostname string
 	TBD      *tbget.TBDownloader
@@ -24,6 +25,7 @@ type Client struct {
 	Port     int
 }
 
+// NewClient creates a new Client.
 func NewClient(verbose bool, lang string, os string, arch string, content *embed.FS) (*Client, error) {
 	m := &Client{
 		TBD: tbget.NewTBDownloader(lang, os, arch, content),
@@ -44,6 +46,7 @@ func NewClient(verbose bool, lang string, os string, arch string, content *embed
 	return m, nil
 }
 
+// GetHost returns the hostname of the client.
 func (m *Client) GetHost() string {
 	if m.Host == "" {
 		m.Host = "127.0.0.1"
@@ -51,6 +54,7 @@ func (m *Client) GetHost() string {
 	return m.Host
 }
 
+// GetPort returns the port of the client.
 func (m *Client) GetPort() string {
 	if m.Port == 0 {
 		m.Port = 7695
@@ -58,10 +62,12 @@ func (m *Client) GetPort() string {
 	return strconv.Itoa(m.Port)
 }
 
+// GetAddress returns the address of the client.
 func (m *Client) GetAddress() string {
 	return m.GetHost() + ":" + m.GetPort()
 }
 
+// ServeHTTP handles HTTP requests.
 func (m *Client) ServeHTTP(rw http.ResponseWriter, rq *http.Request) {
 	path := strings.Replace(rq.URL.Path, "..", "", -1)
 	rq.URL.Path = path
@@ -117,6 +123,7 @@ func (m *Client) ServeHTTP(rw http.ResponseWriter, rq *http.Request) {
 
 }
 
+// Serve serve the control panel locally
 func (m *Client) Serve() error {
 	//http.Handle("/", m)
 	mirrorjson, err := m.GenerateMirrorJSON()

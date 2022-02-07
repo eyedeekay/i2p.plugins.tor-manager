@@ -18,17 +18,23 @@ import (
 	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
 )
 
+// UNPACK_URL is the URL to place to unpack the Browser Bundle
 var UNPACK_URL = tbget.UNPACK_PATH
+
+// DEFAULT_TB_LANG is the default language to use for the Tor Browser Bundle
 var DEFAULT_TB_LANG = tbget.DefaultIETFLang
 
+// OS returns the current OS
 func OS() string {
 	return tbget.OS
 }
 
+// ARCH returns the current architecture
 func ARCH() string {
 	return tbget.ARCH
 }
 
+// Supervisor is the main struct for the Tor Browser Bundle Supervisor
 type Supervisor struct {
 	UnpackPath      string
 	Lang            string
@@ -39,6 +45,7 @@ type Supervisor struct {
 	PassThroughArgs []string
 }
 
+// PTAS is the validator for the pass-through arguments
 func (s *Supervisor) PTAS() []string {
 	// loop over the arguments and make sure that we remove any --profile, -P args
 	// and blank them out.
@@ -57,10 +64,12 @@ func (s *Supervisor) PTAS() []string {
 	return args
 }
 
+// TBPath returns the path to the Tor Browser Bundle launcher
 func (s *Supervisor) TBPath() string {
 	return filepath.Join(s.UnpackPath, "Browser", "start-tor-browser")
 }
 
+// FirefoxPath returns the path to the Firefox executable inside Tor Browser
 func (s *Supervisor) FirefoxPath() string {
 	switch OS() {
 	case "linux":
@@ -72,18 +81,22 @@ func (s *Supervisor) FirefoxPath() string {
 	}
 }
 
+// TBDirectory returns the path to the Tor Browser Bundle directory
 func (s *Supervisor) TBDirectory() string {
 	return filepath.Join(s.UnpackPath, "Browser")
 }
 
+// TorPath returns the path to the Tor executable
 func (s *Supervisor) TorPath() string {
 	return filepath.Join(s.UnpackPath, "Browser", "TorBrowser", "Tor", "tor")
 }
 
+// TorDataPath returns the path to the Tor Browser Bundle Data directory
 func (s *Supervisor) TorDataPath() string {
 	return filepath.Join(s.UnpackPath, "Browser", "TorBrowser", "Data")
 }
 
+// I2PProfilePath returns the path to the I2P profile
 func (s *Supervisor) I2PProfilePath() string {
 	fp := filepath.Join(filepath.Dir(s.UnpackPath), ".i2p.firefox")
 	if !tbget.FileExists(fp) {
@@ -97,22 +110,23 @@ func (s *Supervisor) I2PProfilePath() string {
 	return fp
 }
 
+// I2PDataPath returns the path to the I2P data directory
 func (s *Supervisor) I2PDataPath() string {
 	fp := s.I2PProfilePath()
 	up := filepath.Join(filepath.Dir(s.UnpackPath), "i2p.firefox")
 	if tbget.FileExists(up) {
 		return up
-	} else {
-		log.Printf("i2p workdir not found at %s, copying", up)
-		if s.Profile != nil {
-			if err := cp.Copy(fp, up); err != nil {
-				log.Fatal(err)
-			}
-		}
-		return up
 	}
+	log.Printf("i2p workdir not found at %s, copying", up)
+	if s.Profile != nil {
+		if err := cp.Copy(fp, up); err != nil {
+			log.Fatal(err)
+		}
+	}
+	return up
 }
 
+// UnpackI2PData unpacks the I2P data into the s.UnpackPath
 func (s *Supervisor) UnpackI2PData() error {
 	return fs.WalkDir(s.Profile, ".", func(embedpath string, d fs.DirEntry, err error) error {
 		fp := filepath.Join(filepath.Dir(s.UnpackPath), ".i2p.firefox")
@@ -137,22 +151,23 @@ func (s *Supervisor) UnpackI2PData() error {
 	})
 }
 
+// I2PAppDataPath returns the path to the I2P application data directory
 func (s *Supervisor) I2PAppDataPath() string {
 	fp := s.I2PProfilePath()
 	up := filepath.Join(filepath.Dir(s.UnpackPath), "i2p.firefox.config")
 	if tbget.FileExists(up) {
 		return up
-	} else {
-		log.Printf("i2p workdir not found at %s, copying", up)
-		if s.Profile != nil {
-			if err := cp.Copy(fp, up); err != nil {
-				log.Fatal(err)
-			}
-		}
-		return up
 	}
+	log.Printf("i2p workdir not found at %s, copying", up)
+	if s.Profile != nil {
+		if err := cp.Copy(fp, up); err != nil {
+			log.Fatal(err)
+		}
+	}
+	return up
 }
 
+// UnpackI2PAppData unpacks the I2P application data into the s.UnpackPath
 func (s *Supervisor) UnpackI2PAppData() error {
 	return fs.WalkDir(s.Profile, ".", func(embedpath string, d fs.DirEntry, err error) error {
 		fp := filepath.Join(filepath.Dir(s.UnpackPath), ".i2p.firefox.config")
@@ -187,6 +202,7 @@ func (s *Supervisor) tbbail() error {
 	return nil
 }
 
+// RunTBWithLang runs the Tor Browser with the given language
 func (s *Supervisor) RunTBWithLang() error {
 	tbget.ARCH = ARCH()
 	if s.Lang == "" {
@@ -211,10 +227,9 @@ func (s *Supervisor) RunTBWithLang() error {
 			s.tbcmd.Stdout = os.Stdout
 			s.tbcmd.Stderr = os.Stderr
 			return s.tbcmd.Run()
-		} else {
-			log.Println("tor browser not found at", s.TBPath())
-			return fmt.Errorf("tor browser not found at %s", s.TBPath())
 		}
+		log.Println("tor browser not found at", s.TBPath())
+		return fmt.Errorf("tor browser not found at %s", s.TBPath())
 	case "darwin":
 		s.tbcmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
 		s.tbcmd.Dir = s.TBDirectory()
@@ -242,6 +257,7 @@ func (s *Supervisor) ibbail() error {
 	return nil
 }
 
+// RunI2PBWithLang runs the I2P Browser with the given language
 func (s *Supervisor) RunI2PBWithLang() error {
 	tbget.ARCH = ARCH()
 	if s.Lang == "" {
@@ -266,10 +282,9 @@ func (s *Supervisor) RunI2PBWithLang() error {
 			s.ibcmd.Stdout = os.Stdout
 			s.ibcmd.Stderr = os.Stderr
 			return s.ibcmd.Run()
-		} else {
-			log.Println("tor browser not found at", s.FirefoxPath())
-			return fmt.Errorf("tor browser not found at %s", s.FirefoxPath())
 		}
+		log.Println("tor browser not found at", s.FirefoxPath())
+		return fmt.Errorf("tor browser not found at %s", s.FirefoxPath())
 	case "darwin":
 		s.ibcmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
 		s.ibcmd.Dir = s.TBDirectory()
@@ -289,6 +304,7 @@ func (s *Supervisor) RunI2PBWithLang() error {
 	return nil
 }
 
+// RunI2PBAppWithLang runs the I2P Browser with the given language
 func (s *Supervisor) RunI2PBAppWithLang() error {
 	tbget.ARCH = ARCH()
 	if s.Lang == "" {
@@ -313,10 +329,9 @@ func (s *Supervisor) RunI2PBAppWithLang() error {
 			s.ibcmd.Stdout = os.Stdout
 			s.ibcmd.Stderr = os.Stderr
 			return s.ibcmd.Run()
-		} else {
-			log.Println("tor browser not found at", s.FirefoxPath())
-			return fmt.Errorf("tor browser not found at %s", s.FirefoxPath())
 		}
+		log.Println("tor browser not found at", s.FirefoxPath())
+		return fmt.Errorf("tor browser not found at %s", s.FirefoxPath())
 	case "darwin":
 		s.ibcmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
 		s.ibcmd.Dir = s.TBDirectory()
@@ -354,6 +369,7 @@ func (s *Supervisor) torbail() error {
 	return nil
 }
 
+// RunTorWithLang runs the Tor Exe with the given language
 func (s *Supervisor) RunTorWithLang() error {
 	tbget.ARCH = ARCH()
 	if s.Lang == "" {
@@ -375,10 +391,9 @@ func (s *Supervisor) RunTorWithLang() error {
 			s.torcmd.Stdout = os.Stdout
 			s.torcmd.Stderr = os.Stderr
 			return s.torcmd.Run()
-		} else {
-			log.Println("tor not found at", s.TorPath())
-			return fmt.Errorf("tor not found at %s", s.TorPath())
 		}
+		log.Println("tor not found at", s.TorPath())
+		return fmt.Errorf("tor not found at %s", s.TorPath())
 	case "darwin":
 		s.torcmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
 		s.torcmd.Dir = s.TBDirectory()
@@ -394,10 +409,13 @@ func (s *Supervisor) RunTorWithLang() error {
 	return nil
 }
 
+// StopTor stops tor
 func (s *Supervisor) StopTor() error {
 	return s.torcmd.Process.Kill()
 }
 
+// TorIsAlive returns true,true if tor is alive and belongs to us, true,false
+// if it's alive and doesn't belong to us, false,false if no Tor can be found
 func (s *Supervisor) TorIsAlive() (bool, bool) {
 	_, err := net.Listen("TCP", "127.0.0.1:9050")
 	if err != nil {
@@ -422,6 +440,7 @@ func (s *Supervisor) TorIsAlive() (bool, bool) {
 	return false, true
 }
 
+// NewSupervisor creates a new supervisor
 func NewSupervisor(tbPath, lang string) *Supervisor {
 	return &Supervisor{
 		UnpackPath: tbPath,

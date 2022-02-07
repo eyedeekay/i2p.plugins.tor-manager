@@ -16,7 +16,7 @@ func (m *Client) generateMirrorJSON() (map[string]interface{}, error) {
 	if err != nil {
 		return nil, fmt.Errorf("GenerateMirrorJSON: %s", err)
 	}
-	binpath, _, err := m.TBD.GetUpdaterForLangFromJsonBytes(preBytes, "en-US")
+	binpath, _, err := m.TBD.GetUpdaterForLangFromJSONBytes(preBytes, "en-US")
 	if err != nil {
 		return nil, fmt.Errorf("GenerateMirrorJSON: %s", err)
 	}
@@ -31,6 +31,7 @@ func (m *Client) generateMirrorJSON() (map[string]interface{}, error) {
 	return JSON, nil
 }
 
+// Hostname Returns the hostname of the client, if it has one.
 func (m *Client) Hostname() string {
 	if !strings.HasSuffix(m.hostname, "/") {
 		return m.hostname + "/"
@@ -38,6 +39,7 @@ func (m *Client) Hostname() string {
 	return m.hostname
 }
 
+// GenerateMirrorJSON generates the JSON file for the mirror.
 func (m *Client) GenerateMirrorJSON() (string, error) {
 	JSON, err := m.generateMirrorJSON()
 	if err != nil {
@@ -48,7 +50,7 @@ func (m *Client) GenerateMirrorJSON() (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("GenerateMirrorJSONBytes: %s", err)
 	}
-	binpath, _, err := m.TBD.GetUpdaterForLangFromJsonBytes(preBytes, "en-US")
+	binpath, _, err := m.TBD.GetUpdaterForLangFromJSONBytes(preBytes, "en-US")
 	if err != nil {
 		return "", fmt.Errorf("GenerateMirrorJSONBytes: %s", err)
 	}
@@ -77,6 +79,7 @@ func (m *Client) GenerateMirrorJSON() (string, error) {
 	return "", fmt.Errorf("GenerateMirrorJSONBytes: %s", "No downloads found")
 }
 
+// GenerateReplaceString generates the string to replace in the JSON file.
 func GenerateReplaceString(urlparts []string) string {
 	replaceString := ""
 	for _, val := range urlparts {

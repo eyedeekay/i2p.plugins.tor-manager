@@ -27,8 +27,10 @@ import (
 	"golang.org/x/crypto/openpgp"
 )
 
+// WORKING_DIR is the working directory for the application.
 var WORKING_DIR = ""
 
+// DefaultDir returns the default directory for the application.
 func DefaultDir() string {
 	if WORKING_DIR == "" {
 		WORKING_DIR, _ = os.Getwd()
@@ -43,22 +45,27 @@ func DefaultDir() string {
 	return wd
 }
 
+// UNPACK_PATH returns the path to the unpacked files.
 func UNPACK_PATH() string {
 	var UNPACK_PATH = filepath.Join(DefaultDir(), "unpack")
 	return UNPACK_PATH
 }
 
+// DOWNLOAD_PATH returns the path to the downloads.
 func DOWNLOAD_PATH() string {
 	var DOWNLOAD_PATH = filepath.Join(DefaultDir(), "tor-browser")
 	return DOWNLOAD_PATH
 }
 
+// TOR_UPDATES_URL is the URL of the Tor Browser update list.
 const TOR_UPDATES_URL string = "https://aus1.torproject.org/torbrowser/update_3/release/downloads.json"
 
 var (
+	// DefaultIETFLang is the default language for the TBDownloader.
 	DefaultIETFLang, _ = jibber_jabber.DetectIETF()
 )
 
+// TBDownloader is a struct which manages browser updates
 type TBDownloader struct {
 	UnpackPath   string
 	DownloadPath string
@@ -68,9 +75,13 @@ type TBDownloader struct {
 	Profile      *embed.FS
 }
 
+// OS is the operating system of the TBDownloader.
 var OS = "linux"
+
+// ARCH is the architecture of the TBDownloader.
 var ARCH = "64"
 
+// NewTBDownloader returns a new TBDownloader with the given language, using the TBDownloader's OS/ARCH pair
 func NewTBDownloader(lang string, os, arch string, content *embed.FS) *TBDownloader {
 	OS = os
 	ARCH = arch
@@ -85,6 +96,7 @@ func NewTBDownloader(lang string, os, arch string, content *embed.FS) *TBDownloa
 	}
 }
 
+// ServeHTTP serves the DOWNLOAD_PATH as a mirror
 func (t *TBDownloader) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	r.URL.Path = strings.Replace(r.URL.Path, "..", "", -1)
 	ext := filepath.Ext(r.URL.Path)
@@ -100,6 +112,7 @@ func (t *TBDownloader) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Serve runs ServeHTTP on an I2P listener
 func (t *TBDownloader) Serve() {
 	samlistener, err := sam.I2PListener("tor-mirror", "127.0.0.1:7656", "tor-mirror")
 	if err != nil {
@@ -109,6 +122,7 @@ func (t *TBDownloader) Serve() {
 	http.Serve(samlistener, t)
 }
 
+// GetRuntimePair returns the runtime.GOOS and runtime.GOARCH pair.
 func (t *TBDownloader) GetRuntimePair() string {
 	if t.OS != "" && t.ARCH != "" {
 		return fmt.Sprintf("%s%s", t.OS, t.ARCH)
@@ -137,13 +151,13 @@ func (t *TBDownloader) GetRuntimePair() string {
 	return t.OS
 }
 
-// GetUpdaterForLangFromJsonBytes returns the updater for the given language, using the TBDownloader's OS/ARCH pair
+// GetUpdater returns the updater for the given language, using the TBDownloader's OS/ARCH pair
 // and only the defaults. It returns the URL of the updater and the detatched signature, or an error if one is not found.
 func (t *TBDownloader) GetUpdater() (string, string, error) {
 	return t.GetUpdaterForLang(t.Lang)
 }
 
-// GetUpdaterForLangFromJsonBytes returns the updater for the given language, using the TBDownloader's OS/ARCH pair
+// GetUpdaterForLang returns the updater for the given language, using the TBDownloader's OS/ARCH pair
 // it expects ietf to be a language. It returns the URL of the updater and the detatched signature, or an error if one is not found.
 func (t *TBDownloader) GetUpdaterForLang(ietf string) (string, string, error) {
 	jsonText, err := http.Get(TOR_UPDATES_URL)
@@ -151,22 +165,22 @@ func (t *TBDownloader) GetUpdaterForLang(ietf string) (string, string, error) {
 		return "", "", fmt.Errorf("t.GetUpdaterForLang: %s", err)
 	}
 	defer jsonText.Body.Close()
-	return t.GetUpdaterForLangFromJson(jsonText.Body, ietf)
+	return t.GetUpdaterForLangFromJSON(jsonText.Body, ietf)
 }
 
-// GetUpdaterForLangFromJson returns the updater for the given language, using the TBDownloader's OS/ARCH pair
+// GetUpdaterForLangFromJSON returns the updater for the given language, using the TBDownloader's OS/ARCH pair
 // it expects body to be a valid json reader and ietf to be a language. It returns the URL of the updater and
 // the detatched signature, or an error if one is not found.
-func (t *TBDownloader) GetUpdaterForLangFromJson(body io.ReadCloser, ietf string) (string, string, error) {
+func (t *TBDownloader) GetUpdaterForLangFromJSON(body io.ReadCloser, ietf string) (string, string, error) {
 	jsonBytes, err := io.ReadAll(body)
 	if err != nil {
-		return "", "", fmt.Errorf("t.GetUpdaterForLangFromJson: %s", err)
+		return "", "", fmt.Errorf("t.GetUpdaterForLangFromJSON: %s", err)
 	}
 	t.MakeTBDirectory()
 	if err = ioutil.WriteFile(filepath.Join(t.DownloadPath, "downloads.json"), jsonBytes, 0644); err != nil {
-		return "", "", fmt.Errorf("t.GetUpdaterForLangFromJson: %s", err)
+		return "", "", fmt.Errorf("t.GetUpdaterForLangFromJSON: %s", err)
 	}
-	return t.GetUpdaterForLangFromJsonBytes(jsonBytes, ietf)
+	return t.GetUpdaterForLangFromJSONBytes(jsonBytes, ietf)
 }
 
 // Log logs things if Verbose is true.
@@ -194,38 +208,37 @@ func (t *TBDownloader) MakeTBDirectory() {
 	}
 }
 
-// GetUpdaterForLangFromJsonBytes returns the updater for the given language, using the TBDownloader's OS/ARCH pair
+// GetUpdaterForLangFromJSONBytes returns the updater for the given language, using the TBDownloader's OS/ARCH pair
 // it expects jsonBytes to be a valid json string and ietf to be a language. It returns the URL of the updater and
 // the detatched signature, or an error if one is not found.
-func (t *TBDownloader) GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf string) (string, string, error) {
+func (t *TBDownloader) GetUpdaterForLangFromJSONBytes(jsonBytes []byte, ietf string) (string, string, error) {
 	t.MakeTBDirectory()
 	var dat map[string]interface{}
-	t.Log("GetUpdaterForLangFromJsonBytes()", "Parsing JSON")
+	t.Log("GetUpdaterForLangFromJSONBytes()", "Parsing JSON")
 	if err := json.Unmarshal(jsonBytes, &dat); err != nil {
 		return "", "", fmt.Errorf("func (t *TBDownloader)Name: %s", err)
 	}
-	t.Log("GetUpdaterForLangFromJsonBytes()", "Parsing JSON complete")
+	t.Log("GetUpdaterForLangFromJSONBytes()", "Parsing JSON complete")
 	if platform, ok := dat["downloads"]; ok {
 		rtp := t.GetRuntimePair()
 		if updater, ok := platform.(map[string]interface{})[rtp]; ok {
 			if langUpdater, ok := updater.(map[string]interface{})[ietf]; ok {
-				t.Log("GetUpdaterForLangFromJsonBytes()", "Found updater for language")
+				t.Log("GetUpdaterForLangFromJSONBytes()", "Found updater for language")
 				return langUpdater.(map[string]interface{})["binary"].(string), langUpdater.(map[string]interface{})["sig"].(string), nil
 			}
 			// If we didn't find the language, try splitting at the hyphen
 			lang := strings.Split(ietf, "-")[0]
 			if langUpdater, ok := updater.(map[string]interface{})[lang]; ok {
-				t.Log("GetUpdaterForLangFromJsonBytes()", "Found updater for backup language")
+				t.Log("GetUpdaterForLangFromJSONBytes()", "Found updater for backup language")
 				return langUpdater.(map[string]interface{})["binary"].(string), langUpdater.(map[string]interface{})["sig"].(string), nil
 			}
 			// If we didn't find the language after splitting at the hyphen, try the default
-			t.Log("GetUpdaterForLangFromJsonBytes()", "Last attempt, trying default language")
-			return t.GetUpdaterForLangFromJsonBytes(jsonBytes, t.Lang)
-		} else {
-			return "", "", fmt.Errorf("t.GetUpdaterForLangFromJsonBytes: no updater for platform %s", rtp)
+			t.Log("GetUpdaterForLangFromJSONBytes()", "Last attempt, trying default language")
+			return t.GetUpdaterForLangFromJSONBytes(jsonBytes, t.Lang)
 		}
+		return "", "", fmt.Errorf("t.GetUpdaterForLangFromJSONBytes: no updater for platform %s", rtp)
 	}
-	return "", "", fmt.Errorf("t.GetUpdaterForLangFromJsonBytes: %s", ietf)
+	return "", "", fmt.Errorf("t.GetUpdaterForLangFromJSONBytes: %s", ietf)
 }
 
 // SingleFileDownload downloads a single file from the given URL to the given path.
@@ -268,11 +281,11 @@ func (t *TBDownloader) BotherToDownload(url, name string) bool {
 		return true
 	}
 	defer ioutil.WriteFile(filepath.Join(t.DownloadPath, name+".last-url"), []byte(url), 0644)
-	lastUrl, err := ioutil.ReadFile(filepath.Join(t.DownloadPath, name+".last-url"))
+	lastURL, err := ioutil.ReadFile(filepath.Join(t.DownloadPath, name+".last-url"))
 	if err != nil {
 		return true
 	}
-	if string(lastUrl) == url {
+	if string(lastURL) == url {
 		return false
 	}
 	return true
@@ -319,7 +332,7 @@ func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, erro
 	return binpath, sigpath, nil
 }
 
-// BrowserDirectory returns the path to the directory where the browser is installed.
+// BrowserDir returns the path to the directory where the browser is installed.
 func (t *TBDownloader) BrowserDir() string {
 	return filepath.Join(t.UnpackPath, "tor-browser_"+t.Lang)
 }
@@ -438,10 +451,12 @@ func (t *TBDownloader) BoolCheckSignature(binpath, sigpath string) bool {
 	return err == nil
 }
 
+// TestHTTPDefaultProxy returns true if the I2P proxy is up or blocks until it is.
 func TestHTTPDefaultProxy() bool {
 	return TestHTTPProxy("127.0.0.1", "4444")
 }
 
+// Seconds increments the seconds and displays the number of seconds every 10 seconds
 func Seconds(now int) int {
 	time.Sleep(time.Second)
 	if now == 10 {
@@ -450,6 +465,7 @@ func Seconds(now int) int {
 	return now + 1
 }
 
+// TestHTTPBackupProxy returns true if the I2P backup proxy is up or blocks until it is.
 func TestHTTPBackupProxy() bool {
 	now := 0
 	limit := 0
@@ -472,6 +488,7 @@ func TestHTTPBackupProxy() bool {
 	return false
 }
 
+// TestHTTPProxy returns true if the proxy at host:port is up or blocks until it is.
 func TestHTTPProxy(host, port string) bool {
 	now := 0
 	limit := 0
@@ -494,11 +511,11 @@ func TestHTTPProxy(host, port string) bool {
 }
 
 func hTTPProxy(host, port string) bool {
-	proxyUrl, err := url.Parse("http://" + host + ":" + port)
+	proxyURL, err := url.Parse("http://" + host + ":" + port)
 	if err != nil {
 		log.Panic(err)
 	}
-	myClient := &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyUrl)}}
+	myClient := &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyURL)}}
 	resp, err := myClient.Get("http://proxy.i2p/")
 	if err == nil {
 		defer resp.Body.Close()

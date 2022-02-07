@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// Page generates the HTML for the panel.
 func (m *Client) Page() (string, error) {
 
 	htmlbytes := htmlhead

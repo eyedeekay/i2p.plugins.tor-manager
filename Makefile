@@ -15,6 +15,11 @@ PLUGIN=$(HOME)/.i2p/plugins/$(BINARY)-$(GOOS)-$(GOARCH)
 
 PREFIX?=/usr/local
 
+lint:
+	golint supervise/*.go
+	golint get/*.go
+	golint serve/*.go
+
 binary:
 	go build $(ARG) -tags="netgo" -o $(BINARY)-$(GOOS)-$(GOARCH) .
 

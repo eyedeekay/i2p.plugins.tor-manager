@@ -60,7 +60,7 @@ func (t *TBDownloader) SendFirefoxVersionHEADRequest() (string, error) {
 	return resp.Header.Get("Location"), nil
 }
 
-// ExtactFirefoxVersion extracts the Firefox version from the updater URL
+// ExtractFirefoxVersion extracts the Firefox version from the updater URL
 func (t *TBDownloader) ExtractFirefoxVersion() (string, error) {
 	url, err := t.SendFirefoxVersionHEADRequest()
 	if err != nil {
@@ -93,7 +93,7 @@ func (t *TBDownloader) NamePerPlatformFirefox(ietf string) string {
 	return fmt.Sprintf("firefox%s-%s-%s.%s", windowsonly, t.GetRuntimePair(), ietf, extension)
 }
 
-// FirefoxBrowserDirectory returns the path to the directory where the Firefox browser is installed.
+// FirefoxBrowserDir returns the path to the directory where the Firefox browser is installed.
 func (t *TBDownloader) FirefoxBrowserDir() string {
 	return filepath.Join(t.UnpackPath, "firefox_"+t.Lang)
 }
@@ -205,7 +205,7 @@ func (t *TBDownloader) DownloadFirefoxUpdaterForLang(ietf string) (string, strin
 	return binpath, sigpath, nil
 }
 
-// CheckSignature checks the signature of the updater.
+// CheckFirefoxSignature checks the signature of the updater.
 // it returns an error if one is encountered. If not, it
 // runs the updater and returns an error if one is encountered.
 func (t *TBDownloader) CheckFirefoxSignature(binpath, sigpath string) (string, error) {
