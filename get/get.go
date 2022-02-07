@@ -131,13 +131,20 @@ func (t *TBDownloader) GetRuntimePair() string {
 	default:
 		t.ARCH = "unknown"
 	}
-	return fmt.Sprintf("%s%s", t.OS, t.ARCH)
+	if t.OS != "osx" {
+		return fmt.Sprintf("%s%s", t.OS, t.ARCH)
+	}
+	return t.OS
 }
 
+// GetUpdaterForLangFromJsonBytes returns the updater for the given language, using the TBDownloader's OS/ARCH pair
+// and only the defaults. It returns the URL of the updater and the detatched signature, or an error if one is not found.
 func (t *TBDownloader) GetUpdater() (string, string, error) {
 	return t.GetUpdaterForLang(t.Lang)
 }
 
+// GetUpdaterForLangFromJsonBytes returns the updater for the given language, using the TBDownloader's OS/ARCH pair
+// it expects ietf to be a language. It returns the URL of the updater and the detatched signature, or an error if one is not found.
 func (t *TBDownloader) GetUpdaterForLang(ietf string) (string, string, error) {
 	jsonText, err := http.Get(TOR_UPDATES_URL)
 	if err != nil {
@@ -147,6 +154,9 @@ func (t *TBDownloader) GetUpdaterForLang(ietf string) (string, string, error) {
 	return t.GetUpdaterForLangFromJson(jsonText.Body, ietf)
 }
 
+// GetUpdaterForLangFromJson returns the updater for the given language, using the TBDownloader's OS/ARCH pair
+// it expects body to be a valid json reader and ietf to be a language. It returns the URL of the updater and
+// the detatched signature, or an error if one is not found.
 func (t *TBDownloader) GetUpdaterForLangFromJson(body io.ReadCloser, ietf string) (string, string, error) {
 	jsonBytes, err := io.ReadAll(body)
 	if err != nil {
@@ -159,12 +169,14 @@ func (t *TBDownloader) GetUpdaterForLangFromJson(body io.ReadCloser, ietf string
 	return t.GetUpdaterForLangFromJsonBytes(jsonBytes, ietf)
 }
 
+// Log logs things if Verbose is true.
 func (t *TBDownloader) Log(function, message string) {
 	if t.Verbose {
 		log.Println(fmt.Sprintf("%s: %s", function, message))
 	}
 }
 
+// MakeTBDirectory creates the tor-browser directory if it doesn't exist. It also unpacks a local copy of the TPO signing key.
 func (t *TBDownloader) MakeTBDirectory() {
 	os.MkdirAll(t.DownloadPath, 0755)
 
@@ -182,6 +194,9 @@ func (t *TBDownloader) MakeTBDirectory() {
 	}
 }
 
+// GetUpdaterForLangFromJsonBytes returns the updater for the given language, using the TBDownloader's OS/ARCH pair
+// it expects jsonBytes to be a valid json string and ietf to be a language. It returns the URL of the updater and
+// the detatched signature, or an error if one is not found.
 func (t *TBDownloader) GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf string) (string, string, error) {
 	t.MakeTBDirectory()
 	var dat map[string]interface{}
@@ -213,6 +228,8 @@ func (t *TBDownloader) GetUpdaterForLangFromJsonBytes(jsonBytes []byte, ietf str
 	return "", "", fmt.Errorf("t.GetUpdaterForLangFromJsonBytes: %s", ietf)
 }
 
+// SingleFileDownload downloads a single file from the given URL to the given path.
+// it returns the path to the downloaded file, or an error if one is encountered.
 func (t *TBDownloader) SingleFileDownload(url, name string) (string, error) {
 	t.MakeTBDirectory()
 	path := filepath.Join(t.DownloadPath, name)
@@ -237,11 +254,14 @@ func (t *TBDownloader) SingleFileDownload(url, name string) (string, error) {
 	return path, nil
 }
 
+// FileExists returns true if the given file exists. It will return true if used on an existing directory.
 func FileExists(path string) bool {
 	_, err := os.Stat(path)
 	return !os.IsNotExist(err)
 }
 
+// BotherToDownload returns true if we need to download a file because we don't have an up-to-date
+// version yet.
 func (t *TBDownloader) BotherToDownload(url, name string) bool {
 	path := filepath.Join(t.DownloadPath, name)
 	if !FileExists(path) {
@@ -258,35 +278,30 @@ func (t *TBDownloader) BotherToDownload(url, name string) bool {
 	return true
 }
 
+// NamePerPlatform returns the name of the updater for the given platform with appropriate extensions.
 func (t *TBDownloader) NamePerPlatform(ietf string) string {
 	extension := "tar.xz"
 	windowsonly := ""
-	switch runtime.GOOS {
-	case "darwin":
+	switch t.OS {
+	case "osx":
 		extension = "dmg"
-	case "windows":
+	case "win":
 		windowsonly = "-installer"
 		extension = "exe"
 	}
 	return fmt.Sprintf("torbrowser%s-%s-%s.%s", windowsonly, t.GetRuntimePair(), ietf, extension)
 }
 
+// DownloadUpdater downloads the updater for the t.Lang. It returns
+// the path to the downloaded updater and the downloaded detatched signature,
+// or an error if one is encountered.
 func (t *TBDownloader) DownloadUpdater() (string, string, error) {
-	binary, sig, err := t.GetUpdater()
-	if err != nil {
-		return "", "", fmt.Errorf("DownloadUpdater: %s", err)
-	}
-	sigpath, err := t.SingleFileDownload(sig, t.NamePerPlatform(t.Lang)+".asc")
-	if err != nil {
-		return "", "", fmt.Errorf("DownloadUpdater: %s", err)
-	}
-	binpath, err := t.SingleFileDownload(binary, t.NamePerPlatform(t.Lang))
-	if err != nil {
-		return "", sigpath, fmt.Errorf("DownloadUpdater: %s", err)
-	}
-	return binpath, sigpath, nil
+	return t.DownloadUpdaterForLang(t.Lang)
 }
 
+// DownloadUpdaterForLang downloads the updater for the given language, overriding
+// t.Lang. It returns the path to the downloaded updater and the downloaded
+// detatched signature, or an error if one is encountered.
 func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, error) {
 	binary, sig, err := t.GetUpdaterForLang(ietf)
 	if err != nil {
@@ -304,14 +319,17 @@ func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, erro
 	return binpath, sigpath, nil
 }
 
+// BrowserDirectory returns the path to the directory where the browser is installed.
 func (t *TBDownloader) BrowserDir() string {
 	return filepath.Join(t.UnpackPath, "tor-browser_"+t.Lang)
 }
 
+// UnpackUpdater unpacks the updater to the given path.
+// it returns the path or an erorr if one is encountered.
 func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 	t.Log("UnpackUpdater()", fmt.Sprintf("Unpacking %s", binpath))
 	if t.OS == "win" {
-		installPath := filepath.Join(t.UnpackPath, "tor-browser_"+t.Lang)
+		installPath := t.BrowserDir()
 		if !FileExists(installPath) {
 			t.Log("UnpackUpdater()", "Windows updater, running silent NSIS installer")
 			t.Log("UnpackUpdater()", fmt.Sprintf("Running %s %s %s", binpath, "/S", "/D="+installPath))
@@ -333,9 +351,11 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 		if err != nil {
 			return "", fmt.Errorf("UnpackUpdater: osx open/mount fail %s", err)
 		}
+		//TODO: this might just need to be a hardcoded app path
+		return t.UnpackPath, nil
 	}
-	if FileExists(filepath.Join(t.UnpackPath, "tor-browser_"+t.Lang)) {
-		return filepath.Join(t.UnpackPath, "tor-browser_"+t.Lang), nil
+	if FileExists(t.BrowserDir()) {
+		return t.BrowserDir(), nil
 	}
 	fmt.Printf("Unpacking %s %s\n", binpath, t.UnpackPath)
 	os.MkdirAll(t.UnpackPath, 0755)
@@ -380,9 +400,12 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 			fmt.Printf("Unpacked %s\n", header.Name)
 		}
 	}
-	return filepath.Join(t.UnpackPath, "tor-browser_"+t.Lang), nil
+	return t.BrowserDir(), nil
 }
 
+// CheckSignature checks the signature of the updater.
+// it returns an error if one is encountered. If not, it
+// runs the updater and returns an error if one is encountered.
 func (t *TBDownloader) CheckSignature(binpath, sigpath string) (string, error) {
 	var pkBytes []byte
 	var pk *openpgp.Entity
@@ -409,6 +432,7 @@ func (t *TBDownloader) CheckSignature(binpath, sigpath string) (string, error) {
 	return "", fmt.Errorf("CheckSignature: %s", err)
 }
 
+// BoolCheckSignature turns CheckSignature into a bool.
 func (t *TBDownloader) BoolCheckSignature(binpath, sigpath string) bool {
 	_, err := t.CheckSignature(binpath, sigpath)
 	return err == nil
