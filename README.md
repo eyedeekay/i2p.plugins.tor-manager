@@ -14,7 +14,7 @@ Status:
 ![Screenshot 2](screenshot-console.png)
 
 Linux: Usable, most things work.
-Windows: Unstable, mostly usable, does not work in some important cirumstances, cannot run from a flash drive
+Windows: Usable, most things work.
 OSX: Unstable, untested, not usable, WIP.
 
 Other systems are not targeted and should use a Tor binary built from source,
