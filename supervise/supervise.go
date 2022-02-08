@@ -245,9 +245,13 @@ func (s *Supervisor) RunTBWithLang() error {
 		}
 		log.Println("tor browser not found at", s.TBPath())
 		return fmt.Errorf("tor browser not found at %s", s.TBPath())
-	case "darwin":
-		s.tbcmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
-		s.tbcmd.Dir = s.TBDirectory()
+	case "osx":
+		firefoxPath := filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "MacOS", "firefox")
+		s.tbcmd = exec.Command(firefoxPath)
+		s.tbcmd.Dir = s.UnpackPath
+		s.tbcmd.Stdout = os.Stdout
+		s.tbcmd.Stderr = os.Stderr
+		defer s.tbcmd.Process.Kill()
 		return s.tbcmd.Run()
 	case "win":
 		log.Println("Running Windows EXE", s.TBDirectory(), "firefox.exe")
@@ -288,9 +292,13 @@ func (s *Supervisor) RunTBHelpWithLang() error {
 		}
 		log.Println("tor browser not found at", s.TBPath())
 		return fmt.Errorf("tor browser not found at %s", s.TBPath())
-	case "darwin":
-		s.tbcmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
+	case "osx":
+		firefoxPath := filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "MacOS", "firefox")
+		s.tbcmd = exec.Command(firefoxPath, "--help")
+		s.tbcmd.Stdout = os.Stdout
+		s.tbcmd.Stderr = os.Stderr
 		s.tbcmd.Dir = s.TBDirectory()
+		defer s.tbcmd.Process.Kill()
 		return s.tbcmd.Run()
 	case "win":
 		log.Println("Running Windows EXE", s.TBDirectory(), "firefox.exe")
@@ -373,9 +381,13 @@ func (s *Supervisor) RunTBBWithOfflineProfile(profiledata string, offline bool) 
 		}
 		log.Println("tor browser not found at", s.FirefoxPath())
 		return fmt.Errorf("tor browser not found at %s", s.FirefoxPath())
-	case "darwin":
-		s.ibcmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
-		s.ibcmd.Dir = s.TBDirectory()
+	case "osx":
+		firefoxPath := filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "MacOS", "firefox")
+		s.ibcmd = exec.Command(firefoxPath, "--profile", profiledata)
+		s.ibcmd.Dir = profiledata
+		s.ibcmd.Stdout = os.Stdout
+		s.ibcmd.Stderr = os.Stderr
+		defer s.ibcmd.Process.Kill()
 		return s.ibcmd.Run()
 	case "win":
 		log.Println("Running Windows EXE", filepath.Join(s.TBDirectory(), "firefox.exe"), "--profile", profiledata)
@@ -455,10 +467,14 @@ func (s *Supervisor) RunTorWithLang() error {
 		}
 		log.Println("tor not found at", s.TorPath())
 		return fmt.Errorf("tor not found at %s", s.TorPath())
-	case "darwin":
-		s.torcmd = exec.Command("/usr/bin/env", "open", "-a", "\"Tor Browser.app\"")
-		s.torcmd.Dir = s.TBDirectory()
-		return s.torcmd.Run()
+	case "osx":
+		torPath := filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "Resources", "TorBrowser", "Tor", "tor")
+		s.ibcmd = exec.Command(torPath)
+		s.ibcmd.Dir = filepath.Dir(torPath)
+		s.ibcmd.Stdout = os.Stdout
+		s.ibcmd.Stderr = os.Stderr
+		defer s.ibcmd.Process.Kill()
+		return s.tbcmd.Run()
 	case "win":
 		log.Println("Running Windows EXE", filepath.Join(s.TBDirectory(), "TorBrowser", "Tor", "tor.exe"))
 		s.torcmd = exec.Command(filepath.Join(s.TBDirectory(), "TorBrowser", "Tor", "tor.exe"))

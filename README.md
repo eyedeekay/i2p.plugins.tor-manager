@@ -39,14 +39,14 @@ The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
 ### Secondary Goals:
 
 1. Launch Tor Browser
- - Works on Linux, Windows, not OSX yet but soon
+ - Works on Linux, Windows, OSX with minor bugs
 2. Configure and launch Tor browser for use with I2P
- - Works on Linux, Windows, not OSX yet but soon
+ - Works on Linux, Windows, OSX with minor bugs
 
 #### Optional Features I might add if there is interest
 
 1. Mirror the files which it downloads to an I2P Site
- - Probably works on everything
+ - Works on Windows, Linux, OSX
 2. Mirror the files which it downloads to I2P torrents
  - Not done
 3. Set up an onion site which announces an I2P mirror exists

@@ -140,8 +140,8 @@ profile torbrowser_firefox @{torbrowser_firefox_executable} {
 	deny /etc/group r,
 	deny /etc/mailcap r,
   
-	/etc/machine-id r,
-	/var/lib/dbus/machine-id r,
+	/etc/osxhine-id r,
+	/var/lib/dbus/osxhine-id r,
   
 	/dev/ r,
 	/dev/shm/ r,

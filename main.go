@@ -11,6 +11,9 @@ import (
 
 	"github.com/cloudfoundry/jibber_jabber"
 	i2cpcheck "github.com/eyedeekay/checki2cp"
+	"github.com/itchio/damage"
+	"github.com/itchio/damage/hdiutil"
+	"github.com/itchio/headway/state"
 	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
 	tbserve "i2pgit.org/idk/i2p.plugins.tor-manager/serve"
 )
@@ -44,6 +47,9 @@ func OS() string {
 }
 
 func ARCH() string {
+	//	if OS() == "osx" {
+	//		return ""
+	//	}
 	switch runtime.GOARCH {
 	case "386":
 		return "32"
@@ -177,6 +183,13 @@ func main() {
 	client.Port = *port
 	client.TBS.Profile = &content
 	client.TBS.PassThroughArgs = flag.Args()
+	consumer := &state.Consumer{
+		OnMessage: func(lvl string, msg string) {
+			log.Printf("[%s] %s", lvl, msg)
+		},
+	}
+	host := hdiutil.NewHost(consumer)
+	defer damage.Unmount(host, client.TBD.BrowserDir())
 	//	log.Fatalf("%s", client.TBS.PassThroughArgs)
 	if *help {
 		flag.Usage()
@@ -185,20 +198,30 @@ func main() {
 	}
 	if *profile != "" && !*offline {
 		log.Println("Using a custom profile")
-		client.TBS.RunTBBWithProfile(*profile)
+		if client.TBS.RunTBBWithProfile(*profile); err != nil {
+			log.Fatal(err)
+		}
 	} else if *offline {
 		if *profile == "" {
 			*profile = "firefox.offline"
 		}
 		log.Println("Working offline")
 
-		client.TBS.RunTBBWithOfflineProfile(*profile, *offline)
+		if client.TBS.RunTBBWithOfflineProfile(*profile, *offline); err != nil {
+			log.Fatal(err)
+		}
 	} else if *i2pbrowser {
-		client.TBS.RunI2PBWithLang()
+		if client.TBS.RunI2PBWithLang(); err != nil {
+			log.Fatal(err)
+		}
 	} else if *i2pconfig {
-		client.TBS.RunI2PBAppWithLang()
+		if client.TBS.RunI2PBAppWithLang(); err != nil {
+			log.Fatal(err)
+		}
 	} else if *torbrowser {
-		client.TBS.RunTBWithLang()
+		if err := client.TBS.RunTBWithLang(); err != nil {
+			log.Fatal(err)
+		}
 	} else {
 		if *bemirror {
 			go client.TBD.Serve()
