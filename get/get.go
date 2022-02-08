@@ -195,16 +195,41 @@ func (t *TBDownloader) MakeTBDirectory() {
 	os.MkdirAll(t.DownloadPath, 0755)
 
 	empath := path.Join("tor-browser", "TPO-signing-key.pub")
-	path := filepath.Join(t.DownloadPath, "TPO-signing-key.pub")
-	if !FileExists(path) {
+	opath := filepath.Join(t.DownloadPath, "TPO-signing-key.pub")
+	if !FileExists(opath) {
 		t.Log("MakeTBDirectory()", "Initial TPO signing key not found, using the one embedded in the executable")
 		bytes, err := t.Profile.ReadFile(empath)
 		if err != nil {
 			log.Fatal(err)
 		}
 		t.Log("MakeTBDirectory()", "Writing TPO signing key to disk")
-		ioutil.WriteFile(path, bytes, 0644)
+		err = ioutil.WriteFile(opath, bytes, 0644)
+		if err != nil {
+			log.Fatal(err)
+		}
 		t.Log("MakeTBDirectory()", "Writing TPO signing key to disk complete")
+	}
+	empath = path.Join("tor-browser", "unpack", "awo@eyedeekay.github.io.xpi")
+	dpath := filepath.Join(t.DownloadPath, "awo@eyedeekay.github.io.xpi")
+	opath = filepath.Join(t.UnpackPath, "awo@eyedeekay.github.io.xpi")
+	if !FileExists(opath) {
+		t.Log("MakeTBDirectory()", "Initial TAWO XPI not found, using the one embedded in the executable")
+		bytes, err := t.Profile.ReadFile(empath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		os.MkdirAll(filepath.Dir(dpath), 0755)
+		os.MkdirAll(filepath.Dir(opath), 0755)
+		t.Log("MakeTBDirectory()", "Writing AWO XPI to disk")
+		err = ioutil.WriteFile(opath, bytes, 0644)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = ioutil.WriteFile(dpath, bytes, 0644)
+		if err != nil {
+			log.Fatal(err)
+		}
+		t.Log("MakeTBDirectory()", "Writing AWO XPI disk complete")
 	}
 }
 

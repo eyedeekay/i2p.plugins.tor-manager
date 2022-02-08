@@ -14,6 +14,7 @@ import (
 	"strings"
 
 	"github.com/mitchellh/go-ps"
+	"github.com/otiai10/copy"
 	cp "github.com/otiai10/copy"
 	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
 )
@@ -110,6 +111,20 @@ func (s *Supervisor) I2PProfilePath() string {
 	return fp
 }
 
+// I2PProfilePath returns the path to the I2P profile
+func (s *Supervisor) I2PAppProfilePath() string {
+	fp := filepath.Join(filepath.Dir(s.UnpackPath), ".i2p.firefox.config")
+	if !tbget.FileExists(fp) {
+		log.Printf("i2p app data not found at %s, unpacking", fp)
+		if s.Profile != nil {
+			if err := s.UnpackI2PAppData(); err != nil {
+				log.Fatal(err)
+			}
+		}
+	}
+	return fp
+}
+
 // I2PDataPath returns the path to the I2P data directory
 func (s *Supervisor) I2PDataPath() string {
 	fp := s.I2PProfilePath()
@@ -153,7 +168,7 @@ func (s *Supervisor) UnpackI2PData() error {
 
 // I2PAppDataPath returns the path to the I2P application data directory
 func (s *Supervisor) I2PAppDataPath() string {
-	fp := s.I2PProfilePath()
+	fp := s.I2PAppProfilePath()
 	up := filepath.Join(filepath.Dir(s.UnpackPath), "i2p.firefox.config")
 	if tbget.FileExists(up) {
 		return up
@@ -298,18 +313,50 @@ func (s *Supervisor) ibbail() error {
 	return nil
 }
 
-// RunI2PBWithLang runs the I2P Browser with the given language
-func (s *Supervisor) RunTBBWithProfile(profiledata string) error {
+func (s *Supervisor) CopyAWOXPI(profiledata string) error {
+	apath, err := filepath.Abs(profiledata)
+	if err != nil {
+		return err
+	}
+	odir := filepath.Join(apath, "extensions")
+	if err := os.MkdirAll(odir, 0755); err != nil {
+		return err
+	}
+	if !tbget.FileExists(filepath.Join(apath, "user.js")) {
+		err := ioutil.WriteFile(filepath.Join(apath, "user.js"), []byte("#\n"), 0644)
+		if err != nil {
+			return err
+		}
+	}
+	if !tbget.FileExists(filepath.Join(apath, "pref.js")) {
+		err := ioutil.WriteFile(filepath.Join(apath, "pref.js"), []byte("#\n"), 0644)
+		if err != nil {
+			return err
+		}
+	}
+	opath := filepath.Join(odir, "awo@eyedeekay.github.io.xpi")
+
+	ipath := filepath.Join(filepath.Dir(s.UnpackPath), "awo@eyedeekay.github.io.xpi")
+	if err := copy.Copy(ipath, opath); err != nil {
+		return err
+	}
+	return nil
+}
+
+// RunTBBWithOfflineProfile runs the I2P Browser with the given language
+func (s *Supervisor) RunTBBWithOfflineProfile(profiledata string, offline bool) error {
+	if offline {
+		if err := s.CopyAWOXPI(profiledata); err != nil {
+			log.Println("Error copying AWO XPI", err)
+			return err
+		}
+	}
 	tbget.ARCH = ARCH()
 	if s.Lang == "" {
 		s.Lang = DEFAULT_TB_LANG
 	}
 	if s.UnpackPath == "" {
 		s.UnpackPath = UNPACK_URL()
-	}
-
-	if s.ibbail() != nil {
-		return nil
 	}
 
 	log.Println("running i2p in tor browser with lang", s.Lang, s.UnpackPath, OS())
@@ -341,18 +388,28 @@ func (s *Supervisor) RunTBBWithProfile(profiledata string) error {
 		return s.ibcmd.Run()
 	default:
 	}
-
 	return nil
+}
+
+// RunTBBWithProfile runs the I2P Browser with the given language
+func (s *Supervisor) RunTBBWithProfile(profiledata string) error {
+	return s.RunTBBWithOfflineProfile(profiledata, false)
 }
 
 // RunI2PBWithLang runs the I2P Browser with the given language
 func (s *Supervisor) RunI2PBWithLang() error {
+	if s.ibbail() != nil {
+		return nil
+	}
 	return s.RunTBBWithProfile(s.I2PDataPath())
 }
 
 // RunI2PBAppWithLang runs the I2P Browser with the given language
 func (s *Supervisor) RunI2PBAppWithLang() error {
-	return s.RunTBBWithProfile(s.I2PDataPath())
+	if s.ibbail() != nil {
+		return nil
+	}
+	return s.RunTBBWithOfflineProfile(s.I2PDataPath(), true)
 }
 
 func (s *Supervisor) torbail() error {

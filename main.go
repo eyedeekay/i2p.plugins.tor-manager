@@ -14,6 +14,11 @@ import (
 	tbserve "i2pgit.org/idk/i2p.plugins.tor-manager/serve"
 )
 
+/*
+TODO: A "Default" config file which uses hardened Tor Browser for clearnet
+(or default-route) browsing.
+*/
+
 //go:embed tor-browser/unpack/i2p.firefox/*
 //go:embed tor-browser/unpack/i2p.firefox.config/*
 //go:embed tor-browser/unpack/awo@eyedeekay.github.io.xpi
@@ -72,43 +77,9 @@ var client *tbserve.Client
 
 func main() {
 	filename := filepath.Base(os.Args[0])
+	usage := flag.Usage
 	flag.Usage = func() {
-		log.Println(`
-	Usage of ./i2p.plugins.tor-manager-linux-amd64:
-		-apparmor
-			  Generate apparmor rules
-		-arch string
-			  OS/arch to download (default "64")
-		-bemirror
-			  Act as an in-I2P mirror when you're done downloading
-		-directory string
-			  Directory operate in
-		-host string
-			  Host to serve on (default "127.0.0.1")
-		-i2pbrowser
-			  Open I2P in Tor Browser
-		-i2pconfig
-			  Open I2P routerconsole in Tor Browser with javscript enabled and non-routerconsole sites disabled
-		-lang string
-			  Language to download
-		-os string
-			  OS/arch to download (default "linux")
-		-port int
-			  Port to serve on (default 7695)
-		-profile string
-			  use a custom profile path, normally blank
-		-shortcuts
-			  Create desktop shortcuts
-		-torbrowser
-			  Open Tor Browser
-		-verbose
-			  Verbose output
-		-watch-profiles string
-			  Monitor and control these Firefox profiles. Temporarily Unused.
-		-help
-			  Print help
-		-offline
-			  Work offline`)
+		usage()
 	}
 	flag.Parse()
 	tbget.WORKING_DIR = *directory
@@ -118,6 +89,15 @@ func main() {
 	} else if filename == "torbrowser" {
 		log.Println("Starting Tor Browser")
 		*torbrowser = true
+	} else if filename == "i2pconfig" {
+		log.Println("Starting I2P routerconsole in Tor Browser")
+		*i2pconfig = true
+	} else if filename == "firefox" {
+		log.Println("Starting Firefox")
+		if *profile != "" {
+			*profile = filepath.Join(tbget.WORKING_DIR, "i2p.firefox")
+		}
+		log.Println("Using profile", *profile)
 	}
 	if *i2pbrowser && *torbrowser {
 		log.Fatal("Please don't open I2P and Tor Browser at the same time when running from the terminal.")
@@ -195,10 +175,20 @@ func main() {
 		client.TBS.RunTBHelpWithLang()
 		return
 	}
-	if *profile != "" {
+	if *profile != "" && !*offline {
+		log.Println("Using a custom profile")
 		if tbget.FileExists(*profile) {
 			client.TBS.RunTBBWithProfile(*profile)
 		}
+	} else if *offline {
+		if *profile == "" {
+			*profile = "firefox.offline"
+		}
+		log.Println("Working offline")
+		//if tbget.FileExists(*profile) {
+
+		client.TBS.RunTBBWithOfflineProfile(*profile, *offline)
+		//}
 	} else if *i2pbrowser {
 		client.TBS.RunI2PBWithLang()
 	} else if *i2pconfig {
