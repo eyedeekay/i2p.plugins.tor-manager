@@ -27,14 +27,18 @@ require (
 	github.com/eyedeekay/checki2cp v0.0.21
 	github.com/eyedeekay/httptunnel v0.0.0-20210508193128-6e9606d6eb24
 	github.com/eyedeekay/sam3 v0.32.32
+	github.com/itchio/damage v0.0.0-20190703135837-76df725fc766 // indirect
+	github.com/itchio/headway v0.0.0-20200301160421-e15721f23905 // indirect
 	github.com/justinas/nosurf v1.1.1
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.17.0 // indirect
 	github.com/otiai10/copy v1.7.0
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/russross/blackfriday v1.6.0
 	github.com/ulikunitz/xz v0.5.10 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
+	howett.net/plist v1.0.0 // indirect
 )

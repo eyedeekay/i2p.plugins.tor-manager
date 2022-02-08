@@ -33,7 +33,7 @@ var content embed.FS
 func OS() string {
 	switch runtime.GOOS {
 	case "darwin":
-		return "mac"
+		return "osx"
 	case "linux":
 		return "linux"
 	case "windows":

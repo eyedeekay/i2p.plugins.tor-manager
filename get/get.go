@@ -21,6 +21,9 @@ import (
 
 	"github.com/cloudfoundry/jibber_jabber"
 	sam "github.com/eyedeekay/sam3/helper"
+	"github.com/itchio/damage"
+	"github.com/itchio/damage/hdiutil"
+	"github.com/itchio/headway/state"
 	"github.com/ulikunitz/xz"
 
 	"github.com/jchavannes/go-pgp/pgp"
@@ -382,15 +385,27 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 		return installPath, nil
 	}
 	if t.OS == "osx" {
-		cmd := exec.Command("open", "-W", "-n", "-a", "\""+t.UnpackPath+"\"", "\""+binpath+"\"")
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		err := cmd.Run()
-		if err != nil {
-			return "", fmt.Errorf("UnpackUpdater: osx open/mount fail %s", err)
+		binpath = "tor-browser/torbrowser-osx64-en-US.dmg"
+		log.Println("hdiutil", "mount", "\""+binpath+"\"")
+		//cmd := exec.Command("open", "-W", "-n", "-a", "\""+binpath+"\"")
+		//cmd := exec.Command("hdiutil", "attach", "\""+binpath+"\"")
+		consumer := &state.Consumer{
+			OnMessage: func(lvl string, msg string) {
+				log.Printf("[%s] %s", lvl, msg)
+			},
 		}
+		host := hdiutil.NewHost(consumer)
+		if !FileExists(t.BrowserDir()) {
+			_, err := damage.Mount(host, binpath, t.BrowserDir())
+			if err != nil {
+				return "", fmt.Errorf("UnpackUpdater: osx open/mount fail %s", err)
+			}
+		}
+		//cmd.Stdout = os.Stdout
+		//cmd.Stderr = os.Stderr
+		//err := cmd.Run()
 		//TODO: this might just need to be a hardcoded app path
-		return t.UnpackPath, nil
+		return t.BrowserDir(), nil
 	}
 	if FileExists(t.BrowserDir()) {
 		return t.BrowserDir(), nil
