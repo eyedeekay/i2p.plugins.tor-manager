@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -79,6 +80,13 @@ func main() {
 	filename := filepath.Base(os.Args[0])
 	usage := flag.Usage
 	flag.Usage = func() {
+		fmt.Printf("Usage: %s %s\n", filename, "[options]")
+		fmt.Printf("\n")
+		fmt.Printf("Downloads, verifies and unpacks Tor Browser. Manages the Tor Browser\n")
+		fmt.Printf("system in environments where Tor is not in use.\n")
+		fmt.Printf("\n")
+		fmt.Printf("Options:\n")
+		fmt.Printf("\n")
 		usage()
 	}
 	flag.Parse()

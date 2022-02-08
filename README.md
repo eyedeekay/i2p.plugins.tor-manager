@@ -6,34 +6,7 @@ usable on Windows and Linux for now. OSX support is planned soon.
 Usage:
 ------
 
-```sh
-Usage of ./i2p.plugins.tor-manager:
-
-  -apparmor
-    	Generate apparmor rules
-  -arch string
-    	OS/arch to download (default "64")
-  -bemirror
-    	Act as an in-I2P mirror when you're done downloading
-  -directory string
-    	Directory operate in
-  -host string
-    	Host to serve on (default "127.0.0.1")
-  -i2pbrowser
-    	Open I2P in Tor Browser
-  -lang string
-    	Language to download
-  -os string
-    	OS/arch to download (default "linux")
-  -port int
-    	Port to serve on (default 7695)
-  -shortcuts
-    	Create desktop shortcuts
-  -torbrowser
-    	Open Tor Browser
-  -verbose
-    	Verbose output
-```
+See [Usage](USAGE.md) for command-line usage.
 
 Status:
 -------

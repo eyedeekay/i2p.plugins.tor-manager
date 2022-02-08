@@ -6,34 +6,9 @@
 </head>
 <body>
 <h1 id="i2p.plugins.tor-updater">i2p.plugins.tor-updater</h1>
-<p>A Tor package updater and runner as an I2P Plugin. This plugin is still being changed rapidly but it should be usable on most Linux distributions as of 23 Jan, 2022.</p>
+<p>A Tor package updater and runner as an I2P Plugin. This plugin is usable on Windows and Linux for now. OSX support is planned soon.</p>
 <h2 id="usage">Usage:</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">Usage</span> of ./i2p.plugins.tor-manager:</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>  <span class="ex">-apparmor</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>        <span class="ex">Generate</span> apparmor rules</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>  <span class="ex">-arch</span> string</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>        <span class="ex">OS/arch</span> to download (default <span class="st">&quot;64&quot;</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>  <span class="ex">-bemirror</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>        <span class="ex">Act</span> as an in-I2P mirror when you<span class="st">&#39;re done downloading</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a><span class="st">  -directory string</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="st">        Directory operate in</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a><span class="st">  -host string</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a><span class="st">        Host to serve on (default &quot;127.0.0.1&quot;)</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a><span class="st">  -i2pbrowser</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a><span class="st">        Open I2P in Tor Browser</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a><span class="st">  -lang string</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a><span class="st">        Language to download</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a><span class="st">  -os string</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a><span class="st">        OS/arch to download (default &quot;linux&quot;)</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a><span class="st">  -port int</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a><span class="st">        Port to serve on (default 7695)</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a><span class="st">  -shortcuts</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a><span class="st">        Create desktop shortcuts</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a><span class="st">  -torbrowser</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a><span class="st">        Open Tor Browser</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true"></a><span class="st">  -verbose</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true"></a><span class="st">        Verbose output</span></span></code></pre></div>
+<p>See <a href="USAGE.md">Usage</a> for command-line usage.</p>
 <h2 id="status">Status:</h2>
 <figure>
 <img src="screenshot-console.png" alt="" /><figcaption>Screenshot 2</figcaption>
@@ -90,10 +65,42 @@
 <h4 id="optional-features-i-might-add-if-there-is-interest">Optional Features I might add if there is interest</h4>
 <ol type="1">
 <li>Mirror the files which it downloads to an I2P Site</li>
+</ol>
+<ul>
+<li>Probably works on everything</li>
+</ul>
+<ol start="2" type="1">
 <li>Mirror the files which it downloads to I2P torrents</li>
+</ol>
+<ul>
+<li>Not done</li>
+</ul>
+<ol start="3" type="1">
 <li>Set up an onion site which announces an I2P mirror exists</li>
+</ol>
+<ul>
+<li>Not done</li>
+</ul>
+<ol start="4" type="1">
 <li>Use Bittorrent-over-I2P to download the Tor Browser software</li>
 </ol>
+<ul>
+<li>Not Done</li>
+</ul>
+<h3 id="usage-as-a-library">Usage as a Library</h3>
+<p><a href="https://pkg.go.dev/i2pgit.org/idk/i2p.plugins.tor-manager">More information at the GoDoc</a></p>
+<p>This is also useful as a library for downloading a Tor Browser Bundle. This API isn’t really stable, more “stabilizing.” Feel free to use it, but it may still change a little.</p>
+<p>To create a new instance, use:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>client, err = tbserve.NewClient(*verbose, *lang, *system, *arch, &amp;content)</span></code></pre></div>
+<p>Customize the client using the exposed variables and methods:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>client.Host = *host</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>client.Port = *port</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>client.TBS.Profile = &amp;content</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>client.TBS.PassThroughArgs = flag.Args()</span></code></pre></div>
+<p>And serve the controller:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode go"><code class="sourceCode go"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">if</span> err := client.Serve(); err != <span class="ot">nil</span> {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>  log.Fatal(err)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>}</span></code></pre></div>
 <h3 id="similar-projects">Similar Projects:</h3>
 <ul>
 <li>https://github.com/micahflee/torbrowser-launcher</li>

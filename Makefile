@@ -197,3 +197,21 @@ debsrc: clean
 	mv "../hankhill19580_at_gmail.com.crl" ./
 	mv "../hankhill19580_at_gmail.com.crt" ./
 	mv "../hankhill19580_at_gmail.com.pem" ./
+
+DATE=`date +%Y/%m/%d`
+
+usage:
+	./i2p.plugins.tor-manager --help
+
+usagemd:
+	@echo "Tor(And sometimes Firefox) Manager for I2P" | tee USAGE.md
+	@echo "===========================================" | tee -a USAGE.md
+	@echo "" | tee -a USAGE.md
+	@echo "## Usage: $(BINARY) [options]" | tee -a USAGE.md
+	@echo "" | tee -a USAGE.md
+	@echo "### Options:" | tee -a USAGE.md
+	@echo "" | tee -a USAGE.md
+	@echo '```sh' | tee -a USAGE.md
+	./i2p.plugins.tor-manager --help 2>&1 | grep -v $(DATE) | tee -a USAGE.md
+	@echo '```' | tee -a USAGE.md
+	@echo "" | tee -a USAGE.md
