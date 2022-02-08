@@ -115,7 +115,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Couldn't create client", err)
 	}
-	if *i2pbrowser {
+	if *i2pbrowser || *i2pconfig {
 		if tbget.TestHTTPDefaultProxy() {
 			log.Println("I2P HTTP proxy OK")
 		} else {
@@ -177,18 +177,14 @@ func main() {
 	}
 	if *profile != "" && !*offline {
 		log.Println("Using a custom profile")
-		if tbget.FileExists(*profile) {
-			client.TBS.RunTBBWithProfile(*profile)
-		}
+		client.TBS.RunTBBWithProfile(*profile)
 	} else if *offline {
 		if *profile == "" {
 			*profile = "firefox.offline"
 		}
 		log.Println("Working offline")
-		//if tbget.FileExists(*profile) {
 
 		client.TBS.RunTBBWithOfflineProfile(*profile, *offline)
-		//}
 	} else if *i2pbrowser {
 		client.TBS.RunI2PBWithLang()
 	} else if *i2pconfig {
