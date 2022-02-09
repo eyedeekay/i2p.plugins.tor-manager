@@ -68,7 +68,7 @@ dep:
 	cp "$(HOME)/build/shellservice.jar" tor-browser/lib/shellservice.jar -v
 
 su3:
-	i2p.plugin.native -name=$(BINARY) \
+	i2p.plugin.native -name=$(BINARY)-$(GOOS)-$(GOARCH) \
 		-signer=$(SIGNER) \
 		-version "$(VERSION)" \
 		-author=$(SIGNER) \
