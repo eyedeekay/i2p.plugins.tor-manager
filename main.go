@@ -193,12 +193,14 @@ func main() {
 	//	log.Fatalf("%s", client.TBS.PassThroughArgs)
 	if *help {
 		flag.Usage()
-		client.TBS.RunTBHelpWithLang()
+		if err := client.TBS.RunTBHelpWithLang(); err != nil {
+			log.Fatal(err)
+		}
 		return
 	}
 	if *profile != "" && !*offline {
 		log.Println("Using a custom profile")
-		if client.TBS.RunTBBWithProfile(*profile); err != nil {
+		if err := client.TBS.RunTBBWithProfile(*profile); err != nil {
 			log.Fatal(err)
 		}
 	} else if *offline {
@@ -207,15 +209,15 @@ func main() {
 		}
 		log.Println("Working offline")
 
-		if client.TBS.RunTBBWithOfflineProfile(*profile, *offline); err != nil {
+		if err := client.TBS.RunTBBWithOfflineProfile(*profile, *offline); err != nil {
 			log.Fatal(err)
 		}
 	} else if *i2pbrowser {
-		if client.TBS.RunI2PBWithLang(); err != nil {
+		if err := client.TBS.RunI2PBWithLang(); err != nil {
 			log.Fatal(err)
 		}
 	} else if *i2pconfig {
-		if client.TBS.RunI2PBAppWithLang(); err != nil {
+		if err := client.TBS.RunI2PBAppWithLang(); err != nil {
 			log.Fatal(err)
 		}
 	} else if *torbrowser {
