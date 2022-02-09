@@ -68,7 +68,6 @@ dep:
 	cp "$(HOME)/build/shellservice.jar" tor-browser/lib/shellservice.jar -v
 
 su3:
-	rm -rf $(BINARY).zip $(BINARY)-$(GOOS)-$(GOARCH)-zip
 	i2p.plugin.native -name=$(BINARY) \
 		-signer=$(SIGNER) \
 		-version "$(VERSION)" \
@@ -86,7 +85,7 @@ su3:
 		-command="$(BINARY)-$(GOOS)-$(GOARCH)" \
 		-license=MIT \
 		-res=tor-browser/
-	unzip -o $(BINARY).zip -d $(BINARY)-$(GOOS)-$(GOARCH)-zip
+	unzip -o $(BINARY)-$(GOOS)-$(GOARCH).zip -d $(BINARY)-$(GOOS)-$(GOARCH)-zip
 
 sum:
 	sha256sum $(BINARY)-$(GOOS)-$(GOARCH).su3
