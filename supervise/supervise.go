@@ -37,11 +37,11 @@ func ARCH() string {
 
 // Supervisor is the main struct for the Tor Browser Bundle Supervisor
 type Supervisor struct {
-	UnpackPath      string
-	Lang            string
-	torcmd          *exec.Cmd
-	tbcmd           *exec.Cmd
-	ibcmd           *exec.Cmd
+	UnpackPath string
+	Lang       string
+	torcmd     *exec.Cmd
+	//tbcmd           *exec.Cmd
+	//ibcmd           *exec.Cmd
 	Profile         *embed.FS
 	PassThroughArgs []string
 }
@@ -67,7 +67,16 @@ func (s *Supervisor) PTAS() []string {
 
 // TBPath returns the path to the Tor Browser Bundle launcher
 func (s *Supervisor) TBPath() string {
-	return filepath.Join(s.UnpackPath, "Browser", "start-tor-browser")
+	switch OS() {
+	case "linux":
+		return filepath.Join(s.UnpackPath, "Browser", "start-tor-browser")
+	case "osx":
+		return filepath.Join(s.UnpackPath, "Browser", "Tor Browser.app", "Contents", "MacOS", "start-tor-browser")
+	case "windows":
+		return filepath.Join(s.TBDirectory(), "firefox.exe")
+	default:
+		return filepath.Join(s.TBDirectory(), "firefox")
+	}
 }
 
 // FirefoxPath returns the path to the Firefox executable inside Tor Browser
@@ -89,6 +98,9 @@ func (s *Supervisor) TBDirectory() string {
 
 // TorPath returns the path to the Tor executable
 func (s *Supervisor) TorPath() string {
+	if OS() == "osx" {
+		return filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "Resources", "TorBrowser", "Tor", "tor")
+	}
 	return filepath.Join(s.UnpackPath, "Browser", "TorBrowser", "Tor", "tor")
 }
 
@@ -208,13 +220,7 @@ func (s *Supervisor) UnpackI2PAppData() error {
 }
 
 func (s *Supervisor) tbbail() error {
-	if s.tbcmd != nil && s.tbcmd.Process != nil && s.tbcmd.ProcessState != nil {
-		if s.tbcmd.ProcessState.Exited() {
-			return nil
-		}
-		return fmt.Errorf("Already running")
-	}
-	return nil
+	return s.ibbail()
 }
 
 // RunTBWithLang runs the Tor Browser with the given language
@@ -238,28 +244,28 @@ func (s *Supervisor) RunTBWithLang() error {
 			log.Println("running tor browser with lang", s.Lang, s.UnpackPath)
 			args := []string{}
 			args = append(args, s.PTAS()...)
-			s.tbcmd = exec.Command(s.TBPath(), args...)
-			s.tbcmd.Stdout = os.Stdout
-			s.tbcmd.Stderr = os.Stderr
-			return s.tbcmd.Run()
+			bcmd := exec.Command(s.TBPath(), args...)
+			bcmd.Stdout = os.Stdout
+			bcmd.Stderr = os.Stderr
+			return bcmd.Run()
 		}
 		log.Println("tor browser not found at", s.TBPath())
 		return fmt.Errorf("tor browser not found at %s", s.TBPath())
 	case "osx":
 		firefoxPath := filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "MacOS", "firefox")
-		s.tbcmd = exec.Command(firefoxPath)
-		s.tbcmd.Dir = s.UnpackPath
-		s.tbcmd.Stdout = os.Stdout
-		s.tbcmd.Stderr = os.Stderr
-		defer s.tbcmd.Process.Kill()
-		return s.tbcmd.Run()
+		bcmd := exec.Command(firefoxPath)
+		bcmd.Dir = s.UnpackPath
+		bcmd.Stdout = os.Stdout
+		bcmd.Stderr = os.Stderr
+		defer bcmd.Process.Kill()
+		return bcmd.Run()
 	case "win":
 		log.Println("Running Windows EXE", s.TBDirectory(), "firefox.exe")
 		args := []string{}
 		args = append(args, s.PTAS()...)
-		s.tbcmd = exec.Command(filepath.Join(s.TBDirectory(), "firefox.exe"), args...)
-		s.tbcmd.Dir = s.TBDirectory()
-		return s.tbcmd.Run()
+		bcmd := exec.Command(s.TBPath(), args...)
+		bcmd.Dir = s.TBDirectory()
+		return bcmd.Run()
 	default:
 	}
 
@@ -285,26 +291,26 @@ func (s *Supervisor) RunTBHelpWithLang() error {
 	case "linux":
 		if tbget.FileExists(s.UnpackPath) {
 			log.Println("running tor browser with lang", s.Lang, s.UnpackPath)
-			s.tbcmd = exec.Command(s.TBPath(), "--help")
-			s.tbcmd.Stdout = os.Stdout
-			s.tbcmd.Stderr = os.Stderr
-			return s.tbcmd.Run()
+			bcmd := exec.Command(s.TBPath(), "--help")
+			bcmd.Stdout = os.Stdout
+			bcmd.Stderr = os.Stderr
+			return bcmd.Run()
 		}
 		log.Println("tor browser not found at", s.TBPath())
 		return fmt.Errorf("tor browser not found at %s", s.TBPath())
 	case "osx":
 		firefoxPath := filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "MacOS", "firefox")
-		s.tbcmd = exec.Command(firefoxPath, "--help")
-		s.tbcmd.Stdout = os.Stdout
-		s.tbcmd.Stderr = os.Stderr
-		s.tbcmd.Dir = s.TBDirectory()
-		defer s.tbcmd.Process.Kill()
-		return s.tbcmd.Run()
+		bcmd := exec.Command(firefoxPath, "--help")
+		bcmd.Stdout = os.Stdout
+		bcmd.Stderr = os.Stderr
+		bcmd.Dir = s.TBDirectory()
+		defer bcmd.Process.Kill()
+		return bcmd.Run()
 	case "win":
 		log.Println("Running Windows EXE", s.TBDirectory(), "firefox.exe")
-		s.tbcmd = exec.Command(filepath.Join(s.TBDirectory(), "firefox.exe"), "--help")
-		s.tbcmd.Dir = s.TBDirectory()
-		return s.tbcmd.Run()
+		bcmd := exec.Command(s.TBPath(), "--help")
+		bcmd.Dir = s.TBDirectory()
+		return bcmd.Run()
 	default:
 	}
 
@@ -312,13 +318,36 @@ func (s *Supervisor) RunTBHelpWithLang() error {
 }
 
 func (s *Supervisor) ibbail() error {
-	if s.ibcmd != nil && s.ibcmd.Process != nil && s.ibcmd.ProcessState != nil {
-		if s.ibcmd.ProcessState.Exited() {
-			return nil
+	processes, err := ps.Processes()
+	if err != nil {
+		return nil
+	}
+	for _, p := range processes {
+		if p.Executable() == s.TorPath() {
+			var err error
+			s.torcmd.Process, err = os.FindProcess(p.Pid())
+			if err == nil {
+				return fmt.Errorf("Already running")
+			}
 		}
-		return fmt.Errorf("Already running")
 	}
 	return nil
+}
+
+// RunI2PBWithLang runs the I2P Browser with the given language
+func (s *Supervisor) RunI2PBWithLang() error {
+	if s.ibbail() != nil {
+		return nil
+	}
+	return s.RunTBBWithProfile(s.I2PDataPath())
+}
+
+// RunI2PBAppWithLang runs the I2P Browser with the given language
+func (s *Supervisor) RunI2PBAppWithLang() error {
+	if s.ibbail() != nil {
+		return nil
+	}
+	return s.RunTBBWithOfflineProfile(s.I2PAppDataPath(), true)
 }
 
 func (s *Supervisor) CopyAWOXPI(profiledata string) error {
@@ -374,30 +403,30 @@ func (s *Supervisor) RunTBBWithOfflineProfile(profiledata string, offline bool) 
 			log.Println("running Tor browser with lang and I2P Profile", s.Lang, s.UnpackPath, s.FirefoxPath(), "--profile", profiledata)
 			args := []string{"--profile", profiledata}
 			args = append(args, s.PTAS()...)
-			s.ibcmd = exec.Command(s.FirefoxPath(), args...)
-			s.ibcmd.Stdout = os.Stdout
-			s.ibcmd.Stderr = os.Stderr
-			return s.ibcmd.Run()
+			bcmd := exec.Command(s.FirefoxPath(), args...)
+			bcmd.Stdout = os.Stdout
+			bcmd.Stderr = os.Stderr
+			return bcmd.Run()
 		}
 		log.Println("tor browser not found at", s.FirefoxPath())
 		return fmt.Errorf("tor browser not found at %s", s.FirefoxPath())
 	case "osx":
 		firefoxPath := filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "MacOS", "firefox")
-		s.ibcmd = exec.Command(firefoxPath, "--profile", profiledata)
-		s.ibcmd.Dir = profiledata
-		s.ibcmd.Stdout = os.Stdout
-		s.ibcmd.Stderr = os.Stderr
-		defer s.ibcmd.Process.Kill()
-		return s.ibcmd.Run()
+		bcmd := exec.Command(firefoxPath, "--profile", profiledata)
+		bcmd.Dir = profiledata
+		bcmd.Stdout = os.Stdout
+		bcmd.Stderr = os.Stderr
+		defer bcmd.Process.Kill()
+		return bcmd.Run()
 	case "win":
-		log.Println("Running Windows EXE", filepath.Join(s.TBDirectory(), "firefox.exe"), "--profile", profiledata)
+		log.Println("Running Windows EXE", s.TBPath(), "--profile", profiledata)
 		args := []string{"--profile", "."}
 		args = append(args, s.PTAS()...)
-		s.ibcmd = exec.Command(filepath.Join(s.TBDirectory(), "firefox.exe"), args...)
-		s.ibcmd.Dir = profiledata
-		s.ibcmd.Stdout = os.Stdout
-		s.ibcmd.Stderr = os.Stderr
-		return s.ibcmd.Run()
+		bcmd := exec.Command(s.TBPath(), args...)
+		bcmd.Dir = profiledata
+		bcmd.Stdout = os.Stdout
+		bcmd.Stderr = os.Stderr
+		return bcmd.Run()
 	default:
 	}
 	return nil
@@ -406,22 +435,6 @@ func (s *Supervisor) RunTBBWithOfflineProfile(profiledata string, offline bool) 
 // RunTBBWithProfile runs the I2P Browser with the given language
 func (s *Supervisor) RunTBBWithProfile(profiledata string) error {
 	return s.RunTBBWithOfflineProfile(profiledata, false)
-}
-
-// RunI2PBWithLang runs the I2P Browser with the given language
-func (s *Supervisor) RunI2PBWithLang() error {
-	if s.ibbail() != nil {
-		return nil
-	}
-	return s.RunTBBWithProfile(s.I2PDataPath())
-}
-
-// RunI2PBAppWithLang runs the I2P Browser with the given language
-func (s *Supervisor) RunI2PBAppWithLang() error {
-	if s.ibbail() != nil {
-		return nil
-	}
-	return s.RunTBBWithOfflineProfile(s.I2PDataPath(), true)
 }
 
 func (s *Supervisor) torbail() error {
@@ -469,12 +482,12 @@ func (s *Supervisor) RunTorWithLang() error {
 		return fmt.Errorf("tor not found at %s", s.TorPath())
 	case "osx":
 		torPath := filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "Resources", "TorBrowser", "Tor", "tor")
-		s.ibcmd = exec.Command(torPath)
-		s.ibcmd.Dir = filepath.Dir(torPath)
-		s.ibcmd.Stdout = os.Stdout
-		s.ibcmd.Stderr = os.Stderr
-		defer s.ibcmd.Process.Kill()
-		return s.tbcmd.Run()
+		s.torcmd = exec.Command(torPath)
+		s.torcmd.Dir = filepath.Dir(torPath)
+		s.torcmd.Stdout = os.Stdout
+		s.torcmd.Stderr = os.Stderr
+		defer s.torcmd.Process.Kill()
+		return s.torcmd.Run()
 	case "win":
 		log.Println("Running Windows EXE", filepath.Join(s.TBDirectory(), "TorBrowser", "Tor", "tor.exe"))
 		s.torcmd = exec.Command(filepath.Join(s.TBDirectory(), "TorBrowser", "Tor", "tor.exe"))
