@@ -30,7 +30,9 @@ user_pref("browser.startup.homepage", "about:blank");
 
 However, to do so would then break your Tor Browser's ability to connect to Tor in normal, non-I2P cirumstances.
 This is not desirable, so instead we place a `user.js` and `prefs.js` file in a fresh profile directory, in advance
-of the user starting the Tor Browser.
+of the user starting the Tor Browser. Which brings us to the most important thing:
+
+### RULE ZERO: Preserve Normal Tor Browser Functionality when the user requests Tor Browser
 
 Beside that, we make the remaining changes which are specified in the [i2p.firefox](https://i2pgit.org/i2p-hackers/i2p.firefox)
 `user.js` and `prefs.js` file. This is a decision made to match the `i2p.firefox` profile as closely as possible,
