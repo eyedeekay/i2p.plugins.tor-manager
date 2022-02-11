@@ -47,14 +47,16 @@ func OS() string {
 }
 
 func ARCH() string {
-	//	if OS() == "osx" {
-	//		return ""
-	//	}
 	switch runtime.GOARCH {
 	case "386":
 		return "32"
 	case "amd64":
 		return "64"
+	case "arm64":
+		if OS() == "osx" {
+			return "64"
+		}
+		return ""
 	default:
 		return "unknown"
 	}
@@ -109,7 +111,7 @@ func main() {
 	} else if filename == "firefox" {
 		log.Println("Starting Firefox")
 		if *profile != "" {
-			*profile = filepath.Join(tbget.WORKING_DIR, "i2p.firefox")
+			*profile = filepath.Join(tbget.WORKING_DIR, "profile.firefox")
 		}
 		log.Println("Using profile", *profile)
 	}

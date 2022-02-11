@@ -14,7 +14,6 @@ Plugin:
 - [i2p.plugins.tor-manager-linux-386](i2p.plugins.tor-manager-linux-386.su3)
 - [i2p.plugins.tor-manager-windows-amd64](i2p.plugins.tor-manager-windows-amd64.su3)
 - [i2p.plugins.tor-manager-darwin-arm64](i2p.plugins.tor-manager-darwin-arm64.su3)
-- [i2p.plugins.tor-manager-linux-arm64](i2p.plugins.tor-manager-linux-arm64.su3)
 - [i2p.plugins.tor-manager-linux-amd64](i2p.plugins.tor-manager-linux-amd64.su3)
 - [i2p.plugins.tor-manager-windows-386](i2p.plugins.tor-manager-windows-386.su3)
 - [i2p.plugins.tor-manager-darwin-amd64](i2p.plugins.tor-manager-darwin-amd64.su3)
