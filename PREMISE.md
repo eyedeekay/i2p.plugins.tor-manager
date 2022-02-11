@@ -34,6 +34,9 @@ of the user starting the Tor Browser. Which brings us to the most important thin
 
 ### RULE ZERO: Preserve Normal Tor Browser Functionality when the user requests Tor Browser
 
+If the user requests Tor Browser, we do not interfere in any way. We just start Tor Browser normally. I2P operation
+is always separated to it's own profile.
+
 Beside that, we make the remaining changes which are specified in the [i2p.firefox](https://i2pgit.org/i2p-hackers/i2p.firefox)
 `user.js` and `prefs.js` file. This is a decision made to match the `i2p.firefox` profile as closely as possible,
 however it may not be advisable. The question is "When running in I2P mode, are we trying to look like Tor Browser?"
