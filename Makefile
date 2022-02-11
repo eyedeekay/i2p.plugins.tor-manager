@@ -1,4 +1,4 @@
-VERSION=0.0.4
+VERSION=0.0.5
 CGO_ENABLED=0
 export CGO_ENABLED=0
 
@@ -215,3 +215,4 @@ usagemd:
 	./i2p.plugins.tor-manager --help 2>&1 | grep -v $(DATE) | tee -a USAGE.md
 	@echo '```' | tee -a USAGE.md
 	@echo "" | tee -a USAGE.md
+
