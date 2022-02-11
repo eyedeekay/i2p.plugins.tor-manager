@@ -76,9 +76,12 @@ var (
 	bemirror   = flag.Bool("bemirror", false, "Act as an in-I2P mirror when you're done downloading")
 	shortcuts  = flag.Bool("shortcuts", false, "Create desktop shortcuts")
 	apparmor   = flag.Bool("apparmor", false, "Generate apparmor rules")
-	offline    = flag.Bool("offline", false, "Work offline")
+	offline    = flag.Bool("offline", false, "Work offline. Differs from Firefox's offline mode in that cannot be disabled until the browser is closed.")
 	profile    = flag.String("profile", "", "use a custom profile path, normally blank")
 	help       = flag.Bool("help", false, "Print help")
+	/*onion    = flag.Bool("onion", false, "Serve an onion site which shows some I2P propaganda, magnet links, your I2P mirror URL if configured")*/
+	/*torrent  = flag.Bool("torrent", false, "Create a torrent of the downloaded files and seed it over I2P using an Open Tracker")*/
+	/*ptop     = flag.Bool("p2p", false, "Use bittorrent over I2P to download the initial copy of Tor Browser")*/
 	/*mirror   = flag.String("mirror", "", "Mirror to use")*/
 )
 
