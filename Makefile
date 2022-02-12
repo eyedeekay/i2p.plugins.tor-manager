@@ -236,7 +236,7 @@ usagemd:
 	@echo "### Options:" | tee -a USAGE.md
 	@echo "" | tee -a USAGE.md
 	@echo '```sh' | tee -a USAGE.md
-	./i2p.plugins.tor-manager --help 2>&1 | grep -v $(DATE) | tee -a USAGE.md
+	./i2p.plugins.tor-manager --help 2>&1 | grep -v $(DATE) | grep -v $(HOME) | tee -a USAGE.md
 	@echo '```' | tee -a USAGE.md
 	@echo "" | tee -a USAGE.md
 

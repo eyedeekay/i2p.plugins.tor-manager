@@ -6,7 +6,6 @@ Tor(And sometimes Firefox) Manager for I2P
 ### Options:
 
 ```sh
-Unpacking /home/idk/go/src/i2pgit.org/idk/i2p.plugins.tor-manager/tor-browser/torbrowser-linux64-en-US.tar.xz /home/idk/go/src/i2pgit.org/idk/i2p.plugins.tor-manager/unpack
 Usage: i2p.plugins.tor-manager [options]
 
 Downloads, verifies and unpacks Tor Browser. Manages the Tor Browser
