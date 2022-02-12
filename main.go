@@ -77,6 +77,7 @@ var (
 	shortcuts  = flag.Bool("shortcuts", false, "Create desktop shortcuts")
 	apparmor   = flag.Bool("apparmor", false, "Generate apparmor rules")
 	offline    = flag.Bool("offline", false, "Work offline. Differs from Firefox's offline mode in that cannot be disabled until the browser is closed.")
+	clearnet   = flag.Bool("clearnet", false, "Use clearnet (no Tor or I2P)")
 	profile    = flag.String("profile", "", "use a custom profile path, normally blank")
 	help       = flag.Bool("help", false, "Print help")
 	/*onion    = flag.Bool("onion", false, "Serve an onion site which shows some I2P propaganda, magnet links, your I2P mirror URL if configured")*/
@@ -111,10 +112,19 @@ func main() {
 	} else if filename == "i2pconfig" {
 		log.Println("Starting I2P routerconsole in Tor Browser")
 		*i2pconfig = true
-	} else if filename == "firefox" {
-		log.Println("Starting Firefox")
-		if *profile != "" {
-			*profile = filepath.Join(tbget.WORKING_DIR, "profile.firefox")
+	} else if filename == "firefox" || *clearnet || *offline {
+		log.Println("Starting Firefox from Tor Browser package")
+		*clearnet = true
+		if *profile == "" {
+			if *offline {
+				*profile = filepath.Join(tbget.WORKING_DIR, "profile.firefox.offline")
+			} else if *clearnet {
+				*profile = filepath.Join(tbget.WORKING_DIR, "profile.firefox")
+			} else {
+				*profile = filepath.Join(tbget.WORKING_DIR, "profile.firefox.tor")
+			}
+		} else {
+			*profile = filepath.Join(tbget.WORKING_DIR, *profile)
 		}
 		log.Println("Using profile", *profile)
 	}
@@ -203,18 +213,16 @@ func main() {
 		}
 		return
 	}
-	if *profile != "" && !*offline {
+	client.TBS.UnpackI2PAppData()
+	client.TBS.UnpackI2PData()
+	if *profile != "" {
 		log.Println("Using a custom profile")
-		if err := client.TBS.RunTBBWithProfile(*profile); err != nil {
+		if err := client.TBS.RunTBBWithOfflineClearnetProfile(*profile, *offline, *clearnet); err != nil {
 			log.Fatal(err)
 		}
 	} else if *offline {
-		if *profile == "" {
-			*profile = "firefox.offline"
-		}
 		log.Println("Working offline")
-
-		if err := client.TBS.RunTBBWithOfflineProfile(*profile, *offline); err != nil {
+		if err := client.TBS.RunTBBWithOfflineClearnetProfile(*profile, *offline, *clearnet); err != nil {
 			log.Fatal(err)
 		}
 	} else if *i2pbrowser {

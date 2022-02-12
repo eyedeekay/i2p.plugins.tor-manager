@@ -15,6 +15,9 @@ The bare-minimum requirement to browse I2P using the Tor Browser is to add the f
 
 ```javascript
 user_pref("network.proxy.no_proxies_on", "127.0.0.1:7657,localhost:7657,127.0.0.1:7662,localhost:7662,127.0.0.1:7669,localhost:7669");
+user_pref("extensions.torbutton.use_nontor_proxy", true);
+user_pref("extensions.torlauncher.start_tor", false);
+user_pref("extensions.torlauncher.prompt_at_startup", false);
 user_pref("network.proxy.type", 1);
 user_pref("network.proxy.http", "127.0.0.1");
 user_pref("network.proxy.http_port", 4444);
@@ -116,3 +119,11 @@ I2P browser users by blocking ads and speeding up access to resources that would
  - Actually Work Offline: It is possible to pass the `-offline` flag `-i2pconfig` flag to load an additonal
  extension wherein *all non-localhost requests* are immediately dropped and the browser cannot reach remote sites
  until restarted.
+
+Other Reasons to put Extensions in Tor Browser for Our Purposes
+---------------------------------------------------------------
+
+ - Announce our non-default configuration loudly to the user by making changes to the UI.
+ 
+* Unrelated to extensions: Additionally, apply the environment variable: `TOR_HIDE_BROWSER_LOGO=1` for all non-Tor
+uses.

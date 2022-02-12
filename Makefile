@@ -134,7 +134,7 @@ early-release: clean linux windows version upload-linux upload-windows
 
 release: clean all version upload-all
 
-index:
+index: index-clearnet index-offline
 	@echo "<!DOCTYPE html>" > index.html
 	@echo "<html>" >> index.html
 	@echo "<head>" >> index.html
@@ -145,6 +145,30 @@ index:
 	pandoc README.md >> index.html
 	@echo "</body>" >> index.html
 	@echo "</html>" >> index.html
+
+index-clearnet:
+	@echo "<!DOCTYPE html>" > firefox.html
+	@echo "<html>" >> firefox.html
+	@echo "<head>" >> firefox.html
+	@echo "  <title>$(BINARY) - $(CONSOLEPOSTNAME)</title>" >> firefox.html
+	@echo "  <link rel=\"stylesheet\" type=\"text/css\" href =\"/style.css\" />" >> firefox.html
+	@echo "</head>" >> firefox.html
+	@echo "<body>" >> firefox.html
+	pandoc FIREFOX.md >> firefox.html
+	@echo "</body>" >> firefox.html
+	@echo "</html>" >> firefox.html
+
+index-offline:
+	@echo "<!DOCTYPE html>" > offline.html
+	@echo "<html>" >> offline.html
+	@echo "<head>" >> offline.html
+	@echo "  <title>$(BINARY) - $(CONSOLEPOSTNAME)</title>" >> offline.html
+	@echo "  <link rel=\"stylesheet\" type=\"text/css\" href =\"/style.css\" />" >> offline.html
+	@echo "</head>" >> offline.html
+	@echo "<body>" >> offline.html
+	pandoc OFFLINE.md >> offline.html
+	@echo "</body>" >> offline.html
+	@echo "</html>" >> offline.html
 
 tor-browser/unpack/i2p.firefox:
 	@echo "TODO"

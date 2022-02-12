@@ -339,6 +339,8 @@ func (s *Supervisor) RunI2PBWithLang() error {
 	if s.ibbail() != nil {
 		return nil
 	}
+	// export TOR_HIDE_BROWSER_LOGO=1
+	os.Setenv("TOR_HIDE_BROWSER_LOGO", "1")
 	return s.RunTBBWithProfile(s.I2PDataPath())
 }
 
@@ -347,10 +349,65 @@ func (s *Supervisor) RunI2PBAppWithLang() error {
 	if s.ibbail() != nil {
 		return nil
 	}
-	return s.RunTBBWithOfflineProfile(s.I2PAppDataPath(), true)
+	// export TOR_HIDE_BROWSER_LOGO=1
+	os.Setenv("TOR_HIDE_BROWSER_LOGO", "1")
+	return s.RunTBBWithOfflineClearnetProfile(s.I2PAppDataPath(), true, false)
+}
+
+func (s *Supervisor) GenerateClearnetProfile(profiledata string) error {
+	apath, err := filepath.Abs(profiledata)
+	if err != nil {
+		return err
+	}
+
+	// see: https://github.com/Whonix/tb-starter/blob/b5d2280ad445bc1fbdb613424664bf8503e6f395/usr/share/secbrowser/variables.bsh
+	// export TOR_NO_DISPLAY_NETWORK_SETTINGS=1
+	os.Setenv("TOR_NO_DISPLAY_NETWORK_SETTINGS", "1")
+	// export TOR_HIDE_BROWSER_LOGO=1
+	os.Setenv("TOR_HIDE_BROWSER_LOGO", "1")
+	// export TOR_SKIP_CONTROLPORTTEST=1
+	os.Setenv("TOR_SKIP_CONTROLPORTTEST", "1")
+	// export TOR_SKIP_LAUNCH=1
+	os.Setenv("TOR_SKIP_LAUNCH", "1")
+	// export TOR_TRANSPROXY=1
+	os.Setenv("TOR_TRANSPROXY", "1")
+
+	odir := filepath.Join(apath, "extensions")
+	if err := os.MkdirAll(odir, 0755); err != nil {
+		return err
+	}
+	if !tbget.FileExists(filepath.Join(apath, "user.js")) {
+		err := ioutil.WriteFile(filepath.Join(apath, "user.js"), secbrowserjs, 0644)
+		if err != nil {
+			return err
+		}
+	}
+	if !tbget.FileExists(filepath.Join(apath, "pref.js")) {
+		err := ioutil.WriteFile(filepath.Join(apath, "pref.js"), secbrowserjs, 0644)
+		if err != nil {
+			return err
+		}
+	}
+	htmlfile := filepath.Join(apath, "index.html")
+	if !tbget.FileExists(htmlfile) {
+		err := ioutil.WriteFile(htmlfile, []byte(secbrowserhtml), 0644)
+		if err != nil {
+			return err
+		}
+	}
+
+	opath := filepath.Join(odir, "uBlock0@raymondhill.net.xpi")
+
+	ipath := filepath.Join(filepath.Dir(s.UnpackPath), ".i2p.firefox", "extensions", "uBlock0@raymondhill.net.xpi")
+	if err := copy.Copy(ipath, opath); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *Supervisor) CopyAWOXPI(profiledata string) error {
+	// export TOR_HIDE_BROWSER_LOGO=1
+	os.Setenv("TOR_HIDE_BROWSER_LOGO", "1")
 	apath, err := filepath.Abs(profiledata)
 	if err != nil {
 		return err
@@ -373,6 +430,21 @@ func (s *Supervisor) CopyAWOXPI(profiledata string) error {
 	}
 	opath := filepath.Join(odir, "awo@eyedeekay.github.io.xpi")
 
+	htmlfile := filepath.Join(apath, "index.html")
+	if !tbget.FileExists(htmlfile) {
+		err := ioutil.WriteFile(htmlfile, []byte(offlinehtml), 0644)
+		if err != nil {
+			return err
+		}
+	}
+	cssfile := filepath.Join(apath, "style.css")
+	if !tbget.FileExists(cssfile) {
+		err := ioutil.WriteFile(cssfile, []byte(defaultCSS), 0644)
+		if err != nil {
+			return err
+		}
+	}
+
 	ipath := filepath.Join(filepath.Dir(s.UnpackPath), "awo@eyedeekay.github.io.xpi")
 	if err := copy.Copy(ipath, opath); err != nil {
 		return err
@@ -381,12 +453,22 @@ func (s *Supervisor) CopyAWOXPI(profiledata string) error {
 }
 
 // RunTBBWithOfflineProfile runs the I2P Browser with the given language
-func (s *Supervisor) RunTBBWithOfflineProfile(profiledata string, offline bool) error {
+func (s *Supervisor) RunTBBWithOfflineClearnetProfile(profiledata string, offline, clearnet bool) error {
+	defaultpage := ""
+	if clearnet {
+		log.Print("Generating Clearnet Profile")
+		if err := s.GenerateClearnetProfile(profiledata); err != nil {
+			log.Println("Error generating Clearnet Profile", err)
+			return err
+		}
+		defaultpage = profiledata + "/index.html"
+	}
 	if offline {
 		if err := s.CopyAWOXPI(profiledata); err != nil {
 			log.Println("Error copying AWO XPI", err)
 			return err
 		}
+		defaultpage = profiledata + "/index.html"
 	}
 	tbget.ARCH = ARCH()
 	if s.Lang == "" {
@@ -400,9 +482,9 @@ func (s *Supervisor) RunTBBWithOfflineProfile(profiledata string, offline bool) 
 	switch OS() {
 	case "linux":
 		if tbget.FileExists(s.UnpackPath) {
-			log.Println("running Tor browser with lang and I2P Profile", s.Lang, s.UnpackPath, s.FirefoxPath(), "--profile", profiledata)
-			args := []string{"--profile", profiledata}
+			args := []string{"--profile", profiledata, defaultpage}
 			args = append(args, s.PTAS()...)
+			log.Println("running Tor browser with lang and Custom Profile", s.Lang, s.UnpackPath, s.FirefoxPath(), args)
 			bcmd := exec.Command(s.FirefoxPath(), args...)
 			bcmd.Stdout = os.Stdout
 			bcmd.Stderr = os.Stderr
@@ -412,16 +494,19 @@ func (s *Supervisor) RunTBBWithOfflineProfile(profiledata string, offline bool) 
 		return fmt.Errorf("tor browser not found at %s", s.FirefoxPath())
 	case "osx":
 		firefoxPath := filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "MacOS", "firefox")
-		bcmd := exec.Command(firefoxPath, "--profile", profiledata)
+		args := []string{"--profile", profiledata, defaultpage}
+		args = append(args, s.PTAS()...)
+		log.Println("running Tor browser with lang and Custom Profile", s.Lang, s.UnpackPath, firefoxPath, args)
+		bcmd := exec.Command(firefoxPath, args...)
 		bcmd.Dir = profiledata
 		bcmd.Stdout = os.Stdout
 		bcmd.Stderr = os.Stderr
 		defer bcmd.Process.Kill()
 		return bcmd.Run()
 	case "win":
-		log.Println("Running Windows EXE", s.TBPath(), "--profile", profiledata)
-		args := []string{"--profile", "."}
+		args := []string{"--profile", profiledata, defaultpage}
 		args = append(args, s.PTAS()...)
+		log.Println("running Tor browser with lang and Custom Profile", s.Lang, s.UnpackPath, s.TBPath(), args)
 		bcmd := exec.Command(s.TBPath(), args...)
 		bcmd.Dir = profiledata
 		bcmd.Stdout = os.Stdout
@@ -434,7 +519,7 @@ func (s *Supervisor) RunTBBWithOfflineProfile(profiledata string, offline bool) 
 
 // RunTBBWithProfile runs the I2P Browser with the given language
 func (s *Supervisor) RunTBBWithProfile(profiledata string) error {
-	return s.RunTBBWithOfflineProfile(profiledata, false)
+	return s.RunTBBWithOfflineClearnetProfile(profiledata, false, false)
 }
 
 func (s *Supervisor) torbail() error {

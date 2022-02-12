@@ -105,7 +105,7 @@ user_pref("network.proxy.ftp_port", 4444);
 user_pref("network.proxy.socks", "127.0.0.1");
 user_pref("network.proxy.socks_port", 4444);
 user_pref("network.proxy.share_proxy_settings", true);
-user_pref("browser.startup.homepage", "about:blank");
+user_pref("browser.startup.homepage", "http://127.0.0.1:7657/home");
 
 // Privacy-harden and disable irrelevant features.
 user_pref("app.normandy.api_url", "");
