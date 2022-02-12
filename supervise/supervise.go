@@ -461,7 +461,11 @@ func (s *Supervisor) RunTBBWithOfflineClearnetProfile(profiledata string, offlin
 			log.Println("Error copying AWO XPI", err)
 			return err
 		}
-		defaultpage = profiledata + "/index.html"
+		if !strings.Contains(profiledata, "i2p") {
+			defaultpage = profiledata + "/index.html"
+		} else {
+			defaultpage = "http://127.0.0.1:7657/home"
+		}
 	}
 	tbget.ARCH = ARCH()
 	if s.Lang == "" {
