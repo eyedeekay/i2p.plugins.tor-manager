@@ -134,7 +134,7 @@ early-release: clean linux windows version upload-linux upload-windows
 
 release: clean all version upload-all
 
-index: index-clearnet index-offline
+index: index-clearnet index-offline index-usage
 	@echo "<!DOCTYPE html>" > index.html
 	@echo "<html>" >> index.html
 	@echo "<head>" >> index.html
@@ -240,3 +240,14 @@ usagemd:
 	@echo '```' | tee -a USAGE.md
 	@echo "" | tee -a USAGE.md
 
+index-usage:
+	@echo "<!DOCTYPE html>" > usage.html
+	@echo "<html>" >> usage.html
+	@echo "<head>" >> usage.html
+	@echo "  <title>$(BINARY) - $(CONSOLEPOSTNAME)</title>" >> usage.html
+	@echo "  <link rel=\"stylesheet\" type=\"text/css\" href =\"/style.css\" />" >> usage.html
+	@echo "</head>" >> usage.html
+	@echo "<body>" >> usage.html
+	pandoc USAGE.md >> usage.html
+	@echo "</body>" >> usage.html
+	@echo "</html>" >> usage.html

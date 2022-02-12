@@ -6,9 +6,10 @@
 </head>
 <body>
 <h1 id="i2p.plugins.tor-updater">i2p.plugins.tor-updater</h1>
-<p>A Tor package updater and runner as an I2P Plugin. This plugin is usable on Windows and Linux for now. OSX support is planned soon.</p>
+<p>A Tor package updater and runner as an I2P Plugin. This plugin is usable on Windows, Linux, and OSX, as is the freestanding binary. This also functions as a freestanding update for the Tor Browser Bundle and is capable of configuring Tor Browser from the terminal and updating it without running it, should the user choose to operate this way.</p>
 <h2 id="usage">Usage:</h2>
 <p>See <a href="USAGE.md">Usage</a> for command-line usage.</p>
+<p><a href="usage.html">HTML version</a></p>
 <h2 id="plugin">Plugin:</h2>
 <ul>
 <li><a href="i2p.plugins.tor-manager-linux-386.su3">i2p.plugins.tor-manager-linux-386</a></li>
@@ -22,7 +23,7 @@
 <figure>
 <img src="screenshot-console.png" alt="" /><figcaption>Screenshot 2</figcaption>
 </figure>
-<p>Linux: Usable, most things work. Windows: Usable, most things work. OSX: Unstable, untested, not usable, WIP.</p>
+<p>Linux: Usable, everything implemented works. Windows: Usable, everything implemented works. OSX: Usable, everything implemented works.</p>
 <p>Other systems are not targeted and should use a Tor binary built from source, provided by TPO or, their prefered package management system and not this plugin. The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.</p>
 <figure>
 <img src="screenshot-i2pbrowser.png" alt="" /><figcaption>Screenshot</figcaption>
@@ -63,13 +64,13 @@
 <li>Launch Tor Browser</li>
 </ol>
 <ul>
-<li>Works on Linux, Windows, OSX with minor bugs</li>
+<li>Works on Linux, Windows, OSX</li>
 </ul>
 <ol start="2" type="1">
 <li>Configure and launch Tor browser for use with I2P</li>
 </ol>
 <ul>
-<li>Works on Linux, Windows, OSX with minor bugs</li>
+<li>Works on Linux, Windows, OSX</li>
 </ul>
 <h4 id="optional-features-i-might-add-if-there-is-interest">Optional Features I might add if there is interest</h4>
 <ol type="1">
@@ -95,6 +96,18 @@
 </ol>
 <ul>
 <li>Not Done</li>
+</ul>
+<ol start="5" type="1">
+<li>Import libi2pd and offer the use of an embedded i2pd router.</li>
+</ol>
+<ul>
+<li>Not done.</li>
+</ul>
+<ol start="6" type="1">
+<li>Option to use BRB in a thread as an in-I2P replacement for <code>mibbit</code> IRC client.</li>
+</ol>
+<ul>
+<li>Not done.</li>
 </ul>
 <h3 id="usage-as-a-library">Usage as a Library</h3>
 <p><a href="https://pkg.go.dev/i2pgit.org/idk/i2p.plugins.tor-manager">More information at the GoDoc</a></p>

@@ -1,12 +1,18 @@
 # i2p.plugins.tor-updater
 
 A Tor package updater and runner as an I2P Plugin. This plugin is
-usable on Windows and Linux for now. OSX support is planned soon.
+usable on Windows, Linux, and OSX, as is the freestanding binary.
+This also functions as a freestanding update for the Tor Browser
+Bundle and is capable of configuring Tor Browser from the terminal
+and updating it without running it, should the user choose to operate
+this way.
 
 Usage:
 ------
 
 See [Usage](USAGE.md) for command-line usage.
+
+[HTML version](usage.html)
 
 Plugin:
 -------
@@ -23,9 +29,9 @@ Status:
 
 ![Screenshot 2](screenshot-console.png)
 
-Linux: Usable, most things work.
-Windows: Usable, most things work.
-OSX: Unstable, untested, not usable, WIP.
+Linux: Usable, everything implemented works.
+Windows: Usable, everything implemented works.
+OSX: Usable, everything implemented works.
 
 Other systems are not targeted and should use a Tor binary built from source,
 provided by TPO or, their prefered package management system and not this plugin.
@@ -49,9 +55,9 @@ The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
 ### Secondary Goals:
 
 1. Launch Tor Browser
- - Works on Linux, Windows, OSX with minor bugs
+ - Works on Linux, Windows, OSX
 2. Configure and launch Tor browser for use with I2P
- - Works on Linux, Windows, OSX with minor bugs
+ - Works on Linux, Windows, OSX
 
 #### Optional Features I might add if there is interest
 
@@ -63,6 +69,10 @@ The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
  - Not done
 4. Use Bittorrent-over-I2P to download the Tor Browser software
  - Not Done
+5. Import libi2pd and offer the use of an embedded i2pd router.
+ - Not done.
+6. Option to use BRB in a thread as an in-I2P replacement for `mibbit` IRC client.
+ - Not done.
 
 ### Usage as a Library
 

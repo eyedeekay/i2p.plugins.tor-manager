@@ -257,7 +257,7 @@ func (s *Supervisor) RunTBWithLang() error {
 		bcmd.Dir = s.UnpackPath
 		bcmd.Stdout = os.Stdout
 		bcmd.Stderr = os.Stderr
-		defer bcmd.Process.Kill()
+
 		return bcmd.Run()
 	case "win":
 		log.Println("Running Windows EXE", s.TBDirectory(), "firefox.exe")
@@ -304,7 +304,7 @@ func (s *Supervisor) RunTBHelpWithLang() error {
 		bcmd.Stdout = os.Stdout
 		bcmd.Stderr = os.Stderr
 		bcmd.Dir = s.TBDirectory()
-		defer bcmd.Process.Kill()
+
 		return bcmd.Run()
 	case "win":
 		log.Println("Running Windows EXE", s.TBDirectory(), "firefox.exe")
@@ -501,7 +501,7 @@ func (s *Supervisor) RunTBBWithOfflineClearnetProfile(profiledata string, offlin
 		bcmd.Dir = profiledata
 		bcmd.Stdout = os.Stdout
 		bcmd.Stderr = os.Stderr
-		defer bcmd.Process.Kill()
+
 		return bcmd.Run()
 	case "win":
 		args := []string{"--profile", profiledata, defaultpage}
