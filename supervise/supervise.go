@@ -447,7 +447,7 @@ func (s *Supervisor) CopyAWOXPI(profiledata string) error {
 
 // RunTBBWithOfflineProfile runs the I2P Browser with the given language
 func (s *Supervisor) RunTBBWithOfflineClearnetProfile(profiledata string, offline, clearnet bool) error {
-	defaultpage := ""
+	defaultpage := "about:blank"
 	if clearnet {
 		log.Print("Generating Clearnet Profile")
 		if err := s.GenerateClearnetProfile(profiledata); err != nil {
