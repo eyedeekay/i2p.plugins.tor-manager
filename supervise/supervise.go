@@ -437,13 +437,6 @@ func (s *Supervisor) CopyAWOXPI(profiledata string) error {
 			return err
 		}
 	}
-	cssfile := filepath.Join(apath, "style.css")
-	if !tbget.FileExists(cssfile) {
-		err := ioutil.WriteFile(cssfile, []byte(defaultCSS), 0644)
-		if err != nil {
-			return err
-		}
-	}
 
 	ipath := filepath.Join(filepath.Dir(s.UnpackPath), "awo@eyedeekay.github.io.xpi")
 	if err := copy.Copy(ipath, opath); err != nil {
