@@ -9,4 +9,4 @@ Firefox's normal work offline mode and cannot be canceled.
  - Visit the [Freenet FProxy](http://127.0.0.1:8888)
 
 This wrapper has been developed for use with the I2P project. To learn more about I2P,
-visit https://geti2p.net
+visit [Get I2P](https://geti2p.net)

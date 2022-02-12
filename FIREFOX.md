@@ -9,4 +9,4 @@ web browser for your non-anonymous tasks.
  - or [PrivacyGuides](https://privacyguides.org/)
 
 This wrapper has been developed for use with the I2P project. To learn more about I2P,
-visit https://geti2p.net
+visit [Get I2P](https://geti2p.net)
