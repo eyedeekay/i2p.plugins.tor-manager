@@ -467,6 +467,9 @@ func (s *Supervisor) RunTBBWithOfflineClearnetProfile(profiledata string, offlin
 			defaultpage = "http://127.0.0.1:7657/home"
 		}
 	}
+	if len(s.PTAS()) > 0 {
+		defaultpage = s.PTAS()[0]
+	}
 	tbget.ARCH = ARCH()
 	if s.Lang == "" {
 		s.Lang = DEFAULT_TB_LANG
