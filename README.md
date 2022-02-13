@@ -109,8 +109,8 @@ if err := client.Serve(); err != nil {
 
 ### Similar Projects:
 
-- https://github.com/micahflee/torbrowser-launcher
-- https://github.com/whonix/tb-updater
+- [https://github.com/micahflee/torbrowser-launcher](https://github.com/micahflee/torbrowser-launcher)
+- [https://github.com/whonix/tb-updater](https://github.com/whonix/tb-updater)
 - Probably about 200 or so bespoke scripts written and abandoned by hackers over the years, search github
 
 #### Why this is Better than those projects(A.K.A Why didn't you just use...)
