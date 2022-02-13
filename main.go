@@ -16,8 +16,6 @@ import (
 	"github.com/itchio/headway/state"
 	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
 	tbserve "i2pgit.org/idk/i2p.plugins.tor-manager/serve"
-
-	i2pd "github.com/eyedeekay/go-i2pd/goi2pd"
 )
 
 /*
@@ -166,11 +164,11 @@ func main() {
 				}
 			} else {
 				log.Fatal("Failed to run I2P", err)
-				closer := i2pd.InitI2PSAM()
+				closer := InitI2PSAM()
 				defer closer()
-				go i2pd.StartI2P()
+				go StartI2P()
 				//time.Sleep(time.Hour)
-				defer i2pd.StopI2P()
+				defer StopI2P()
 				//TODO: Link libi2pd and start our own router if we cant find one anywhere.
 				//TODO: loop again until TestHTTPDefaultProxy is up
 			}
