@@ -8,7 +8,7 @@
 <h1 id="i2p.plugins.tor-updater">i2p.plugins.tor-updater</h1>
 <p>A Tor package updater and runner as an I2P Plugin. This plugin is usable on Windows, Linux, and OSX, as is the freestanding binary. This also functions as a freestanding update for the Tor Browser Bundle and is capable of configuring Tor Browser from the terminal and updating it without running it, should the user choose to operate this way.</p>
 <h2 id="usage">Usage:</h2>
-<p>See <a href="USAGE.md">Usage</a> for command-line usage.</p>
+<p>See <a href="USAGE.md">Usage</a> for command-line usage. When used from the Terminal, it acts as a cross-platform Tor Browser installer and wrapper, which adds non-Tor specific options.</p>
 <p><a href="usage.html">HTML version</a></p>
 <h2 id="plugin">Plugin:</h2>
 <ul>
@@ -127,7 +127,28 @@
 <ul>
 <li>https://github.com/micahflee/torbrowser-launcher</li>
 <li>https://github.com/whonix/tb-updater</li>
+<li>Probably about 200 or so bespoke scripts written and abandoned by hackers over the years, search github</li>
 </ul>
+<h4 id="why-this-is-better-than-those-projectsa.k.a-why-didnt-you-just-use">Why this is Better than those projects(A.K.A Why didn’t you just use…)</h4>
+<h5 id="torbrowser-launcher"><a href="https://github.com/micahfleee/torbrowser-launcher">TorBrowser Launcher</a></h5>
+<p>i2p.plugins.tor-manager is in many ways a clone of Tor Browser Launcher by Micah Lee, it reproduces all of TBL’s functionality for downloading, verifying, and running Tor Browser. In particular Micah’s project deserves credit for the AppArmor profiles, which were used in the apparmor profile generator functionality and will probably continue to be the upstream example which I use in my code. Micah’s also already got a PPA, a FlatPak, a Snap, an <code>.rpm</code> and a bunch of other stuff that provides, through packaging, a better way to deal with updates to his software and a better way to deal with the supply chain for many users. There is no reason that <code>i2p.plugins.tor-manager</code> cannot do this, in fact it’s easier for us than it is for Micah, but this project is about a month and a half old and his is several years old. I haven’t done a bunch of packages yet.</p>
+<p>Improvements on Tor Browser Launcher include:</p>
+<ul>
+<li>Does not require GPG to be in the <code>$PATH</code> or on the system at all</li>
+<li>Capable of managing a long-running Tor service without also running the Tor Browser</li>
+<li>Works everywhere Tor Browser does, not just Linux. Including: Linux, Mac, Windows, AMD64, X86, and M1</li>
+<li>Embeds all required resources into a single binary which unpacks itself to a directory of the user’s choice. Never touches any other directory.</li>
+<li>Easy to package by placing a single static binary into a boilerplate package.</li>
+<li>Automatically generate an AppArmor profile which works for custom installation directory</li>
+<li>Accepts a custom profile argument without interfering with normal Tor Browser functionality.</li>
+<li>Bundles a “Extra” profiles for I2P browsing, non-Anonymous browsing, and offline/localhost-only browsing.</li>
+<li>Automatically organize multiple Tor Browser profiles for different networks(I2P, Clearnet) and discourage accidental mixing.</li>
+<li>Optional TAILS mode, adds uBlock Origin to Tor Browser</li>
+<li>Embeds an i2pd router in case the host system doesn’t have an I2P router</li>
+<li>No python. Language wars are stupid, but so is python.</li>
+</ul>
+<h4 id="tb-updaterwhonix"><a href="https://github.com/whonix/tb-updater">TB-Updater(Whonix)</a></h4>
+<p>tb-updater is generally only useful on Linux systems and especially Debian-based systems, and only recieves serious testing within the Whonix system itself. It’s a highly specialized tool in some ways, depending on packages which must be installed and repositories which must be configured. For their purposes, this is probably a good thing, Whonix’s raison d’etre is to carefully configure every aspect of their system to be as anonymous and secure as possible, and their approach deals with supply-chain issues which <code>i2p.plugins.tor-manager</code> can only deal with in <strong>packaging</strong> and not by adding features to the launcher itself. Therefore, while most of the improvements on Tor Browser Launcher also apply to TB-Updater, the <code>i2p.plugins.tor-manager</code> and <code>tb-launcher</code> are actually less directly comparable.</p>
 <p><a href="https://www.flaticon.com/free-icons/garlic" title="garlic icons">Garlic icons created by Icongeek26 - Flaticon</a> <a href="https://www.flaticon.com/free-icons/onion" title="onion icons">Onion icons created by Freepik - Flaticon</a></p>
 <h3 id="more-screenshots">More Screenshots:</h3>
 <ul>
