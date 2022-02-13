@@ -10,6 +10,7 @@ func InitI2PSAM() func() {
 func nullFunc() {
 
 }
+
 func StartI2P() {
 
 }

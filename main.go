@@ -163,14 +163,15 @@ func main() {
 					}
 				}
 			} else {
-				log.Fatal("Failed to run I2P", err)
 				closer := InitI2PSAM()
 				defer closer()
 				go StartI2P()
-				//time.Sleep(time.Hour)
 				defer StopI2P()
-				//TODO: Link libi2pd and start our own router if we cant find one anywhere.
-				//TODO: loop again until TestHTTPDefaultProxy is up
+				if tbget.TestHTTPDefaultProxy() {
+					log.Println("I2P HTTP proxy OK")
+				} else {
+					log.Fatal("Embedded i2pd unable to start")
+				}
 			}
 		}
 	}
