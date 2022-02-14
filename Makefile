@@ -142,7 +142,8 @@ index: index-clearnet index-offline index-usage
 	@echo "  <link rel=\"stylesheet\" type=\"text/css\" href =\"/style.css\" />" >> index.html
 	@echo "</head>" >> index.html
 	@echo "<body>" >> index.html
-	pandoc README.md >> index.html
+	sed 's|https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/||g' README.md | \
+		sed "s|$(VERSION)||g" | pandoc >> index.html
 	@echo "</body>" >> index.html
 	@echo "</html>" >> index.html
 

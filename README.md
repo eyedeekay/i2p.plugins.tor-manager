@@ -19,12 +19,13 @@ non-Tor specific options.
 Plugin:
 -------
 
-- [i2p.plugins.tor-manager-linux-386](i2p.plugins.tor-manager-linux-386.su3)
-- [i2p.plugins.tor-manager-windows-amd64](i2p.plugins.tor-manager-windows-amd64.su3)
-- [i2p.plugins.tor-manager-darwin-arm64](i2p.plugins.tor-manager-darwin-arm64.su3)
-- [i2p.plugins.tor-manager-linux-amd64](i2p.plugins.tor-manager-linux-amd64.su3)
-- [i2p.plugins.tor-manager-windows-386](i2p.plugins.tor-manager-windows-386.su3)
-- [i2p.plugins.tor-manager-darwin-amd64](i2p.plugins.tor-manager-darwin-amd64.su3)
+- [i2p.plugins.tor-manager-linux-386](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/0.0.4/i2p.plugins.tor-manager-linux-386.su3)
+- [i2p.plugins.tor-manager-windows-amd64](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/0.0.4/i2p.plugins.tor-manager-windows-amd64.su3)
+- [i2p.plugins.tor-manager-darwin-arm64](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/0.0.4/i2p.plugins.tor-manager-darwin-arm64.su3)
+- [i2p.plugins.tor-manager-linux-amd64](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/0.0.4/i2p.plugins.tor-manager-linux-amd64.su3)
+- [i2p.plugins.tor-manager-windows-386](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/0.0.4/i2p.plugins.tor-manager-windows-386.su3)
+- [i2p.plugins.tor-manager-darwin-amd64](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/0.0.4/i2p.plugins.tor-manager-darwin-amd64.su3)
+
 
 Status:
 -------
