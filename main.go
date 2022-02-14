@@ -151,7 +151,7 @@ func main() {
 			log.Println("I2P HTTP proxy not OK")
 			run, err := i2cpcheck.ConditionallyLaunchI2P()
 			if err != nil {
-				log.Fatal("Couldn't launch I2P", err)
+				log.Println("Couldn't launch I2P", err)
 			}
 			if run {
 				if tbget.TestHTTPDefaultProxy() {
