@@ -5,8 +5,9 @@ VERSION=0.0.4
 GOOS?=$(shell uname -s | tr A-Z a-z)
 GOARCH?="amd64"
 
-ARG=-v -tags netgo -ldflags '-w -extldflags "-static"'
-
+#ARG=-v -tags netgo -ldflags '-w -extldflags "-static"'
+FLAGS=/usr/lib/x86_64-linux-gnu/libboost_system.a /usr/lib/x86_64-linux-gnu/libboost_date_time.a /usr/lib/x86_64-linux-gnu/libboost_filesystem.a /usr/lib/x86_64-linux-gnu/libboost_program_options.a /usr/lib/x86_64-linux-gnu/libssl.a /usr/lib/x86_64-linux-gnu/libcrypto.a /usr/lib/x86_64-linux-gnu/libz.a
+ARG=-ldflags '-w -linkmode=external -extldflags "-static -ldl $(FLAGS)"'
 NOSTATIC=-v -tags netgo -ldflags '-w'
 
 BINARY=i2p.plugins.tor-manager
@@ -18,10 +19,10 @@ PLUGIN=$(HOME)/.i2p/plugins/$(BINARY)-$(GOOS)-$(GOARCH)
 PREFIX?=/usr/local
 
 binary:
-	go build $(ARG) -tags="netgo,nosystray,noi2pd" -o $(BINARY)-$(GOOS)-$(GOARCH) .
+	go build $(ARG) -tags=netgo,nosystray -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
 systray:
-	go build $(NOSTATIC) -tags="netgo" -o $(BINARY)-$(GOOS)-$(GOARCH) .
+	go build $(NOSTATIC) -tags=netgo -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
 lint:
 	golint supervise/*.go
@@ -296,12 +297,9 @@ export CGO_CPPFLAGS=-static
 #export CGO_LDFLAGS=-static
 
 
-#Trying to achieve fully-static builds, this doesn't work yet.
-FLAGS=/usr/lib/x86_64-linux-gnu/libboost_system.a /usr/lib/x86_64-linux-gnu/libboost_date_time.a /usr/lib/x86_64-linux-gnu/libboost_filesystem.a /usr/lib/x86_64-linux-gnu/libboost_program_options.a /usr/lib/x86_64-linux-gnu/libssl.a /usr/lib/x86_64-linux-gnu/libcrypto.a /usr/lib/x86_64-linux-gnu/libz.a
-
 
 example:
-	go build -x -v --tags=netgo \
+	go build -x -v --tags=netgo,nosystray \
 		-ldflags '-w -linkmode=external -extldflags "-static -ldl $(FLAGS)"'
 
 xhost:
