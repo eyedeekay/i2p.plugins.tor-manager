@@ -1,5 +1,5 @@
-//go:build !i2pd
-// +build !i2pd
+//go:build noi2pd
+// +build noi2pd
 
 package main
 

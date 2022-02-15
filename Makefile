@@ -18,7 +18,7 @@ PLUGIN=$(HOME)/.i2p/plugins/$(BINARY)-$(GOOS)-$(GOARCH)
 PREFIX?=/usr/local
 
 binary:
-	go build $(ARG) -tags="netgo,nosystray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
+	go build $(ARG) -tags="netgo,nosystray,noi2pd" -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
 systray:
 	go build $(NOSTATIC) -tags="netgo" -o $(BINARY)-$(GOOS)-$(GOARCH) .
@@ -299,6 +299,19 @@ export CGO_CPPFLAGS=-static
 #Trying to achieve fully-static builds, this doesn't work yet.
 FLAGS=/usr/lib/x86_64-linux-gnu/libboost_system.a /usr/lib/x86_64-linux-gnu/libboost_date_time.a /usr/lib/x86_64-linux-gnu/libboost_filesystem.a /usr/lib/x86_64-linux-gnu/libboost_program_options.a /usr/lib/x86_64-linux-gnu/libssl.a /usr/lib/x86_64-linux-gnu/libcrypto.a /usr/lib/x86_64-linux-gnu/libz.a
 
+
 example:
 	go build -x -v --tags=netgo \
 		-ldflags '-w -linkmode=external -extldflags "-static -ldl $(FLAGS)"'
+
+xhost:
+	xhost + local:docker
+
+docker: xhost
+	docker build -t eyedeekay/i2p.plugins.tor-manager .
+	docker run it --volume $(PWD)/build:/go/src/eyedeekay/i2p.plugins.tor-manager/build \
+		--env-file $(HOME)/i2p.plugins.tor-manager/env \
+		--publish 127.0.0.1:7695:7695 \
+		-e DISPLAY=unix$(DISPLAY) \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		--rm eyedeekay/i2p.plugins.tor-manager
