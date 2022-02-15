@@ -5,7 +5,9 @@ VERSION=0.0.4
 GOOS?=$(shell uname -s | tr A-Z a-z)
 GOARCH?="amd64"
 
-ARG=-v -tags netgo -ldflags '-w'
+ARG=-v -tags netgo -ldflags '-w -extldflags "-static"'
+
+NOSTATIC=-v -tags netgo -ldflags '-w'
 
 BINARY=i2p.plugins.tor-manager
 SIGNER=hankhill19580@gmail.com
@@ -16,7 +18,10 @@ PLUGIN=$(HOME)/.i2p/plugins/$(BINARY)-$(GOOS)-$(GOARCH)
 PREFIX?=/usr/local
 
 binary:
-	go build $(ARG) -tags="netgo" -o $(BINARY)-$(GOOS)-$(GOARCH) .
+	go build $(ARG) -tags="netgo,nosystray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
+
+systray:
+	go build $(NOSTATIC) -tags="netgo" -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
 lint:
 	golint supervise/*.go
