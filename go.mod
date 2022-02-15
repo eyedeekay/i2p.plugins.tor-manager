@@ -4,12 +4,13 @@ go 1.17
 
 require (
 	github.com/cloudfoundry/jibber_jabber v0.0.0-20151120183258-bcc4c8345a21
-	github.com/eyedeekay/go-i2pcontrol v0.0.0-20200110011336-510cca77e350
 	github.com/eyedeekay/go-i2pd v0.0.0-20220213070306-9807541b2dfc
 	github.com/getlantern/systray v1.1.0
 	github.com/go-ole/go-ole v1.2.6
 	github.com/jchavannes/go-pgp v0.0.0-20200131171414-e5978e6d02b4
+	github.com/magisterquis/connectproxy v0.0.0-20200725203833-3582e84f0c9b
 	golang.org/x/crypto v0.0.0-20220112180741-5e0467b6c7ce
+	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2
 )
 
 require (
@@ -25,18 +26,17 @@ require (
 	github.com/getlantern/ops v0.0.0-20200403153110-8476b16edcd6 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/gtank/cryptopasta v0.0.0-20170601214702-1f550f6f2f69 // indirect
-	github.com/magisterquis/connectproxy v0.0.0-20200725203833-3582e84f0c9b // indirect
 	github.com/mwitkow/go-http-dialer v0.0.0-20161116154839-378f744fb2b8 // indirect
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
 	github.com/phayes/freeport v0.0.0-20180830031419-95f893ade6f2 // indirect
-	github.com/ybbus/jsonrpc v2.1.2+incompatible // indirect
+	github.com/ybbus/jsonrpc/v2 v2.1.6 // indirect
 	github.com/zieckey/goini v0.0.0-20180118150432-0da17d361d26 // indirect
-	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
 	golang.org/x/time v0.0.0-20190308202827-9d24e82272b4 // indirect
 )
 
 require (
 	github.com/eyedeekay/checki2cp v0.0.21
+	github.com/eyedeekay/go-i2pcontrol v0.0.0-20201227222421-6e9f31a29a91
 	github.com/eyedeekay/httptunnel v0.0.0-20210508193128-6e9606d6eb24
 	github.com/eyedeekay/sam3 v0.32.32
 	github.com/itchio/damage v0.0.0-20190703135837-76df725fc766
@@ -54,3 +54,5 @@ require (
 )
 
 replace github.com/eyedeekay/go-i2pd v0.0.0-20220213070306-9807541b2dfc => ./go-i2pd
+
+replace github.com/getlantern/systray v1.1.0 => github.com/eyedeekay/systray v1.1.1-0.20220213191004-800d7458fdfd

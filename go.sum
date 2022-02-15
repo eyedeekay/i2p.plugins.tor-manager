@@ -27,12 +27,9 @@ github.com/eyedeekay/eephttpd v0.0.0-20190903000420-52f5a8485a4e/go.mod h1:wFPQs
 github.com/eyedeekay/go-fpw v0.0.0-20200512022837-c8b4dcdc74d4/go.mod h1:RyCx7KuH+5ryvIpUF7SpxiChLtjeuPbVFCIzf8shIFc=
 github.com/eyedeekay/go-i2cp v0.0.0-20190716135428-6d41bed718b0 h1:rnn9OlD/3+tATEZNuiMR1C84O5CX8bZL2qqgttprKrw=
 github.com/eyedeekay/go-i2cp v0.0.0-20190716135428-6d41bed718b0/go.mod h1:+P0fIhkqIYjo7exMJRTlSteRMbRyHbiBiKw+YlPWk+c=
-github.com/eyedeekay/go-i2pcontrol v0.0.0-20200110011336-510cca77e350 h1:LxSh6dLIeiDfXxex1B+jFh7YyI7OuBza+IXS+SFzuLQ=
 github.com/eyedeekay/go-i2pcontrol v0.0.0-20200110011336-510cca77e350/go.mod h1:bhIQsVpbNNXMtcoZ9UF4hLQleOjaCgKGXiRRhNc8TOA=
 github.com/eyedeekay/go-i2pcontrol v0.0.0-20201227222421-6e9f31a29a91 h1:GjdUYLGSC4SBTKuuQ3K3+iLbFihCpBIO8VRjF7GNEYw=
 github.com/eyedeekay/go-i2pcontrol v0.0.0-20201227222421-6e9f31a29a91/go.mod h1:bhIQsVpbNNXMtcoZ9UF4hLQleOjaCgKGXiRRhNc8TOA=
-github.com/eyedeekay/go-i2pd v0.0.0-20220213070306-9807541b2dfc h1:ozp8Cxn9nsFF+p4tMcE63G0Kx+2lEywlCW0EvtISEZg=
-github.com/eyedeekay/go-i2pd v0.0.0-20220213070306-9807541b2dfc/go.mod h1:Yg8xCWRLyq0mezPV+xJygBhJCf7wYsIdXbYGQk5tnW8=
 github.com/eyedeekay/goSam v0.1.1-0.20190814204230-d4c9b8c57dd6/go.mod h1:kGTfZrncJ4CwMX3d1qA6bcMJTOcuTbOqgWg7WrFNAQ0=
 github.com/eyedeekay/goSam v0.32.31-0.20210415231611-c6d9c0e340b8 h1:w8gZ6aGy4H3pwRI7seUvUrVPhzrrEid2X8G2DcH7Yvk=
 github.com/eyedeekay/goSam v0.32.31-0.20210415231611-c6d9c0e340b8/go.mod h1:UgJnih/LpotwKriwVPOEa6yPDM2NDdVrKfLtS5DOLPE=
@@ -54,6 +51,8 @@ github.com/eyedeekay/sam3 v0.0.0-20190730185140-f8d54526ea25/go.mod h1:Y3igFVzN4
 github.com/eyedeekay/sam3 v0.32.2/go.mod h1:Y3igFVzN4ybqkkpfUWULGhw7WRp8lieq0ORXbLBbcZM=
 github.com/eyedeekay/sam3 v0.32.32 h1:9Ea1Ere5O8Clx8zYxKnvhrWy7R96Q4FvxlPskYf8VW0=
 github.com/eyedeekay/sam3 v0.32.32/go.mod h1:qRA9KIIVxbrHlkj+ZB+OoxFGFgdKeGp1vSgPw26eOVU=
+github.com/eyedeekay/systray v1.1.1-0.20220213191004-800d7458fdfd h1:oJHZovdE0+dbONGpgSboibxtf3A4Kh0XjtPBhJDInWI=
+github.com/eyedeekay/systray v1.1.1-0.20220213191004-800d7458fdfd/go.mod h1:AecygODWIsBquJCJFop8MEQcJbWFfw/1yWbVabNgpCM=
 github.com/eyedeekay/zerobundle v0.0.0-20210508181003-86893b4491fd/go.mod h1:wkwqUXsii7d0hSXusO/wbGmOQyYP7ltVrfanWnBNJj8=
 github.com/eyedeekay/zerobundle/parts/0 v0.0.0-20210508034048-7cd2a4edba67/go.mod h1:r0sUb3XQ87Ae7PIdPjjLqNph/7nCWj5dkEWrUeDCaVI=
 github.com/eyedeekay/zerobundle/parts/1 v0.0.0-20210508034048-7cd2a4edba67/go.mod h1:DQDEE5G1HE4682/HCjTFgoXkT4uni5aKPdPe1GmnVGU=
@@ -206,8 +205,6 @@ github.com/getlantern/netx v0.0.0-20190110220209-9912de6f94fd/go.mod h1:wKdY0ikO
 github.com/getlantern/ops v0.0.0-20190325191751-d70cb0d6f85f/go.mod h1:D5ao98qkA6pxftxoqzibIBBrLSUli+kYnJqrgBf9cIA=
 github.com/getlantern/ops v0.0.0-20200403153110-8476b16edcd6 h1:QthAQCekS1YOeYWSvoHI6ZatlG4B+GBDLxV/2ZkBsTA=
 github.com/getlantern/ops v0.0.0-20200403153110-8476b16edcd6/go.mod h1:D5ao98qkA6pxftxoqzibIBBrLSUli+kYnJqrgBf9cIA=
-github.com/getlantern/systray v1.1.0 h1:U0wCEqseLi2ok1fE6b88gJklzriavPJixZysZPkZd/Y=
-github.com/getlantern/systray v1.1.0/go.mod h1:AecygODWIsBquJCJFop8MEQcJbWFfw/1yWbVabNgpCM=
 github.com/go-gl/gl v0.0.0-20181026044259-55b76b7df9d2/go.mod h1:482civXOzJJCPzJ4ZOX/pwvXBWSnzD4OKMdH4ClKGbk=
 github.com/go-gl/gl v0.0.0-20210501111010-69f74958bac0/go.mod h1:wjpnOv6ONl2SuJSxqCPVaPZibGFdSci9HFocT9qtVYM=
 github.com/go-gl/glfw v0.0.0-20210410170116-ea3d685f79fb/go.mod h1:vR7hzQXu2zJy9AVAgeJqvqgH9Q5CA+iKCZ2gyEVpxRU=

@@ -1,11 +1,11 @@
 VERSION=0.0.4
-CGO_ENABLED=0
+#CGO_ENABLED=0
 #export CGO_ENABLED=0
 
 GOOS?=$(shell uname -s | tr A-Z a-z)
 GOARCH?="amd64"
 
-ARG=-v -tags netgo -ldflags '-w -extldflags "-static"'
+ARG=-v -tags netgo -ldflags '-w'
 
 BINARY=i2p.plugins.tor-manager
 SIGNER=hankhill19580@gmail.com
