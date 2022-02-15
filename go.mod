@@ -4,7 +4,9 @@ go 1.17
 
 require (
 	github.com/cloudfoundry/jibber_jabber v0.0.0-20151120183258-bcc4c8345a21
+	github.com/eyedeekay/go-i2pcontrol v0.0.0-20200110011336-510cca77e350
 	github.com/eyedeekay/go-i2pd v0.0.0-20220213070306-9807541b2dfc
+	github.com/getlantern/systray v1.1.0
 	github.com/go-ole/go-ole v1.2.6
 	github.com/jchavannes/go-pgp v0.0.0-20200131171414-e5978e6d02b4
 	golang.org/x/crypto v0.0.0-20220112180741-5e0467b6c7ce
@@ -15,9 +17,18 @@ require (
 	github.com/eyedeekay/go-i2cp v0.0.0-20190716135428-6d41bed718b0 // indirect
 	github.com/eyedeekay/goSam v0.32.31-0.20210415231611-c6d9c0e340b8 // indirect
 	github.com/eyedeekay/sam-forwarder v0.0.0-20190908210105-71ca8cd65fda // indirect
+	github.com/getlantern/context v0.0.0-20190109183933-c447772a6520 // indirect
+	github.com/getlantern/errors v1.0.1 // indirect
+	github.com/getlantern/golog v0.0.0-20201105130739-9586b8bde3a9 // indirect
+	github.com/getlantern/hex v0.0.0-20190417191902-c6586a6fe0b7 // indirect
+	github.com/getlantern/hidden v0.0.0-20190325191715-f02dbb02be55 // indirect
+	github.com/getlantern/ops v0.0.0-20200403153110-8476b16edcd6 // indirect
+	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/gtank/cryptopasta v0.0.0-20170601214702-1f550f6f2f69 // indirect
 	github.com/mwitkow/go-http-dialer v0.0.0-20161116154839-378f744fb2b8 // indirect
+	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
 	github.com/phayes/freeport v0.0.0-20180830031419-95f893ade6f2 // indirect
+	github.com/ybbus/jsonrpc v2.1.2+incompatible // indirect
 	github.com/zieckey/goini v0.0.0-20180118150432-0da17d361d26 // indirect
 	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
 	golang.org/x/time v0.0.0-20190308202827-9d24e82272b4 // indirect
@@ -41,4 +52,4 @@ require (
 	howett.net/plist v1.0.0 // indirect
 )
 
-replace github.com/eyedeekay/go-i2pd v0.0.0-20220213070306-9807541b2dfc => ./go-i2pd 
+replace github.com/eyedeekay/go-i2pd v0.0.0-20220213070306-9807541b2dfc => ./go-i2pd

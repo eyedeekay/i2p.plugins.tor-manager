@@ -1,6 +1,7 @@
 package tbserve
 
 import (
+	"context"
 	"embed"
 	"io/ioutil"
 	"log"
@@ -23,6 +24,7 @@ type Client struct {
 	DarkMode bool
 	Host     string
 	Port     int
+	server   http.Server
 }
 
 // NewClient creates a new Client.
@@ -130,8 +132,17 @@ func (m *Client) Serve() error {
 	if err != nil {
 		return err
 	}
+	m.server = http.Server{
+		Addr:    m.GetAddress(),
+		Handler: nosurf.New(m),
+	}
 	ioutil.WriteFile(filepath.Join(m.TBD.DownloadPath, "mirror.json"), []byte(mirrorjson), 0644)
 	cp.Copy(m.TBS.I2PProfilePath(), filepath.Join(m.TBD.DownloadPath, "i2p.firefox"))
 	go m.TBS.RunTorWithLang()
-	return http.ListenAndServe(m.GetAddress(), nosurf.New(m))
+	return m.server.ListenAndServe() //http.ListenAndServe(m.GetAddress(), nosurf.New(m))
+}
+
+func (m *Client) Shutdown(ctx context.Context) error {
+	m.TBS.StopTor()
+	return m.server.Shutdown(ctx)
 }

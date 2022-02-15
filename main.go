@@ -113,20 +113,19 @@ func main() {
 		log.Println("Starting I2P routerconsole in Tor Browser")
 		*i2pconfig = true
 	} else if filename == "firefox" || *clearnet || *offline {
-		log.Println("Starting Firefox from Tor Browser package")
 		*clearnet = true
-		if *profile == "" {
-			if *offline {
-				*profile = filepath.Join(tbget.WORKING_DIR, "profile.firefox.offline")
-			} else if *clearnet {
-				*profile = filepath.Join(tbget.WORKING_DIR, "profile.firefox")
-			} else {
-				*profile = filepath.Join(tbget.WORKING_DIR, "profile.firefox.tor")
-			}
+	}
+
+	if *profile == "" {
+		if *offline {
+			*profile = filepath.Join(tbget.WORKING_DIR, "profile.firefox.offline")
+		} else if *clearnet {
+			*profile = filepath.Join(tbget.WORKING_DIR, "profile.firefox")
 		} else {
-			*profile = filepath.Join(tbget.WORKING_DIR, *profile)
+			*profile = filepath.Join(tbget.WORKING_DIR, "profile.firefox.default")
 		}
-		log.Println("Using profile", *profile)
+	} else {
+		*profile = filepath.Join(tbget.WORKING_DIR, *profile)
 	}
 	if *i2pbrowser && *torbrowser {
 		log.Fatal("Please don't open I2P and Tor Browser at the same time when running from the terminal.")
@@ -166,6 +165,7 @@ func main() {
 				closer := InitI2PSAM()
 				defer closer()
 				go StartI2P()
+				go runSysTray(true)
 				defer StopI2P()
 				if tbget.TestHTTPDefaultProxy() {
 					log.Println("I2P HTTP proxy OK")
@@ -221,17 +221,7 @@ func main() {
 	}
 	client.TBS.UnpackI2PAppData()
 	client.TBS.UnpackI2PData()
-	if *profile != "" {
-		log.Println("Using a custom profile")
-		if err := client.TBS.RunTBBWithOfflineClearnetProfile(*profile, *offline, *clearnet); err != nil {
-			log.Fatal(err)
-		}
-	} else if *offline {
-		log.Println("Working offline")
-		if err := client.TBS.RunTBBWithOfflineClearnetProfile(*profile, *offline, *clearnet); err != nil {
-			log.Fatal(err)
-		}
-	} else if *i2pbrowser {
+	if *i2pbrowser {
 		if err := client.TBS.RunI2PBWithLang(); err != nil {
 			log.Fatal(err)
 		}
@@ -243,10 +233,21 @@ func main() {
 		if err := client.TBS.RunTBWithLang(); err != nil {
 			log.Fatal(err)
 		}
+	} else if *offline {
+		log.Println("Working offline")
+		if err := client.TBS.RunTBBWithOfflineClearnetProfile(*profile, *offline, *clearnet); err != nil {
+			log.Fatal(err)
+		}
+	} else if *clearnet {
+		log.Println("Using a custom profile")
+		if err := client.TBS.RunTBBWithOfflineClearnetProfile(*profile, *offline, *clearnet); err != nil {
+			log.Fatal(err)
+		}
 	} else {
 		if *bemirror {
 			go client.TBD.Serve()
 		}
+		go runSysTray(false)
 		if err := client.Serve(); err != nil {
 			log.Fatal(err)
 		}
