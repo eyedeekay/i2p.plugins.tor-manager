@@ -28,10 +28,11 @@ type Client struct {
 }
 
 // NewClient creates a new Client.
-func NewClient(verbose bool, lang string, os string, arch string, content *embed.FS) (*Client, error) {
+func NewClient(verbose bool, lang, os, arch, mirror string, content *embed.FS) (*Client, error) {
 	m := &Client{
 		TBD: tbget.NewTBDownloader(lang, os, arch, content),
 	}
+	m.TBD.Mirror = mirror
 	m.TBD.Verbose = verbose
 	m.TBD.MakeTBDirectory()
 	tgz, sig, err := m.TBD.DownloadUpdaterForLang(lang)

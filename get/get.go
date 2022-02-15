@@ -24,10 +24,12 @@ import (
 	"github.com/itchio/damage"
 	"github.com/itchio/damage/hdiutil"
 	"github.com/itchio/headway/state"
+	"github.com/magisterquis/connectproxy"
 	"github.com/ulikunitz/xz"
 
 	"github.com/jchavannes/go-pgp/pgp"
 	"golang.org/x/crypto/openpgp"
+	"golang.org/x/net/proxy"
 )
 
 // WORKING_DIR is the working directory for the application.
@@ -74,6 +76,7 @@ type TBDownloader struct {
 	DownloadPath string
 	Lang         string
 	OS, ARCH     string
+	Mirror       string
 	Verbose      bool
 	Profile      *embed.FS
 }
@@ -252,13 +255,17 @@ func (t *TBDownloader) GetUpdaterForLangFromJSONBytes(jsonBytes []byte, ietf str
 		if updater, ok := platform.(map[string]interface{})[rtp]; ok {
 			if langUpdater, ok := updater.(map[string]interface{})[ietf]; ok {
 				t.Log("GetUpdaterForLangFromJSONBytes()", "Found updater for language")
-				return langUpdater.(map[string]interface{})["binary"].(string), langUpdater.(map[string]interface{})["sig"].(string), nil
+				bin := langUpdater.(map[string]interface{})["binary"].(string)
+				sig := langUpdater.(map[string]interface{})["sig"].(string)
+				return t.MirrorIze(bin), t.MirrorIze(sig), nil
 			}
 			// If we didn't find the language, try splitting at the hyphen
 			lang := strings.Split(ietf, "-")[0]
 			if langUpdater, ok := updater.(map[string]interface{})[lang]; ok {
 				t.Log("GetUpdaterForLangFromJSONBytes()", "Found updater for backup language")
-				return langUpdater.(map[string]interface{})["binary"].(string), langUpdater.(map[string]interface{})["sig"].(string), nil
+				bin := langUpdater.(map[string]interface{})["binary"].(string)
+				sig := langUpdater.(map[string]interface{})["sig"].(string)
+				return t.MirrorIze(bin), t.MirrorIze(sig), nil
 			}
 			// If we didn't find the language after splitting at the hyphen, try the default
 			t.Log("GetUpdaterForLangFromJSONBytes()", "Last attempt, trying default language")
@@ -269,18 +276,42 @@ func (t *TBDownloader) GetUpdaterForLangFromJSONBytes(jsonBytes []byte, ietf str
 	return "", "", fmt.Errorf("t.GetUpdaterForLangFromJSONBytes: %s", ietf)
 }
 
+func (t *TBDownloader) MirrorIze(replaceStr string) string {
+	if t.Mirror != "" {
+		return strings.Replace(replaceStr, "https://dist.torproject.org/torbrowser/", t.Mirror, 1)
+	}
+	return replaceStr
+}
+
 // SingleFileDownload downloads a single file from the given URL to the given path.
 // it returns the path to the downloaded file, or an error if one is encountered.
-func (t *TBDownloader) SingleFileDownload(url, name string) (string, error) {
+func (t *TBDownloader) SingleFileDownload(dl, name string) (string, error) {
 	t.MakeTBDirectory()
 	path := filepath.Join(t.DownloadPath, name)
-	t.Log("SingleFileDownload()", fmt.Sprintf("Checking for updates %s to %s", url, path))
-	if !t.BotherToDownload(url, name) {
+	t.Log("SingleFileDownload()", fmt.Sprintf("Checking for updates %s to %s", dl, path))
+	if !t.BotherToDownload(dl, name) {
 		t.Log("SingleFileDownload()", "File already exists, skipping download")
 		return path, nil
 	}
+	var d proxy.Dialer
+	if t.MirrorIsI2P() {
+		log.Println("Using I2P mirror, setting up proxy")
+		var err error
+		proxyURL, err := url.Parse("http://127.0.0.1:4444")
+		if err != nil {
+			panic(err)
+		}
+		d, err = connectproxy.New(proxyURL, proxy.Direct)
+		if nil != err {
+			panic(err)
+		}
+	}
+	tr := &http.Transport{
+		Dial: d.Dial,
+	}
+	http.DefaultClient.Transport = tr
 	t.Log("SingleFileDownload()", "Downloading file")
-	file, err := http.Get(url)
+	file, err := http.Get(dl)
 	if err != nil {
 		return "", fmt.Errorf("SingleFileDownload: %s", err)
 	}
@@ -303,17 +334,17 @@ func FileExists(path string) bool {
 
 // BotherToDownload returns true if we need to download a file because we don't have an up-to-date
 // version yet.
-func (t *TBDownloader) BotherToDownload(url, name string) bool {
+func (t *TBDownloader) BotherToDownload(dl, name string) bool {
 	path := filepath.Join(t.DownloadPath, name)
 	if !FileExists(path) {
 		return true
 	}
-	defer ioutil.WriteFile(filepath.Join(t.DownloadPath, name+".last-url"), []byte(url), 0644)
+	defer ioutil.WriteFile(filepath.Join(t.DownloadPath, name+".last-url"), []byte(dl), 0644)
 	lastURL, err := ioutil.ReadFile(filepath.Join(t.DownloadPath, name+".last-url"))
 	if err != nil {
 		return true
 	}
-	if string(lastURL) == url {
+	if string(lastURL) == dl {
 		return false
 	}
 	return true
@@ -565,4 +596,9 @@ func hTTPProxy(host, port string) bool {
 		}
 	}
 	return false
+}
+
+func (t *TBDownloader) MirrorIsI2P() bool {
+	// check if hostname is an I2P hostname
+	return strings.Contains(t.Mirror, ".i2p")
 }

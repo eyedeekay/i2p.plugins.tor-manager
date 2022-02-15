@@ -80,10 +80,11 @@ var (
 	clearnet   = flag.Bool("clearnet", false, "Use clearnet (no Tor or I2P)")
 	profile    = flag.String("profile", "", "use a custom profile path, normally blank")
 	help       = flag.Bool("help", false, "Print help")
+	mirror     = flag.String("mirror", "http://dist.torproject.i2p/torbrowser/", "Mirror to use")
 	/*onion    = flag.Bool("onion", false, "Serve an onion site which shows some I2P propaganda, magnet links, your I2P mirror URL if configured")*/
 	/*torrent  = flag.Bool("torrent", false, "Create a torrent of the downloaded files and seed it over I2P using an Open Tracker")*/
 	/*ptop     = flag.Bool("p2p", false, "Use bittorrent over I2P to download the initial copy of Tor Browser")*/
-	/*mirror   = flag.String("mirror", "", "Mirror to use")*/
+
 )
 
 var client *tbserve.Client
@@ -115,7 +116,6 @@ func main() {
 	} else if filename == "firefox" || *clearnet || *offline {
 		*clearnet = true
 	}
-
 	if *profile == "" {
 		if *offline {
 			*profile = filepath.Join(tbget.WORKING_DIR, "profile.firefox.offline")
@@ -139,7 +139,7 @@ func main() {
 		log.Println("Using auto-detected language", *lang)
 	}
 	var err error
-	client, err = tbserve.NewClient(*verbose, *lang, *system, *arch, &content)
+	client, err = tbserve.NewClient(*verbose, *lang, *system, *arch, *mirror, &content)
 	if err != nil {
 		log.Fatal("Couldn't create client", err)
 	}

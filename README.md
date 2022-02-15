@@ -43,7 +43,7 @@ The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
 
 ![Screenshot](screenshot-i2pbrowser.png)
 
-### Primary Goals
+### Primary Goals(Done):
 
 1. Ship known-good public keys, download a current Tor for the platform in the background, authenticate it, and launch it only if necessary.
  - Works on Windows, Linux, OSX
@@ -54,16 +54,16 @@ The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
 4. Work as an I2P Plugin OR as a freestanding app to be compatible with all I2P distributions
  - Works on Linux, Windows, OSX
 5. Download Tor Browser from an in-I2P mirror(or one of a network of in-I2P mirrors)
- - Not done
+ - Works on Linux, Windows, OSX
 
-### Secondary Goals:
+### Secondary Goals(Also done):
 
 1. Launch Tor Browser
  - Works on Linux, Windows, OSX
 2. Configure and launch Tor browser for use with I2P
  - Works on Linux, Windows, OSX
 
-#### Optional Features I might add if there is interest
+#### Optional Features I might add if there is interest(Not much stopping me...):
 
 1. Mirror the files which it downloads to an I2P Site
  - Works on Windows, Linux, OSX
