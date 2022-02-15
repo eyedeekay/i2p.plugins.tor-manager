@@ -8,7 +8,7 @@ GOARCH?="amd64"
 #ARG=-v -tags netgo -ldflags '-w -extldflags "-static"'
 FLAGS=/usr/lib/x86_64-linux-gnu/libboost_system.a /usr/lib/x86_64-linux-gnu/libboost_date_time.a /usr/lib/x86_64-linux-gnu/libboost_filesystem.a /usr/lib/x86_64-linux-gnu/libboost_program_options.a /usr/lib/x86_64-linux-gnu/libssl.a /usr/lib/x86_64-linux-gnu/libcrypto.a /usr/lib/x86_64-linux-gnu/libz.a
 ARG=-ldflags '-w -linkmode=external -extldflags "-static -ldl $(FLAGS)"'
-NOSTATIC=-v -tags netgo -ldflags '-w'
+NOSTATIC=-v -tags netgo -ldflags '-w -extldflags "-ldl $(FLAGS)"'
 
 BINARY=i2p.plugins.tor-manager
 SIGNER=hankhill19580@gmail.com
