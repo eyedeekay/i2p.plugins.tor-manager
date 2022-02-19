@@ -4,7 +4,6 @@ go 1.17
 
 require (
 	github.com/cloudfoundry/jibber_jabber v0.0.0-20151120183258-bcc4c8345a21
-	github.com/eyedeekay/go-i2pd v0.0.0-20220213070306-9807541b2dfc
 	github.com/getlantern/systray v1.1.0
 	github.com/go-ole/go-ole v1.2.6
 	github.com/jchavannes/go-pgp v0.0.0-20200131171414-e5978e6d02b4
@@ -52,7 +51,5 @@ require (
 	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
 	howett.net/plist v1.0.0 // indirect
 )
-
-replace github.com/eyedeekay/go-i2pd v0.0.0-20220213070306-9807541b2dfc => ./go-i2pd
 
 replace github.com/getlantern/systray v1.1.0 => github.com/eyedeekay/systray v1.1.1-0.20220213191004-800d7458fdfd

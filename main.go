@@ -162,11 +162,7 @@ func main() {
 					}
 				}
 			} else {
-				closer := InitI2PSAM()
-				defer closer()
-				go StartI2P()
 				go runSysTray(true)
-				defer StopI2P()
 				if tbget.TestHTTPDefaultProxy() {
 					log.Println("I2P HTTP proxy OK")
 				} else {

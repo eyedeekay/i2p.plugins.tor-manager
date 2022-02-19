@@ -1,14 +1,15 @@
 VERSION=0.0.4
-#CGO_ENABLED=0
-#export CGO_ENABLED=0
+CGO_ENABLED=0
+export CGO_ENABLED=0
 
 GOOS?=$(shell uname -s | tr A-Z a-z)
 GOARCH?="amd64"
 
 #ARG=-v -tags netgo -ldflags '-w -extldflags "-static"'
-FLAGS=/usr/lib/x86_64-linux-gnu/libboost_system.a /usr/lib/x86_64-linux-gnu/libboost_date_time.a /usr/lib/x86_64-linux-gnu/libboost_filesystem.a /usr/lib/x86_64-linux-gnu/libboost_program_options.a /usr/lib/x86_64-linux-gnu/libssl.a /usr/lib/x86_64-linux-gnu/libcrypto.a /usr/lib/x86_64-linux-gnu/libz.a
+#FLAGS=/usr/lib/x86_64-linux-gnu/libboost_system.a /usr/lib/x86_64-linux-gnu/libboost_date_time.a /usr/lib/x86_64-linux-gnu/libboost_filesystem.a /usr/lib/x86_64-linux-gnu/libboost_program_options.a /usr/lib/x86_64-linux-gnu/libssl.a /usr/lib/x86_64-linux-gnu/libcrypto.a /usr/lib/x86_64-linux-gnu/libz.a
 ARG=-ldflags '-w -linkmode=external -extldflags "-static -ldl $(FLAGS)"'
 NOSTATIC=-v -tags netgo -ldflags '-w -extldflags "-ldl $(FLAGS)"'
+WINGUI=-v -tags netgo -ldflags '-H=windowsgui -w -extldflags "-static -ldl $(FLAGS)"'
 
 BINARY=i2p.plugins.tor-manager
 SIGNER=hankhill19580@gmail.com
@@ -20,6 +21,9 @@ PREFIX?=/usr/local
 
 binary:
 	go build $(ARG) -tags=netgo,nosystray -o $(BINARY)-$(GOOS)-$(GOARCH) .
+
+winbinary:
+	go build $(WINGUI) -tags=netgo,nosystray -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
 systray:
 	go build $(NOSTATIC) -tags=netgo -o $(BINARY)-$(GOOS)-$(GOARCH) .
@@ -43,6 +47,8 @@ install:
 	install onion.png /var/lib/i2pbrowser/icons/onion.png
 
 build: dep binary
+
+winbuild: dep winbinary
 	
 p: dep binary su3
 
@@ -54,8 +60,8 @@ clean:
 all: windows linux osx bsd
 
 windows:
-	GOOS=windows GOARCH=amd64 make build su3
-	GOOS=windows GOARCH=386 make build su3
+	GOOS=windows GOARCH=amd64 make winbuild su3
+	GOOS=windows GOARCH=386 make winbuild su3
 
 linux:
 	GOOS=linux GOARCH=amd64 make build su3
