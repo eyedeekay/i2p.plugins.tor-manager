@@ -85,6 +85,20 @@ func onExit() {
 		if err != nil {
 			log.Println(err)
 		}
+		ltc := 0
+		for {
+			tunnels, err := i2pcontrol.ParticipatingTunnels()
+			if err != nil {
+				log.Println(err)
+			}
+			if ltc != tunnels {
+				log.Println("Participating tunnels:", tunnels)
+			}
+			ltc = tunnels
+			if tunnels <= 0 {
+				break
+			}
+		}
 		log.Println(message)
 	}
 	running = false

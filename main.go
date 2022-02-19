@@ -16,6 +16,8 @@ import (
 	"github.com/itchio/headway/state"
 	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
 	tbserve "i2pgit.org/idk/i2p.plugins.tor-manager/serve"
+
+	"github.com/eyedeekay/go-I2P-jpackage"
 )
 
 /*
@@ -162,6 +164,16 @@ func main() {
 					}
 				}
 			} else {
+				I2Pdaemon, err := I2P.NewDaemon(*directory, false)
+				if err != nil {
+					log.Println(err)
+					return
+				}
+				if err = I2Pdaemon.Start(); err != nil {
+					log.Fatal(err)
+				}
+				shutdown = true
+				defer I2Pdaemon.Stop()
 				go runSysTray(true)
 				if tbget.TestHTTPDefaultProxy() {
 					log.Println("I2P HTTP proxy OK")

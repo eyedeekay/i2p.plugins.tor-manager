@@ -14,6 +14,9 @@ require (
 
 require (
 	github.com/boreq/friendlyhash v0.0.0-20190522010448-1ca64b3ca69e // indirect
+	github.com/dsnet/compress v0.0.1 // indirect
+	github.com/emirpasic/gods v1.12.0 // indirect
+	github.com/eyedeekay/go-I2P-jpackage v0.0.0-20220219044935-be7909c9f4c5 // indirect
 	github.com/eyedeekay/go-i2cp v0.0.0-20190716135428-6d41bed718b0 // indirect
 	github.com/eyedeekay/goSam v0.32.31-0.20210415231611-c6d9c0e340b8 // indirect
 	github.com/eyedeekay/sam-forwarder v0.0.0-20190908210105-71ca8cd65fda // indirect
@@ -24,13 +27,27 @@ require (
 	github.com/getlantern/hidden v0.0.0-20190325191715-f02dbb02be55 // indirect
 	github.com/getlantern/ops v0.0.0-20200403153110-8476b16edcd6 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
+	github.com/golang/snappy v0.0.4 // indirect
 	github.com/gtank/cryptopasta v0.0.0-20170601214702-1f550f6f2f69 // indirect
+	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
+	github.com/kevinburke/ssh_config v0.0.0-20190725054713-01f96b0aa0cd // indirect
+	github.com/mholt/archiver v3.1.1+incompatible // indirect
+	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mwitkow/go-http-dialer v0.0.0-20161116154839-378f744fb2b8 // indirect
+	github.com/nwaples/rardecode v1.1.2 // indirect
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
 	github.com/phayes/freeport v0.0.0-20180830031419-95f893ade6f2 // indirect
+	github.com/pierrec/lz4 v2.6.1+incompatible // indirect
+	github.com/sergi/go-diff v1.0.0 // indirect
+	github.com/src-d/gcfg v1.4.0 // indirect
+	github.com/xanzy/ssh-agent v0.2.1 // indirect
+	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	github.com/ybbus/jsonrpc/v2 v2.1.6 // indirect
 	github.com/zieckey/goini v0.0.0-20180118150432-0da17d361d26 // indirect
 	golang.org/x/time v0.0.0-20190308202827-9d24e82272b4 // indirect
+	gopkg.in/src-d/go-billy.v4 v4.3.2 // indirect
+	gopkg.in/src-d/go-git.v4 v4.13.1 // indirect
+	gopkg.in/warnings.v0 v0.1.2 // indirect
 )
 
 require (
@@ -53,3 +70,5 @@ require (
 )
 
 replace github.com/getlantern/systray v1.1.0 => github.com/eyedeekay/systray v1.1.1-0.20220213191004-800d7458fdfd
+
+replace github.com/eyedeekay/go-I2P-jpackage => ../../../github.com/eyedeekay/go-I2P-jpackage
