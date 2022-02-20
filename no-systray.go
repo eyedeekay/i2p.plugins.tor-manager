@@ -3,6 +3,8 @@
 
 package main
 
+var shutdown = false
+
 func runSysTray(down bool) {
 
 }

@@ -16,7 +16,6 @@ require (
 	github.com/boreq/friendlyhash v0.0.0-20190522010448-1ca64b3ca69e // indirect
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/emirpasic/gods v1.12.0 // indirect
-	github.com/eyedeekay/go-I2P-jpackage v0.0.0-20220219044935-be7909c9f4c5 // indirect
 	github.com/eyedeekay/go-i2cp v0.0.0-20190716135428-6d41bed718b0 // indirect
 	github.com/eyedeekay/goSam v0.32.31-0.20210415231611-c6d9c0e340b8 // indirect
 	github.com/eyedeekay/sam-forwarder v0.0.0-20190908210105-71ca8cd65fda // indirect
@@ -42,12 +41,16 @@ require (
 	github.com/src-d/gcfg v1.4.0 // indirect
 	github.com/xanzy/ssh-agent v0.2.1 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
-	github.com/ybbus/jsonrpc/v2 v2.1.6 // indirect
 	github.com/zieckey/goini v0.0.0-20180118150432-0da17d361d26 // indirect
 	golang.org/x/time v0.0.0-20190308202827-9d24e82272b4 // indirect
 	gopkg.in/src-d/go-billy.v4 v4.3.2 // indirect
 	gopkg.in/src-d/go-git.v4 v4.13.1 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
+)
+
+require (
+	github.com/eyedeekay/go-I2P-jpackage v0.0.0-20220219044935-be7909c9f4c5
+	github.com/ybbus/jsonrpc/v2 v2.1.6 // indirect
 )
 
 require (

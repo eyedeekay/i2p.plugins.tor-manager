@@ -20,10 +20,10 @@ PLUGIN=$(HOME)/.i2p/plugins/$(BINARY)-$(GOOS)-$(GOARCH)
 PREFIX?=/usr/local
 
 binary:
-	go build $(ARG) -tags=netgo,nosystray -o $(BINARY)-$(GOOS)-$(GOARCH) .
+	go build $(ARG) -tags="netgo nosystray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
 winbinary:
-	go build $(WINGUI) -tags=netgo,systray -o $(BINARY)-$(GOOS)-$(GOARCH) .
+	go build $(WINGUI) -tags="netgo systray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
 systray:
 	go build $(NOSTATIC) -tags=netgo -o $(BINARY)-$(GOOS)-$(GOARCH) .
