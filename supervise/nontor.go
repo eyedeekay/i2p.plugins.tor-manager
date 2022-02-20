@@ -79,7 +79,7 @@ var secbrowserhtml = []byte(`
 <li>To get started, perhaps try <a href="https://duckduckgo.com">DuckDuckGo</a></li>
 <li>or <a href="https://privacyguides.org/">PrivacyGuides</a></li>
 </ul>
-<p>This wrapper has been developed for use with the I2P project. To learn more about I2P, visit [Get I2P](https://geti2p.net)</p>
+<p>This wrapper has been developed for use with the I2P project. To learn more about I2P, visit <a href="https://geti2p.net/">Get I2P</a></p>
 </body>
 </html>
 `)
@@ -98,7 +98,7 @@ var offlinehtml = []byte(`
 <li>Visit the <a href="http://127.0.0.1:7657">I2P Router Console</a></li>
 <li>Visit the <a href="http://127.0.0.1:8888">Freenet FProxy</a></li>
 </ul>
-<p>This wrapper has been developed for use with the I2P project. To learn more about I2P, visit [Get I2P](https://geti2p.net)</p>
+<p>This wrapper has been developed for use with the I2P project. To learn more about I2P, visit <a href="https://geti2p.net/">Get I2P</a></p>
 </body>
 </html>
 `)
