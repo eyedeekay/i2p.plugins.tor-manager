@@ -530,7 +530,7 @@ func TestHTTPDefaultProxy() bool {
 // Seconds increments the seconds and displays the number of seconds every 10 seconds
 func Seconds(now int) int {
 	time.Sleep(time.Second)
-	if now == 10 {
+	if now == 3 {
 		return 0
 	}
 	return now + 1
