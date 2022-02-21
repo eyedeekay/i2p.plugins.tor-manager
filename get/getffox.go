@@ -2,6 +2,7 @@ package tbget
 
 import (
 	"archive/tar"
+	"embed"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -18,6 +19,28 @@ import (
 
 // FFOX_UPDATES_URL is the URL to the Firefox updates page
 const FFOX_UPDATES_URL string = "https://download.mozilla.org/?product=firefox-latest&os=%s&lang=%s"
+
+// NewFirefoxDownloader returns a new TBDownloader with the given language, using the TBDownloader's OS/ARCH pair
+func NewFirefoxDownloader(lang string, os, arch string, content *embed.FS) *TBDownloader {
+	OS = os
+	ARCH = arch
+	return &TBDownloader{
+		Lang:         lang,
+		DownloadPath: DOWNLOAD_FIREFOX_PATH(),
+		UnpackPath:   UNPACK_PATH(),
+		OS:           os,
+		ARCH:         arch,
+		Verbose:      false,
+		Profile:      content,
+		Mirror:       "https://download.mozilla.org/?product=firefox-latest",
+	}
+}
+
+// DOWNLOAD_PATH returns the path to the downloads.
+func DOWNLOAD_FIREFOX_PATH() string {
+	var DOWNLOAD_PATH = filepath.Join(DefaultDir(), "firefox")
+	return DOWNLOAD_PATH
+}
 
 // GetLatestFirefoxVersionURL returns the URL to the latest Firefox version for the given os and lang
 func (t *TBDownloader) GetLatestFirefoxVersionURL(os, lang string) string {

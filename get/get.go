@@ -600,5 +600,11 @@ func hTTPProxy(host, port string) bool {
 
 func (t *TBDownloader) MirrorIsI2P() bool {
 	// check if hostname is an I2P hostname
-	return strings.Contains(t.Mirror, ".i2p")
+	url, err := url.Parse(t.Mirror)
+	if err != nil {
+		return false
+	}
+	log.Println("Checking if", url.Hostname(), "is an I2P hostname")
+
+	return strings.Contains(url.Hostname(), ".i2p")
 }

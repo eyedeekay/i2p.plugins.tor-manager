@@ -210,13 +210,15 @@ func main() {
 	client.Port = *port
 	client.TBS.Profile = &content
 	client.TBS.PassThroughArgs = flag.Args()
-	consumer := &state.Consumer{
-		OnMessage: func(lvl string, msg string) {
-			log.Printf("[%s] %s", lvl, msg)
-		},
+	if runtime.GOOS == "windows" {
+		consumer := &state.Consumer{
+			OnMessage: func(lvl string, msg string) {
+				log.Printf("[%s] %s", lvl, msg)
+			},
+		}
+		host := hdiutil.NewHost(consumer)
+		defer damage.Unmount(host, client.TBD.BrowserDir())
 	}
-	host := hdiutil.NewHost(consumer)
-	defer damage.Unmount(host, client.TBD.BrowserDir())
 	//	log.Fatalf("%s", client.TBS.PassThroughArgs)
 	if *help {
 		flag.Usage()

@@ -49,6 +49,28 @@ func NewClient(verbose bool, lang, os, arch, mirror string, content *embed.FS) (
 	return m, nil
 }
 
+// NewFirefoxClient creates a new Client.
+func NewFirefoxClient(verbose bool, lang, os, arch, mirror string, content *embed.FS) (*Client, error) {
+	m := &Client{
+		TBD: tbget.NewFirefoxDownloader(lang, os, arch, content),
+	}
+	m.TBD.Mirror = mirror
+	m.TBD.Verbose = verbose
+	m.TBD.MakeTBDirectory()
+	tgz, sig, err := m.TBD.DownloadFirefoxUpdaterForLang(lang)
+	if err != nil {
+		panic(err)
+	}
+	var home string
+	if home, err = m.TBD.CheckSignature(tgz, sig); err != nil {
+		log.Fatal(err)
+	} else {
+		log.Printf("Signature check passed: %s %s", tgz, sig)
+	}
+	m.TBS = TBSupervise.NewSupervisor(home, lang)
+	return m, nil
+}
+
 // GetHost returns the hostname of the client.
 func (m *Client) GetHost() string {
 	if m.Host == "" {
