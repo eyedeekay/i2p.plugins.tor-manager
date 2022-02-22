@@ -1,4 +1,4 @@
-VERSION=0.0.4
+VERSION=0.0.5
 CGO_ENABLED=0
 export CGO_ENABLED=0
 
@@ -199,7 +199,7 @@ clean-tor-keys:
 tor-browser/TPO-signing-key.pub:
 	#gpg --output ./tor-browser/TPO-signing-key.pub --export -r torbrowser@torproject.org
 	#gpg --armor --output ./tor-browser/TPO-signing-key.pub --export -r torbrowser@torproject.org
-	gpg -r 0xEF6E286DDA85EA2A4BA7DE684E2C6E8793298290 --output ./tor-browser/TPO-signing-key.pub --export 
+	#gpg -r 0xEF6E286DDA85EA2A4BA7DE684E2C6E8793298290 --output ./tor-browser/TPO-signing-key.pub --export 
 	#gpg -r 0xEF6E286DDA85EA2A4BA7DE684E2C6E8793298290 --armor --output ./tor-browser/TPO-signing-key.pub --export 
 
 deb: clean
