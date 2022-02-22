@@ -27,8 +27,6 @@ import (
 	"github.com/magisterquis/connectproxy"
 	"github.com/ulikunitz/xz"
 
-	"github.com/jchavannes/go-pgp/pgp"
-	"golang.org/x/crypto/openpgp"
 	"golang.org/x/net/proxy"
 )
 
@@ -305,11 +303,11 @@ func (t *TBDownloader) SingleFileDownload(dl, name string) (string, error) {
 		if nil != err {
 			panic(err)
 		}
+		tr := &http.Transport{
+			Dial: d.Dial,
+		}
+		http.DefaultClient.Transport = tr
 	}
-	tr := &http.Transport{
-		Dial: d.Dial,
-	}
-	http.DefaultClient.Transport = tr
 	t.Log("SingleFileDownload()", "Downloading file")
 	file, err := http.Get(dl)
 	if err != nil {
@@ -491,28 +489,12 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 // it returns an error if one is encountered. If not, it
 // runs the updater and returns an error if one is encountered.
 func (t *TBDownloader) CheckSignature(binpath, sigpath string) (string, error) {
-	var pkBytes []byte
-	var pk *openpgp.Entity
-	var sig []byte
-	var bin []byte
+	pk := filepath.Join(t.DownloadPath, "TPO-signing-key.pub")
 	var err error
-	if pkBytes, err = ioutil.ReadFile(filepath.Join(t.DownloadPath, "TPO-signing-key.pub")); err != nil {
-		return "", fmt.Errorf("CheckSignature pkBytes: %s", err)
-	}
-	if pk, err = pgp.GetEntity(pkBytes, nil); err != nil {
-		return "", fmt.Errorf("CheckSignature pk: %s", err)
-	}
-	if bin, err = ioutil.ReadFile(binpath); err != nil {
-		return "", fmt.Errorf("CheckSignature bin: %s", err)
-	}
-	if sig, err = ioutil.ReadFile(sigpath); err != nil {
-		return "", fmt.Errorf("CheckSignature sig: %s", err)
-	}
-	if err = pgp.Verify(pk, sig, bin); err != nil {
+	if err = Verify(pk, sigpath, binpath); err == nil {
+		t.Log("CheckSignature: signature", "verified successfully")
 		return t.UnpackUpdater(binpath)
-		//return nil
 	}
-	err = fmt.Errorf("signature check failed")
 	return "", fmt.Errorf("CheckSignature: %s", err)
 }
 

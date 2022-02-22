@@ -3,6 +3,7 @@ package tbserve
 import (
 	"context"
 	"embed"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -43,6 +44,10 @@ func NewClient(verbose bool, lang, os, arch, mirror string, content *embed.FS) (
 	if home, err = m.TBD.CheckSignature(tgz, sig); err != nil {
 		log.Fatal(err)
 	} else {
+		_, err = m.TBD.UnpackUpdater(tgz)
+		if err != nil {
+			return nil, fmt.Errorf("unpacking updater: %v", err)
+		}
 		log.Printf("Signature check passed: %s %s", tgz, sig)
 	}
 	m.TBS = TBSupervise.NewSupervisor(home, lang)
@@ -62,7 +67,7 @@ func NewFirefoxClient(verbose bool, lang, os, arch, mirror string, content *embe
 		panic(err)
 	}
 	var home string
-	if home, err = m.TBD.CheckSignature(tgz, sig); err != nil {
+	if home, err = m.TBD.CheckFirefoxSignature(tgz, sig); err != nil {
 		log.Fatal(err)
 	} else {
 		log.Printf("Signature check passed: %s %s", tgz, sig)

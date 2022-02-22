@@ -2,19 +2,15 @@ package tbget
 
 import (
 	"archive/tar"
+	"compress/bzip2"
 	"embed"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
-
-	"github.com/jchavannes/go-pgp/pgp"
-	"github.com/ulikunitz/xz"
-	"golang.org/x/crypto/openpgp"
 )
 
 // FFOX_UPDATES_URL is the URL to the Firefox updates page
@@ -104,7 +100,7 @@ func (t *TBDownloader) ExtractFirefoxVersion() (string, error) {
 
 // NamePerPlatformFirefox returns the name of the Firefox package per platform.
 func (t *TBDownloader) NamePerPlatformFirefox(ietf string) string {
-	extension := "tar.xz"
+	extension := "tar.bz2"
 	windowsonly := ""
 	switch t.OS {
 	case "osx":
@@ -160,16 +156,13 @@ func (t *TBDownloader) UnpackFirefox(binpath string) (string, error) {
 		return "", fmt.Errorf("UnpackFirefox: directory error %s", err)
 	}
 	defer UNPACK_DIRECTORY.Close()
-	xzfile, err := os.Open(binpath)
+	bzfile, err := os.Open(binpath)
 	if err != nil {
-		return "", fmt.Errorf("UnpackFirefox: XZFile error %s", err)
+		return "", fmt.Errorf("UnpackFirefox: BZFile error %s", err)
 	}
-	defer xzfile.Close()
-	xzReader, err := xz.NewReader(xzfile)
-	if err != nil {
-		return "", fmt.Errorf("UnpackFirefox: XZReader error %s", err)
-	}
-	tarReader := tar.NewReader(xzReader)
+	defer bzfile.Close()
+	bzReader := bzip2.NewReader(bzfile)
+	tarReader := tar.NewReader(bzReader)
 	for {
 		header, err := tarReader.Next()
 		if err == io.EOF {
@@ -185,7 +178,8 @@ func (t *TBDownloader) UnpackFirefox(binpath string) (string, error) {
 		filename := filepath.Join(UNPACK_DIRECTORY.Name(), header.Name)
 		file, err := os.Create(filename)
 		if err != nil {
-			return "", fmt.Errorf("UnpackFirefox: Tar unpacker error %s", err)
+			//return "",
+			fmt.Printf("UnpackFirefox: Tar unpacker error %s", err)
 		}
 		defer file.Close()
 		io.Copy(file, tarReader)
@@ -233,30 +227,15 @@ func (t *TBDownloader) DownloadFirefoxUpdaterForLang(ietf string) (string, strin
 // runs the updater and returns an error if one is encountered.
 func (t *TBDownloader) CheckFirefoxSignature(binpath, sigpath string) (string, error) {
 	if t.OS == "linux" {
-		var pkBytes []byte
-		var pk *openpgp.Entity
-		var sig []byte
-		var bin []byte
 		var err error
-		if pkBytes, err = ioutil.ReadFile(filepath.Join(t.DownloadPath, "TPO-signing-key.pub")); err != nil {
-			return "", fmt.Errorf("CheckSignature pkBytes: %s", err)
+		pk := filepath.Join(t.DownloadPath, "TPO-signing-key.pub")
+		if err = Verify(pk, sigpath, binpath); err == nil {
+			t.Log("CheckFirefoxSignature: signature", "verified successfully")
+			return t.UnpackFirefox(binpath)
 		}
-		if pk, err = pgp.GetEntity(pkBytes, nil); err != nil {
-			return "", fmt.Errorf("CheckSignature pk: %s", err)
-		}
-		if bin, err = ioutil.ReadFile(binpath); err != nil {
-			return "", fmt.Errorf("CheckSignature bin: %s", err)
-		}
-		if sig, err = ioutil.ReadFile(sigpath); err != nil {
-			return "", fmt.Errorf("CheckSignature sig: %s", err)
-		}
-		if err = pgp.Verify(pk, sig, bin); err != nil {
-			return t.UnpackUpdater(binpath)
-			//return nil
-		}
+		return "", fmt.Errorf("CheckSignature: %s", err)
 	}
-	err := fmt.Errorf("signature check failed")
-	return "", fmt.Errorf("CheckSignature: %s", err)
+	return "", nil
 }
 
 // BoolCheckFirefoxSignature turns CheckFirefoxSignature into a bool.
