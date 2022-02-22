@@ -106,6 +106,9 @@ func main() {
 		usage()
 	}
 	flag.Parse()
+	if *clearnet {
+		*mirror = "http://dist.torproject.org/torbrowser/"
+	}
 	tbget.WORKING_DIR = *directory
 	if filename == "i2pbrowser" {
 		log.Println("Starting I2P in Tor Browser")
