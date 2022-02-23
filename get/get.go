@@ -77,6 +77,7 @@ type TBDownloader struct {
 	Mirror       string
 	Verbose      bool
 	Profile      *embed.FS
+	listener     net.Listener
 }
 
 // OS is the operating system of the TBDownloader.
@@ -118,12 +119,13 @@ func (t *TBDownloader) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // Serve runs ServeHTTP on an I2P listener
 func (t *TBDownloader) Serve() {
-	samlistener, err := sam.I2PListener("tor-mirror", "127.0.0.1:7656", "tor-mirror")
+	var err error
+	t.listener, err = sam.I2PListener("tor-mirror", "127.0.0.1:7656", "tor-mirror")
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer samlistener.Close()
-	http.Serve(samlistener, t)
+	defer t.listener.Close()
+	http.Serve(t.listener, t)
 }
 
 // GetRuntimePair returns the runtime.GOOS and runtime.GOARCH pair.

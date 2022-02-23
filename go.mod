@@ -69,6 +69,7 @@ require (
 	github.com/sirupsen/logrus v1.4.2 // indirect
 	github.com/src-d/gcfg v1.4.0 // indirect
 	github.com/xanzy/ssh-agent v0.2.1 // indirect
+	github.com/xgfone/bt v0.4.1 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	github.com/zieckey/goini v0.0.0-20180118150432-0da17d361d26 // indirect
 	golang.org/x/text v0.3.6 // indirect
