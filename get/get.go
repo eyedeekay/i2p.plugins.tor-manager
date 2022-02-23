@@ -120,7 +120,7 @@ func (t *TBDownloader) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 // Serve runs ServeHTTP on an I2P listener
 func (t *TBDownloader) Serve() {
 	var err error
-	t.listener, err = sam.I2PListener("tor-mirror", "127.0.0.1:7656", filepath.Join(t.UnpackPath, "tor-mirror"))
+	t.listener, err = sam.I2PListener("torbrowser-mirror", "127.0.0.1:7656", filepath.Join(t.UnpackPath, "torbrowser-mirror"))
 	if err != nil {
 		log.Fatal(err)
 	}
