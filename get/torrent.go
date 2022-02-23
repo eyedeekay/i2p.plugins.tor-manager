@@ -153,3 +153,10 @@ func FindSnarkDirectory() (string, error) {
 	}
 	return "", fmt.Errorf("FindSnarkDirectory: Unable to find snark directory")
 }
+
+func TorrentReady() bool {
+	if _, err := FindSnarkDirectory(); err != nil {
+		return false
+	}
+	return true
+}

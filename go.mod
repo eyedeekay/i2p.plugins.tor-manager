@@ -39,6 +39,7 @@ require (
 	github.com/ProtonMail/go-crypto v0.0.0-20220113124808-70ae35bab23f // indirect
 	github.com/ProtonMail/go-mime v0.0.0-20190923161245-9b5a4261663a // indirect
 	github.com/boreq/friendlyhash v0.0.0-20190522010448-1ca64b3ca69e // indirect
+	github.com/cretz/bine v0.2.0 // indirect
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/emirpasic/gods v1.12.0 // indirect
 	github.com/eyedeekay/go-i2cp v0.0.0-20190716135428-6d41bed718b0 // indirect

@@ -85,7 +85,7 @@ var (
 	//mirror     = flag.String("mirror", "http://dist.torproject.i2p/torbrowser/", "Mirror to use")
 	mirror = flag.String("mirror", "http://dist.torproject.org/torbrowser/", "Mirror to use")
 	/*onion    = flag.Bool("onion", false, "Serve an onion site which shows some I2P propaganda, magnet links, your I2P mirror URL if configured")*/
-	torrent = flag.Bool("torrent", false, "Create a torrent of the downloaded files and seed it over I2P using an Open Tracker")
+	torrent = flag.Bool("torrent", tbget.TorrentReady(), "Create a torrent of the downloaded files and seed it over I2P using an Open Tracker")
 	/*ptop     = flag.Bool("p2p", false, "Use bittorrent over I2P to download the initial copy of Tor Browser")*/
 
 )
