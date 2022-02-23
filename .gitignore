@@ -13,3 +13,6 @@ tmp
 plugin
 lib
 .vscode
+firefox
+tor-mirror.i2p.private
+tor-mirror.i2p.public.txt
