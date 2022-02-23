@@ -19,7 +19,7 @@ import (
 func (t *TBDownloader) DownloadedFilesList() ([]string, error) {
 	files, err := ioutil.ReadDir(t.DownloadPath)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("DownloadedFilesList: %s", err)
 	}
 	var list []string
 	for _, f := range files {
@@ -51,7 +51,7 @@ func (t *TBDownloader) GenerateMissingTorrents() error {
 			meta.Write(file)
 			file.Close()
 		}
-		snark, err := FundSnarkDirectory()
+		snark, err := FindSnarkDirectory()
 		if err != nil {
 			return err
 		}
@@ -68,14 +68,14 @@ func (t *TBDownloader) GenerateMissingTorrents() error {
 func (t *TBDownloader) GenerateTorrent(file string, announces []string) (*metainfo.MetaInfo, error) {
 	info, err := metainfo.NewInfoFromFilePath(file, 5120)
 	if err != nil {
-		return nil, fmt.Errorf("GenerateTorrent:", err)
+		return nil, fmt.Errorf("GenerateTorrent: %s", err)
 	}
 	info.Name = filepath.Base(file)
 
 	var mi metainfo.MetaInfo
 	mi.InfoBytes, err = bencode.EncodeBytes(info)
 	if err != nil {
-		return nil, fmt.Errorf("GenerateTorrent:", err)
+		return nil, fmt.Errorf("GenerateTorrent: %s", err)
 	}
 
 	switch len(announces) {
@@ -90,7 +90,7 @@ func (t *TBDownloader) GenerateTorrent(file string, announces []string) (*metain
 	if t.listener != nil {
 		url, err = url.Parse("http://" + t.listener.Addr().(i2pkeys.I2PAddr).Base32() + "/" + filepath.Base(file))
 		if err != nil {
-			return nil, fmt.Errorf("GenerateTorrent:", err)
+			return nil, fmt.Errorf("GenerateTorrent: %s", err)
 		}
 		if t.Mirror != "" {
 			mi.URLList = []string{url.String()}
@@ -100,7 +100,7 @@ func (t *TBDownloader) GenerateTorrent(file string, announces []string) (*metain
 	return &mi, nil
 }
 
-func FundSnarkDirectory() (string, error) {
+func FindSnarkDirectory() (string, error) {
 	// Snark could be at:
 	// or: $I2P_CONFIG/i2psnark/
 	// or: $I2P/i2psnark/
@@ -149,7 +149,7 @@ func FundSnarkDirectory() (string, error) {
 			return checkfori2pservice, nil
 		}
 	case "darwin":
-		return "", fmt.Errorf("Automatic torrent generation is not supported on MacOS for now, for now copy the files manually.")
+		return "", fmt.Errorf("FindSnarkDirectory: Automatic torrent generation is not supported on MacOS, for now copy the files manually")
 	}
-	return "", fmt.Errorf("Unable to find snark directory")
+	return "", fmt.Errorf("FindSnarkDirectory: Unable to find snark directory")
 }
