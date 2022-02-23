@@ -9,3 +9,7 @@ i2p.plugins.tor-manager*
 *-zip
 pluginunpack
 _build
+tmp
+plugin
+lib
+.vscode
