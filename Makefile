@@ -1,15 +1,15 @@
 VERSION=0.0.5
-CGO_ENABLED=0
-export CGO_ENABLED=0
+#CGO_ENABLED=0
+#export CGO_ENABLED=0
 
 GOOS?=$(shell uname -s | tr A-Z a-z)
 GOARCH?="amd64"
 
-#ARG=-v -tags netgo -ldflags '-w -extldflags "-static"'
+ARG=-v -tags netgo -ldflags '-w -extldflags "-static"'
 #FLAGS=/usr/lib/x86_64-linux-gnu/libboost_system.a /usr/lib/x86_64-linux-gnu/libboost_date_time.a /usr/lib/x86_64-linux-gnu/libboost_filesystem.a /usr/lib/x86_64-linux-gnu/libboost_program_options.a /usr/lib/x86_64-linux-gnu/libssl.a /usr/lib/x86_64-linux-gnu/libcrypto.a /usr/lib/x86_64-linux-gnu/libz.a
-ARG=-ldflags '-w -linkmode=external -extldflags "-static -ldl $(FLAGS)"'
-NOSTATIC=-v -tags netgo -ldflags '-w -extldflags "-ldl $(FLAGS)"'
-WINGUI=-v -tags netgo -ldflags '-H=windowsgui -w -extldflags "-static -ldl $(FLAGS)"'
+#ARG=-ldflags '-w -linkmode=external -extldflags "-static -ldl $(FLAGS)"'
+#NOSTATIC=-v -tags netgo -ldflags '-w -extldflags "-ldl $(FLAGS)"'
+WINGUI=-ldflags '-H=windowsgui'
 
 BINARY=i2p.plugins.tor-manager
 SIGNER=hankhill19580@gmail.com
@@ -20,13 +20,15 @@ PLUGIN=$(HOME)/.i2p/plugins/$(BINARY)-$(GOOS)-$(GOARCH)
 PREFIX?=/usr/local
 
 binary:
-	go build $(ARG) -tags="netgo nosystray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
+	go build $(ARG) -tags="netgo osusergo nosystray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
 winbinary:
-	go build $(WINGUI) -tags="netgo systray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
+	CC=/usr/bin/x86_64-w64-mingw32-gcc \
+		CXX=/usr/bin/x86_64-w64-mingw32-g++ \
+		GOOS=windows go build $(WINGUI) -tags="netgo osusergo systray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
 systray:
-	go build $(NOSTATIC) -tags=netgo -o $(BINARY)-$(GOOS)-$(GOARCH) .
+	go build $(NOSTATIC) -tags="netgo osusergo" -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
 lint:
 	golint supervise/*.go
@@ -267,45 +269,6 @@ index-usage:
 	pandoc USAGE.md >> usage.html
 	@echo "</body>" >> usage.html
 	@echo "</html>" >> usage.html
-
-
-
-#GO111MODULE=off
-#export GO111MODULE=off
-
-i2pd_prerelease_version=c-wrapper-libi2pd-api
-i2pd_release_version=2.40.0
-
-export GOPATH=$(HOME)/go
-
-export USE_STATIC=yes
-USE_STATIC=yes
-
-export LDFLAGS=-static
-LDFLAGS=-static
-
-GXXFLAGS=-static
-export GXXFLAGS=-static
-
-CXXFLAGS=-static
-export CXXFLAGS=-static
-
-CGO_GXXFLAGS=-static
-export CGO_GXXFLAGS=-static
-
-CGO_CFLAGS=-static
-export CGO_CFLAGS=-static
-
-CGO_CXXFLAGS=-static
-export CGO_CXXFLAGS=-static
-
-CGO_CPPFLAGS=-static
-export CGO_CPPFLAGS=-static
-
-#CGO_LDFLAGS=-static
-#export CGO_LDFLAGS=-static
-
-
 
 example:
 	go build -x -v --tags=netgo,nosystray \

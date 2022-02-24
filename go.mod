@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/cloudfoundry/jibber_jabber v0.0.0-20151120183258-bcc4c8345a21
-	github.com/getlantern/systray v1.1.0
+	github.com/getlantern/systray v1.2.0
 	github.com/go-ole/go-ole v1.2.6
 	github.com/magisterquis/connectproxy v0.0.0-20200725203833-3582e84f0c9b
 	golang.org/x/crypto v0.0.0-20220112180741-5e0467b6c7ce // indirect
@@ -80,6 +80,6 @@ require (
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 )
 
-replace github.com/getlantern/systray v1.1.0 => github.com/eyedeekay/systray v1.1.1-0.20220213191004-800d7458fdfd
+//replace github.com/getlantern/systray v1.1.0 => github.com/eyedeekay/systray v1.1.1-0.20220213191004-800d7458fdfd
 
 replace github.com/eyedeekay/go-I2P-jpackage => ../../../github.com/eyedeekay/go-I2P-jpackage
