@@ -103,7 +103,7 @@ func NewTBDownloader(lang string, os, arch string, content *embed.FS) *TBDownloa
 
 // ServeHTTP serves the DOWNLOAD_PATH as a mirror
 func (t *TBDownloader) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	r.URL.Path = strings.Replace(r.URL.Path, "..", "", -1)
+	r.URL.Path = path.Clean(r.URL.Path)
 	ext := filepath.Ext(r.URL.Path)
 	if ext == ".json" {
 		w.Header().Set("Content-Type", "application/json")

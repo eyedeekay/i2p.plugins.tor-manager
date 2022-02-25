@@ -7,9 +7,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"path"
 	"path/filepath"
 	"strconv"
-	"strings"
 
 	"github.com/justinas/nosurf"
 	cp "github.com/otiai10/copy"
@@ -99,7 +99,7 @@ func (m *Client) GetAddress() string {
 
 // ServeHTTP handles HTTP requests.
 func (m *Client) ServeHTTP(rw http.ResponseWriter, rq *http.Request) {
-	path := strings.Replace(rq.URL.Path, "..", "", -1)
+	path := path.Clean(rq.URL.Path)
 	rq.URL.Path = path
 	log.Printf("ServeHTTP: '%s'", path)
 	fileextension := filepath.Ext(path)
