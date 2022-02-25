@@ -14,6 +14,7 @@ import (
 	"github.com/justinas/nosurf"
 	cp "github.com/otiai10/copy"
 	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
+	i2pdotonion "i2pgit.org/idk/i2p.plugins.tor-manager/onion"
 	TBSupervise "i2pgit.org/idk/i2p.plugins.tor-manager/supervise"
 )
 
@@ -22,6 +23,7 @@ type Client struct {
 	hostname string
 	TBD      *tbget.TBDownloader
 	TBS      *TBSupervise.Supervisor
+	Onion    *i2pdotonion.I2POnionService
 	DarkMode bool
 	Host     string
 	Port     int
@@ -51,6 +53,7 @@ func NewClient(verbose bool, lang, os, arch, mirror string, content *embed.FS) (
 		log.Printf("Signature check passed: %s %s", tgz, sig)
 	}
 	m.TBS = TBSupervise.NewSupervisor(home, lang)
+	go m.TBS.RunTorWithLang()
 	return m, nil
 }
 
@@ -166,7 +169,6 @@ func (m *Client) Serve() error {
 	}
 	ioutil.WriteFile(filepath.Join(m.TBD.DownloadPath, "mirror.json"), []byte(mirrorjson), 0644)
 	cp.Copy(m.TBS.I2PProfilePath(), filepath.Join(m.TBD.DownloadPath, "i2p.firefox"))
-	go m.TBS.RunTorWithLang()
 	return m.server.ListenAndServe() //http.ListenAndServe(m.GetAddress(), nosurf.New(m))
 }
 

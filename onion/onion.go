@@ -6,12 +6,15 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
 	"path"
 	"path/filepath"
 	"time"
 
 	"github.com/cretz/bine/tor"
 )
+
+//go:embded www/*
 
 type I2POnionService struct {
 	OnionService net.Listener
@@ -28,8 +31,19 @@ func (ios *I2POnionService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		path = "/index.html"
 	}
 	path = filepath.Join(ios.ServeDir, path)
-
+	finfo, err := os.Stat(path)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	if finfo.IsDir() {
+		http.NotFound(w, r)
+	}
 	http.ServeFile(w, r, path)
+}
+
+func (ios *I2POnionService) StandardHTML() string {
+	return ""
 }
 
 func (ios *I2POnionService) Listen(net, addr string) (net.Listener, error) {
