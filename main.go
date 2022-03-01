@@ -240,6 +240,7 @@ func main() {
 	}
 	client.TBS.UnpackI2PAppData()
 	client.TBS.UnpackI2PData()
+	client.Onion.UnpackSite()
 	if *torrent {
 		log.Println("Generating I2P torrents of Tor packages")
 		if err := client.TBD.GenerateMissingTorrents(); err != nil {
