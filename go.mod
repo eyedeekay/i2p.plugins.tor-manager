@@ -41,6 +41,7 @@ require (
 	github.com/boreq/friendlyhash v0.0.0-20190522010448-1ca64b3ca69e // indirect
 	github.com/cretz/bine v0.2.0 // indirect
 	github.com/dsnet/compress v0.0.1 // indirect
+	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/emirpasic/gods v1.12.0 // indirect
 	github.com/eyedeekay/go-i2cp v0.0.0-20190716135428-6d41bed718b0 // indirect
 	github.com/eyedeekay/goSam v0.32.31-0.20210415231611-c6d9c0e340b8 // indirect

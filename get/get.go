@@ -20,6 +20,7 @@ import (
 	"time"
 
 	"github.com/cloudfoundry/jibber_jabber"
+	"github.com/dustin/go-humanize"
 	sam "github.com/eyedeekay/sam3/helper"
 	"github.com/itchio/damage"
 	"github.com/itchio/damage/hdiutil"
@@ -283,6 +284,22 @@ func (t *TBDownloader) MirrorIze(replaceStr string) string {
 	return replaceStr
 }
 
+type WriteCounter struct {
+	Total uint64
+}
+
+func (wc *WriteCounter) Write(p []byte) (int, error) {
+	n := len(p)
+	wc.Total += uint64(n)
+	wc.PrintProgress()
+	return n, nil
+}
+
+func (wc WriteCounter) PrintProgress() {
+	fmt.Printf("\r%s", strings.Repeat(" ", 35))
+	fmt.Printf("\rDownloading... %s complete", humanize.Bytes(wc.Total))
+}
+
 // SingleFileDownload downloads a single file from the given URL to the given path.
 // it returns the path to the downloaded file, or an error if one is encountered.
 func (t *TBDownloader) SingleFileDownload(dl, name string) (string, error) {
@@ -321,7 +338,15 @@ func (t *TBDownloader) SingleFileDownload(dl, name string) (string, error) {
 		return "", fmt.Errorf("SingleFileDownload: %s", err)
 	}
 	defer outFile.Close()
-	io.Copy(outFile, file.Body)
+	// Create our progress reporter and pass it to be used alongside our writer
+	counter := &WriteCounter{}
+	if _, err = io.Copy(outFile, io.TeeReader(file.Body, counter)); err != nil {
+		return "", err
+	}
+
+	// The progress use the same line so print a new line once it's finished downloading
+	fmt.Print("\n")
+	//io.Copy(outFile, file.Body)
 	t.Log("SingleFileDownload()", "Downloading file complete")
 	return path, nil
 }

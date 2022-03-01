@@ -85,9 +85,7 @@ func (ios *I2POnionService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if path == "/" {
 		path = "/index.html"
 	}
-	fmt.Println("ServeHTTP:", path)
 	path = filepath.Join(ios.ServeDir, path)
-	fmt.Println("ServeHTTP:", path)
 	finfo, err := os.Stat(path)
 	if err != nil {
 		http.NotFound(w, r)
@@ -108,7 +106,10 @@ func (ios *I2POnionService) Listen(net, addr string) (net.Listener, error) {
 		return ios.OnionService, nil
 	}
 	fmt.Println("Starting and registering onion service, please wait a couple of minutes...")
-	t, err := tor.Start(nil, nil)
+	t, err := tor.Start(nil, &tor.StartConf{
+		DataDir: filepath.Join(filepath.Dir(ios.ServeDir), "tor"),
+	})
+	t.DeleteDataDirOnClose = true
 	if err != nil {
 		return nil, fmt.Errorf("Unable to start Tor: %v", err)
 	}
@@ -187,12 +188,9 @@ func (ios *I2POnionService) UnpackSite() error {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println("UnpackSite: ", embedpath, fp, embedpath)
 		if d.IsDir() {
-			log.Println("UnpackSite: mkdir", filepath.Join(fp, strings.Replace(embedpath, "www", "", -1)))
 			os.MkdirAll(filepath.Join(fp, strings.Replace(embedpath, "www", "", -1)), 0755)
 		} else {
-			log.Println("UnpackSite: copy", filepath.Join(fp, strings.Replace(embedpath, "www", "", -1)))
 			fullpath := path.Join(embedpath)
 			bytes, err := content.ReadFile(fullpath)
 			if err != nil {
