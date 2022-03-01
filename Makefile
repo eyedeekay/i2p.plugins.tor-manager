@@ -81,17 +81,17 @@ osxplugin:
 	GOOS=darwin make backup-embed build unbackup-embed
 
 windows:
-	GOOS=windows GOARCH=amd64 make winplugin su3
-	GOOS=windows GOARCH=386 make winplugin su3
+	GOOS=windows GOARCH=amd64 make winplugin su3 build
+	GOOS=windows GOARCH=386 make winplugin su3 build
 
 linux:
-	GOOS=linux GOARCH=amd64 make linplugin su3
-	GOOS=linux GOARCH=arm64 make linplugin su3
-	GOOS=linux GOARCH=386 make linplugin su3
+	GOOS=linux GOARCH=amd64 make linplugin su3 build
+	GOOS=linux GOARCH=arm64 make linplugin su3 build
+	GOOS=linux GOARCH=386 make linplugin su3 build
 
 osx:
-	GOOS=darwin GOARCH=amd64 make osxplugin su3
-	GOOS=darwin GOARCH=arm64 make osxplugin su3
+	GOOS=darwin GOARCH=amd64 make osxplugin su3 build
+	GOOS=darwin GOARCH=arm64 make osxplugin su3 build
 
 bsd:
 #	GOOS=freebsd GOARCH=amd64 make build su3
