@@ -84,13 +84,13 @@ var (
 	help       = flag.Bool("help", false, "Print help")
 	/* TODO: Hash sometimes doesn't match when downloading from this mirror. Probably due to latency
 	between updates. Know for sure why before enabling it.*/
-	mirror = flag.String("mirror", "http://dist.torproject.i2p/torbrowser/", "Mirror to use(I2P)")
+	//mirror = flag.String("mirror", "http://dist.torproject.i2p/torbrowser/", "Mirror to use(I2P)")
 	/* TODO: This is a clearnet mirror which was originally used by default. Since this is intended as
 	an I2P browser configurer, and we guarantee the availability of the HTTP proxy by starting our own
 	if one is unavailable, we download over I2P instead. This is pretty fast these days really, but for
 	77 or so MB it's noticably delayed still. In "clearnet" modes, it might make sense to default to
 	this mirror instead of the I2P one, or maybe offer a convenience option for just the download.*/
-	//mirror     = flag.String("mirror", "https://dist.torproject.org/torbrowser/", "Mirror to use")
+	mirror     = flag.String("mirror", "https://dist.torproject.org/torbrowser/", "Mirror to use")
 	solidarity = flag.Bool("onion", false, "Serve an onion site which shows some I2P propaganda, magnet links, your I2P mirror URL if configured")
 	torrent    = flag.Bool("torrent", tbget.TorrentReady(), "Create a torrent of the downloaded files and seed it over I2P using an Open Tracker")
 	/*ptop     = flag.Bool("p2p", false, "Use bittorrent over I2P to download the initial copy of Tor Browser")*/
