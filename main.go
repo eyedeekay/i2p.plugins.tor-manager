@@ -246,7 +246,7 @@ func main() {
 			log.Fatal(err)
 		}
 	}
-
+	client.TBS.RunTorWithLang()
 	if *i2pbrowser {
 		if err := client.TBS.RunI2PBWithLang(); err != nil {
 			log.Fatal(err)
@@ -272,6 +272,9 @@ func main() {
 	} else {
 		if *bemirror {
 			go client.TBD.Serve()
+		}
+		if *solidarity {
+			go client.Onion.ListenAndServe()
 		}
 		go runSysTray(false)
 		if err := client.Serve(); err != nil {

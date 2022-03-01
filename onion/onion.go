@@ -2,27 +2,36 @@ package i2pdotonion
 
 import (
 	"context"
+	"embed"
 	"fmt"
+	"io/fs"
+	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/cretz/bine/tor"
 )
 
 //go:embded www/*
+var content embed.FS
 
 type I2POnionService struct {
 	OnionService net.Listener
 	ServeDir     string
 }
 
-func NewOnionService(dir string) *I2POnionService {
-	return &I2POnionService{ServeDir: dir}
+func NewOnionService(dir string) (*I2POnionService, error) {
+	ios := &I2POnionService{ServeDir: dir}
+	if err := ios.UnpackSite(); err != nil {
+		return nil, err
+	}
+	return ios, nil
 }
 
 func (ios *I2POnionService) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -79,4 +88,35 @@ func (ios *I2POnionService) ListenAndServe() error {
 		return err
 	}
 	return http.Serve(ios.OnionService, ios)
+}
+
+func (ios *I2POnionService) UnpackSite() error {
+	docroot := filepath.Join(ios.ServeDir, "www")
+	os.MkdirAll(docroot, 0755)
+	if dir, err := os.Stat(docroot); err == nil && dir.IsDir() {
+		return nil
+	}
+	//unpack the contents to the docroot
+	return fs.WalkDir(content, ".", func(embedpath string, d fs.DirEntry, err error) error {
+		fp := filepath.Join(docroot)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(embedpath, filepath.Join(fp, strings.Replace(embedpath, "tor-browser/unpack/i2p.firefox", "", -1)))
+		if d.IsDir() {
+			os.MkdirAll(filepath.Join(fp, strings.Replace(embedpath, "tor-browser/unpack/i2p.firefox", "", -1)), 0755)
+		} else {
+			fullpath := path.Join(embedpath)
+			bytes, err := content.ReadFile(fullpath)
+			if err != nil {
+				return err
+			}
+			unpack := filepath.Join(fp, strings.Replace(embedpath, "tor-browser/unpack/i2p.firefox", "", -1))
+			if err := ioutil.WriteFile(unpack, bytes, 0644); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+
 }

@@ -38,6 +38,11 @@ func NewClient(verbose bool, lang, os, arch, mirror string, content *embed.FS) (
 	m.TBD.Mirror = mirror
 	m.TBD.Verbose = verbose
 	m.TBD.MakeTBDirectory()
+	var err error
+	m.Onion, err = i2pdotonion.NewOnionService(m.TBD.DownloadPath)
+	if err != nil {
+		return nil, err
+	}
 	tgz, sig, err := m.TBD.DownloadUpdaterForLang(lang)
 	if err != nil {
 		panic(err)

@@ -185,6 +185,27 @@ index-offline:
 	@echo "</body>" >> offline.html
 	@echo "</html>" >> offline.html
 
+index-onion:
+	@echo "<!DOCTYPE html>" > onion/www/index.html
+	@echo "<html>" >> onion/www/index.html
+	@echo "<head>" >> onion/www/index.html
+	@echo "  <title>$(BINARY) - $(CONSOLEPOSTNAME)</title>" >> onion/www/index.html
+	@echo "  <link rel=\"stylesheet\" type=\"text/css\" href =\"/style.css\" />" >> onion/www/index.html
+	@echo "  <link rel=\"stylesheet\" type=\"text/css\" href =\"/default.css\" />" >> onion/www/index.html
+	@echo "  <link rel=\"stylesheet\" type=\"text/css\" href =\"/desktop.css\" />" >> onion/www/index.html
+	@echo "  <link rel=\"stylesheet\" type=\"text/css\" href =\"/mobile.css\" />" >> onion/www/index.html
+	@echo "  <link rel=\"stylesheet\" type=\"text/css\" href =\"/syntax.css\" />" >> onion/www/index.html
+	@echo "  <link rel=\"stylesheet\" type=\"text/css\" href =\"/widescreen.rtl.css\" />" >> onion/www/index.html
+	@echo "  <link rel=\"stylesheet\" type=\"text/css\" href =\"/default.rtl.css\" />" >> onion/www/index.html
+	@echo "  <link rel=\"stylesheet\" type=\"text/css\" href =\"/desktop.rtl.css\" />" >> onion/www/index.html
+	@echo "  <link rel=\"stylesheet\" type=\"text/css\" href =\"/reset.css\" />" >> onion/www/index.html
+	@echo "  <link rel=\"stylesheet\" type=\"text/css\" href =\"/widescreen.css\" />" >> onion/www/index.html
+	@echo "</head>" >> onion/www/index.html
+	@echo "<body>" >> onion/www/index.html
+	pandoc ONION.md >> onion/www/index.html
+	@echo "</body>" >> onion/www/index.html
+	@echo "</html>" >> onion/www/index.html
+
 tor-browser/unpack/i2p.firefox:
 	@echo "TODO"
 
