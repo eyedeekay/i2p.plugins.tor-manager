@@ -1,0 +1,108 @@
+/** Topbar **/
+
+div#topbar .title {
+    text-align: left
+}
+
+/** Dropdown menu **/
+
+#cssmenu > ul,
+#cssmenu > ul > li {
+    float: right
+}
+
+#cssmenu > ul > li.right {
+    left: 10%;
+    right: auto;
+}
+
+#cssmenu .has-sub ul {
+    left: auto;
+    right: 0;
+}
+
+#cssmenu .has-sub ul li {
+    border-left: 0 none;
+    border-right: 1px solid #ffffcc;
+}
+
+#cssmenu .has-sub ul li.has-sub > div.menuitem:after {
+    content: "◄";
+    float: left;
+}
+
+#cssmenu .has-sub .has-sub ul {
+    left: auto;
+    right: 100%;
+}
+
+#cssmenu .has-sub .has-sub ul li:first-child {
+    border-right: none
+}
+
+/** Frontpage **/
+
+div#content .main {
+    padding-left: 35%;
+    padding-right: 10%;
+}
+
+.main .get-i2p {
+    left: 10%;
+    right: auto;
+    transform: rotate(5deg);
+    -moz-transform: rotate(5deg);
+    -webkit-transform: rotate(5deg);
+    -ms-transform: rotate(5deg);
+    -o-transform: rotate(5deg);
+}
+
+/** Content **/
+
+div#content .inner .fluid {
+    background-position: right;
+    border-left: none;
+    border-right: 2px solid #abcc71;
+    margin-left: 0;
+    margin-right: 0.625rem;
+}
+
+div#content .inner .sidebar {
+    border-radius: 0 0 0 10px;
+    border-left: 2px solid #abcc71;
+    border-right: none;
+    float: right;
+}
+
+div#content .content-inner {
+    margin-left: 0;
+    margin-right: 252px;
+    padding-left: 4em;
+    padding-right: 2em;
+}
+
+
+/** Downloads list **/
+
+.package .os {
+    float: right
+}
+
+.package .details {
+    float: left
+}
+
+.file {
+    float: right
+}
+
+.file .default {
+    clear: right;
+    float: right;
+}
+
+.file .mirrors,
+.file .sig {
+    clear: left;
+    float: left;
+}
