@@ -71,6 +71,14 @@ backup-embed:
 unbackup-embed:
 	cp ../../../github.com/eyedeekay/go-I2P-jpackage.bak/*.tar.xz ../../../github.com/eyedeekay/go-I2P-jpackage/
 
+unembed-windows:
+	mv ../../../github.com/eyedeekay/go-I2P-jpackage/build.windows.I2P.tar.xz ../../../github.com/eyedeekay/
+	tar -cvJf ../../../github.com/eyedeekay/go-I2P-jpackage/build.windows.I2P.tar.xz README.md LICENSE
+
+unembed-linux:
+	mv ../../../github.com/eyedeekay/go-I2P-jpackage/build.linux.I2P.tar.xz ../../../github.com/eyedeekay/
+	tar -cvJf ../../../github.com/eyedeekay/go-I2P-jpackage/build.linux.I2P.tar.xz README.md LICENSE
+
 winplugin: 
 	GOOS=windows make backup-embed build unbackup-embed
 
@@ -81,17 +89,17 @@ osxplugin:
 	GOOS=darwin make backup-embed build unbackup-embed
 
 windows:
-	GOOS=windows GOARCH=amd64 make winplugin su3 build
-	GOOS=windows GOARCH=386 make winplugin su3 build
+	GOOS=windows GOARCH=amd64 make winplugin su3 unembed-linux build unbackup-embed
+	GOOS=windows GOARCH=386 make winplugin su3 unembed-linux build unbackup-embed
 
 linux:
-	GOOS=linux GOARCH=amd64 make linplugin su3 build
-	GOOS=linux GOARCH=arm64 make linplugin su3 build
-	GOOS=linux GOARCH=386 make linplugin su3 build
+	GOOS=linux GOARCH=amd64 make linplugin su3 unembed-windows build unbackup-embed
+	GOOS=linux GOARCH=arm64 make linplugin su3 unembed-windows build unbackup-embed
+	GOOS=linux GOARCH=386 make linplugin su3 unembed-windows build unbackup-embed
 
 osx:
-	GOOS=darwin GOARCH=amd64 make osxplugin su3 build
-	GOOS=darwin GOARCH=arm64 make osxplugin su3 build
+	GOOS=darwin GOARCH=amd64 make osxplugin su3 unembed-windows unembed-linux build unbackup-embed
+	GOOS=darwin GOARCH=arm64 make osxplugin su3 unembed-windows unembed-linux build unbackup-embed
 
 bsd:
 #	GOOS=freebsd GOARCH=amd64 make build su3
