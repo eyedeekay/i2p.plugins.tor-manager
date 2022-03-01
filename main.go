@@ -240,7 +240,6 @@ func main() {
 	}
 	client.TBS.UnpackI2PAppData()
 	client.TBS.UnpackI2PData()
-	client.Onion.UnpackSite()
 	if *torrent {
 		log.Println("Generating I2P torrents of Tor packages")
 		if err := client.TBD.GenerateMissingTorrents(); err != nil {
@@ -275,7 +274,12 @@ func main() {
 			go client.TBD.Serve()
 		}
 		if *solidarity {
-			go client.Onion.ListenAndServe()
+			client.Onion.UnpackSite()
+			go func() {
+				if err := client.Onion.ListenAndServe(); err != nil {
+					log.Println("Onion error:", err)
+				}
+			}()
 		}
 		go runSysTray(false)
 		if err := client.Serve(); err != nil {

@@ -42,7 +42,9 @@ func (t *TBDownloader) GenerateMissingTorrents() error {
 			log.Println("Generating torrent for", fp)
 			meta, err := t.GenerateTorrent(af, nil)
 			if err != nil {
-				return err
+				//return err
+				log.Println("GenerateMissingTorrents:", err)
+				continue
 			}
 			file, err := os.Create(fp)
 			if err != nil {
