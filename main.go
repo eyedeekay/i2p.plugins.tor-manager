@@ -221,7 +221,7 @@ func main() {
 	client.Port = *port
 	client.TBS.Profile = &content
 	client.TBS.PassThroughArgs = flag.Args()
-	if runtime.GOOS == "windows" {
+	if runtime.GOOS == "darwin" {
 		consumer := &state.Consumer{
 			OnMessage: func(lvl string, msg string) {
 				log.Printf("[%s] %s", lvl, msg)
