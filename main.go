@@ -72,7 +72,7 @@ var (
 	i2pconfig  = flag.Bool("i2pconfig", false, "Open I2P routerconsole in Tor Browser with javscript enabled and non-routerconsole sites disabled")
 	torbrowser = flag.Bool("torbrowser", false, "Open Tor Browser")
 	verbose    = flag.Bool("verbose", false, "Verbose output")
-	directory  = flag.String("directory", "", "Directory operate in")
+	directory  = flag.String("directory", DefaultDir(), "Directory operate in")
 	host       = flag.String("host", "127.0.0.1", "Host to serve on")
 	port       = flag.Int("port", 7695, "Port to serve on")
 	bemirror   = flag.Bool("bemirror", false, "Act as an in-I2P mirror when you're done downloading")
@@ -94,13 +94,15 @@ var (
 	solidarity = flag.Bool("onion", false, "Serve an onion site which shows some I2P propaganda")
 	torrent    = flag.Bool("torrent", tbget.TorrentReady(), "Create a torrent of the downloaded files and seed it over I2P using an Open Tracker")
 	/*ptop     = flag.Bool("p2p", false, "Use bittorrent over I2P to download the initial copy of Tor Browser")*/
-
 )
+
+var snowflake *bool
 
 var client *tbserve.Client
 
 func main() {
 	filename := filepath.Base(os.Args[0])
+	SnowflakeFlag()
 	usage := flag.Usage
 	flag.Usage = func() {
 		fmt.Printf("Usage: %s %s\n", filename, "[options]")
@@ -115,6 +117,9 @@ func main() {
 	flag.Parse()
 	if *clearnet {
 		*mirror = "http://dist.torproject.org/torbrowser/"
+	}
+	if *snowflake {
+		Snowflake()
 	}
 	tbget.WORKING_DIR = *directory
 	if filename == "i2pbrowser" {
