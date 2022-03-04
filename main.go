@@ -119,7 +119,7 @@ func main() {
 		*mirror = "http://dist.torproject.org/torbrowser/"
 	}
 	if *snowflake {
-		Snowflake()
+		go Snowflake()
 	}
 	tbget.WORKING_DIR = *directory
 	if filename == "i2pbrowser" {
