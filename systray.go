@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 	"time"
 
@@ -20,22 +21,26 @@ var running = false
 var shutdown = false
 
 func Password() string {
-	passwd, err := zenity.Entry(
-		"Enter a password if you want to encrypt the working directory",
-		zenity.Title("Work Directory Encryption"),
-		zenity.CancelLabel("Don't encrypt"),
-		zenity.OKLabel("Encrypt"),
-		zenity.Width(400),
-		zenity.EntryText("password"),
-	)
-	if err != nil {
-		if !strings.Contains(err.Error(), "canceled") {
-			log.Panicln(err)
+	require_password := os.Getenv("TOR_MANAGER_REQUIRE_PASSWORD")
+	if require_password == "true" || require_password == "1" {
+		passwd, err := zenity.Entry(
+			"Enter a password if you want to encrypt the working directory",
+			zenity.Title("Work Directory Encryption"),
+			zenity.CancelLabel("Don't encrypt"),
+			zenity.OKLabel("Encrypt"),
+			zenity.Width(400),
+			zenity.EntryText("password"),
+		)
+		if err != nil {
+			if !strings.Contains(err.Error(), "canceled") {
+				log.Panicln(err)
+			}
+			log.Println("Password dialog canceled")
+			return ""
 		}
-		log.Println("Password dialog canceled")
-		return ""
+		return passwd
 	}
-	return passwd
+	return ""
 }
 
 func onReady() {
