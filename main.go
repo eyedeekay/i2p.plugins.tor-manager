@@ -94,6 +94,7 @@ var (
 	solidarity = flag.Bool("onion", false, "Serve an onion site which shows some I2P propaganda")
 	torrent    = flag.Bool("torrent", tbget.TorrentReady(), "Create a torrent of the downloaded files and seed it over I2P using an Open Tracker")
 	destruct   = flag.Bool("destruct", false, "Destructively delete the working directory when finished")
+	password   = flag.String("password", "", "Password to encrypt the working directory with")
 	/*ptop     = flag.Bool("p2p", false, "Use bittorrent over I2P to download the initial copy of Tor Browser")*/
 )
 
@@ -124,6 +125,10 @@ func main() {
 	}
 	if *destruct {
 		defer OverwriteDirectoryContents(*directory)
+	}
+	if *password != "" {
+		DecryptTarXZifThere(*directory, *password)
+		defer EncryptTarXZip(*directory, *password)
 	}
 	tbget.WORKING_DIR = *directory
 	if filename == "i2pbrowser" {
