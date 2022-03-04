@@ -4,6 +4,7 @@
 package main
 
 import (
+	"embed"
 	"flag"
 	"io"
 	"log"
@@ -17,6 +18,11 @@ import (
 	"git.torproject.org/pluggable-transports/snowflake.git/common/safelog"
 	sf "git.torproject.org/pluggable-transports/snowflake.git/proxy/lib"
 )
+
+//go:embed tor-browser/www/home.css
+//go:embed tor-browser/www/index.html
+//go:embed tor-browser/www/blizzard.png
+var snowflakeContent embed.FS
 
 var snowflakeProxy sf.SnowflakeProxy
 
@@ -64,7 +70,11 @@ func Snowflake() {
 	}
 
 	go func() {
-		http.Handle("/", http.FileServer(http.Dir(*snowflakeDirectory)))
+		if *directory != "" {
+			http.Handle("/", http.FileServer(http.Dir(*snowflakeDirectory)))
+		} else {
+			http.Handle("/", http.FileServer(http.FS(snowflakeContent)))
+		}
 
 		log.Printf("Serving %s on HTTP localhost:snowflakePort: %s\n", *snowflakeDirectory, *snowflakePort)
 		log.Fatal(http.ListenAndServe("localhost:"+*snowflakePort, nil))

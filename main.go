@@ -95,7 +95,7 @@ var (
 	solidarity = flag.Bool("onion", false, "Serve an onion site which shows some I2P propaganda")
 	torrent    = flag.Bool("torrent", tbget.TorrentReady(), "Create a torrent of the downloaded files and seed it over I2P using an Open Tracker")
 	destruct   = flag.Bool("destruct", false, "Destructively delete the working directory when finished")
-	password   = flag.String("password", Password(), "Password to encrypt the working directory with")
+	password   = flag.String("password", Password(), "Password to encrypt the working directory with. Implies -destruct, only the encrypted container will be saved.")
 	/*ptop     = flag.Bool("p2p", false, "Use bittorrent over I2P to download the initial copy of Tor Browser")*/
 )
 
@@ -136,7 +136,11 @@ func main() {
 		go func() {
 			for range c {
 				log.Println("Caught interrupt, exiting")
-				EncryptTarXZip(*directory, *password)
+				err := EncryptTarXZip(*directory, *password)
+				if err != nil {
+					log.Println(err)
+				}
+				os.Exit(0)
 			}
 		}()
 	}
