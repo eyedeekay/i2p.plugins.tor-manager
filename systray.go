@@ -36,6 +36,8 @@ func onReady() {
 		subMenuBottom2 := subMenuTop.AddSubMenuItem("Launch the Tor Browser", "Launch the standard Tor Browser bundle")
 		subMenuBottom3 := subMenuTop.AddSubMenuItem("Launch Hardened Firefox in Clearnet Mode", "Launch the Tor Browser bundle, but without Tor")
 		systray.AddSeparator()
+		go onSnowflakeReady()
+		systray.AddSeparator()
 
 		mQuit := systray.AddMenuItem("Quit", "Quit the whole app")
 
@@ -75,6 +77,7 @@ func onReady() {
 }
 
 func onExit() {
+	onSnowflakeExit()
 	if shutdown {
 		i2pcontrol.Initialize("127.0.0.1", "7657", "")
 		_, err := i2pcontrol.Authenticate("itoopie")

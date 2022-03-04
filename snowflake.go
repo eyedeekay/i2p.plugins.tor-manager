@@ -62,7 +62,6 @@ func Snowflake() {
 	} else {
 		log.SetOutput(&safelog.LogScrubber{Output: logOutput})
 	}
-	go systray.Run(onSnowflakeReady, onSnowflakeExit)
 
 	go func() {
 		http.Handle("/", http.FileServer(http.Dir(*snowflakeDirectory)))
@@ -78,20 +77,20 @@ func Snowflake() {
 }
 
 func onSnowflakeReady() {
-	systray.SetIcon(icon.Data)
-	systray.SetTitle("Snowflake Donor")
-	systray.SetTooltip("You are available to donate a Snowflake snowflakeProxy")
-	mQuit := systray.AddMenuItem("Stop Snowflake", "Close the application and stop your snowflake.")
+	if !*snowflake {
+		return
+	}
+	mSnowflakeQuit := systray.AddMenuItem("Stop Snowflake", "Close the application and stop your snowflake.")
 
 	// Sets the icon of a menu item. Only available on Mac and Windows.
-	mQuit.SetIcon(icon.Data)
+	mSnowflakeQuit.SetIcon(icon.Data)
 	runloop := true
 	for runloop {
 		select {
-		case <-mQuit.ClickedCh:
+		case <-mSnowflakeQuit.ClickedCh:
 			snowflakeProxy.Stop()
 			runloop = false
-
+			log.Println("Snowflake stopped")
 		}
 	}
 }
