@@ -70,6 +70,8 @@ func EncryptTarXZip(source, password string) error {
 	file.Write(make([]byte, bytes))
 	file.Close()
 	os.Remove(source + ".tar.xz")
+	OverwriteDirectoryContents(source)
+	os.RemoveAll(source)
 	return nil
 }
 
@@ -94,15 +96,15 @@ func DecryptTarXzip(source, password string) error {
 	if err != nil {
 		return err
 	}
-	err = ioutil.WriteFile(source+"tar.xz", decryptedSourceBytes, 0644)
+	err = ioutil.WriteFile(source+".tar.xz", decryptedSourceBytes, 0644)
 	if err != nil {
 		return err
 	}
-	err = UnTarXzip(source + "tar.xz")
+	err = UnTarXzip(source + ".tar.xz")
 	if err != nil {
 		return err
 	}
-	os.Remove(source + "tar.xz.crypt")
+	os.Remove(source + ".tar.xz.crypt")
 	return nil
 }
 

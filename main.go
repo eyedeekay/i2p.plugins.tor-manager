@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"runtime"
 
@@ -129,6 +130,15 @@ func main() {
 	if *password != "" {
 		log.Println("Looking for directory with password")
 		DecryptTarXZifThere(*directory, *password)
+		// capture sigint
+		c := make(chan os.Signal, 1)
+		signal.Notify(c, os.Interrupt)
+		go func() {
+			for range c {
+				log.Println("Caught interrupt, exiting")
+				EncryptTarXZip(*directory, *password)
+			}
+		}()
 	}
 	tbget.WORKING_DIR = *directory
 	if filename == "i2pbrowser" {

@@ -20,7 +20,6 @@ var running = false
 var shutdown = false
 
 func Password() string {
-	//_,
 	passwd, err := zenity.Entry(
 		"Enter a password if you want to encrypt the working directory",
 		zenity.Title("Work Directory Encryption"),
