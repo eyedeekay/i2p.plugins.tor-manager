@@ -9,6 +9,10 @@ import (
 
 var shutdown = false
 
+func Password() string {
+	return ""
+}
+
 func runSysTray(down bool) {
 
 }

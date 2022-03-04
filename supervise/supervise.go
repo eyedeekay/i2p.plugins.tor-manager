@@ -586,7 +586,10 @@ func (s *Supervisor) RunTorWithLang() error {
 
 // StopTor stops tor
 func (s *Supervisor) StopTor() error {
-	return s.torcmd.Process.Kill()
+	if s.torcmd != nil && s.torcmd.Process != nil && s.torcmd.ProcessState != nil {
+		return s.torcmd.Process.Kill()
+	}
+	return nil
 }
 
 // TorIsAlive returns true,true if tor is alive and belongs to us, true,false

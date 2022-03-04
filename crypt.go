@@ -24,6 +24,7 @@ func DecryptTarXZifThere(source, password string) error {
 	if tbget.FileExists(source + ".tar.xz.crypt") {
 		return DecryptTarXzip(source, password)
 	}
+	log.Println("DecryptTarXZifThere: no encrypted store at:", source+".tar.xz.crypt")
 	return nil
 }
 
@@ -39,6 +40,7 @@ func TarXzip(source string) error {
 }
 
 func EncryptTarXZip(source, password string) error {
+	log.Println("EncryptTarXZip:", source)
 	err := TarXzip(source)
 	if err != nil {
 		return err

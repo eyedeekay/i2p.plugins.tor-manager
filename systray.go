@@ -7,15 +7,37 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/eyedeekay/go-i2pcontrol"
 	"github.com/getlantern/systray"
+	"github.com/ncruces/zenity"
 	"i2pgit.org/idk/i2p.plugins.tor-manager/icon"
 )
 
 var running = false
 var shutdown = false
+
+func Password() string {
+	//_,
+	passwd, err := zenity.Entry(
+		"Enter a password if you want to encrypt the working directory",
+		zenity.Title("Work Directory Encryption"),
+		zenity.CancelLabel("Don't encrypt"),
+		zenity.OKLabel("Encrypt"),
+		zenity.Width(400),
+		zenity.EntryText("password"),
+	)
+	if err != nil {
+		if !strings.Contains(err.Error(), "canceled") {
+			log.Panicln(err)
+		}
+		log.Println("Password dialog canceled")
+		return ""
+	}
+	return passwd
+}
 
 func onReady() {
 	systray.SetTemplateIcon(icon.Data, icon.Data)
@@ -78,6 +100,10 @@ func onReady() {
 
 func onExit() {
 	onSnowflakeExit()
+	if *password != "" {
+		log.Println("Encrypting directory with password")
+		EncryptTarXZip(*directory, *password)
+	}
 	if shutdown {
 		i2pcontrol.Initialize("127.0.0.1", "7657", "")
 		_, err := i2pcontrol.Authenticate("itoopie")
