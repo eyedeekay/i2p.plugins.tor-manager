@@ -68,14 +68,16 @@ The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
 1. Mirror the files which it downloads to an I2P Site
  - Works on Windows, Linux, OSX
 2. Mirror the files which it downloads to I2P torrents
- - Not done
+ - Works on Windows and Linux, might work on OSX but unsure.
 3. Set up an onion site which announces an I2P mirror exists
- - Not done
+ - Works on Windows, Linux, OSX
 4. Use Bittorrent-over-I2P to download the Tor Browser software
- - Not Done
-5. Import libi2pd and offer the use of an embedded i2pd router.
- - Not done.
-6. Option to use BRB in a thread as an in-I2P replacement for `mibbit` IRC client.
+ - Not Done, but pretty trivial. Fetch it from "somewhere", and drop it in the Snark directory.
+5. Embed jpackaged I2P routers and manage them internally
+ - Works on Windows and Linux. Can be done on OSX but needs to be different.
+6. Encrypt the "Working directory" with all the plugin data using a password.
+ - Works on Windows, Linux, and OSX.
+7. Option to use BRB in a thread as an in-I2P replacement for `mibbit` IRC client.
  - Not done.
 
 ### Usage as a Library
@@ -148,7 +150,8 @@ Improvements on Tor Browser Launcher include:
  - Automatically organize multiple Tor Browser profiles for different networks(I2P,
   Clearnet) and discourage accidental mixing.
  - Optional TAILS mode, adds uBlock Origin to Tor Browser
- - Embeds an i2pd router in case the host system doesn't have an I2P router
+ - Embeds an I2P router in case the host system doesn't have an I2P router
+ - Encrypt the working directory automatically when it's not in use.
  - No python. Language wars are stupid, but so is python.
 
 #### [TB-Updater(Whonix)](https://github.com/whonix/tb-updater)
