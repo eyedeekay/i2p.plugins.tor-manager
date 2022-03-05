@@ -13,12 +13,12 @@
 <h2 id="plugin">Plugin:</h2>
 <p>Clearnet visitor? You’ll need to use the <a href="https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/">Github Releases Mirror</a>.</p>
 <ul>
-<li><a href="/i2p.plugins.tor-manager-linux-386.su3">i2p.plugins.tor-manager-linux-386</a></li>
-<li><a href="/i2p.plugins.tor-manager-windows-amd64.su3">i2p.plugins.tor-manager-windows-amd64</a></li>
-<li><a href="/i2p.plugins.tor-manager-darwin-arm64.su3">i2p.plugins.tor-manager-darwin-arm64</a></li>
-<li><a href="/i2p.plugins.tor-manager-linux-amd64.su3">i2p.plugins.tor-manager-linux-amd64</a></li>
-<li><a href="/i2p.plugins.tor-manager-windows-386.su3">i2p.plugins.tor-manager-windows-386</a></li>
-<li><a href="/i2p.plugins.tor-manager-darwin-amd64.su3">i2p.plugins.tor-manager-darwin-amd64</a></li>
+<li><a href="0.0.4/i2p.plugins.tor-manager-linux-386.su3">i2p.plugins.tor-manager-linux-386</a></li>
+<li><a href="0.0.4/i2p.plugins.tor-manager-windows-amd64.su3">i2p.plugins.tor-manager-windows-amd64</a></li>
+<li><a href="0.0.4/i2p.plugins.tor-manager-darwin-arm64.su3">i2p.plugins.tor-manager-darwin-arm64</a></li>
+<li><a href="0.0.4/i2p.plugins.tor-manager-linux-amd64.su3">i2p.plugins.tor-manager-linux-amd64</a></li>
+<li><a href="0.0.4/i2p.plugins.tor-manager-windows-386.su3">i2p.plugins.tor-manager-windows-386</a></li>
+<li><a href="0.0.4/i2p.plugins.tor-manager-darwin-amd64.su3">i2p.plugins.tor-manager-darwin-amd64</a></li>
 </ul>
 <h2 id="status">Status:</h2>
 <figure>
@@ -84,27 +84,33 @@
 <li>Mirror the files which it downloads to I2P torrents</li>
 </ol>
 <ul>
-<li>Not done</li>
+<li>Works on Windows and Linux, might work on OSX but unsure.</li>
 </ul>
 <ol start="3" type="1">
 <li>Set up an onion site which announces an I2P mirror exists</li>
 </ol>
 <ul>
-<li>Not done</li>
+<li>Works on Windows, Linux, OSX</li>
 </ul>
 <ol start="4" type="1">
 <li>Use Bittorrent-over-I2P to download the Tor Browser software</li>
 </ol>
 <ul>
-<li>Not Done</li>
+<li>Not Done, but pretty trivial. Fetch it from “somewhere”, and drop it in the Snark directory.</li>
 </ul>
 <ol start="5" type="1">
-<li>Import libi2pd and offer the use of an embedded i2pd router.</li>
+<li>Embed jpackaged I2P routers and manage them internally</li>
 </ol>
 <ul>
-<li>Not done.</li>
+<li>Works on Windows and Linux. Can be done on OSX but needs to be different.</li>
 </ul>
 <ol start="6" type="1">
+<li>Encrypt the “Working directory” with all the plugin data using a password.</li>
+</ol>
+<ul>
+<li>Works on Windows, Linux, and OSX.</li>
+</ul>
+<ol start="7" type="1">
 <li>Option to use BRB in a thread as an in-I2P replacement for <code>mibbit</code> IRC client.</li>
 </ol>
 <ul>
@@ -145,7 +151,8 @@
 <li>Bundles a “Extra” profiles for I2P browsing, non-Anonymous browsing, and offline/localhost-only browsing.</li>
 <li>Automatically organize multiple Tor Browser profiles for different networks(I2P, Clearnet) and discourage accidental mixing.</li>
 <li>Optional TAILS mode, adds uBlock Origin to Tor Browser</li>
-<li>Embeds an i2pd router in case the host system doesn’t have an I2P router</li>
+<li>Embeds an I2P router in case the host system doesn’t have an I2P router</li>
+<li>Encrypt the working directory automatically when it’s not in use.</li>
 <li>No python. Language wars are stupid, but so is python.</li>
 </ul>
 <h4 id="tb-updaterwhonix"><a href="https://github.com/whonix/tb-updater">TB-Updater(Whonix)</a></h4>

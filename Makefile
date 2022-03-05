@@ -175,7 +175,7 @@ early-release: clean linux windows version upload-linux upload-windows
 
 release: clean all version upload-all
 
-index: index-clearnet index-offline index-usage
+index: index-clearnet index-offline index-usage index-onion
 	@echo "<!DOCTYPE html>" > index.html
 	@echo "<html>" >> index.html
 	@echo "<head>" >> index.html
