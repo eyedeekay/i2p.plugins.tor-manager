@@ -22,6 +22,9 @@ var shutdown = false
 
 func Password() string {
 	require_password := os.Getenv("TOR_MANAGER_REQUIRE_PASSWORD")
+	if !PluginStat() {
+		require_password = "true"
+	}
 	if require_password == "true" || require_password == "1" {
 		passwd, err := zenity.Entry(
 			"Enter a password if you want to encrypt the working directory",
@@ -103,9 +106,12 @@ func onReady() {
 }
 
 func onExit() {
-	onSnowflakeExit()
+	if *snowflake {
+		snowflakeProxy.Stop()
+	}
 	if *password != "" {
 		log.Println("Encrypting directory with password")
+		os.Remove(*directory + ".tar.xz")
 		EncryptTarXZip(*directory, *password)
 	}
 	if shutdown {

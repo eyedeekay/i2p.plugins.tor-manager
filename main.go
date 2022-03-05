@@ -118,15 +118,6 @@ func main() {
 		usage()
 	}
 	flag.Parse()
-	if *clearnet {
-		*mirror = "http://dist.torproject.org/torbrowser/"
-	}
-	if *snowflake {
-		go Snowflake()
-	}
-	if *destruct {
-		defer OverwriteDirectoryContents(*directory)
-	}
 	if *password != "" {
 		log.Println("Looking for directory with password")
 		DecryptTarXZifThere(*directory, *password)
@@ -143,6 +134,15 @@ func main() {
 				os.Exit(0)
 			}
 		}()
+	}
+	if *clearnet {
+		*mirror = "http://dist.torproject.org/torbrowser/"
+	}
+	if *snowflake {
+		go Snowflake()
+	}
+	if *destruct {
+		defer OverwriteDirectoryContents(*directory)
 	}
 	tbget.WORKING_DIR = *directory
 	if filename == "i2pbrowser" {

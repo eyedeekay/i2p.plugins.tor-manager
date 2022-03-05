@@ -9,7 +9,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"strings"
+	"path/filepath"
 
 	"crypto/aes"
 	"crypto/cipher"
@@ -59,11 +59,11 @@ func EncryptTarXZip(source, password string) error {
 	}
 	file, err := os.OpenFile(source+".tar.xz", os.O_RDWR, 0)
 	if err != nil {
-		log.Println("Error:", err)
+		log.Println("Open File Error:", err)
 	}
 	info, err := file.Stat()
 	if err != nil {
-		log.Println("Error:", err)
+		log.Println("File Stat Error:", err)
 	}
 	bytes := info.Size()
 	file.Truncate(0)
@@ -76,7 +76,7 @@ func EncryptTarXZip(source, password string) error {
 }
 
 func UnTarXzip(source string) error {
-	target := strings.Replace(source, ".tar.xz", "", 1)
+	target := filepath.Dir(source)
 	txz := archiver.NewTarXz()
 	txz.Tar.OverwriteExisting = true
 	txz.Tar.ContinueOnError = true
