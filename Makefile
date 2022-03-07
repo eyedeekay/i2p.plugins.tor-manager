@@ -20,15 +20,15 @@ PLUGIN=$(HOME)/.i2p/plugins/$(BINARY)-$(GOOS)-$(GOARCH)
 PREFIX?=/usr/local
 
 binary:
-	go build $(ARG) -tags="netgo osusergo nosystray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
+	go build $(ARG) -tags="netgo osusergo systray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
 winbinary:
 	CC=/usr/bin/x86_64-w64-mingw32-gcc \
 		CXX=/usr/bin/x86_64-w64-mingw32-g++ \
 		GOOS=windows go build $(WINGUI) -tags="netgo osusergo systray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
-systray:
-	go build $(NOSTATIC) -tags="netgo osusergo" -o $(BINARY)-$(GOOS)-$(GOARCH) .
+nosystray:
+	go build $(NOSTATIC) -tags="netgo osusergo nosystray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
 lint:
 	golint supervise/*.go
