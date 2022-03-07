@@ -144,7 +144,10 @@ func onExit() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := client.Shutdown(ctx); err != nil {
-		panic(err)
+		log.Println(err)
+	}
+	if *destruct {
+		OverwriteDirectoryContents(*directory)
 	}
 }
 
