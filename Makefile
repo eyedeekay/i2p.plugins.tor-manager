@@ -68,8 +68,7 @@ portable.zip: all
 		$(BINARY)-linux-386 \
 		$(BINARY)-windows-386.exe \
 		$(BINARY)-osx-arm64 \
-
-
+		browse.cmd
 
 backup-embed:
 	mkdir -p ../../../github.com/eyedeekay/go-I2P-jpackage.bak
