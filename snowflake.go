@@ -106,5 +106,9 @@ func onSnowflakeReady() {
 }
 
 func onSnowflakeExit() {
+	if !*snowflake {
+		return
+	}
 	log.Println("Stopping the Snowflake")
+	snowflakeProxy.Stop()
 }
