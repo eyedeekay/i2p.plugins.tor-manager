@@ -96,6 +96,7 @@ var (
 	torrent    = flag.Bool("torrent", tbget.TorrentReady(), "Create a torrent of the downloaded files and seed it over I2P using an Open Tracker")
 	destruct   = flag.Bool("destruct", false, "Destructively delete the working directory when finished")
 	password   = flag.String("password", Password(), "Password to encrypt the working directory with. Implies -destruct, only the encrypted container will be saved.")
+	chat       = flag.Bool("chat", false, "Open a WebChat client")
 	/*ptop     = flag.Bool("p2p", false, "Use bittorrent over I2P to download the initial copy of Tor Browser")*/
 )
 
@@ -275,6 +276,10 @@ func main() {
 		}
 	}
 	client.TBS.RunTorWithLang()
+	if *chat {
+		log.Println("Starting I2P chat")
+		go BRBClient(*directory, "brb")
+	}
 	if *i2pbrowser {
 		if err := client.TBS.RunI2PBWithLang(); err != nil {
 			log.Fatal(err)

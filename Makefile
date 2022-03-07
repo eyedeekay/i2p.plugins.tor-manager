@@ -1,11 +1,12 @@
 VERSION=0.0.5
 #CGO_ENABLED=0
 #export CGO_ENABLED=0
+export PKG_CONFIG_PATH=/usr/lib/$(uname -m)-linux-musl/pkgconfig
 
 GOOS?=$(shell uname -s | tr A-Z a-z)
 GOARCH?="amd64"
 
-ARG=-v -tags netgo -ldflags '-w -extldflags "-static"'
+ARG=-v -tags netgo -ldflags '-w' # -extldflags "-static"'
 #FLAGS=/usr/lib/x86_64-linux-gnu/libboost_system.a /usr/lib/x86_64-linux-gnu/libboost_date_time.a /usr/lib/x86_64-linux-gnu/libboost_filesystem.a /usr/lib/x86_64-linux-gnu/libboost_program_options.a /usr/lib/x86_64-linux-gnu/libssl.a /usr/lib/x86_64-linux-gnu/libcrypto.a /usr/lib/x86_64-linux-gnu/libz.a
 #ARG=-ldflags '-w -linkmode=external -extldflags "-static -ldl $(FLAGS)"'
 #NOSTATIC=-v -tags netgo -ldflags '-w -extldflags "-ldl $(FLAGS)"'
@@ -62,13 +63,14 @@ clean:
 all: windows linux osx bsd
 
 portable.zip: all
-	zip -r portable.zip $(BINARY)-linux-amd64 \
-		$(BINARY)-windows-amd64.exe \
-		$(BINARY)-osx-amd64 \
-		$(BINARY)-linux-386 \
-		$(BINARY)-windows-386.exe \
-		$(BINARY)-osx-arm64 \
-		browse.cmd
+	cp $(BINARY)-windows-amd64 $(BINARY)-windows-amd64.exe
+	cp $(BINARY)-windows-386 $(BINARY)-windows-386.exe
+	zip -r portable.zip browse.cmd \
+		$(BINARY)-linux-amd64 \
+		$(BINARY)-windows-amd64 \
+		#$(BINARY)-darwin-amd64 \
+		#$(BINARY)-darwin-arm64 \
+		
 
 backup-embed:
 	mkdir -p ../../../github.com/eyedeekay/go-I2P-jpackage.bak
@@ -94,8 +96,11 @@ winplugin:
 linplugin: 
 	GOOS=linux make backup-embed build unbackup-embed
 
+linplugin-nosystray: 
+	GOOS=linux make backup-embed nosystray unbackup-embed
+
 osxplugin:
-	GOOS=darwin make backup-embed build unbackup-embed
+	GOOS=darwin make backup-embed nosystray unbackup-embed
 
 windows:
 	GOOS=windows GOARCH=amd64 make winplugin su3 unembed-linux build unbackup-embed
@@ -104,11 +109,11 @@ windows:
 linux:
 	GOOS=linux GOARCH=amd64 make linplugin su3 unembed-windows build unbackup-embed
 #	GOOS=linux GOARCH=arm64 make linplugin su3 unembed-windows build unbackup-embed
-	GOOS=linux GOARCH=386 make linplugin su3 unembed-windows build unbackup-embed
+	PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig GOOS=linux GOARCH=386 make linplugin-nosystray su3 unembed-windows nosystray unbackup-embed
 
 osx:
-	GOOS=darwin GOARCH=amd64 make osxplugin su3 unembed-windows unembed-linux build unbackup-embed
-	GOOS=darwin GOARCH=arm64 make osxplugin su3 unembed-windows unembed-linux build unbackup-embed
+	GOOS=darwin GOARCH=amd64 make osxplugin su3 unembed-windows unembed-linux nosystray unbackup-embed
+	GOOS=darwin GOARCH=arm64 make osxplugin su3 unembed-windows unembed-linux nosystray unbackup-embed
 
 bsd:
 #	GOOS=freebsd GOARCH=amd64 make build su3

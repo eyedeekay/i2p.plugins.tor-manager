@@ -74,7 +74,7 @@ The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
 4. Use Bittorrent-over-I2P to download the Tor Browser software
  - Not Done, but pretty trivial. Fetch it from "somewhere", and drop it in the Snark directory.
 5. Embed jpackaged I2P routers and manage them internally
- - Works on Windows and Linux. Can be done on OSX but needs to be different.
+ - Works on Windows and Linux. Can be done on OSX but needs to be different. AMD64 only.
 6. Encrypt the "Working directory" with all the plugin data using a password.
  - Works on Windows, Linux, and OSX.
 7. Use a transparently encrypted filesystem to interact with the host system.
