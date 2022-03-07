@@ -61,6 +61,16 @@ clean:
 
 all: windows linux osx bsd
 
+portable.zip: all
+	zip -r portable.zip $(BINARY)-linux-amd64 \
+		$(BINARY)-windows-amd64.exe \
+		$(BINARY)-osx-amd64 \
+		$(BINARY)-linux-386 \
+		$(BINARY)-windows-386.exe \
+		$(BINARY)-osx-arm64 \
+
+
+
 backup-embed:
 	mkdir -p ../../../github.com/eyedeekay/go-I2P-jpackage.bak
 	cp ../../../github.com/eyedeekay/go-I2P-jpackage/* ../../../github.com/eyedeekay/go-I2P-jpackage.bak -r;true
@@ -94,7 +104,7 @@ windows:
 
 linux:
 	GOOS=linux GOARCH=amd64 make linplugin su3 unembed-windows build unbackup-embed
-	GOOS=linux GOARCH=arm64 make linplugin su3 unembed-windows build unbackup-embed
+#	GOOS=linux GOARCH=arm64 make linplugin su3 unembed-windows build unbackup-embed
 	GOOS=linux GOARCH=386 make linplugin su3 unembed-windows build unbackup-embed
 
 osx:
