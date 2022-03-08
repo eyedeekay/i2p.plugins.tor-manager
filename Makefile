@@ -1,4 +1,4 @@
-VERSION=0.0.6
+VERSION=0.0.7
 #CGO_ENABLED=0
 #export CGO_ENABLED=0
 export PKG_CONFIG_PATH=/usr/lib/$(uname -m)-linux-musl/pkgconfig
