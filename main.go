@@ -30,6 +30,7 @@ TODO: A "Default" config file which uses hardened Tor Browser for clearnet
 //go:embed tor-browser/unpack/i2p.firefox.config/*
 //go:embed tor-browser/unpack/awo@eyedeekay.github.io.xpi
 //go:embed tor-browser/TPO-signing-key.pub
+//go:embed tor-browser/NOT-TPO-signing-key.pub
 //go:embed garliconion.png
 //go:embed onion.png
 //go:embed torbrowser.desktop
@@ -91,7 +92,7 @@ var (
 	if one is unavailable, we download over I2P instead. This is pretty fast these days really, but for
 	77 or so MB it's noticably delayed still. In "clearnet" modes, it might make sense to default to
 	this mirror instead of the I2P one, or maybe offer a convenience option for just the download.*/
-	mirror     = flag.String("mirror", "https://dist.torproject.org/torbrowser/", "Mirror to use")
+	mirror     = flag.String("mirror", Mirror(), "Mirror to use")
 	solidarity = flag.Bool("onion", false, "Serve an onion site which shows some I2P propaganda")
 	torrent    = flag.Bool("torrent", tbget.TorrentReady(), "Create a torrent of the downloaded files and seed it over I2P using an Open Tracker")
 	destruct   = flag.Bool("destruct", false, "Destructively delete the working directory when finished")
@@ -99,6 +100,16 @@ var (
 	chat       = flag.Bool("chat", false, "Open a WebChat client")
 	/*ptop     = flag.Bool("p2p", false, "Use bittorrent over I2P to download the initial copy of Tor Browser")*/
 )
+
+func Mirror() string {
+	if tbget.TorrentReady() {
+		return "http://127.0.0.1:7657/i2psnark/"
+	}
+	if runtime.GOOS == "linux" && runtime.GOARCH == "arm64" {
+		return "https://sourceforge.net/projects/tor-browser-ports/files"
+	}
+	return "https://dist.torproject.org/torbrowser/"
+}
 
 var snowflake *bool
 

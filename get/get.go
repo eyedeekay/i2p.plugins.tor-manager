@@ -150,7 +150,7 @@ func (t *TBDownloader) GetRuntimePair() string {
 	case "386":
 		t.ARCH = "32"
 	default:
-		t.ARCH = "unknown"
+		t.ARCH = "64"
 	}
 	if t.OS != "osx" {
 		return fmt.Sprintf("%s%s", t.OS, t.ARCH)
@@ -201,8 +201,13 @@ func (t *TBDownloader) Log(function, message string) {
 func (t *TBDownloader) MakeTBDirectory() {
 	os.MkdirAll(t.DownloadPath, 0755)
 
-	empath := path.Join("tor-browser", "TPO-signing-key.pub")
-	opath := filepath.Join(t.DownloadPath, "TPO-signing-key.pub")
+	tpk := "TPO-signing-key.pub"
+	if t.OS == "linux" && runtime.GOARCH == "arm64" {
+		tpk = "NOT-TPO-signing-key.pub"
+	}
+
+	empath := path.Join("tor-browser", tpk)
+	opath := filepath.Join(t.DownloadPath, tpk)
 	if !FileExists(opath) {
 		t.Log("MakeTBDirectory()", "Initial TPO signing key not found, using the one embedded in the executable")
 		bytes, err := t.Profile.ReadFile(empath)
@@ -278,6 +283,16 @@ func (t *TBDownloader) GetUpdaterForLangFromJSONBytes(jsonBytes []byte, ietf str
 }
 
 func (t *TBDownloader) MirrorIze(replaceStr string) string {
+	if t.OS == "linux" && runtime.GOARCH == "arm64" {
+		replaceStr = strings.Replace(replaceStr, "linux64", "linux-arm64", -1)
+		if strings.HasSuffix(replaceStr, ".tar.xz.asc") {
+			//sha256sums-unsigned-build.txt.asc
+			lastElement := filepath.Base(
+				strings.Replace(replaceStr, "https://", strings.Replace(replaceStr, "http://", "", 1), 1),
+			)
+			replaceStr = strings.Replace(replaceStr, lastElement, "sha256sums-unsigned-build.txt.asc", -1)
+		}
+	}
 	if t.Mirror != "" {
 		return strings.Replace(replaceStr, "https://dist.torproject.org/torbrowser/", t.Mirror, 1)
 	}
@@ -326,6 +341,26 @@ func (t *TBDownloader) SingleFileDownload(dl, name string) (string, error) {
 			Dial: d.Dial,
 		}
 		http.DefaultClient.Transport = tr
+	} else {
+		log.Println("Not using I2P mirror, checking if system Tor can be used to download")
+		if !strings.Contains(t.Mirror, "127.0.0.1") {
+			if tmp, torerr := net.Listen("tcp", "127.0.0.1:9050"); torerr != nil {
+				proxyURL, err := url.Parse("http://127.0.0.1:9050")
+				if err != nil {
+					panic(err)
+				}
+				d, err = connectproxy.New(proxyURL, proxy.Direct)
+				if nil != err {
+					panic(err)
+				}
+				tr := &http.Transport{
+					Dial: d.Dial,
+				}
+				http.DefaultClient.Transport = tr
+			} else {
+				tmp.Close()
+			}
+		}
 	}
 	t.Log("SingleFileDownload()", "Downloading file")
 	file, err := http.Get(dl)
@@ -392,28 +427,35 @@ func (t *TBDownloader) NamePerPlatform(ietf string) string {
 // DownloadUpdater downloads the updater for the t.Lang. It returns
 // the path to the downloaded updater and the downloaded detatched signature,
 // or an error if one is encountered.
-func (t *TBDownloader) DownloadUpdater() (string, string, error) {
+func (t *TBDownloader) DownloadUpdater() (string, string, string, error) {
 	return t.DownloadUpdaterForLang(t.Lang)
 }
 
 // DownloadUpdaterForLang downloads the updater for the given language, overriding
 // t.Lang. It returns the path to the downloaded updater and the downloaded
 // detatched signature, or an error if one is encountered.
-func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, error) {
+func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, string, error) {
 	binary, sig, err := t.GetUpdaterForLang(ietf)
 	if err != nil {
-		return "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
+		return "", "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
 
 	sigpath, err := t.SingleFileDownload(sig, t.NamePerPlatform(ietf)+".asc")
 	if err != nil {
-		return "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
+		return "", "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
 	binpath, err := t.SingleFileDownload(binary, t.NamePerPlatform(ietf))
 	if err != nil {
-		return "", sigpath, fmt.Errorf("DownloadUpdaterForLang: %s", err)
+		return "", sigpath, "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
-	return binpath, sigpath, nil
+	var sumpath string
+	if t.OS == "linux" && runtime.GOARCH == "arm64" {
+		sumpath, err = t.SingleFileDownload("https://sourceforge.net/projects/tor-browser-ports/files/11.0.6/sha256sums-unsigned-build.txt/download", t.NamePerPlatform(ietf)+".sha256sums")
+		if err != nil {
+			return "", sigpath, sumpath, fmt.Errorf("DownloadUpdaterForLang: %s", err)
+		}
+	}
+	return binpath, sigpath, sumpath, nil
 }
 
 // BrowserDir returns the path to the directory where the browser is installed.
@@ -517,6 +559,9 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 // runs the updater and returns an error if one is encountered.
 func (t *TBDownloader) CheckSignature(binpath, sigpath string) (string, error) {
 	pk := filepath.Join(t.DownloadPath, "TPO-signing-key.pub")
+	if t.OS == "linux" && runtime.GOARCH == "arm64" {
+		pk = filepath.Join(t.DownloadPath, "NOT-TPO-signing-key.pub")
+	}
 	var err error
 	if err = Verify(pk, sigpath, binpath); err == nil {
 		t.Log("CheckSignature: signature", "verified successfully")

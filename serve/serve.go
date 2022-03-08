@@ -2,14 +2,19 @@ package tbserve
 
 import (
 	"context"
+	"crypto/sha256"
 	"embed"
+	"encoding/hex"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"path"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/justinas/nosurf"
 	cp "github.com/otiai10/copy"
@@ -31,9 +36,9 @@ type Client struct {
 }
 
 // NewClient creates a new Client.
-func NewClient(verbose bool, lang, os, arch, mirror string, content *embed.FS) (*Client, error) {
+func NewClient(verbose bool, lang, OS, arch, mirror string, content *embed.FS) (*Client, error) {
 	m := &Client{
-		TBD: tbget.NewTBDownloader(lang, os, arch, content),
+		TBD: tbget.NewTBDownloader(lang, OS, arch, content),
 	}
 	m.TBD.Mirror = mirror
 	m.TBD.Verbose = verbose
@@ -43,9 +48,50 @@ func NewClient(verbose bool, lang, os, arch, mirror string, content *embed.FS) (
 	if err != nil {
 		return nil, err
 	}
-	tgz, sig, err := m.TBD.DownloadUpdaterForLang(lang)
+	tgz, sig, sums, err := m.TBD.DownloadUpdaterForLang(lang)
 	if err != nil {
 		panic(err)
+	}
+	sum := ""
+	if sums != "" {
+		b, err := ioutil.ReadFile(sums)
+		if err != nil {
+			log.Fatal(err)
+		}
+		// find the line containing the checksum of our tgz file
+		for _, line := range strings.Split(string(b), "\n") {
+			if strings.Contains(line, lang+".tar.xz") {
+				sum = strings.Split(line, " ")[0]
+				break
+			}
+		}
+		log.Println("Checksum for ARM:" + sum)
+		// compute the sha256sum of the downloaded tar.xz file
+		f, err := os.Open(tgz)
+		if err != nil {
+			log.Fatal(err)
+		}
+		h := sha256.New()
+		if _, err := io.Copy(h, f); err != nil {
+			log.Fatal(err)
+		}
+		f.Close()
+		if sum != hex.EncodeToString(h.Sum(nil)) {
+			log.Fatal("Checksum mismatch")
+		}
+		var home string
+		if home, err = m.TBD.CheckSignature(sums, sig); err != nil {
+			log.Fatal(err)
+		} else {
+			_, err = m.TBD.UnpackUpdater(tgz)
+			if err != nil {
+				return nil, fmt.Errorf("unpacking updater: %v", err)
+			}
+			log.Printf("Signature check passed: %s %s", tgz, sig)
+		}
+		m.TBS = TBSupervise.NewSupervisor(home, lang)
+		go m.TBS.RunTorWithLang()
+		return m, nil
 	}
 	var home string
 	if home, err = m.TBD.CheckSignature(tgz, sig); err != nil {
