@@ -60,7 +60,7 @@ clean:
 	rm -f *.su3 *.zip $(BINARY)-$(GOOS)-$(GOARCH) $(BINARY)-*
 	git clean -df
 
-all: windows linux osx bsd
+all: clean windows linux osx bsd
 
 portable.zip: all
 	cp $(BINARY)-windows-amd64 $(BINARY)-windows-amd64.exe
@@ -151,6 +151,9 @@ version:
 upload:
 	gothub upload -R -u eyedeekay -r $(BINARY) -t "$(VERSION)" -f $(BINARY)-$(GOOS)-$(GOARCH).su3 -n $(BINARY)-$(GOOS)-$(GOARCH).su3 -l "`sha256sum $(BINARY)-$(GOOS)-$(GOARCH).su3`"
 	gothub upload -R -u eyedeekay -r $(BINARY) -t "$(VERSION)" -f $(BINARY)-$(GOOS)-$(GOARCH) -n $(BINARY)-$(GOOS)-$(GOARCH) -l "`sha256sum $(BINARY)-$(GOOS)-$(GOARCH)`"
+
+upload-portable.zip:
+	gothub upload -R -u eyedeekay -r $(BINARY) -t "$(VERSION)" -f portable.zip -n i2pbrowser.portable.zip -l "`sha256sum portable.zip`"
 
 upload-windows:
 	GOOS=windows GOARCH=amd64 make upload
