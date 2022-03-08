@@ -449,8 +449,10 @@ func (t *TBDownloader) BotherToDownload(dl, name string) bool {
 		return true
 	}
 	// 86 MB
-	if stat.Size() < 80000000 {
-		return true
+	if !strings.Contains(name, ".asc") {
+		if stat.Size() < 8000000 { //TODO: Make this the real size of the file by requesting content-length
+			return true
+		}
 	}
 	defer ioutil.WriteFile(filepath.Join(t.DownloadPath, name+".last-url"), []byte(dl), 0644)
 	lastURL, err := ioutil.ReadFile(filepath.Join(t.DownloadPath, name+".last-url"))
