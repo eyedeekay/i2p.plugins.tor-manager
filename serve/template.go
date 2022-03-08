@@ -66,59 +66,56 @@ func (m *Client) PageHTML() []byte {
 	dir := filepath.Dir(m.TBD.DownloadPath)
 	mdpath := filepath.Join(dir, m.TBD.Lang, "index.md")
 	mdbytes, err := ioutil.ReadFile(mdpath)
-	markdown := blackfriday.New()
 	if err != nil {
-		htmlbytes := markdown.Parse(defaultmd)
-		return []byte(htmlbytes.String())
+		htmlbytes := blackfriday.Run(defaultmd)
+		return htmlbytes
 	}
-	htmlbytes := markdown.Parse(mdbytes)
-	return []byte(htmlbytes.String())
+	htmlbytes := blackfriday.Run(mdbytes)
+	return htmlbytes
 }
 
 // TorOnStatusHTML returns the HTML for "Tor Status" section the page
 func (m *Client) TorOnStatusHTML(ours bool) []byte {
 	dir := filepath.Dir(m.TBD.DownloadPath)
-	markdown := blackfriday.New()
 	if ours {
 		mdpath := filepath.Join(dir, m.TBD.Lang, "stoptor.md")
 		torbytes, err := ioutil.ReadFile(mdpath)
 		if err != nil {
-			htmlbytes := markdown.Parse(torstop)
-			return []byte(htmlbytes.String())
+			htmlbytes := blackfriday.Run(torstop)
+			return htmlbytes
 		}
-		htmlbytes := markdown.Parse(torbytes)
-		return []byte(htmlbytes.String())
+		htmlbytes := blackfriday.Run(torbytes)
+		return htmlbytes
 	}
 	mdpath := filepath.Join(dir, m.TBD.Lang, "torstarted.md")
 	toron, err := ioutil.ReadFile(mdpath)
 	if err != nil {
-		htmlbytes := markdown.Parse(torrunning)
-		return []byte(htmlbytes.String())
+		htmlbytes := blackfriday.Run(torrunning)
+		return htmlbytes
 	}
-	htmlbytes := markdown.Parse(toron)
-	return []byte(htmlbytes.String())
+	htmlbytes := blackfriday.Run(toron)
+	return htmlbytes
 }
 
 // TorOffStatusHTML returns the HTML for "Tor Status" section the page
 func (m *Client) TorOffStatusHTML(ours bool) []byte {
 	dir := filepath.Dir(m.TBD.DownloadPath)
-	markdown := blackfriday.New()
 	if ours {
 		mdpath := filepath.Join(dir, m.TBD.Lang, "startor.md")
 		torbytes, err := ioutil.ReadFile(mdpath)
 		if err != nil {
-			htmlbytes := markdown.Parse(torstart)
-			return []byte(htmlbytes.String())
+			htmlbytes := blackfriday.Run(torstart)
+			return htmlbytes
 		}
-		htmlbytes := markdown.Parse(torbytes)
-		return []byte(htmlbytes.String())
+		htmlbytes := blackfriday.Run(torbytes)
+		return htmlbytes
 	}
 	mdpath := filepath.Join(dir, m.TBD.Lang, "torstopped.md")
 	toroff, err := ioutil.ReadFile(mdpath)
 	if err != nil {
-		htmlbytes := markdown.Parse(torstopped)
-		return []byte(htmlbytes.String())
+		htmlbytes := blackfriday.Run(torstopped)
+		return htmlbytes
 	}
-	htmlbytes := markdown.Parse(toroff)
-	return []byte(htmlbytes.String())
+	htmlbytes := blackfriday.Run(toroff)
+	return htmlbytes
 }
