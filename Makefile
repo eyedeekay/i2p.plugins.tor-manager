@@ -63,12 +63,11 @@ clean:
 all: clean windows linux osx bsd portable.zip
 
 portable.zip:
-	zip -r portable.zip browse.cmd \
+	zip -r portable.zip browse.cmd README-PORTABLE.txt \
 		$(BINARY)-linux-amd64 \
 		$(BINARY)-windows-amd64 \
 		#$(BINARY)-darwin-amd64 \
 		#$(BINARY)-darwin-arm64 \
-		
 
 backup-embed:
 	mkdir -p ../../../github.com/eyedeekay/go-I2P-jpackage.bak
