@@ -17,3 +17,7 @@ firefox
 tor-mirror.i2p.private
 tor-mirror.i2p.public.txt
 *.crypt
+tmp-i2pbrowser
+.i2pkeys
+*.tar.xz
+config
