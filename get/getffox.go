@@ -210,12 +210,12 @@ func (t *TBDownloader) DownloadFirefoxUpdaterForLang(ietf string) (string, strin
 	}
 	sigpath := ""
 	if t.OS == "linux" {
-		sigpath, err = t.SingleFileDownload(sig, t.NamePerPlatformFirefox(ietf)+".asc")
+		sigpath, err = t.SingleFileDownload(sig, t.NamePerPlatformFirefox(ietf)+".asc", 0)
 		if err != nil {
 			return "", "", fmt.Errorf("DownloadUpdater: %s", err)
 		}
 	}
-	binpath, err := t.SingleFileDownload(binary, t.NamePerPlatformFirefox(ietf))
+	binpath, err := t.SingleFileDownload(binary, t.NamePerPlatformFirefox(ietf), 0)
 	if err != nil {
 		return "", "", fmt.Errorf("DownloadUpdater: %s", err)
 	}

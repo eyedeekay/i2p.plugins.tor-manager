@@ -2,6 +2,7 @@ package tbget
 
 import (
 	"archive/tar"
+	"context"
 	"embed"
 	"encoding/json"
 	"fmt"
@@ -20,6 +21,7 @@ import (
 	"time"
 
 	"github.com/cloudfoundry/jibber_jabber"
+	"github.com/cretz/bine/tor"
 	"github.com/dustin/go-humanize"
 	sam "github.com/eyedeekay/sam3/helper"
 	"github.com/itchio/damage"
@@ -317,7 +319,7 @@ func (wc WriteCounter) PrintProgress() {
 
 // SingleFileDownload downloads a single file from the given URL to the given path.
 // it returns the path to the downloaded file, or an error if one is encountered.
-func (t *TBDownloader) SingleFileDownload(dl, name string) (string, error) {
+func (t *TBDownloader) SingleFileDownload(dl, name string, rangebottom int64) (string, error) {
 	t.MakeTBDirectory()
 	path := filepath.Join(t.DownloadPath, name)
 	t.Log("SingleFileDownload()", fmt.Sprintf("Checking for updates %s to %s", dl, path))
@@ -342,41 +344,55 @@ func (t *TBDownloader) SingleFileDownload(dl, name string) (string, error) {
 		}
 		http.DefaultClient.Transport = tr
 	} else {
-		log.Println("Not using I2P mirror, checking if system Tor can be used to download")
 		if !strings.Contains(t.Mirror, "127.0.0.1") {
 			if tmp, torerr := net.Listen("tcp", "127.0.0.1:9050"); torerr != nil {
-				proxyURL, err := url.Parse("http://127.0.0.1:9050")
+				log.Println("System Tor is running, downloading over that because obviously.")
+				t, err := tor.Start(context.Background(), nil)
 				if err != nil {
-					panic(err)
+					return "", err
 				}
-				d, err = connectproxy.New(proxyURL, proxy.Direct)
-				if nil != err {
-					panic(err)
+				defer t.Close()
+				// Wait at most a minute to start network and get
+				dialCtx, dialCancel := context.WithTimeout(context.Background(), time.Minute)
+				defer dialCancel()
+				// Make connection
+				dialer, err := t.Dialer(dialCtx, nil)
+				if err != nil {
+					return "", err
 				}
-				tr := &http.Transport{
-					Dial: d.Dial,
-				}
+				tr := &http.Transport{DialContext: dialer.DialContext}
 				http.DefaultClient.Transport = tr
 			} else {
 				tmp.Close()
 			}
 		}
 	}
-	t.Log("SingleFileDownload()", "Downloading file")
-	file, err := http.Get(dl)
+	dlurl, err := url.Parse(dl)
 	if err != nil {
-		return "", fmt.Errorf("SingleFileDownload: %s", err)
+		return "", err
+	}
+	req := http.Request{
+		Method: "GET",
+		URL:    dlurl,
+	}
+	t.Log("SingleFileDownload()", "Downloading file "+dl)
+	//file, err := http.Get(dl)
+	file, err := http.DefaultClient.Do(&req)
+	//Do(&req, nil)
+	if err != nil {
+		return "", fmt.Errorf("SingleFileDownload: Request Error %s", err)
 	}
 	defer file.Body.Close()
 	outFile, err := os.Create(path)
 	if err != nil {
-		return "", fmt.Errorf("SingleFileDownload: %s", err)
+		return "", fmt.Errorf("SingleFileDownload: Write Error %s", err)
 	}
 	defer outFile.Close()
 	// Create our progress reporter and pass it to be used alongside our writer
 	counter := &WriteCounter{}
-	if _, err = io.Copy(outFile, io.TeeReader(file.Body, counter)); err != nil {
-		return "", err
+	if rangebottom, err := io.Copy(outFile, io.TeeReader(file.Body, counter)); err != nil {
+		return t.SingleFileDownload(dl, name, rangebottom)
+		//"", err
 	}
 
 	// The progress use the same line so print a new line once it's finished downloading
@@ -440,17 +456,17 @@ func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, stri
 		return "", "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
 
-	sigpath, err := t.SingleFileDownload(sig, t.NamePerPlatform(ietf)+".asc")
+	sigpath, err := t.SingleFileDownload(sig, t.NamePerPlatform(ietf)+".asc", 0)
 	if err != nil {
 		return "", "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
-	binpath, err := t.SingleFileDownload(binary, t.NamePerPlatform(ietf))
+	binpath, err := t.SingleFileDownload(binary, t.NamePerPlatform(ietf), 0)
 	if err != nil {
 		return "", sigpath, "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
 	var sumpath string
 	if t.OS == "linux" && runtime.GOARCH == "arm64" {
-		sumpath, err = t.SingleFileDownload("https://sourceforge.net/projects/tor-browser-ports/files/11.0.6/sha256sums-unsigned-build.txt/download", t.NamePerPlatform(ietf)+".sha256sums")
+		sumpath, err = t.SingleFileDownload("https://sourceforge.net/projects/tor-browser-ports/files/11.0.6/sha256sums-unsigned-build.txt/download", t.NamePerPlatform(ietf)+".sha256sums", 0)
 		if err != nil {
 			return "", sigpath, sumpath, fmt.Errorf("DownloadUpdaterForLang: %s", err)
 		}
