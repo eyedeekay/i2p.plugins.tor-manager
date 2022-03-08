@@ -143,7 +143,7 @@ sum:
 	sha256sum $(BINARY)-$(GOOS)-$(GOARCH).su3
 
 version:
-	gothub release -p -u eyedeekay -r $(BINARY) -t "$(VERSION)" -d "`cat desc`"; true
+	gothub release -u eyedeekay -r $(BINARY) -t "$(VERSION)" -d "`cat desc`"; true
 
 upload:
 	gothub upload -R -u eyedeekay -r $(BINARY) -t "$(VERSION)" -f $(BINARY)-$(GOOS)-$(GOARCH).su3 -n $(BINARY)-$(GOOS)-$(GOARCH).su3 -l "`sha256sum $(BINARY)-$(GOOS)-$(GOARCH).su3`"
