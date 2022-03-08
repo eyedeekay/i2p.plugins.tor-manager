@@ -84,21 +84,13 @@ var (
 	clearnet   = flag.Bool("clearnet", false, "Use clearnet (no Tor or I2P)")
 	profile    = flag.String("profile", "", "use a custom profile path, normally blank")
 	help       = flag.Bool("help", false, "Print help")
-	/* TODO: Hash sometimes doesn't match when downloading from this mirror. Probably due to latency
-	between updates. Know for sure why before enabling it.*/
-	//mirror = flag.String("mirror", "http://dist.torproject.i2p/torbrowser/", "Mirror to use(I2P)")
-	/* TODO: This is a clearnet mirror which was originally used by default. Since this is intended as
-	an I2P browser configurer, and we guarantee the availability of the HTTP proxy by starting our own
-	if one is unavailable, we download over I2P instead. This is pretty fast these days really, but for
-	77 or so MB it's noticably delayed still. In "clearnet" modes, it might make sense to default to
-	this mirror instead of the I2P one, or maybe offer a convenience option for just the download.*/
-	mirror     = flag.String("mirror", Mirror(), "Mirror to use")
+	mirror     = flag.String("mirror", Mirror(), "Mirror to use. I2P will be used if an I2P proxy is present, if system Tor is available, it will be downloaded over the Tor proxy.")
 	solidarity = flag.Bool("onion", false, "Serve an onion site which shows some I2P propaganda")
 	torrent    = flag.Bool("torrent", tbget.TorrentReady(), "Create a torrent of the downloaded files and seed it over I2P using an Open Tracker")
 	destruct   = flag.Bool("destruct", false, "Destructively delete the working directory when finished")
 	password   = flag.String("password", Password(), "Password to encrypt the working directory with. Implies -destruct, only the encrypted container will be saved.")
 	chat       = flag.Bool("chat", false, "Open a WebChat client")
-	/*ptop     = flag.Bool("p2p", false, "Use bittorrent over I2P to download the initial copy of Tor Browser")*/
+	/*ptop     = flag.Bool("p2p", tbget.TorrentReady(), "Use bittorrent over I2P to download the initial copy of Tor Browser")*/
 )
 
 func Mirror() string {

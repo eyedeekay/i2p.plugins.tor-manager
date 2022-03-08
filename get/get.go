@@ -371,9 +371,20 @@ func (t *TBDownloader) SingleFileDownload(dl, name string, rangebottom int64) (s
 	if err != nil {
 		return "", err
 	}
+	if FileExists(path) {
+		size, err := os.Stat(path)
+		if err != nil {
+			return "", err
+		}
+		rangebottom = size.Size()
+		t.Log("SingleFileDownload()", fmt.Sprintf("Resuming download from %d", rangebottom))
+	}
 	req := http.Request{
 		Method: "GET",
 		URL:    dlurl,
+		Header: http.Header{
+			"Range": []string{fmt.Sprintf("bytes=%d-", rangebottom)},
+		},
 	}
 	t.Log("SingleFileDownload()", "Downloading file "+dl)
 	//file, err := http.Get(dl)
@@ -383,13 +394,15 @@ func (t *TBDownloader) SingleFileDownload(dl, name string, rangebottom int64) (s
 		return "", fmt.Errorf("SingleFileDownload: Request Error %s", err)
 	}
 	defer file.Body.Close()
-	outFile, err := os.Create(path)
+	outFile, err := Create(path)
 	if err != nil {
 		return "", fmt.Errorf("SingleFileDownload: Write Error %s", err)
 	}
 	defer outFile.Close()
 	// Create our progress reporter and pass it to be used alongside our writer
-	counter := &WriteCounter{}
+	counter := &WriteCounter{
+		Total: uint64(rangebottom),
+	}
 	if rangebottom, err := io.Copy(outFile, io.TeeReader(file.Body, counter)); err != nil {
 		return t.SingleFileDownload(dl, name, rangebottom)
 		//"", err
@@ -400,6 +413,22 @@ func (t *TBDownloader) SingleFileDownload(dl, name string, rangebottom int64) (s
 	//io.Copy(outFile, file.Body)
 	t.Log("SingleFileDownload()", "Downloading file complete")
 	return path, nil
+}
+
+func Create(path string) (*os.File, error) {
+	if FileExists(path) {
+		stat, err := os.Stat(path)
+		if err != nil {
+			return nil, err
+		}
+		return os.OpenFile(path, os.O_APPEND|os.O_WRONLY, stat.Mode().Perm())
+	}
+	// Create the file
+	outFile, err := os.Create(path)
+	if err != nil {
+		return nil, err
+	}
+	return outFile, nil
 }
 
 // FileExists returns true if the given file exists. It will return true if used on an existing directory.
@@ -413,6 +442,14 @@ func FileExists(path string) bool {
 func (t *TBDownloader) BotherToDownload(dl, name string) bool {
 	path := filepath.Join(t.DownloadPath, name)
 	if !FileExists(path) {
+		return true
+	}
+	stat, err := os.Stat(path)
+	if err != nil {
+		return true
+	}
+	// 86 MB
+	if stat.Size() < 80000000 {
 		return true
 	}
 	defer ioutil.WriteFile(filepath.Join(t.DownloadPath, name+".last-url"), []byte(dl), 0644)
