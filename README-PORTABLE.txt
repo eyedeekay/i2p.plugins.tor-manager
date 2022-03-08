@@ -1,1 +1,1 @@
-run browse.cmd
+Double-click browse.cmd on any platform to run the portable bundle.
