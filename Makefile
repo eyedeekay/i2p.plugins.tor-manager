@@ -158,7 +158,7 @@ upload-windows:
 
 upload-linux:
 	GOOS=linux GOARCH=amd64 make upload
-	GOOS=linux GOARCH=arm64 make upload
+#	GOOS=linux GOARCH=arm64 make upload
 	GOOS=linux GOARCH=386 make upload
 
 upload-osx:
@@ -169,7 +169,7 @@ upload-bsd:
 #	GOOS=freebsd GOARCH=amd64 make upload
 #	GOOS=openbsd GOARCH=amd64 make upload
 
-upload-all: upload-windows upload-linux upload-osx upload-bsd
+upload-all: upload-windows upload-linux upload-osx upload-bsd upload-portable-zip
 
 download-su3s:
 	GOOS=windows GOARCH=amd64 make download-single-su3
