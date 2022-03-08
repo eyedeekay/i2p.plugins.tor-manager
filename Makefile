@@ -60,11 +60,9 @@ clean:
 	rm -f *.su3 *.zip $(BINARY)-$(GOOS)-$(GOARCH) $(BINARY)-*
 	git clean -df
 
-all: clean windows linux osx bsd
+all: clean windows linux osx bsd portable.zip
 
-portable.zip: all
-	cp $(BINARY)-windows-amd64 $(BINARY)-windows-amd64.exe
-	cp $(BINARY)-windows-386 $(BINARY)-windows-386.exe
+portable.zip:
 	zip -r portable.zip browse.cmd \
 		$(BINARY)-linux-amd64 \
 		$(BINARY)-windows-amd64 \
