@@ -80,7 +80,7 @@ The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
 7. Use a transparently encrypted filesystem to interact with the host system.
  - Not done.
 8. Option to use BRB in a thread as an in-I2P replacement for `mibbit` IRC client.
- - Not done.
+ - Works on Windows, Linux, OSX
 
 ### Usage as a Library
 
