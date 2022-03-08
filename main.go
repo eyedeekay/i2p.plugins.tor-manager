@@ -106,6 +106,9 @@ func Mirror() string {
 		//return "http://127.0.0.1:7657/i2psnark/"
 		return "https://dist.torproject.org/torbrowser/"
 	}
+	if tbget.TestHTTPDefaultProxy() {
+		return "http://dist.torproject.i2p/torbrowser/"
+	}
 	if runtime.GOOS == "linux" && runtime.GOARCH == "arm64" {
 		return "https://sourceforge.net/projects/tor-browser-ports/files"
 	}
