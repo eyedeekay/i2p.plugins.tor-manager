@@ -9,12 +9,14 @@ import (
 	"os/signal"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/cloudfoundry/jibber_jabber"
 	i2cpcheck "github.com/eyedeekay/checki2cp"
 	"github.com/itchio/damage"
 	"github.com/itchio/damage/hdiutil"
 	"github.com/itchio/headway/state"
+	"github.com/ncruces/zenity"
 	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
 	tbserve "i2pgit.org/idk/i2p.plugins.tor-manager/serve"
 
@@ -92,6 +94,32 @@ var (
 	chat       = flag.Bool("chat", false, "Open a WebChat client")
 	/*ptop     = flag.Bool("p2p", tbget.TorrentReady(), "Use bittorrent over I2P to download the initial copy of Tor Browser")*/
 )
+
+func Password() string {
+	require_password := os.Getenv("TOR_MANAGER_REQUIRE_PASSWORD")
+	if !PluginStat() {
+		require_password = "true"
+	}
+	if require_password == "true" || require_password == "1" {
+		passwd, err := zenity.Entry(
+			"Enter a password if you want to encrypt the working directory",
+			zenity.Title("Work Directory Encryption"),
+			zenity.CancelLabel("Don't encrypt"),
+			zenity.OKLabel("Encrypt"),
+			zenity.Width(400),
+			zenity.EntryText("password"),
+		)
+		if err != nil {
+			if !strings.Contains(err.Error(), "canceled") {
+				log.Panicln(err)
+			}
+			log.Println("Password dialog canceled")
+			return ""
+		}
+		return passwd
+	}
+	return ""
+}
 
 func Mirror() string {
 	if tbget.TestHTTPDefaultProxy() {
