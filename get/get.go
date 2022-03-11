@@ -437,6 +437,72 @@ func FileExists(path string) bool {
 	return !os.IsNotExist(err)
 }
 
+func (t *TBDownloader) FetchContentLength(dl, name string) (int64, error) {
+	t.MakeTBDirectory()
+	//if !t.BotherToDownload(dl, name) {
+	//	t.Log("FetchContentLength()", "File already exists, skipping download")
+	//	return 0, nil
+	//}
+	var d proxy.Dialer
+	if t.MirrorIsI2P() {
+		log.Println("Using I2P mirror, setting up proxy")
+		var err error
+		proxyURL, err := url.Parse("http://127.0.0.1:4444")
+		if err != nil {
+			return 0, err
+		}
+		d, err = connectproxy.New(proxyURL, proxy.Direct)
+		if nil != err {
+			return 0, err
+		}
+		tr := &http.Transport{
+			Dial: d.Dial,
+		}
+		http.DefaultClient.Transport = tr
+	} else {
+		if !strings.Contains(t.Mirror, "127.0.0.1") {
+			if tmp, torerr := net.Listen("tcp", "127.0.0.1:9050"); torerr != nil {
+				log.Println("System Tor is running, downloading over that because obviously.")
+				t, err := tor.Start(context.Background(), nil)
+				if err != nil {
+					return 0, err
+				}
+				defer t.Close()
+				// Wait at most a minute to start network and get
+				dialCtx, dialCancel := context.WithTimeout(context.Background(), time.Minute)
+				defer dialCancel()
+				// Make connection
+				dialer, err := t.Dialer(dialCtx, nil)
+				if err != nil {
+					return 0, err
+				}
+				tr := &http.Transport{DialContext: dialer.DialContext}
+				http.DefaultClient.Transport = tr
+			} else {
+				tmp.Close()
+			}
+		}
+	}
+	dlurl, err := url.Parse(dl)
+	if err != nil {
+		return 0, err
+	}
+	req := http.Request{
+		Method: "HEAD",
+		URL:    dlurl,
+	}
+	t.Log("SingleFileDownload()", "Downloading file "+dl)
+	//file, err := http.Get(dl)
+	file, err := http.DefaultClient.Do(&req)
+	//Do(&req, nil)
+	if err != nil {
+		return 0, fmt.Errorf("SingleFileDownload: Request Error %s", err)
+	}
+	file.Body.Close()
+	log.Println("Content-Length:", file.ContentLength)
+	return file.ContentLength, nil
+}
+
 // BotherToDownload returns true if we need to download a file because we don't have an up-to-date
 // version yet.
 func (t *TBDownloader) BotherToDownload(dl, name string) bool {
@@ -450,7 +516,11 @@ func (t *TBDownloader) BotherToDownload(dl, name string) bool {
 	}
 	// 86 MB
 	if !strings.Contains(name, ".asc") {
-		if stat.Size() < 8000000 { //TODO: Make this the real size of the file by requesting content-length
+		contentLength, err := t.FetchContentLength(dl, name)
+		if err != nil {
+			return true
+		}
+		if stat.Size() < contentLength { //TODO: Make this the real size of the file by requesting content-length
 			return true
 		}
 	}
