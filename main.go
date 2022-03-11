@@ -97,7 +97,7 @@ var (
 
 func Password() string {
 	require_password := os.Getenv("TOR_MANAGER_REQUIRE_PASSWORD")
-	if !PluginStat() {
+	if require_password == "" && !PluginStat() {
 		require_password = "true"
 	}
 	if require_password == "true" || require_password == "1" {
