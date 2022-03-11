@@ -317,6 +317,35 @@ func (wc WriteCounter) PrintProgress() {
 	fmt.Printf("\rDownloading... %s complete", humanize.Bytes(wc.Total))
 }
 
+func (t *TBDownloader) StartConf() *tor.StartConf {
+	paths := []string{
+		"/bin/tor",
+		"/usr/bin/tor",
+		"/usr/sbin/tor",
+		"/usr/local/bin/tor",
+		"/usr/bin/tor",
+	}
+	path := strings.Split(os.Getenv("PATH"), ":")
+	for _, p := range path {
+		p := filepath.Join(p, "tor")
+		paths = append(paths, p)
+	}
+	for _, path := range paths {
+		if FileExists(path) {
+			return &tor.StartConf{
+				ExePath: path,
+			}
+		}
+	}
+	tp := t.TorPath()
+	if FileExists(tp) {
+		return &tor.StartConf{
+			ExePath: tp,
+		}
+	}
+	return nil
+}
+
 // SingleFileDownload downloads a single file from the given URL to the given path.
 // it returns the path to the downloaded file, or an error if one is encountered.
 func (t *TBDownloader) SingleFileDownload(dl, name string, rangebottom int64) (string, error) {
@@ -347,9 +376,11 @@ func (t *TBDownloader) SingleFileDownload(dl, name string, rangebottom int64) (s
 		if !strings.Contains(t.Mirror, "127.0.0.1") {
 			if tmp, torerr := net.Listen("tcp", "127.0.0.1:9050"); torerr != nil {
 				log.Println("System Tor is running, downloading over that because obviously.")
-				t, err := tor.Start(context.Background(), nil)
+				t, err := tor.Start(context.Background(), t.StartConf())
 				if err != nil {
-					return "", err
+					if t == nil {
+						return "", err
+					}
 				}
 				defer t.Close()
 				// Wait at most a minute to start network and get
@@ -677,6 +708,14 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 		}
 	}
 	return t.BrowserDir(), nil
+}
+
+// TorPath returns the path to the Tor executable
+func (s *TBDownloader) TorPath() string {
+	if s.OS == "osx" {
+		return filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "Resources", "TorBrowser", "Tor", "tor")
+	}
+	return filepath.Join(s.UnpackPath, "Browser", "TorBrowser", "Tor", "tor")
 }
 
 // CheckSignature checks the signature of the updater.
