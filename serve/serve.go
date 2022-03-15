@@ -13,6 +13,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"strings"
 
@@ -53,7 +54,7 @@ func NewClient(verbose bool, lang, OS, arch, mirror string, content *embed.FS) (
 		panic(err)
 	}
 	sum := ""
-	if sums != "" {
+	if sums != "" && runtime.GOOS == "linux" && runtime.GOARCH == "arm64" {
 		b, err := ioutil.ReadFile(sums)
 		if err != nil {
 			log.Fatal(err)

@@ -83,7 +83,7 @@ var (
 	shortcuts  = flag.Bool("shortcuts", false, "Create desktop shortcuts")
 	apparmor   = flag.Bool("apparmor", false, "Generate apparmor rules")
 	offline    = flag.Bool("offline", false, "Work offline. Differs from Firefox's offline mode in that cannot be disabled until the browser is closed.")
-	clearnet   = flag.Bool("clearnet", false, "Use clearnet (no Tor or I2P)")
+	clearnet   = flag.Bool("clearnet", Clearnet(), "Use clearnet (no Tor or I2P)")
 	profile    = flag.String("profile", "", "use a custom profile path, normally blank")
 	help       = flag.Bool("help", false, "Print help")
 	mirror     = flag.String("mirror", Mirror(), "Mirror to use. I2P will be used if an I2P proxy is present, if system Tor is available, it will be downloaded over the Tor proxy.")
@@ -95,12 +95,23 @@ var (
 	/*ptop     = flag.Bool("p2p", tbget.TorrentReady(), "Use bittorrent over I2P to download the initial copy of Tor Browser")*/
 )
 
+func Clearnet() bool {
+	if tmc := os.Getenv("TOR_MANAGER_CLEARNET"); tmc != "" {
+		switch tmc {
+		case "1", "true", "yes", "on":
+			return true
+		}
+	}
+	return false
+}
+
 func Password() string {
 	require_password := os.Getenv("TOR_MANAGER_REQUIRE_PASSWORD")
 	if require_password == "" && !PluginStat() {
 		require_password = "true"
 	}
-	if require_password == "true" || require_password == "1" {
+	switch require_password {
+	case "true", "1", "yes", "on":
 		passwd, err := zenity.Entry(
 			"Enter a password if you want to encrypt the working directory",
 			zenity.Title("Work Directory Encryption"),
@@ -122,16 +133,24 @@ func Password() string {
 }
 
 func Mirror() string {
-	if tbget.TestHTTPDefaultProxy() {
-		return "http://dist.torproject.i2p/torbrowser/"
-	}
-	if tbget.TorrentReady() {
-		//return "http://127.0.0.1:7657/i2psnark/"
-		return "https://dist.torproject.org/torbrowser/"
+	if mir := os.Getenv("TOR_MANAGER_MIRROR"); mir != "" {
+		return mir
 	}
 	if runtime.GOOS == "linux" && runtime.GOARCH == "arm64" {
 		return "https://sourceforge.net/projects/tor-browser-ports/files"
 	}
+	clear := os.Getenv("TOR_MANAGER_CLEARNET")
+	if clear == "true" || clear == "1" {
+		return "https://dist.torproject.org/torbrowser/"
+	}
+	if tbget.TorrentReady() {
+		// return "http://127.0.0.1:7657/i2psnark/"
+		return "https://dist.torproject.org/torbrowser/"
+	}
+	if tbget.TestHTTPDefaultProxy() {
+		return "http://dist.torproject.i2p/torbrowser/"
+	}
+
 	return "https://dist.torproject.org/torbrowser/"
 }
 
@@ -147,7 +166,8 @@ func main() {
 		fmt.Printf("Usage: %s %s\n", filename, "[options]")
 		fmt.Printf("\n")
 		fmt.Printf("Downloads, verifies and unpacks Tor Browser. Manages the Tor Browser\n")
-		fmt.Printf("system in environments where Tor is not in use.\n")
+		fmt.Printf("system in environments where Tor is not in use. Monitors a long-running\n")
+		fmt.Printf("Tor process and downloads updates when Tor is not available.\n")
 		fmt.Printf("\n")
 		fmt.Printf("Options:\n")
 		fmt.Printf("\n")
@@ -310,7 +330,10 @@ func main() {
 			log.Fatal(err)
 		}
 	}
-	client.TBS.RunTorWithLang()
+	if !*clearnet {
+		client.TBS.RunTorWithLang()
+	}
+
 	if *chat {
 		log.Println("Starting I2P chat")
 		go BRBClient(*directory, "brb")

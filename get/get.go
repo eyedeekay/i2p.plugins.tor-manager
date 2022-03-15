@@ -17,6 +17,7 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 	"time"
 
@@ -333,14 +334,63 @@ func (t *TBDownloader) StartConf() *tor.StartConf {
 	for _, path := range paths {
 		if FileExists(path) {
 			return &tor.StartConf{
-				ExePath: path,
+				ExePath:           path,
+				RetainTempDataDir: false,
 			}
 		}
 	}
 	tp := t.TorPath()
 	if FileExists(tp) {
 		return &tor.StartConf{
-			ExePath: tp,
+			ExePath:           tp,
+			RetainTempDataDir: false,
+		}
+	}
+	return nil
+}
+
+// SetupProxy sets up the proxy for the given URL
+func (t *TBDownloader) SetupProxy() error {
+	var d proxy.Dialer
+	if t.MirrorIsI2P() {
+		log.Println("Using I2P mirror, setting up proxy")
+		var err error
+		proxyURL, err := url.Parse("http://127.0.0.1:4444")
+		if err != nil {
+			return err
+		}
+		d, err = connectproxy.New(proxyURL, proxy.Direct)
+		if nil != err {
+			return err
+		}
+		tr := &http.Transport{
+			Dial: d.Dial,
+		}
+		http.DefaultClient.Transport = tr
+	} else {
+		if !strings.Contains(t.Mirror, "127.0.0.1") {
+			if tmp, torerr := net.Listen("tcp", "127.0.0.1:9050"); torerr != nil {
+				log.Println("System Tor is running, downloading over that because obviously.")
+				t, err := tor.Start(context.Background(), t.StartConf())
+				if err != nil {
+					if t == nil {
+						return err
+					}
+				}
+				//defer t.Close()
+				// Wait at most a minute to start network and get
+				dialCtx, _ := context.WithTimeout(context.Background(), time.Minute)
+				//defer dialCancel()
+				// Make connection
+				dialer, err := t.Dialer(dialCtx, nil)
+				if err != nil {
+					return err
+				}
+				tr := &http.Transport{DialContext: dialer.DialContext}
+				http.DefaultClient.Transport = tr
+			} else {
+				tmp.Close()
+			}
 		}
 	}
 	return nil
@@ -356,47 +406,9 @@ func (t *TBDownloader) SingleFileDownload(dl, name string, rangebottom int64) (s
 		t.Log("SingleFileDownload()", "File already exists, skipping download")
 		return path, nil
 	}
-	var d proxy.Dialer
-	if t.MirrorIsI2P() {
-		log.Println("Using I2P mirror, setting up proxy")
-		var err error
-		proxyURL, err := url.Parse("http://127.0.0.1:4444")
-		if err != nil {
-			panic(err)
-		}
-		d, err = connectproxy.New(proxyURL, proxy.Direct)
-		if nil != err {
-			panic(err)
-		}
-		tr := &http.Transport{
-			Dial: d.Dial,
-		}
-		http.DefaultClient.Transport = tr
-	} else {
-		if !strings.Contains(t.Mirror, "127.0.0.1") {
-			if tmp, torerr := net.Listen("tcp", "127.0.0.1:9050"); torerr != nil {
-				log.Println("System Tor is running, downloading over that because obviously.")
-				t, err := tor.Start(context.Background(), t.StartConf())
-				if err != nil {
-					if t == nil {
-						return "", err
-					}
-				}
-				defer t.Close()
-				// Wait at most a minute to start network and get
-				dialCtx, dialCancel := context.WithTimeout(context.Background(), time.Minute)
-				defer dialCancel()
-				// Make connection
-				dialer, err := t.Dialer(dialCtx, nil)
-				if err != nil {
-					return "", err
-				}
-				tr := &http.Transport{DialContext: dialer.DialContext}
-				http.DefaultClient.Transport = tr
-			} else {
-				tmp.Close()
-			}
-		}
+	err := t.SetupProxy()
+	if err != nil {
+		return "", err
 	}
 	dlurl, err := url.Parse(dl)
 	if err != nil {
@@ -474,45 +486,9 @@ func (t *TBDownloader) FetchContentLength(dl, name string) (int64, error) {
 	//	t.Log("FetchContentLength()", "File already exists, skipping download")
 	//	return 0, nil
 	//}
-	var d proxy.Dialer
-	if t.MirrorIsI2P() {
-		log.Println("Using I2P mirror, setting up proxy")
-		var err error
-		proxyURL, err := url.Parse("http://127.0.0.1:4444")
-		if err != nil {
-			return 0, err
-		}
-		d, err = connectproxy.New(proxyURL, proxy.Direct)
-		if nil != err {
-			return 0, err
-		}
-		tr := &http.Transport{
-			Dial: d.Dial,
-		}
-		http.DefaultClient.Transport = tr
-	} else {
-		if !strings.Contains(t.Mirror, "127.0.0.1") {
-			if tmp, torerr := net.Listen("tcp", "127.0.0.1:9050"); torerr != nil {
-				log.Println("System Tor is running, downloading over that because obviously.")
-				t, err := tor.Start(context.Background(), nil)
-				if err != nil {
-					return 0, err
-				}
-				defer t.Close()
-				// Wait at most a minute to start network and get
-				dialCtx, dialCancel := context.WithTimeout(context.Background(), time.Minute)
-				defer dialCancel()
-				// Make connection
-				dialer, err := t.Dialer(dialCtx, nil)
-				if err != nil {
-					return 0, err
-				}
-				tr := &http.Transport{DialContext: dialer.DialContext}
-				http.DefaultClient.Transport = tr
-			} else {
-				tmp.Close()
-			}
-		}
+	err := t.SetupProxy()
+	if err != nil {
+		return 0, err
 	}
 	dlurl, err := url.Parse(dl)
 	if err != nil {
@@ -551,8 +527,16 @@ func (t *TBDownloader) BotherToDownload(dl, name string) bool {
 		if err != nil {
 			return true
 		}
-		if stat.Size() < contentLength { //TODO: Make this the real size of the file by requesting content-length
+
+		lenString := strconv.Itoa(int(contentLength))[:4]
+		lenSize := strconv.Itoa(int(stat.Size()))[:4]
+		log.Println("comparing sizes:", lenString, lenSize)
+
+		//if stat.Size() != contentLength {
+		if lenString != lenSize {
 			return true
+		} else {
+			return false
 		}
 	}
 	defer ioutil.WriteFile(filepath.Join(t.DownloadPath, name+".last-url"), []byte(dl), 0644)
@@ -567,7 +551,7 @@ func (t *TBDownloader) BotherToDownload(dl, name string) bool {
 }
 
 // NamePerPlatform returns the name of the updater for the given platform with appropriate extensions.
-func (t *TBDownloader) NamePerPlatform(ietf string) string {
+func (t *TBDownloader) NamePerPlatform(ietf, version string) string {
 	extension := "tar.xz"
 	windowsonly := ""
 	switch t.OS {
@@ -577,7 +561,21 @@ func (t *TBDownloader) NamePerPlatform(ietf string) string {
 		windowsonly = "-installer"
 		extension = "exe"
 	}
-	return fmt.Sprintf("torbrowser%s-%s-%s.%s", windowsonly, t.GetRuntimePair(), ietf, extension)
+	//version, err := t.Get
+	return fmt.Sprintf("torbrowser%s-%s-%s_%s.%s", windowsonly, t.GetRuntimePair(), version, ietf, extension)
+}
+
+func (t *TBDownloader) GetVersion() string {
+	binary, _, err := t.GetUpdaterForLang(t.Lang)
+	if err != nil {
+		return ""
+	}
+	version := strings.Split(binary, "/")[len(strings.Split(binary, "/"))-2]
+	return version
+}
+
+func (t *TBDownloader) GetName() string {
+	return t.NamePerPlatform(t.Lang, t.GetVersion())
 }
 
 // DownloadUpdater downloads the updater for the t.Lang. It returns
@@ -595,18 +593,19 @@ func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, stri
 	if err != nil {
 		return "", "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
+	version := t.GetVersion()
 
-	sigpath, err := t.SingleFileDownload(sig, t.NamePerPlatform(ietf)+".asc", 0)
+	sigpath, err := t.SingleFileDownload(sig, t.NamePerPlatform(ietf, version)+".asc", 0)
 	if err != nil {
 		return "", "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
-	binpath, err := t.SingleFileDownload(binary, t.NamePerPlatform(ietf), 0)
+	binpath, err := t.SingleFileDownload(binary, t.NamePerPlatform(ietf, version), 0)
 	if err != nil {
 		return "", sigpath, "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
 	var sumpath string
 	if t.OS == "linux" && runtime.GOARCH == "arm64" {
-		sumpath, err = t.SingleFileDownload("https://sourceforge.net/projects/tor-browser-ports/files/11.0.6/sha256sums-unsigned-build.txt/download", t.NamePerPlatform(ietf)+".sha256sums", 0)
+		sumpath, err = t.SingleFileDownload("https://sourceforge.net/projects/tor-browser-ports/files/11.0.6/sha256sums-unsigned-build.txt/download", t.NamePerPlatform(ietf, version)+".sha256sums", 0)
 		if err != nil {
 			return "", sigpath, sumpath, fmt.Errorf("DownloadUpdaterForLang: %s", err)
 		}
@@ -728,7 +727,7 @@ func (t *TBDownloader) CheckSignature(binpath, sigpath string) (string, error) {
 	}
 	var err error
 	if err = Verify(pk, sigpath, binpath); err == nil {
-		t.Log("CheckSignature: signature", "verified successfully")
+		log.Println("CheckSignature: signature", "verified successfully")
 		return t.UnpackUpdater(binpath)
 	}
 	return "", fmt.Errorf("CheckSignature: %s", err)

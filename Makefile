@@ -264,7 +264,7 @@ tor-browser/TPO-signing-key.pub:
 	#gpg --output ./tor-browser/TPO-signing-key.pub --export -r torbrowser@torproject.org
 	#gpg --armor --output ./tor-browser/TPO-signing-key.pub --export -r torbrowser@torproject.org
 	#gpg -r 0xEF6E286DDA85EA2A4BA7DE684E2C6E8793298290 --output ./tor-browser/TPO-signing-key.pub --export 
-	#gpg -r 0xEF6E286DDA85EA2A4BA7DE684E2C6E8793298290 --armor --output ./tor-browser/TPO-signing-key.pub --export 
+	gpg -r 0xEF6E286DDA85EA2A4BA7DE684E2C6E8793298290 --armor --output ./tor-browser/TPO-signing-key.pub --export 
 
 deb: clean
 	mv "hankhill19580_at_gmail.com.crl" ../; true

@@ -29,6 +29,8 @@ func Verify(keyrings, detached, target string) error {
 		return fmt.Errorf("Verify: failed to read keyrings: %s\n\t%s", err, keyrings)
 	}
 	log.Printf("Verify: %s", fmt.Sprintf("Read %d keyrings", len(entities)))
+	log.Printf("Verifying: %s against %s\n", target, detached)
+	log.Printf("Verify: using keyring %s\n", keyrings)
 	_, err = openpgp.CheckArmoredDetachedSignature(entities, verification_target, signature, nil)
 	if err != nil {
 		return fmt.Errorf("Verify: failed to verify signature: %s\n\t%s\n\t%s\n\t%s", err, keyrings, detached, target)
