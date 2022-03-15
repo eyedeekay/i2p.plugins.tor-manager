@@ -286,6 +286,7 @@ func (t *TBDownloader) GetUpdaterForLangFromJSONBytes(jsonBytes []byte, ietf str
 }
 
 func (t *TBDownloader) MirrorIze(replaceStr string) string {
+	log.Println("MirrorIze()", "Replacing", replaceStr, t.Mirror)
 	if t.OS == "linux" && runtime.GOARCH == "arm64" {
 		replaceStr = strings.Replace(replaceStr, "linux64", "linux-arm64", -1)
 		if strings.HasSuffix(replaceStr, ".tar.xz.asc") {
@@ -295,6 +296,14 @@ func (t *TBDownloader) MirrorIze(replaceStr string) string {
 			)
 			replaceStr = strings.Replace(replaceStr, lastElement, "sha256sums-unsigned-build.txt.asc", -1)
 		}
+	}
+	if strings.Contains(t.Mirror, "i2psnark") {
+		replaceStr = strings.Replace(replaceStr, "https://dist.torproject.org/torbrowser/", t.Mirror, 1)
+		dpath := filepath.Base(replaceStr)
+		replaceStr = strings.Replace(replaceStr, "http://", "", 1)
+		replaceStr = filepath.Dir(replaceStr)
+		replaceStr = filepath.Dir(replaceStr)
+		return "http://" + filepath.Join(replaceStr, dpath)
 	}
 	if t.Mirror != "" {
 		return strings.Replace(replaceStr, "https://dist.torproject.org/torbrowser/", t.Mirror, 1)
@@ -498,12 +507,12 @@ func (t *TBDownloader) FetchContentLength(dl, name string) (int64, error) {
 		Method: "HEAD",
 		URL:    dlurl,
 	}
-	t.Log("SingleFileDownload()", "Downloading file "+dl)
+	t.Log("FetchContentLength()", "Downloading file "+dl)
 	//file, err := http.Get(dl)
 	file, err := http.DefaultClient.Do(&req)
 	//Do(&req, nil)
 	if err != nil {
-		return 0, fmt.Errorf("SingleFileDownload: Request Error %s", err)
+		return 0, fmt.Errorf("FetchContentLength: Request Error %s", err)
 	}
 	file.Body.Close()
 	log.Println("Content-Length:", file.ContentLength)
@@ -528,8 +537,12 @@ func (t *TBDownloader) BotherToDownload(dl, name string) bool {
 			return true
 		}
 
-		lenString := strconv.Itoa(int(contentLength))[:4]
-		lenSize := strconv.Itoa(int(stat.Size()))[:4]
+		l := 4
+		if len(strconv.Itoa(int(contentLength))) < 4 {
+			l = 1
+		}
+		lenString := strconv.Itoa(int(contentLength))[:l]
+		lenSize := strconv.Itoa(int(stat.Size()))[:l]
 		log.Println("comparing sizes:", lenString, lenSize)
 
 		//if stat.Size() != contentLength {
@@ -562,7 +575,7 @@ func (t *TBDownloader) NamePerPlatform(ietf, version string) string {
 		extension = "exe"
 	}
 	//version, err := t.Get
-	return fmt.Sprintf("torbrowser%s-%s-%s_%s.%s", windowsonly, t.GetRuntimePair(), version, ietf, extension)
+	return fmt.Sprintf("tor-browser%s-%s-%s_%s.%s", windowsonly, t.GetRuntimePair(), version, ietf, extension)
 }
 
 func (t *TBDownloader) GetVersion() string {
@@ -594,6 +607,13 @@ func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, stri
 		return "", "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 	}
 	version := t.GetVersion()
+	if strings.Contains(t.Mirror, "i2psnark") {
+		for !TorrentDownloaded() {
+			time.Sleep(time.Second * 10)
+			log.Println("DownloadUpdaterForLang:", "Waiting for torrent to download")
+		}
+		time.Sleep(time.Second * 10)
+	}
 
 	sigpath, err := t.SingleFileDownload(sig, t.NamePerPlatform(ietf, version)+".asc", 0)
 	if err != nil {

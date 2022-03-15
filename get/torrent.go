@@ -162,3 +162,49 @@ func TorrentReady() bool {
 	}
 	return true
 }
+
+func TorrentPath() (string, string) {
+	extension := "tar.xz"
+	windowsonly := ""
+	switch runtime.GOOS {
+	case "darwin":
+		extension = "dmg"
+	case "windows":
+		windowsonly = "-installer"
+		extension = "exe"
+	}
+	//version, err := t.Get
+	return fmt.Sprintf("tor-browser%s", windowsonly), extension
+}
+
+func TorrentDownloaded() bool {
+	cmpsize := 8661000
+	if dir, err := FindSnarkDirectory(); err == nil {
+		err := filepath.Walk(dir,
+			func(path string, info os.FileInfo, err error) error {
+				if err != nil {
+					return err
+				}
+				prefix, suffix := TorrentPath()
+				if strings.HasPrefix(path, prefix) && strings.HasSuffix(path, suffix) {
+					if info.Size() > int64(cmpsize) {
+						log.Println("TorrentDownloaded: Torrent Download found:", path)
+						return nil
+					}
+				}
+				return nil
+			})
+		return err == nil
+	}
+	return false
+}
+
+func Torrent() bool {
+	if !TorrentReady() {
+		return false
+	}
+	if !TorrentDownloaded() {
+		return false
+	}
+	return true
+}

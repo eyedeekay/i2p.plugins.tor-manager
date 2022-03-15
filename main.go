@@ -92,7 +92,8 @@ var (
 	destruct   = flag.Bool("destruct", false, "Destructively delete the working directory when finished")
 	password   = flag.String("password", Password(), "Password to encrypt the working directory with. Implies -destruct, only the encrypted container will be saved.")
 	chat       = flag.Bool("chat", false, "Open a WebChat client")
-	/*ptop     = flag.Bool("p2p", tbget.TorrentReady(), "Use bittorrent over I2P to download the initial copy of Tor Browser")*/
+	notor      = flag.Bool("notor", false, "Do not automatically start Tor")
+	ptop       = flag.Bool("p2p", tbget.TorrentDownloaded(), "Use bittorrent over I2P to download the initial copy of Tor Browser")
 )
 
 func Clearnet() bool {
@@ -136,21 +137,32 @@ func Mirror() string {
 	if mir := os.Getenv("TOR_MANAGER_MIRROR"); mir != "" {
 		return mir
 	}
+	log.Println("No mirror specified, using default")
 	if runtime.GOOS == "linux" && runtime.GOARCH == "arm64" {
+		log.Println("Using arm64 mirror")
 		return "https://sourceforge.net/projects/tor-browser-ports/files"
 	}
 	clear := os.Getenv("TOR_MANAGER_CLEARNET")
-	if clear == "true" || clear == "1" {
+	switch clear {
+	case "1", "true", "yes", "on":
+		log.Println("Using clearnet mirror")
 		return "https://dist.torproject.org/torbrowser/"
 	}
-	if tbget.TorrentReady() {
-		// return "http://127.0.0.1:7657/i2psnark/"
+	clearmirror := os.Getenv("TOR_MANAGER_CLEARNET_MIRROR")
+	switch clearmirror {
+	case "1", "true", "yes", "on":
+		log.Println("Using clearnet mirror")
 		return "https://dist.torproject.org/torbrowser/"
+	}
+	if tbget.Torrent() {
+		log.Println("Using torrent mirror")
+		return "http://localhost:7657/i2psnark/"
 	}
 	if tbget.TestHTTPDefaultProxy() {
+		log.Println("Using I2P mirror")
 		return "http://dist.torproject.i2p/torbrowser/"
 	}
-
+	log.Println("Using clearnet mirror")
 	return "https://dist.torproject.org/torbrowser/"
 }
 
@@ -174,6 +186,9 @@ func main() {
 		usage()
 	}
 	flag.Parse()
+	if *ptop {
+		*mirror = "http://localhost:7657/i2psnark/"
+	}
 	if *password != "" {
 		log.Println("Looking for directory with password")
 		DecryptTarXZifThere(*directory, *password)
@@ -330,7 +345,7 @@ func main() {
 			log.Fatal(err)
 		}
 	}
-	if !*clearnet {
+	if !*clearnet && !*notor {
 		client.TBS.RunTorWithLang()
 	}
 
