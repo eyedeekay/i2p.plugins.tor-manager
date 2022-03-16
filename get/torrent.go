@@ -96,17 +96,20 @@ func (t *TBDownloader) GenerateTorrent(file string, announces []string) (*metain
 	default:
 		mi.AnnounceList = metainfo.AnnounceList{announces}
 	}
-	var url *url.URL
+	url, err := url.Parse("http://idk.i2p/torbrowser/" + filepath.Base(file))
+	if err != nil {
+		return nil, fmt.Errorf("GenerateTorrent: %s", err)
+	}
+	mi.URLList = []string{url.String()}
 	if t.listener != nil {
-		url, err = url.Parse("http://" + t.listener.Addr().(i2pkeys.I2PAddr).Base32() + "/" + filepath.Base(file))
+		url, err := url.Parse("http://" + t.listener.Addr().(i2pkeys.I2PAddr).Base32() + "/" + filepath.Base(file))
 		if err != nil {
 			return nil, fmt.Errorf("GenerateTorrent: %s", err)
 		}
 		if t.Mirror != "" {
-			mi.URLList = []string{url.String()}
+			mi.URLList = append(mi.URLList, url.String())
 		}
 	}
-
 	return &mi, nil
 }
 
