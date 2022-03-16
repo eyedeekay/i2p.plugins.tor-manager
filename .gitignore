@@ -21,3 +21,4 @@ tmp-i2pbrowser
 .i2pkeys
 *.tar.xz
 config
+i2p.plugins.native

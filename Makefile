@@ -117,10 +117,10 @@ bsd:
 #	GOOS=openbsd GOARCH=amd64 make build su3
 
 dep:
-	cp "$(HOME)/build/shellservice.jar" tor-browser/lib/shellservice.jar -v
+	#cp "$(HOME)/build/shellservice.jar" tor-browser/lib/shellservice.jar -v
 
 su3:
-	i2p.plugin.native -name=$(BINARY)-$(GOOS)-$(GOARCH) \
+	./i2p.plugin.native -name=$(BINARY)-$(GOOS)-$(GOARCH) \
 		-signer=$(SIGNER) \
 		-version "$(VERSION)" \
 		-author=$(SIGNER) \
@@ -339,14 +339,17 @@ example:
 xhost:
 	xhost + local:docker
 
-docker: xhost
+docker: clean xhost
 	docker build -t eyedeekay/i2p.plugins.tor-manager .
+	rm -rfv $(PWD).docker-build
+	cp -rv $(PWD) $(PWD).docker-build
 	docker run -it --rm \
-	    -u `id -u $(USER)`:`id -g $(USER)` \
-		-v $(PWD):/go/src/i2pgit.org/idk/i2p.plugins.tor-manager \
-		-v $(GOPATH)/src/github.com/eyedeekay/go-I2P-jpackage:/go/src/src/github.com/eyedeekay/go-I2P-jpackage \
+		-v $(PWD).docker-build:/go/src/i2pgit.org/idk/i2p.plugins.tor-manager \
+		-v $(GOPATH)/src/github.com/eyedeekay/go-I2P-jpackage:/go/src/github.com/eyedeekay/go-I2P-jpackage \
 		eyedeekay/i2p.plugins.tor-manager
-
+	cp -v $(PWD).docker-build/i2p.plugins.tor-manager* $(PWD)
+	sudo chown $(USER):$(USER) $(PWD)/i2p.plugins.tor-manager*
+		#-u `id -u $(USER)`:`id -g $(USER)` \
 		#-e DISPLAY=unix$(DISPLAY) \
 		#--publish 127.0.0.1:7695:7695 \
 		#-v /tmp/.X11-unix:/tmp/.X11-unix \
