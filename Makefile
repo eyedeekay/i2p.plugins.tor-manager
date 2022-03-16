@@ -320,7 +320,7 @@ usagemd:
 	@echo '```' | tee -a USAGE.md
 	@echo "" | tee -a USAGE.md
 
-index-usage: usagemd 
+index-usage:
 	@echo "<!DOCTYPE html>" > usage.html
 	@echo "<html>" >> usage.html
 	@echo "<head>" >> usage.html

@@ -8,110 +8,186 @@
 <h1 id="torand-sometimes-firefox-manager-for-i2p">Tor(And sometimes Firefox) Manager for I2P</h1>
 <h2 id="usage-i2p.plugins.tor-manager-options">Usage: i2p.plugins.tor-manager [options]</h2>
 <h3 id="options">Options:</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">Usage</span>: i2p.plugins.tor-manager [options]</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="ex">Downloads</span>, verifies and unpacks Tor Browser. Manages the Tor Browser</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="ex">system</span> in environments where Tor is not in use.</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="ex">Options</span>:</span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">Using</span> clearnet mirror</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="ex">Usage</span>: i2p.plugins.tor-manager [options]</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="ex">Downloads</span>, verifies and unpacks Tor Browser. Manages the Tor Browser</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="ex">system</span> in environments where Tor is not in use. Monitors a long-running</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a><span class="ex">Tor</span> process and downloads updates when Tor is not available.</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="ex">Usage</span> of ./i2p.plugins.tor-manager:</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>  <span class="ex">-apparmor</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>        <span class="ex">Generate</span> apparmor rules</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>  <span class="ex">-arch</span> string</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>        <span class="ex">OS/arch</span> to download (default <span class="st">&quot;64&quot;</span>)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>  <span class="ex">-bemirror</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>        <span class="ex">Act</span> as an in-I2P mirror when you<span class="st">&#39;re done downloading</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a><span class="st">  -clearnet</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a><span class="st">        Use clearnet (no Tor or I2P)</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a><span class="st">  -directory string</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a><span class="st">        Directory operate in</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a><span class="st">  -help</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a><span class="st">        Print help</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a><span class="st">  -host string</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a><span class="st">        Host to serve on (default &quot;127.0.0.1&quot;)</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a><span class="st">  -i2pbrowser</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a><span class="st">        Open I2P in Tor Browser</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true"></a><span class="st">  -i2pconfig</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true"></a><span class="st">        Open I2P routerconsole in Tor Browser with javscript enabled and non-routerconsole sites disabled</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true"></a><span class="st">  -lang string</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true"></a><span class="st">        Language to download</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true"></a><span class="st">  -offline</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true"></a><span class="st">        Work offline. Differs from Firefox&#39;</span>s offline mode in that cannot be disabled until the browser is closed.</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true"></a>  <span class="ex">-os</span> string</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true"></a>        <span class="ex">OS/arch</span> to download (default <span class="st">&quot;linux&quot;</span>)</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true"></a>  <span class="ex">-port</span> int</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true"></a>        <span class="ex">Port</span> to serve on (default 7695)</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true"></a>  <span class="ex">-profile</span> string</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true"></a>        <span class="ex">use</span> a custom profile path, normally blank</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true"></a>  <span class="ex">-shortcuts</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true"></a>        <span class="ex">Create</span> desktop shortcuts</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true"></a>  <span class="ex">-torbrowser</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true"></a>        <span class="ex">Open</span> Tor Browser</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true"></a>  <span class="ex">-verbose</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true"></a>        <span class="ex">Verbose</span> output</span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true"></a>  <span class="ex">-watch-profiles</span> string</span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true"></a>        <span class="ex">Monitor</span> and control these Firefox profiles. Temporarily Unused.</span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true"></a><span class="ex">Usage</span>: ./firefox.real [ options ... ] [URL]</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true"></a>       <span class="ex">where</span> options include:</span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true"></a></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true"></a><span class="ex">X11</span> options</span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true"></a>  <span class="ex">--display</span>=DISPLAY  X display to use</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true"></a>  <span class="ex">--sync</span>             Make X calls synchronous</span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true"></a>  <span class="ex">--g-fatal-warnings</span> Make all warnings fatal</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true"></a></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true"></a><span class="ex">Firefox</span> options</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true"></a>  <span class="ex">-h</span> or --help       Print this message.</span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true"></a>  <span class="ex">-v</span> or --version    Print Firefox version.</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true"></a>  <span class="ex">--full-version</span>     Print Firefox version, build and platform build ids.</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true"></a>  <span class="ex">-P</span> <span class="op">&lt;</span>profile<span class="op">&gt;</span>       Start with <span class="op">&lt;</span>profile<span class="op">&gt;</span>.</span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true"></a>  <span class="ex">--profile</span> <span class="op">&lt;</span>path<span class="op">&gt;</span>   Start with profile at <span class="op">&lt;</span>path<span class="op">&gt;</span>.</span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true"></a>  <span class="ex">--migration</span>        Start with migration wizard.</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true"></a>  <span class="ex">--ProfileManager</span>   Start with ProfileManager.</span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true"></a>  <span class="ex">--no-remote</span>        (default) <span class="ex">Do</span> not accept or send remote commands<span class="kw">;</span> <span class="ex">implies</span></span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true"></a>                     <span class="ex">--new-instance.</span></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true"></a>  <span class="ex">--allow-remote</span>     Accept and send remote commands.</span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true"></a>  <span class="ex">--new-instance</span>     Open new instance, not a new window in running instance.</span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true"></a>  <span class="ex">--safe-mode</span>        Disables extensions and themes for this session.</span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true"></a>  <span class="ex">--MOZ_LOG</span>=<span class="op">&lt;</span>modules<span class="op">&gt;</span> Treated as MOZ_LOG=<span class="op">&lt;</span>modules<span class="op">&gt;</span> environment variable,</span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true"></a>                     <span class="ex">overrides</span> it.</span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true"></a>  <span class="ex">--MOZ_LOG_FILE</span>=<span class="op">&lt;</span>file<span class="op">&gt;</span> Treated as MOZ_LOG_FILE=<span class="op">&lt;</span>file<span class="op">&gt;</span> environment variable,</span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true"></a>                     <span class="ex">overrides</span> it. If MOZ_LOG_FILE is not specified as an</span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true"></a>                     <span class="ex">argument</span> or as an environment variable, logging will be</span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true"></a>                     <span class="ex">written</span> to stdout.</span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true"></a>  <span class="ex">--headless</span>         Run without a GUI.</span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true"></a>  <span class="ex">--browser</span>          Open a browser window.</span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true"></a>  <span class="ex">--new-window</span> <span class="op">&lt;</span>url<span class="op">&gt;</span> Open <span class="op">&lt;</span>url<span class="op">&gt;</span> in a new window.</span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true"></a>  <span class="ex">--new-tab</span> <span class="op">&lt;</span>url<span class="op">&gt;</span>    Open <span class="op">&lt;</span>url<span class="op">&gt;</span> in a new tab.</span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true"></a>  <span class="ex">--private-window</span> <span class="op">&lt;</span>url<span class="op">&gt;</span> Open <span class="op">&lt;</span>url<span class="op">&gt;</span> in a new private window.</span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true"></a>  <span class="ex">--preferences</span>      Open Preferences dialog.</span>
-<span id="cb1-78"><a href="#cb1-78" aria-hidden="true"></a>  <span class="ex">--screenshot</span> [<span class="op">&lt;</span>path<span class="op">&gt;</span>] Save screenshot to <span class="op">&lt;</span>path<span class="op">&gt;</span> or in working directory.</span>
-<span id="cb1-79"><a href="#cb1-79" aria-hidden="true"></a>  <span class="ex">--window-size</span> width[,height] Width and optionally height of screenshot.</span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true"></a>  <span class="ex">--search</span> <span class="op">&lt;</span>term<span class="op">&gt;</span>    Search <span class="op">&lt;</span>term<span class="op">&gt;</span> with your default search engine.</span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true"></a>  <span class="ex">--setDefaultBrowser</span> Set this app as the default browser.</span>
-<span id="cb1-82"><a href="#cb1-82" aria-hidden="true"></a>  <span class="ex">--first-startup</span>    Run post-install actions before opening a new window.</span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true"></a>  <span class="ex">--kiosk</span> Start the browser in kiosk mode.</span>
-<span id="cb1-84"><a href="#cb1-84" aria-hidden="true"></a>  <span class="ex">--jsconsole</span>        Open the Browser Console.</span>
-<span id="cb1-85"><a href="#cb1-85" aria-hidden="true"></a>  <span class="ex">--jsdebugger</span> [<span class="op">&lt;</span>path<span class="op">&gt;</span>] Open the Browser Toolbox. Defaults to the local build</span>
-<span id="cb1-86"><a href="#cb1-86" aria-hidden="true"></a>                     <span class="ex">but</span> can be overridden by a firefox path.</span>
-<span id="cb1-87"><a href="#cb1-87" aria-hidden="true"></a>  <span class="ex">--wait-for-jsdebugger</span> Spin event loop until JS debugger connects.</span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true"></a>                     <span class="ex">Enables</span> debugging (some) <span class="ex">application</span> startup code paths.</span>
-<span id="cb1-89"><a href="#cb1-89" aria-hidden="true"></a>                     <span class="ex">Only</span> has an effect when <span class="kw">`</span><span class="ex">--jsdebugger</span><span class="kw">`</span> is also supplied.</span>
-<span id="cb1-90"><a href="#cb1-90" aria-hidden="true"></a>  <span class="ex">--devtools</span>         Open DevTools on initial load.</span>
-<span id="cb1-91"><a href="#cb1-91" aria-hidden="true"></a>  <span class="ex">--start-debugger-server</span> [ws:][ <span class="op">&lt;</span>port<span class="op">&gt;</span> <span class="kw">|</span> <span class="op">&lt;</span><span class="ex">path</span><span class="op">&gt;</span> ] Start the devtools server on</span>
-<span id="cb1-92"><a href="#cb1-92" aria-hidden="true"></a>                     <span class="ex">a</span> TCP port or Unix domain socket path. Defaults to TCP port</span>
-<span id="cb1-93"><a href="#cb1-93" aria-hidden="true"></a>                     <span class="ex">6000.</span> Use WebSocket protocol if ws: prefix is specified.</span>
-<span id="cb1-94"><a href="#cb1-94" aria-hidden="true"></a>  <span class="ex">--recording</span> <span class="op">&lt;</span>file<span class="op">&gt;</span> Record drawing for a given URL.</span>
-<span id="cb1-95"><a href="#cb1-95" aria-hidden="true"></a>  <span class="ex">--recording-output</span> <span class="op">&lt;</span>file<span class="op">&gt;</span> Specify destination file for a drawing recording.</span>
-<span id="cb1-96"><a href="#cb1-96" aria-hidden="true"></a>  <span class="ex">--remote-debugging-port</span> [<span class="op">&lt;</span>port<span class="op">&gt;</span>] Start the Firefox remote agent,</span>
-<span id="cb1-97"><a href="#cb1-97" aria-hidden="true"></a>                     <span class="fu">which</span> is a low-level debugging interface based on the CDP protocol.</span>
-<span id="cb1-98"><a href="#cb1-98" aria-hidden="true"></a>                     <span class="ex">Defaults</span> to listen on localhost:9222.</span>
-<span id="cb1-99"><a href="#cb1-99" aria-hidden="true"></a></span>
-<span id="cb1-100"><a href="#cb1-100" aria-hidden="true"></a><span class="ex">Tor</span> Browser Script Options</span>
-<span id="cb1-101"><a href="#cb1-101" aria-hidden="true"></a>  <span class="ex">--verbose</span>         Display Tor and Firefox output in the terminal</span>
-<span id="cb1-102"><a href="#cb1-102" aria-hidden="true"></a>  <span class="ex">--log</span> [file]      Record Tor and Firefox output in file (default: tor-browser.log)</span>
-<span id="cb1-103"><a href="#cb1-103" aria-hidden="true"></a>  <span class="ex">--detach</span>          Detach from terminal and run Tor Browser in the background.</span>
-<span id="cb1-104"><a href="#cb1-104" aria-hidden="true"></a>  <span class="ex">--register-app</span>    Register Tor Browser as a desktop app for this user</span>
-<span id="cb1-105"><a href="#cb1-105" aria-hidden="true"></a>  <span class="ex">--unregister-app</span>  Unregister Tor Browser as a desktop app for this user</span></code></pre></div>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a><span class="ex">Options</span>:</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a><span class="ex">Usage</span> of ./i2p.plugins.tor-manager:</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>  <span class="ex">-apparmor</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>        <span class="ex">Generate</span> apparmor rules</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>  <span class="ex">-arch</span> string</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>        <span class="ex">OS/arch</span> to download (default <span class="st">&quot;64&quot;</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a>  <span class="ex">-bemirror</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a>        <span class="ex">Act</span> as an in-I2P mirror when you<span class="st">&#39;re done downloading</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a><span class="st">  -chat</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a><span class="st">        Open a WebChat client</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a><span class="st">  -clearnet</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true"></a><span class="st">        Use clearnet (no Tor or I2P) in Tor Browser</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true"></a><span class="st">  -destruct</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true"></a><span class="st">        Destructively delete the working directory when finished</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true"></a><span class="st">  -directory string</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true"></a><span class="st">        Directory operate in (default &quot;tmp-i2pbrowser&quot;)</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true"></a><span class="st">  -help</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true"></a><span class="st">        Print help and quit</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true"></a><span class="st">  -host string</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true"></a><span class="st">        Host to serve on (default &quot;127.0.0.1&quot;)</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true"></a><span class="st">  -i2pbrowser</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true"></a><span class="st">        Open I2P in Tor Browser</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true"></a><span class="st">  -i2pconfig</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true"></a><span class="st">        Open I2P routerconsole in Tor Browser with javscript enabled and non-routerconsole sites disabled</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true"></a><span class="st">  -lang string</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true"></a><span class="st">        Language to download</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true"></a><span class="st">  -mirror string</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true"></a><span class="st">        Mirror to use. I2P will be used if an I2P proxy is present, if system Tor is available, it will be downloaded over the Tor proxy. (default &quot;https://dist.torproject.org/torbrowser/&quot;)</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true"></a><span class="st">  -notor</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true"></a><span class="st">        Do not automatically start Tor</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true"></a><span class="st">  -nounpack</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true"></a><span class="st">        Do not unpack the Tor Browser</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true"></a><span class="st">  -offline</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true"></a><span class="st">        Work offline. Differs from Firefox&#39;</span>s offline mode in that cannot be disabled until the browser is closed.</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true"></a>  <span class="ex">-onion</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true"></a>        <span class="ex">Serve</span> an onion site which shows some I2P propaganda</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true"></a>  <span class="ex">-os</span> string</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true"></a>        <span class="ex">OS/arch</span> to download (default <span class="st">&quot;linux&quot;</span>)</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true"></a>  <span class="ex">-p2p</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true"></a>        <span class="ex">Use</span> bittorrent over I2P to download the initial copy of Tor Browser (default true)</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true"></a>  <span class="ex">-password</span> string</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true"></a>        <span class="ex">Password</span> to encrypt the working directory with. Implies -destruct, only the encrypted container will be saved.</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true"></a>  <span class="ex">-port</span> int</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true"></a>        <span class="ex">Port</span> to serve on (default 7695)</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true"></a>  <span class="ex">-profile</span> string</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true"></a>        <span class="ex">use</span> a custom profile path, normally blank</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true"></a>  <span class="ex">-shortcuts</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true"></a>        <span class="ex">Create</span> desktop shortcuts</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true"></a>  <span class="ex">-snowflake</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true"></a>        <span class="ex">Offer</span> a Snowflake to other Tor Browser users</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true"></a>  <span class="ex">-snowflake-broker</span> string</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true"></a>        <span class="ex">broker</span> URL (default <span class="st">&quot;https://snowflake-broker.torproject.net/&quot;</span>)</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true"></a>  <span class="ex">-snowflake-capacity</span> uint</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true"></a>        <span class="ex">maximum</span> concurrent clients</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true"></a>  <span class="ex">-snowflake-directory</span> string</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true"></a>        <span class="ex">directory</span> with a page to serve locally for your snowflake. If empty, no local page is served.</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true"></a>  <span class="ex">-snowflake-keep-local-addresses</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true"></a>        <span class="ex">keep</span> local LAN address ICE candidates</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true"></a>  <span class="ex">-snowflake-log</span> string</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true"></a>        <span class="ex">log</span> filename</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true"></a>  <span class="ex">-snowflake-port</span> string</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true"></a>        <span class="ex">port</span> to serve info page(directory) <span class="ex">on</span> (default <span class="st">&quot;7676&quot;</span>)</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true"></a>  <span class="ex">-snowflake-relay</span> string</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true"></a>        <span class="ex">websocket</span> relay URL (default <span class="st">&quot;wss://snowflake.bamsoftware.com/&quot;</span>)</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true"></a>  <span class="ex">-snowflake-stun</span> string</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true"></a>        <span class="ex">broker</span> URL (default <span class="st">&quot;stun:stun.stunprotocol.org:3478&quot;</span>)</span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true"></a>  <span class="ex">-snowflake-unsafe-logging</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true"></a>        <span class="ex">prevent</span> logs from being scrubbed</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true"></a>  <span class="ex">-torbrowser</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true"></a>        <span class="ex">Open</span> Tor Browser</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true"></a>  <span class="ex">-torrent</span></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true"></a>        <span class="ex">Create</span> a torrent of the downloaded files and seed it over I2P using an Open Tracker (default true)</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true"></a>  <span class="ex">-verbose</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true"></a>        <span class="ex">Verbose</span> output</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true"></a>  <span class="ex">-watch-profiles</span> string</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true"></a>        <span class="ex">Monitor</span> and control these Firefox profiles. Temporarily Unused.</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true"></a>  <span class="ex">-</span> lt</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true"></a>  <span class="ex">-</span> my</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true"></a>  <span class="ex">-</span> pt-BR</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true"></a>  <span class="ex">-</span> cs</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true"></a>  <span class="ex">-</span> da</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true"></a>  <span class="ex">-</span> fr</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true"></a>  <span class="ex">-</span> he</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true"></a>  <span class="ex">-</span> zh-CN</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true"></a>  <span class="ex">-</span> en-US</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true"></a>  <span class="ex">-</span> es-AR</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true"></a>  <span class="ex">-</span> id</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true"></a>  <span class="ex">-</span> sv-SE</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true"></a>  <span class="ex">-</span> ar</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true"></a>  <span class="ex">-</span> ca</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true"></a>  <span class="ex">-</span> vi</span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true"></a>  <span class="ex">-</span> zh-TW</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true"></a>  <span class="ex">-</span> de</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true"></a>  <span class="ex">-</span> fa</span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true"></a>  <span class="ex">-</span> ko</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true"></a>  <span class="ex">-</span> ru</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true"></a>  <span class="ex">-</span> mk</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true"></a>  <span class="ex">-</span> nb-NO</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true"></a>  <span class="ex">-</span> nl</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true"></a>  <span class="ex">-</span> el</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true"></a>  <span class="ex">-</span> ga-IE</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true"></a>  <span class="ex">-</span> it</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true"></a>  <span class="ex">-</span> ja</span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true"></a>  <span class="ex">-</span> is</span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true"></a>  <span class="ex">-</span> pl</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true"></a>  <span class="ex">-</span> ro</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true"></a>  <span class="ex">-</span> th</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true"></a>  <span class="ex">-</span> es-ES</span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true"></a>  <span class="ex">-</span> hu</span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true"></a>  <span class="ex">-</span> ka</span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true"></a>  <span class="ex">-</span> ms</span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true"></a>  <span class="ex">-</span> tr</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true"></a><span class="ex">Usage</span>: ./firefox.real [ options ... ] [URL]</span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true"></a>       <span class="ex">where</span> options include:</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true"></a></span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true"></a><span class="ex">X11</span> options</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true"></a>  <span class="ex">--display</span>=DISPLAY  X display to use</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true"></a>  <span class="ex">--sync</span>             Make X calls synchronous</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true"></a>  <span class="ex">--g-fatal-warnings</span> Make all warnings fatal</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true"></a></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true"></a><span class="ex">Firefox</span> options</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true"></a>  <span class="ex">-h</span> or --help       Print this message.</span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true"></a>  <span class="ex">-v</span> or --version    Print Firefox version.</span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true"></a>  <span class="ex">--full-version</span>     Print Firefox version, build and platform build ids.</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true"></a>  <span class="ex">-P</span> <span class="op">&lt;</span>profile<span class="op">&gt;</span>       Start with <span class="op">&lt;</span>profile<span class="op">&gt;</span>.</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true"></a>  <span class="ex">--profile</span> <span class="op">&lt;</span>path<span class="op">&gt;</span>   Start with profile at <span class="op">&lt;</span>path<span class="op">&gt;</span>.</span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true"></a>  <span class="ex">--migration</span>        Start with migration wizard.</span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true"></a>  <span class="ex">--ProfileManager</span>   Start with ProfileManager.</span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true"></a>  <span class="ex">--no-remote</span>        (default) <span class="ex">Do</span> not accept or send remote commands<span class="kw">;</span> <span class="ex">implies</span></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true"></a>                     <span class="ex">--new-instance.</span></span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true"></a>  <span class="ex">--allow-remote</span>     Accept and send remote commands.</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true"></a>  <span class="ex">--new-instance</span>     Open new instance, not a new window in running instance.</span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true"></a>  <span class="ex">--safe-mode</span>        Disables extensions and themes for this session.</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true"></a>  <span class="ex">--MOZ_LOG</span>=<span class="op">&lt;</span>modules<span class="op">&gt;</span> Treated as MOZ_LOG=<span class="op">&lt;</span>modules<span class="op">&gt;</span> environment variable,</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true"></a>                     <span class="ex">overrides</span> it.</span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true"></a>  <span class="ex">--MOZ_LOG_FILE</span>=<span class="op">&lt;</span>file<span class="op">&gt;</span> Treated as MOZ_LOG_FILE=<span class="op">&lt;</span>file<span class="op">&gt;</span> environment variable,</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true"></a>                     <span class="ex">overrides</span> it. If MOZ_LOG_FILE is not specified as an</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true"></a>                     <span class="ex">argument</span> or as an environment variable, logging will be</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true"></a>                     <span class="ex">written</span> to stdout.</span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true"></a>  <span class="ex">--headless</span>         Run without a GUI.</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true"></a>  <span class="ex">--browser</span>          Open a browser window.</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true"></a>  <span class="ex">--new-window</span> <span class="op">&lt;</span>url<span class="op">&gt;</span> Open <span class="op">&lt;</span>url<span class="op">&gt;</span> in a new window.</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true"></a>  <span class="ex">--new-tab</span> <span class="op">&lt;</span>url<span class="op">&gt;</span>    Open <span class="op">&lt;</span>url<span class="op">&gt;</span> in a new tab.</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true"></a>  <span class="ex">--private-window</span> <span class="op">&lt;</span>url<span class="op">&gt;</span> Open <span class="op">&lt;</span>url<span class="op">&gt;</span> in a new private window.</span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true"></a>  <span class="ex">--preferences</span>      Open Preferences dialog.</span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true"></a>  <span class="ex">--screenshot</span> [<span class="op">&lt;</span>path<span class="op">&gt;</span>] Save screenshot to <span class="op">&lt;</span>path<span class="op">&gt;</span> or in working directory.</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true"></a>  <span class="ex">--window-size</span> width[,height] Width and optionally height of screenshot.</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true"></a>  <span class="ex">--search</span> <span class="op">&lt;</span>term<span class="op">&gt;</span>    Search <span class="op">&lt;</span>term<span class="op">&gt;</span> with your default search engine.</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true"></a>  <span class="ex">--setDefaultBrowser</span> Set this app as the default browser.</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true"></a>  <span class="ex">--first-startup</span>    Run post-install actions before opening a new window.</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true"></a>  <span class="ex">--kiosk</span> Start the browser in kiosk mode.</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true"></a>  <span class="ex">--jsconsole</span>        Open the Browser Console.</span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true"></a>  <span class="ex">--jsdebugger</span> [<span class="op">&lt;</span>path<span class="op">&gt;</span>] Open the Browser Toolbox. Defaults to the local build</span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true"></a>                     <span class="ex">but</span> can be overridden by a firefox path.</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true"></a>  <span class="ex">--wait-for-jsdebugger</span> Spin event loop until JS debugger connects.</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true"></a>                     <span class="ex">Enables</span> debugging (some) <span class="ex">application</span> startup code paths.</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true"></a>                     <span class="ex">Only</span> has an effect when <span class="kw">`</span><span class="ex">--jsdebugger</span><span class="kw">`</span> is also supplied.</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true"></a>  <span class="ex">--devtools</span>         Open DevTools on initial load.</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true"></a>  <span class="ex">--start-debugger-server</span> [ws:][ <span class="op">&lt;</span>port<span class="op">&gt;</span> <span class="kw">|</span> <span class="op">&lt;</span><span class="ex">path</span><span class="op">&gt;</span> ] Start the devtools server on</span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true"></a>                     <span class="ex">a</span> TCP port or Unix domain socket path. Defaults to TCP port</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true"></a>                     <span class="ex">6000.</span> Use WebSocket protocol if ws: prefix is specified.</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true"></a>  <span class="ex">--recording</span> <span class="op">&lt;</span>file<span class="op">&gt;</span> Record drawing for a given URL.</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true"></a>  <span class="ex">--recording-output</span> <span class="op">&lt;</span>file<span class="op">&gt;</span> Specify destination file for a drawing recording.</span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true"></a>  <span class="ex">--remote-debugging-port</span> [<span class="op">&lt;</span>port<span class="op">&gt;</span>] Start the Firefox remote agent,</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true"></a>                     <span class="fu">which</span> is a low-level debugging interface based on the CDP protocol.</span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true"></a>                     <span class="ex">Defaults</span> to listen on localhost:9222.</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true"></a></span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true"></a><span class="ex">Tor</span> Browser Script Options</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true"></a>  <span class="ex">--verbose</span>         Display Tor and Firefox output in the terminal</span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true"></a>  <span class="ex">--log</span> [file]      Record Tor and Firefox output in file (default: tor-browser.log)</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true"></a>  <span class="ex">--detach</span>          Detach from terminal and run Tor Browser in the background.</span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true"></a>  <span class="ex">--register-app</span>    Register Tor Browser as a desktop app for this user</span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true"></a>  <span class="ex">--unregister-app</span>  Unregister Tor Browser as a desktop app for this user</span></code></pre></div>
 </body>
 </html>
