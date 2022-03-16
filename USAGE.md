@@ -90,42 +90,45 @@ Usage of ./i2p.plugins.tor-manager:
     	Verbose output
   -watch-profiles string
     	Monitor and control these Firefox profiles. Temporarily Unused.
+
+Available Languages:
+
+  - mk
+  - en-US
+  - id
+  - ka
+  - ko
+  - ca
+  - hu
   - lt
+  - ru
+  - ja
+  - ms
   - my
-  - pt-BR
+  - tr
+  - fr
+  - ga-IE
+  - is
+  - it
+  - vi
+  - ar
   - cs
   - da
-  - fr
-  - he
-  - zh-CN
-  - en-US
-  - es-AR
-  - id
-  - sv-SE
-  - ar
-  - ca
-  - vi
-  - zh-TW
+  - pt-BR
   - de
-  - fa
-  - ko
-  - ru
-  - mk
-  - nb-NO
-  - nl
   - el
-  - ga-IE
-  - it
-  - ja
-  - is
+  - es-ES
   - pl
   - ro
   - th
-  - es-ES
-  - hu
-  - ka
-  - ms
-  - tr
+  - zh-CN
+  - he
+  - nb-NO
+  - nl
+  - sv-SE
+  - es-AR
+  - fa
+  - zh-TW
 Usage: ./firefox.real [ options ... ] [URL]
        where options include:
 

@@ -185,7 +185,7 @@ func main() {
 		fmt.Printf("Options:\n")
 		fmt.Printf("\n")
 		usage()
-		log.Printf("Available Languages:\n")
+		fmt.Printf("\nAvailable Languages:\n\n")
 		for _, l := range tbget.Languages() {
 			fmt.Printf("  - %s\n", l)
 		}
