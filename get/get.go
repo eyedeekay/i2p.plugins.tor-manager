@@ -326,11 +326,14 @@ func (t *TBDownloader) MirrorIze(replaceStr string) string {
 		replaceStr = strings.Replace(replaceStr, "http://", "", 1)
 		replaceStr = filepath.Dir(replaceStr)
 		replaceStr = filepath.Dir(replaceStr)
-		return "http://" + filepath.Join(replaceStr, dpath)
+		newurl := "http://" + filepath.Join(replaceStr, dpath)
+		log.Println("MirrorIze()", "Final URL", newurl)
+		return newurl
 	}
 	if t.Mirror != "" {
 		return strings.Replace(replaceStr, "https://dist.torproject.org/torbrowser/", t.Mirror, 1)
 	}
+	log.Println("MirrorIze()", "Final URL", replaceStr)
 	return replaceStr
 }
 
@@ -650,8 +653,8 @@ func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, stri
 			}
 		}
 		for !TorrentDownloaded() {
-			time.Sleep(time.Second * 10)
 			log.Println("DownloadUpdaterForLang:", "Waiting for torrent to download")
+			time.Sleep(time.Second * 10)
 		}
 		time.Sleep(time.Second * 10)
 	}

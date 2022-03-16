@@ -160,7 +160,7 @@ func (s *Supervisor) UnpackI2PData() error {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(embedpath, filepath.Join(fp, strings.Replace(embedpath, "tor-browser/unpack/i2p.firefox", "", -1)))
+		//fmt.Println(embedpath, filepath.Join(fp, strings.Replace(embedpath, "tor-browser/unpack/i2p.firefox", "", -1)))
 		if d.IsDir() {
 			os.MkdirAll(filepath.Join(fp, strings.Replace(embedpath, "tor-browser/unpack/i2p.firefox", "", -1)), 0755)
 		} else {
@@ -201,7 +201,7 @@ func (s *Supervisor) UnpackI2PAppData() error {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(embedpath, filepath.Join(fp, strings.Replace(embedpath, "tor-browser/unpack/i2p.firefox.config", "", -1)))
+		//fmt.Println(embedpath, filepath.Join(fp, strings.Replace(embedpath, "tor-browser/unpack/i2p.firefox.config", "", -1)))
 		if d.IsDir() {
 			os.MkdirAll(filepath.Join(fp, strings.Replace(embedpath, "tor-browser/unpack/i2p.firefox.config", "", -1)), 0755)
 		} else {

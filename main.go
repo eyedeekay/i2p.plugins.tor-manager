@@ -136,33 +136,34 @@ func Password() string {
 
 func Mirror() string {
 	if mir := os.Getenv("TOR_MANAGER_MIRROR"); mir != "" {
+		fmt.Println("Using environment mirror", mir)
 		return mir
 	}
 	if runtime.GOOS == "linux" && runtime.GOARCH == "arm64" {
-		log.Println("Using arm64 mirror")
+		fmt.Println("Using arm64 mirror")
 		return "https://sourceforge.net/projects/tor-browser-ports/files"
 	}
 	clear := os.Getenv("TOR_MANAGER_CLEARNET")
 	switch clear {
 	case "1", "true", "yes", "on":
-		log.Println("Using clearnet mirror")
+		fmt.Println("Using clearnet mirror")
 		return "https://dist.torproject.org/torbrowser/"
 	}
 	clearmirror := os.Getenv("TOR_MANAGER_CLEARNET_MIRROR")
 	switch clearmirror {
 	case "1", "true", "yes", "on":
-		log.Println("Using clearnet mirror")
+		fmt.Println("Using clearnet mirror")
 		return "https://dist.torproject.org/torbrowser/"
 	}
 	if tbget.Torrent() {
-		log.Println("Using torrent mirror")
+		fmt.Println("Using torrent mirror")
 		return "http://localhost:7657/i2psnark/"
 	}
 	if tbget.TestHTTPDefaultProxy() {
-		log.Println("Using I2P mirror")
+		fmt.Println("Using I2P mirror")
 		return "http://dist.torproject.i2p/torbrowser/"
 	}
-	log.Println("Using clearnet mirror")
+	fmt.Println("Using clearnet mirror")
 	return "https://dist.torproject.org/torbrowser/"
 }
 
@@ -346,6 +347,7 @@ func main() {
 		if err := client.TBD.GenerateMissingTorrents(); err != nil {
 			log.Fatal(err)
 		}
+		log.Println("I2P torrents generated")
 	}
 	client.TBS.UnpackI2PAppData()
 	client.TBS.UnpackI2PData()

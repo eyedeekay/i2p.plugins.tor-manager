@@ -54,20 +54,20 @@ func (t *TBDownloader) GenerateMissingTorrents() error {
 				meta.Write(file)
 				file.Close()
 			}
-		}
-		snark, err := FindSnarkDirectory()
-		if err != nil {
-			return err
-		}
-		sf := filepath.Join(snark, f)
-		sfp := filepath.Join(snark, f+".torrent")
-		if !FileExists(sf) {
-			log.Println("Copying", af, "to", sf)
-			cp.Copy(af, sf)
-		}
-		if !FileExists(sfp) {
-			log.Println("Copying", fp, "to", sfp)
-			cp.Copy(fp, sfp)
+			snark, err := FindSnarkDirectory()
+			if err != nil {
+				return err
+			}
+			sf := filepath.Join(snark, f)
+			sfp := filepath.Join(snark, f+".torrent")
+			if !FileExists(sf) {
+				log.Println("Copying", af, "to", sf)
+				cp.Copy(af, sf)
+			}
+			if !FileExists(sfp) {
+				log.Println("Copying", fp, "to", sfp)
+				cp.Copy(fp, sfp)
+			}
 		}
 	}
 	return nil
@@ -211,13 +211,16 @@ func TorrentDownloaded() bool {
 					return err
 				}
 				prefix, suffix := TorrentPath()
+				path = filepath.Base(path)
 				if strings.HasPrefix(path, prefix) && strings.HasSuffix(path, suffix) {
-					if info.Size() > int64(cmpsize) {
-						log.Println("TorrentDownloaded: Torrent Download found:", path)
-						found = true
-						return nil
-					} else {
-						return fmt.Errorf("TorrentDownloaded: Torrent Download found but size is too small: %s", path)
+					if !strings.HasSuffix(path, ".torrent") {
+						if info.Size() > int64(cmpsize) {
+							//fmt.Println("TorrentDownloaded: Torrent Download found:", path)
+							found = true
+							return nil
+						} else {
+							return fmt.Errorf("TorrentDownloaded: Torrent Download found but size is too small: %s", path)
+						}
 					}
 				}
 				return nil
