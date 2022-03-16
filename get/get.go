@@ -635,7 +635,7 @@ func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, stri
 	version := t.GetVersion()
 	if strings.Contains(t.Mirror, "i2psnark") {
 		if !TorrentDownloaded() {
-			//t.Log("DownloadUpdaterForLang()", "Downloading torrent")
+			t.Log("DownloadUpdaterForLang()", "Downloading torrent")
 			//Download the torrent files from their static locations.
 			i2psnark, err := FindSnarkDirectory()
 			if err != nil {
