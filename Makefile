@@ -341,12 +341,15 @@ xhost:
 
 docker: xhost
 	docker build -t eyedeekay/i2p.plugins.tor-manager .
-	docker run it --volume $(PWD)/build:/go/src/eyedeekay/i2p.plugins.tor-manager/build \
-		--env-file $(HOME)/i2p.plugins.tor-manager/env \
-		--publish 127.0.0.1:7695:7695 \
-		-e DISPLAY=unix$(DISPLAY) \
-		-v /tmp/.X11-unix:/tmp/.X11-unix \
-		--rm eyedeekay/i2p.plugins.tor-manager
+	docker run -it --rm \
+	    -u `id -u $(USER)`:`id -g $(USER)` \
+		-v $(PWD):/go/src/i2pgit.org/idk/i2p.plugins.tor-manager \
+		-v $(GOPATH)/src/github.com/eyedeekay/go-I2P-jpackage:/go/src/src/github.com/eyedeekay/go-I2P-jpackage \
+		eyedeekay/i2p.plugins.tor-manager
+
+		#-e DISPLAY=unix$(DISPLAY) \
+		#--publish 127.0.0.1:7695:7695 \
+		#-v /tmp/.X11-unix:/tmp/.X11-unix \
 
 LANG?=en-US
 TORRENT?=false
