@@ -127,6 +127,14 @@ func FindSnarkDirectory() (string, error) {
 	// or: %LOCALAPPDATA\i2p\i2psnark\
 	// or: %APPDATA\i2p\i2psnark\
 
+	SNARK_CONFIG := os.Getenv("SNARK_CONFIG")
+	if SNARK_CONFIG != "" {
+		checkfori2pcustom := filepath.Join(SNARK_CONFIG)
+		if FileExists(checkfori2pcustom) {
+			return checkfori2pcustom, nil
+		}
+	}
+
 	I2P_CONFIG := os.Getenv("I2P_CONFIG")
 	if I2P_CONFIG != "" {
 		checkfori2pcustom := filepath.Join(I2P_CONFIG, "i2psnark")
