@@ -305,7 +305,7 @@ debsrc: clean
 DATE=`date +%Y/%m/%d`
 
 usage:
-	./i2p.plugins.tor-manager --help
+	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager --help
 
 usagemd:
 	@echo "Tor(And sometimes Firefox) Manager for I2P" | tee USAGE.md
@@ -316,11 +316,11 @@ usagemd:
 	@echo "### Options:" | tee -a USAGE.md
 	@echo "" | tee -a USAGE.md
 	@echo '```sh' | tee -a USAGE.md
-	./i2p.plugins.tor-manager --help 2>&1 | grep -v $(DATE) | grep -v $(HOME) | tee -a USAGE.md
+	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager --help 2>&1 | grep -v $(DATE) | grep -v $(HOME) | tee -a USAGE.md
 	@echo '```' | tee -a USAGE.md
 	@echo "" | tee -a USAGE.md
 
-index-usage:
+index-usage: usagemd 
 	@echo "<!DOCTYPE html>" > usage.html
 	@echo "<html>" >> usage.html
 	@echo "<head>" >> usage.html
