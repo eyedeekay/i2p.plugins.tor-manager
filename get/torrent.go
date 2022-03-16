@@ -179,6 +179,7 @@ func TorrentPath() (string, string) {
 
 func TorrentDownloaded() bool {
 	cmpsize := 8661000
+	found := false
 	if dir, err := FindSnarkDirectory(); err == nil {
 		err := filepath.Walk(dir,
 			func(path string, info os.FileInfo, err error) error {
@@ -189,12 +190,18 @@ func TorrentDownloaded() bool {
 				if strings.HasPrefix(path, prefix) && strings.HasSuffix(path, suffix) {
 					if info.Size() > int64(cmpsize) {
 						log.Println("TorrentDownloaded: Torrent Download found:", path)
+						found = true
 						return nil
+					} else {
+						return fmt.Errorf("TorrentDownloaded: Torrent Download found but size is too small: %s", path)
 					}
 				}
 				return nil
 			})
-		return err == nil
+		if found {
+			return err == nil
+		}
+		return false
 	}
 	return false
 }

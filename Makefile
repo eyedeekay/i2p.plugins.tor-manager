@@ -8,7 +8,7 @@ GOARCH?="amd64"
 
 ARG=-v -tags netgo -ldflags '-w' # -extldflags "-static"'
 #FLAGS=/usr/lib/x86_64-linux-gnu/libboost_system.a /usr/lib/x86_64-linux-gnu/libboost_date_time.a /usr/lib/x86_64-linux-gnu/libboost_filesystem.a /usr/lib/x86_64-linux-gnu/libboost_program_options.a /usr/lib/x86_64-linux-gnu/libssl.a /usr/lib/x86_64-linux-gnu/libcrypto.a /usr/lib/x86_64-linux-gnu/libz.a
-#ARG=-ldflags '-w -linkmode=external -extldflags "-static -ldl $(FLAGS)"'
+STATIC=-v -tags netgo -ldflags '-w -extldflags "-static"'
 #NOSTATIC=-v -tags netgo -ldflags '-w -extldflags "-ldl $(FLAGS)"'
 WINGUI=-ldflags '-H=windowsgui'
 
@@ -29,7 +29,7 @@ winbinary:
 		GOOS=windows go build $(WINGUI) -tags="netgo osusergo systray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
 nosystray:
-	go build $(NOSTATIC) -tags="netgo osusergo nosystray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
+	CGO_ENABLED=0 go build $(STATIC) -tags="netgo osusergo nosystray" -o $(BINARY)-$(GOOS)-$(GOARCH)-static .
 
 lint:
 	golint supervise/*.go
@@ -347,3 +347,10 @@ docker: xhost
 		-e DISPLAY=unix$(DISPLAY) \
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		--rm eyedeekay/i2p.plugins.tor-manager
+
+torrents:
+	./i2p.plugins.tor-manager -nounpack -notor -os win
+	./i2p.plugins.tor-manager -nounpack -notor -os osx
+	./i2p.plugins.tor-manager -nounpack -notor -os linux
+	./i2p.plugins.tor-manager -nounpack -notor -os win -arch 32
+	./i2p.plugins.tor-manager -nounpack -notor -os linux -arch 32

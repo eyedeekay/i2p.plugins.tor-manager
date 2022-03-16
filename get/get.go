@@ -80,6 +80,7 @@ type TBDownloader struct {
 	OS, ARCH     string
 	Mirror       string
 	Verbose      bool
+	NoUnpack     bool
 	Profile      *embed.FS
 	listener     net.Listener
 }
@@ -608,6 +609,24 @@ func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, stri
 	}
 	version := t.GetVersion()
 	if strings.Contains(t.Mirror, "i2psnark") {
+		if !TorrentDownloaded() {
+			//t.Log("DownloadUpdaterForLang()", "Downloading torrent")
+			//Download the torrent files from their static locations.
+			i2psnark, err := FindSnarkDirectory()
+			if err != nil {
+				return "", "", "", err
+			}
+			asctorrent := filepath.Join(t.NamePerPlatform(ietf, version)+".asc", ".torrent")
+			_, err = t.SingleFileDownload("http://idk.i2p/torbrowser/"+asctorrent, filepath.Join(i2psnark, asctorrent), 0)
+			if err != nil {
+				return "", "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
+			}
+			bintorrent := filepath.Join(t.NamePerPlatform(ietf, version), ".torrent")
+			_, err = t.SingleFileDownload("http://idk.i2p/torbrowser/"+bintorrent, filepath.Join(i2psnark, bintorrent), 0)
+			if err != nil {
+				return "", "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
+			}
+		}
 		for !TorrentDownloaded() {
 			time.Sleep(time.Second * 10)
 			log.Println("DownloadUpdaterForLang:", "Waiting for torrent to download")
@@ -641,6 +660,9 @@ func (t *TBDownloader) BrowserDir() string {
 // UnpackUpdater unpacks the updater to the given path.
 // it returns the path or an erorr if one is encountered.
 func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
+	if t.NoUnpack {
+		return binpath, nil
+	}
 	t.Log("UnpackUpdater()", fmt.Sprintf("Unpacking %s", binpath))
 	if t.OS == "win" {
 		installPath := t.BrowserDir()
@@ -748,7 +770,11 @@ func (t *TBDownloader) CheckSignature(binpath, sigpath string) (string, error) {
 	var err error
 	if err = Verify(pk, sigpath, binpath); err == nil {
 		log.Println("CheckSignature: signature", "verified successfully")
-		return t.UnpackUpdater(binpath)
+		if !t.NoUnpack {
+			return t.UnpackUpdater(binpath)
+		}
+		log.Printf("CheckSignature: %s", "NoUnpack set, skipping unpack")
+		return t.BrowserDir(), nil
 	}
 	return "", fmt.Errorf("CheckSignature: %s", err)
 }

@@ -37,12 +37,13 @@ type Client struct {
 }
 
 // NewClient creates a new Client.
-func NewClient(verbose bool, lang, OS, arch, mirror string, content *embed.FS) (*Client, error) {
+func NewClient(verbose bool, lang, OS, arch, mirror string, content *embed.FS, nounpack bool) (*Client, error) {
 	m := &Client{
 		TBD: tbget.NewTBDownloader(lang, OS, arch, content),
 	}
 	m.TBD.Mirror = mirror
 	m.TBD.Verbose = verbose
+	m.TBD.NoUnpack = nounpack
 	m.TBD.MakeTBDirectory()
 	var err error
 	m.Onion, err = i2pdotonion.NewOnionService(m.TBD.DownloadPath)
@@ -91,7 +92,7 @@ func NewClient(verbose bool, lang, OS, arch, mirror string, content *embed.FS) (
 			log.Printf("Signature check passed: %s %s", tgz, sig)
 		}
 		m.TBS = TBSupervise.NewSupervisor(home, lang)
-		go m.TBS.RunTorWithLang()
+		//go m.TBS.RunTorWithLang()
 		return m, nil
 	}
 	var home string
@@ -105,7 +106,7 @@ func NewClient(verbose bool, lang, OS, arch, mirror string, content *embed.FS) (
 		log.Printf("Signature check passed: %s %s", tgz, sig)
 	}
 	m.TBS = TBSupervise.NewSupervisor(home, lang)
-	go m.TBS.RunTorWithLang()
+	//go m.TBS.RunTorWithLang()
 	return m, nil
 }
 

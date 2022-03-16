@@ -93,6 +93,7 @@ var (
 	password   = flag.String("password", Password(), "Password to encrypt the working directory with. Implies -destruct, only the encrypted container will be saved.")
 	chat       = flag.Bool("chat", false, "Open a WebChat client")
 	notor      = flag.Bool("notor", false, "Do not automatically start Tor")
+	nounpack   = flag.Bool("nounpack", false, "Do not unpack the Tor Browser")
 	ptop       = flag.Bool("p2p", tbget.TorrentDownloaded(), "Use bittorrent over I2P to download the initial copy of Tor Browser")
 )
 
@@ -137,7 +138,6 @@ func Mirror() string {
 	if mir := os.Getenv("TOR_MANAGER_MIRROR"); mir != "" {
 		return mir
 	}
-	log.Println("No mirror specified, using default")
 	if runtime.GOOS == "linux" && runtime.GOARCH == "arm64" {
 		log.Println("Using arm64 mirror")
 		return "https://sourceforge.net/projects/tor-browser-ports/files"
@@ -287,7 +287,7 @@ func main() {
 		}
 	}
 	var err error
-	client, err = tbserve.NewClient(*verbose, *lang, *system, *arch, *mirror, &content)
+	client, err = tbserve.NewClient(*verbose, *lang, *system, *arch, *mirror, &content, *nounpack)
 	if err != nil {
 		log.Fatal("Couldn't create client", err)
 	}
@@ -337,15 +337,21 @@ func main() {
 		}
 		return
 	}
-	client.TBS.UnpackI2PAppData()
-	client.TBS.UnpackI2PData()
 	if *torrent {
 		log.Println("Generating I2P torrents of Tor packages")
 		if err := client.TBD.GenerateMissingTorrents(); err != nil {
 			log.Fatal(err)
 		}
 	}
-	if !*clearnet && !*notor {
+	client.TBS.UnpackI2PAppData()
+	client.TBS.UnpackI2PData()
+	if *nounpack {
+		log.Println("not unpacking, cannot continue")
+		os.Exit(0)
+	}
+	if !(*clearnet || *notor) {
+		log.Println("CLEARNET", *clearnet)
+		log.Println("NOTOR", *notor)
 		client.TBS.RunTorWithLang()
 	}
 
