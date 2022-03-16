@@ -189,6 +189,7 @@ func main() {
 		for _, l := range tbget.Languages() {
 			fmt.Printf("  - %s\n", l)
 		}
+		fmt.Printf("\n")
 	}
 	flag.Parse()
 	if *ptop {

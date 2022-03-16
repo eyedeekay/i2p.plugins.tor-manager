@@ -93,42 +93,43 @@ Usage of ./i2p.plugins.tor-manager:
 
 Available Languages:
 
-  - mk
-  - en-US
-  - id
+  - ar
+  - my
+  - nl
+  - ro
+  - tr
+  - it
+  - ms
+  - pt-BR
+  - da
+  - es-ES
+  - fa
+  - is
+  - ja
+  - nb-NO
+  - lt
   - ka
   - ko
-  - ca
-  - hu
-  - lt
-  - ru
-  - ja
-  - ms
-  - my
-  - tr
-  - fr
-  - ga-IE
-  - is
-  - it
+  - pl
   - vi
-  - ar
+  - zh-TW
+  - ca
+  - fr
+  - id
+  - mk
+  - zh-CN
   - cs
-  - da
-  - pt-BR
   - de
   - el
-  - es-ES
-  - pl
-  - ro
+  - en-US
   - th
-  - zh-CN
-  - he
-  - nb-NO
-  - nl
-  - sv-SE
   - es-AR
-  - fa
-  - zh-TW
+  - ga-IE
+  - he
+  - hu
+  - ru
+  - sv-SE
+
 Usage: ./firefox.real [ options ... ] [URL]
        where options include:
 
