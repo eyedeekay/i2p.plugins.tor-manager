@@ -9,7 +9,7 @@ this way.
 
 This project explicitly views I2P and Tor as complementary privacy
 tools and explores good ways of combining them in a user-facing tool.
-It is especially useful when combined with a Socks Outproxy plugin
+It is especially useful when combined with a SOCKS Outproxy plugin
 like the one written by zzz. You can obtain it within I2P: http://zzz.i2p/topics/3219
 
 Usage:
