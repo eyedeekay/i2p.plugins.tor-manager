@@ -38,20 +38,22 @@ func (t *TBDownloader) GenerateMissingTorrents() error {
 		fp := filepath.Join(t.DownloadPath, f+".torrent")
 		af := filepath.Join(t.DownloadPath, f)
 		if !strings.HasSuffix(af, ".torrent") {
-			os.Remove(fp)
-			log.Println("Generating torrent for", fp)
-			meta, err := t.GenerateTorrent(af, nil)
-			if err != nil {
-				//return err
-				log.Println("GenerateMissingTorrents:", err)
-				continue
+			//os.Remove(fp)
+			if !FileExists(fp) {
+				log.Println("Generating torrent for", fp)
+				meta, err := t.GenerateTorrent(af, nil)
+				if err != nil {
+					//return err
+					log.Println("GenerateMissingTorrents:", err)
+					continue
+				}
+				file, err := os.Create(fp)
+				if err != nil {
+					return err
+				}
+				meta.Write(file)
+				file.Close()
 			}
-			file, err := os.Create(fp)
-			if err != nil {
-				return err
-			}
-			meta.Write(file)
-			file.Close()
 		}
 		snark, err := FindSnarkDirectory()
 		if err != nil {
@@ -59,16 +61,22 @@ func (t *TBDownloader) GenerateMissingTorrents() error {
 		}
 		sf := filepath.Join(snark, f)
 		sfp := filepath.Join(snark, f+".torrent")
-		log.Println("Copying", af, "to", sf)
-		cp.Copy(af, sf)
-		log.Println("Copying", fp, "to", sfp)
-		cp.Copy(fp, sfp)
+		if !FileExists(sf) {
+			log.Println("Copying", af, "to", sf)
+			cp.Copy(af, sf)
+		}
+		if !FileExists(sfp) {
+			log.Println("Copying", fp, "to", sfp)
+			cp.Copy(fp, sfp)
+		}
 	}
 	return nil
 }
 
 func (t *TBDownloader) GenerateTorrent(file string, announces []string) (*metainfo.MetaInfo, error) {
-	info, err := metainfo.NewInfoFromFilePath(file, 5120)
+
+	//info, err := metainfo.NewInfoFromFilePath(file, 5120)
+	info, err := metainfo.NewInfoFromFilePath(file, 10240)
 	if err != nil {
 		return nil, fmt.Errorf("GenerateTorrent: %s", err)
 	}

@@ -184,6 +184,10 @@ func main() {
 		fmt.Printf("Options:\n")
 		fmt.Printf("\n")
 		usage()
+		log.Printf("Available Languages:\n")
+		for _, l := range tbget.Languages() {
+			fmt.Printf("  - %s\n", l)
+		}
 	}
 	flag.Parse()
 	if *ptop {

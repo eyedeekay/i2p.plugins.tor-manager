@@ -67,6 +67,28 @@ func DOWNLOAD_PATH() string {
 // TOR_UPDATES_URL is the URL of the Tor Browser update list.
 const TOR_UPDATES_URL string = "https://aus1.torproject.org/torbrowser/update_3/release/downloads.json"
 
+func Languages() []string {
+	jsonText, err := http.Get(TOR_UPDATES_URL)
+	if err != nil {
+		return []string{}
+	}
+	defer jsonText.Body.Close()
+	jsonBytes, err := ioutil.ReadAll(jsonText.Body)
+	if err != nil {
+		return []string{}
+	}
+	var updates map[string]interface{}
+	if err := json.Unmarshal(jsonBytes, &updates); err != nil {
+		return []string{}
+	}
+	var languages []string
+	//updates[]
+	for i := range updates["downloads"].(map[string]interface{})["win64"].(map[string]interface{}) {
+		languages = append(languages, i)
+	}
+	return languages
+}
+
 var (
 	// DefaultIETFLang is the default language for the TBDownloader.
 	DefaultIETFLang, _ = jibber_jabber.DetectIETF()

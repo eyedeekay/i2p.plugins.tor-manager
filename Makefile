@@ -348,9 +348,51 @@ docker: xhost
 		-v /tmp/.X11-unix:/tmp/.X11-unix \
 		--rm eyedeekay/i2p.plugins.tor-manager
 
+LANG?=en-US
+TORRENT?=false
+
+all-torrents:
+	LANG=ro make torrents
+	LANG=ru make torrents
+	LANG=tr make torrents
+	LANG=en-US make torrents
+	LANG=ga-IE make torrents
+	LANG=pt-BR make torrents
+	LANG=es-ES make torrents
+	LANG=fa make torrents
+	LANG=it make torrents
+	LANG=ja make torrents
+	LANG=ka make torrents
+	LANG=ar make torrents
+	LANG=ca make torrents
+	LANG=da make torrents
+	LANG=my make torrents
+	LANG=th make torrents
+	LANG=de make torrents
+	LANG=hu make torrents
+	LANG=lt make torrents
+	LANG=he make torrents
+	LANG=ms make torrents
+	LANG=pl make torrents
+	LANG=zh-TW make torrents
+	LANG=id make torrents
+	LANG=ko make torrents
+	LANG=nl make torrents
+	LANG=zh-CN make torrents
+	LANG=el make torrents
+	LANG=fr make torrents
+	LANG=sv-SE make torrents
+	LANG=cs make torrents
+	LANG=es-AR make torrents
+	LANG=nb-NO make torrents
+	LANG=is make torrents
+	LANG=mk make torrents
+	LANG=vi make torrents
+	TORRENT=true LANG=vi make torrents
+
 torrents:
-	./i2p.plugins.tor-manager -nounpack -notor -os win
-	./i2p.plugins.tor-manager -nounpack -notor -os osx
-	./i2p.plugins.tor-manager -nounpack -notor -os linux
-	./i2p.plugins.tor-manager -nounpack -notor -os win -arch 32
-	./i2p.plugins.tor-manager -nounpack -notor -os linux -arch 32
+	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os win -lang "$(LANG)" #-torrent $(TORRENT)
+	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os osx -lang "$(LANG)" #-torrent $(TORRENT)
+	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os linux -lang "$(LANG)" #-torrent $(TORRENT)
+	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os win -arch 32 -lang "$(LANG)" #-torrent $(TORRENT)
+	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os linux -arch 32 -lang "$(LANG)" #-torrent $(TORRENT)
