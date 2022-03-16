@@ -110,6 +110,11 @@ func (t *TBDownloader) GenerateTorrent(file string, announces []string) (*metain
 			mi.URLList = append(mi.URLList, url.String())
 		}
 	}
+	clearurl, err := url.Parse("https://eyedeekay.github.io/torbrowser/" + filepath.Base(file))
+	if err != nil {
+		return nil, fmt.Errorf("GenerateTorrent: %s", err)
+	}
+	mi.URLList = append(mi.URLList, clearurl.String())
 	return &mi, nil
 }
 
