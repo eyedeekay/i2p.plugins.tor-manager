@@ -347,6 +347,8 @@ docker: clean xhost
 	cp -rv $(PWD) $(PWD).docker-build
 	cp -v $(HOME)/go/bin/i2p.plugin.native ./i2p.plugin.native
 	docker run -it --rm \
+		--env GOOS=linux \
+		--env GOARCH=$(GOARCH) \
 		-v $(PWD).docker-build:/go/src/i2pgit.org/idk/i2p.plugins.tor-manager \
 		-v $(GOPATH)/src/github.com/eyedeekay/go-I2P-jpackage:/go/src/github.com/eyedeekay/go-I2P-jpackage \
 		eyedeekay/i2p.plugins.tor-manager
