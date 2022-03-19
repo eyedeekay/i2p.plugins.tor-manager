@@ -12,15 +12,12 @@ import (
 	"strings"
 
 	"github.com/cloudfoundry/jibber_jabber"
-	i2cpcheck "github.com/eyedeekay/checki2cp"
 	"github.com/itchio/damage"
 	"github.com/itchio/damage/hdiutil"
 	"github.com/itchio/headway/state"
 	"github.com/ncruces/zenity"
 	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
 	tbserve "i2pgit.org/idk/i2p.plugins.tor-manager/serve"
-
-	"github.com/eyedeekay/go-I2P-jpackage"
 )
 
 /*
@@ -256,41 +253,8 @@ func main() {
 		}
 		log.Println("Using auto-detected language", *lang)
 	}
-	if tbget.TestHTTPDefaultProxy() {
-		log.Println("I2P HTTP proxy OK")
-	} else {
-		log.Println("I2P HTTP proxy not OK")
-		run, err := i2cpcheck.ConditionallyLaunchI2P()
-		if err != nil {
-			log.Println("Couldn't launch I2P", err)
-		}
-		if run {
-			if tbget.TestHTTPDefaultProxy() {
-				log.Println("I2P HTTP proxy OK after launching I2P")
-			} else {
-				go proxy()
-				if !tbget.TestHTTPBackupProxy() {
-					log.Fatal("Please set the I2P HTTP proxy on localhost:4444", err)
-				}
-			}
-		} else {
-			I2Pdaemon, err := I2P.NewDaemon(*directory, false)
-			if err != nil {
-				log.Println(err)
-				return
-			}
-			if err = I2Pdaemon.Start(); err != nil {
-				log.Fatal(err)
-			}
-			shutdown = true
-			defer I2Pdaemon.Stop()
-			go runSysTray(true)
-			if tbget.TestHTTPDefaultProxy() {
-				log.Println("I2P HTTP proxy OK")
-			} else {
-				log.Fatal("Embedded i2pd unable to start")
-			}
-		}
+	if err := StartI2P(*directory); err != nil {
+		log.Fatal(err)
 	}
 	var err error
 	client, err = tbserve.NewClient(*verbose, *lang, *system, *arch, *mirror, &content, *nounpack)
