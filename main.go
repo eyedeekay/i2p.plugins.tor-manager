@@ -253,8 +253,12 @@ func main() {
 		}
 		log.Println("Using auto-detected language", *lang)
 	}
-	if err := StartI2P(*directory); err != nil {
+	if I2PDaemon, err := StartI2P(*directory); err != nil {
 		log.Fatal(err)
+	} else {
+		if I2PDaemon != nil {
+			defer I2PDaemon.Stop()
+		}
 	}
 	var err error
 	client, err = tbserve.NewClient(*verbose, *lang, *system, *arch, *mirror, &content, *nounpack)
