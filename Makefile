@@ -343,7 +343,7 @@ xhost:
 
 docker: clean xhost
 	docker build -t eyedeekay/i2p.plugins.tor-manager .
-	rm -rfv $(PWD).docker-build
+	sudo rm -rfv $(PWD).docker-build
 	cp -rv $(PWD) $(PWD).docker-build
 	cp -v $(HOME)/go/bin/i2p.plugin.native ./i2p.plugin.native
 	docker run -it --rm \
