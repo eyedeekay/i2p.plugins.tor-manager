@@ -30,6 +30,7 @@ winbinary:
 
 nosystray:
 	CGO_ENABLED=0 go build $(STATIC) -tags="netgo osusergo nosystray" -o $(BINARY)-$(GOOS)-$(GOARCH)-static .
+	cp i2p.plugins.tor-manager-linux-386-static i2p.plugins.tor-manager-linux-386; true
 
 lint:
 	golint supervise/*.go
@@ -104,7 +105,8 @@ windows:
 	GOOS=windows GOARCH=386 make winplugin su3 unembed-linux build unbackup-embed
 
 linux:
-	GOOS=linux GOARCH=amd64 make linplugin su3 unembed-windows build unbackup-embed
+	GOOS=linux GOARCH=amd64 make docker su3
+#	linplugin su3 unembed-windows build unbackup-embed
 #	GOOS=linux GOARCH=arm64 make linplugin su3 unembed-windows build unbackup-embed
 	PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig GOOS=linux GOARCH=386 make linplugin-nosystray su3 unembed-windows nosystray unbackup-embed
 
