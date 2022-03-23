@@ -164,18 +164,18 @@ func FindSnarkDirectory() (string, error) {
 	case "windows":
 		checkfori2plocal := filepath.Join(home, "AppData", "Local", "i2p", "i2psnark")
 		if FileExists(checkfori2plocal) {
-			log.Println("Found snark directory at %APPDATA%\\i2p\\i2psnark", checkfori2plocal)
+			log.Println("Found snark directory at %APPDATA%\\i2p\\i2psnark", "%APPDATA%\\i2p\\i2psnark")
 			return checkfori2plocal, nil
 		}
 		checkfori2proaming := filepath.Join(home, "AppData", "Roaming", "i2p", "i2psnark")
 		if FileExists(checkfori2proaming) {
-			log.Println("Found snark directory at %APPDATA%\\i2p\\i2psnark", checkfori2proaming)
+			log.Println("Found snark directory at %APPDATA%\\i2p\\i2psnark", "%APPDATA%\\i2p\\i2psnark")
 			return checkfori2proaming, nil
 		}
 	case "linux":
 		checkfori2phome := filepath.Join(home, ".i2p", "i2psnark")
 		if FileExists(checkfori2phome) {
-			log.Println("Found snark directory at $HOME/.i2p/i2psnark", checkfori2phome)
+			log.Println("Found snark directory at $HOME/.i2p/i2psnark", "$HOME/.i2p/i2psnark")
 			return checkfori2phome, nil
 		}
 		checkfori2pservice := filepath.Join("/var/lib/i2p/i2p-config", "i2psnark")
