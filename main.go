@@ -350,6 +350,7 @@ func main() {
 		log.Println("Starting I2P chat")
 		go BRBClient(*directory, "brb")
 	}
+	go ServeEditor()
 	if *i2pbrowser {
 		if err := client.TBS.RunI2PBWithLang(); err != nil {
 			log.Fatal(err)

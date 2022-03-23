@@ -531,6 +531,7 @@ func (t *TBDownloader) FetchContentLength(dl, name string) (int64, error) {
 	return FetchContentLength(dl, name)
 }
 func FetchContentLength(dl, name string) (int64, error) {
+	log.Println("FetchContentLength():", fmt.Sprintf("Checking for updates %s to %s", dl, name))
 	err := SetupProxy(dl, "")
 	if err != nil {
 		return 0, err

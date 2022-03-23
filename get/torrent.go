@@ -249,12 +249,12 @@ func GetTorBrowserVersionFromUpdateURL() (string, error) {
 	return "Unknown", nil
 }
 
-func TorrentDownloaded(lang, rtpair string) bool {
+func TorrentDownloaded(ietf, rtpair string) bool {
 	version, err := GetTorBrowserVersionFromUpdateURL()
 	if err != nil {
 		panic(err)
 	}
-	log.Println("Tor Browser Version", version, lang)
+	log.Println("Tor Browser Version", version, ietf)
 	extension := "exe"
 	if strings.Contains(rtpair, "linux") {
 		extension = "tar.xz"
@@ -263,7 +263,10 @@ func TorrentDownloaded(lang, rtpair string) bool {
 		extension = "dmg"
 	}
 
-	cmpsize, err := FetchContentLength(fmt.Sprintf("https://dist.torproject.org/torbrowser/%s/tor-browser-%s-%s_%s.%s", version, rtpair, version, lang, extension), fmt.Sprintf("tor-browser-%s-%s_%s.%s", rtpair, version, lang, extension))
+	if ietf == "" {
+		ietf = "en-US"
+	}
+	cmpsize, err := FetchContentLength(fmt.Sprintf("https://dist.torproject.org/torbrowser/%s/tor-browser-%s-%s_%s.%s", version, rtpair, version, ietf, extension), fmt.Sprintf("tor-browser-%s-%s_%s.%s", rtpair, version, ietf, extension))
 	if err != nil {
 		panic(err)
 	}
@@ -277,7 +280,7 @@ func TorrentDownloaded(lang, rtpair string) bool {
 				prefix, suffix := TorrentPath()
 				path = filepath.Base(path)
 				if strings.HasPrefix(path, prefix) {
-					if strings.Contains(path, "_"+lang) {
+					if strings.Contains(path, "_"+ietf) {
 						if strings.Contains(path, version) {
 							if strings.Contains(path, rtpair) {
 								if strings.HasSuffix(path, suffix) {
@@ -306,11 +309,11 @@ func TorrentDownloaded(lang, rtpair string) bool {
 	return false
 }
 
-func Torrent(lang, rtpair string) bool {
+func Torrent(ietf, rtpair string) bool {
 	if !TorrentReady() {
 		return false
 	}
-	if !TorrentDownloaded(lang, rtpair) {
+	if !TorrentDownloaded(ietf, rtpair) {
 		return false
 	}
 	return true
