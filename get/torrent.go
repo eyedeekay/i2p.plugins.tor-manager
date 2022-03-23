@@ -239,7 +239,7 @@ func GetTorBrowserVersionFromUpdateURL() (string, error) {
 		}
 	}
 
-	return "11.0.9", nil
+	return "Unknown", nil
 }
 
 func TorrentDownloaded() bool {
@@ -249,7 +249,7 @@ func TorrentDownloaded() bool {
 	}
 	log.Println("Tor Browser Version", version)
 
-	cmpsize := 8661000
+	cmpsize := 86610000
 	found := false
 	if dir, err := FindSnarkDirectory(); err == nil {
 		err := filepath.Walk(dir,
