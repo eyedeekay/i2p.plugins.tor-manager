@@ -437,6 +437,8 @@ all-torrents:
 		make torrents-\$$TBLANG"
 	bash -c "export TORRENT=true && export TBLANG=vi && \
 		make torrents-\$$TBLANG"
+	cd ../torbrowser && ./copy.sh
+	cd ../torbrowser && ./add.sh
 
 torrents-$(TBLANG):
 	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os win -lang "$(TBLANG)" -p2p=false
