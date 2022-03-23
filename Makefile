@@ -363,43 +363,80 @@ docker: clean xhost
 TORRENT?=false
 
 all-torrents:
-	TBLANG=ro make torrents-$(TBLANG)
-	TBLANG=ru make torrents-$(TBLANG)
-	TBLANG=tr make torrents-$(TBLANG)
-	TBLANG=en-US make torrents-$(TBLANG)
-	TBLANG=ga-IE make torrents-$(TBLANG)
-	TBLANG=pt-BR make torrents-$(TBLANG)
-	TBLANG=es-ES make torrents-$(TBLANG)
-	TBLANG=fa make torrents-$(TBLANG)
-	TBLANG=it make torrents-$(TBLANG)
-	TBLANG=ja make torrents-$(TBLANG)
-	TBLANG=ka make torrents-$(TBLANG)
-	TBLANG=ar make torrents-$(TBLANG)
-	TBLANG=ca make torrents-$(TBLANG)
-	TBLANG=da make torrents-$(TBLANG)
-	TBLANG=my make torrents-$(TBLANG)
-	TBLANG=th make torrents-$(TBLANG)
-	TBLANG=de make torrents-$(TBLANG)
-	TBLANG=hu make torrents-$(TBLANG)
-	TBLANG=lt make torrents-$(TBLANG)
-	TBLANG=he make torrents-$(TBLANG)
-	TBLANG=ms make torrents-$(TBLANG)
-	TBLANG=pl make torrents-$(TBLANG)
-	TBLANG=zh-TW make torrents-$(TBLANG)
-	TBLANG=id make torrents-$(TBLANG)
-	TBLANG=ko make torrents-$(TBLANG)
-	TBLANG=nl make torrents-$(TBLANG)
-	TBLANG=zh-CN make torrents-$(TBLANG)
-	TBLANG=el make torrents-$(TBLANG)
-	TBLANG=fr make torrents-$(TBLANG)
-	TBLANG=sv-SE make torrents-$(TBLANG)
-	TBLANG=cs make torrents-$(TBLANG)
-	TBLANG=es-AR make torrents-$(TBLANG)
-	TBLANG=nb-NO make torrents-$(TBLANG)
-	TBLANG=is make torrents-$(TBLANG)
-	TBLANG=mk make torrents-$(TBLANG)
-	TBLANG=vi make torrents-$(TBLANG)
-	TORRENT=true TBLANG=vi make torrents-$(TBLANG)
+	bash -c "export TBLANG=ro && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=ru && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=tr && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=en-US && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=ga-IE && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=pt-BR && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=es-ES && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=fa && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=it && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=ja && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=ka && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=ar && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=ca && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=da && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=my && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=th && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=de && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=hu && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=lt && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=he && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=ms && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=pl && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=zh-TW && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=id && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=ko && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=nl && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=zh-CN && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=el && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=fr && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=sv-SE && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=cs && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=es-AR && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=nb-NO && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=is && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=mk && \
+		make torrents-\$$TBLANG"
+	bash -c "export TBLANG=vi && \
+		make torrents-\$$TBLANG"
+	bash -c "export TORRENT=true && export TBLANG=vi && \
+		make torrents-\$$TBLANG"
 
 torrents-$(TBLANG):
 	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os win -lang "$(TBLANG)" #-p2p=false #-torrent $(TORRENT)
