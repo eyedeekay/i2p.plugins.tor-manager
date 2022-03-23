@@ -22,3 +22,4 @@ tmp-i2pbrowser
 *.tar.xz
 config
 i2p.plugins.native
+torrents-*

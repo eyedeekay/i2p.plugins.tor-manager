@@ -255,8 +255,18 @@ func TorrentDownloaded(lang, rtpair string) bool {
 		panic(err)
 	}
 	log.Println("Tor Browser Version", version, lang)
+	extension := "exe"
+	if strings.Contains(rtpair, "linux") {
+		extension = "tar.xz"
+	}
+	if strings.Contains(rtpair, "osx") {
+		extension = "dmg"
+	}
 
-	cmpsize := 86000000
+	cmpsize, err := FetchContentLength(fmt.Sprintf("https://dist.torproject.org/torbrowser/%s/tor-browser-%s-%s_%s.%s", version, rtpair, version, lang, extension), fmt.Sprintf("tor-browser-%s-%s_%s.%s", rtpair, version, lang, extension))
+	if err != nil {
+		panic(err)
+	}
 	found := false
 	if dir, err := FindSnarkDirectory(); err == nil {
 		err := filepath.Walk(dir,
@@ -271,7 +281,7 @@ func TorrentDownloaded(lang, rtpair string) bool {
 						if strings.Contains(path, version) {
 							if strings.Contains(path, rtpair) {
 								if strings.HasSuffix(path, suffix) {
-									if info.Size() > int64(cmpsize) {
+									if info.Size() == int64(cmpsize) {
 										sizeString := fmt.Sprintf("%d", info.Size())
 										cmpString := fmt.Sprintf("%d", cmpsize)
 										fmt.Println("TorrentDownloaded: Torrent Download complete:", path, info.Size(), int64(cmpsize), len(sizeString), len(cmpString))

@@ -528,11 +528,10 @@ func FileExists(path string) bool {
 
 func (t *TBDownloader) FetchContentLength(dl, name string) (int64, error) {
 	t.MakeTBDirectory()
-	//if !t.BotherToDownload(dl, name) {
-	//	t.Log("FetchContentLength()", "File already exists, skipping download")
-	//	return 0, nil
-	//}
-	err := t.SetupProxy()
+	return FetchContentLength(dl, name)
+}
+func FetchContentLength(dl, name string) (int64, error) {
+	err := SetupProxy(dl, "")
 	if err != nil {
 		return 0, err
 	}
@@ -544,7 +543,7 @@ func (t *TBDownloader) FetchContentLength(dl, name string) (int64, error) {
 		Method: "HEAD",
 		URL:    dlurl,
 	}
-	t.Log("FetchContentLength()", "Downloading file "+dl)
+	log.Println("FetchContentLength()", "Downloading file "+dl)
 	//file, err := http.Get(dl)
 	file, err := http.DefaultClient.Do(&req)
 	//Do(&req, nil)
@@ -576,18 +575,18 @@ func (t *TBDownloader) BotherToDownload(dl, name string) bool {
 
 		l := 4
 		if len(strconv.Itoa(int(contentLength))) < 4 {
-			l = 1
+			return true
 		}
 		lenString := strconv.Itoa(int(contentLength))[:l]
 		lenSize := strconv.Itoa(int(stat.Size()))[:l]
 		fmt.Println("comparing sizes:", lenString, lenSize)
 
-		if stat.Size() != contentLength {
-			if lenString != lenSize {
-				return true
-			} else {
-				return false
-			}
+		if stat.Size() == contentLength {
+			//if lenString != lenSize {
+			//	return true
+			//} else {
+			return false
+			//}
 		}
 	}
 	defer ioutil.WriteFile(filepath.Join(t.DownloadPath, name+".last-url"), []byte(dl), 0644)
