@@ -1,4 +1,4 @@
-VERSION=0.0.8
+VERSION=0.0.9
 #CGO_ENABLED=0
 #export CGO_ENABLED=0
 export PKG_CONFIG_PATH=/usr/lib/$(uname -m)-linux-musl/pkgconfig
@@ -146,6 +146,7 @@ sum:
 
 version:
 	gothub release -u eyedeekay -r $(BINARY) -t "$(VERSION)" -d "`cat desc`"; true
+	sleep 2s
 
 upload:
 	gothub upload -R -u eyedeekay -r $(BINARY) -t "$(VERSION)" -f $(BINARY)-$(GOOS)-$(GOARCH).su3 -n $(BINARY)-$(GOOS)-$(GOARCH).su3 -l "`sha256sum $(BINARY)-$(GOOS)-$(GOARCH).su3`"
