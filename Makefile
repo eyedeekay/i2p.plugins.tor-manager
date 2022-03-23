@@ -402,8 +402,8 @@ all-torrents:
 	TORRENT=true LANG=vi make torrents
 
 torrents:
-	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os win -lang "$(LANG)" #-torrent $(TORRENT)
-	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os osx -lang "$(LANG)" #-torrent $(TORRENT)
-	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os linux -lang "$(LANG)" #-torrent $(TORRENT)
-	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os win -arch 32 -lang "$(LANG)" #-torrent $(TORRENT)
-	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os linux -arch 32 -lang "$(LANG)" #-torrent $(TORRENT)
+	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os win -lang "$(LANG)" #-p2p=false #-torrent $(TORRENT)
+	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os osx -lang "$(LANG)" #-p2p=false #-torrent $(TORRENT)
+	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os linux -lang "$(LANG)" #-p2p=false #-torrent $(TORRENT)
+	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os win -arch 32 -lang "$(LANG)" #-p2p=false #-torrent $(TORRENT)
+	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os linux -arch 32 -lang "$(LANG)" #-p2p=false #-torrent $(TORRENT)

@@ -11,6 +11,7 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/mitchellh/go-ps"
@@ -624,4 +625,132 @@ func NewSupervisor(tbPath, lang string) *Supervisor {
 		UnpackPath: tbPath,
 		Lang:       lang,
 	}
+}
+
+func FindEepsiteDocroot() (string, error) {
+	// eepsite docroot could be at:
+	// or: $I2P_CONFIG/eepsite/docroot/
+	// or: $I2P/eepsite/docroot/
+	// or: $HOME/.i2p/eepsite/docroot/
+	// or: /var/lib/i2p/i2p-config/eepsite/docroot/
+	// or: %LOCALAPPDATA\i2p\eepsite\docroot\
+	// or: %APPDATA\i2p\eepsite\docroot\
+	// or: %USERPROFILE\i2p\eepsite\docroot\
+	SNARK_CONFIG := os.Getenv("SNARK_CONFIG")
+	if SNARK_CONFIG != "" {
+		checkfori2pcustom := filepath.Join(SNARK_CONFIG)
+		if tbget.FileExists(checkfori2pcustom) {
+			return checkfori2pcustom, nil
+		}
+	}
+
+	I2P_CONFIG := os.Getenv("I2P_CONFIG")
+	if I2P_CONFIG != "" {
+		checkfori2pcustom := filepath.Join(I2P_CONFIG, "eepsite", "docroot")
+		if tbget.FileExists(checkfori2pcustom) {
+			return checkfori2pcustom, nil
+		}
+	}
+
+	I2P := os.Getenv("I2P")
+	if I2P != "" {
+		checkfori2p := filepath.Join(I2P, "eepsite", "docroot")
+		if tbget.FileExists(checkfori2p) {
+			return checkfori2p, nil
+		}
+	}
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+	// Start by getting the home directory
+	switch runtime.GOOS {
+	case "windows":
+		checkfori2plocal := filepath.Join(home, "AppData", "Local", "i2p", "eepsite", "docroot")
+		if tbget.FileExists(checkfori2plocal) {
+			return checkfori2plocal, nil
+		}
+		checkfori2proaming := filepath.Join(home, "AppData", "Roaming", "i2p", "eepsite", "docroot")
+		if tbget.FileExists(checkfori2proaming) {
+			return checkfori2proaming, nil
+		}
+	case "linux":
+		checkfori2phome := filepath.Join(home, ".i2p", "eepsite", "docroot")
+		if tbget.FileExists(checkfori2phome) {
+			return checkfori2phome, nil
+		}
+		checkfori2pservice := filepath.Join("/var/lib/i2p/i2p-config", "eepsite", "docroot")
+		if tbget.FileExists(checkfori2pservice) {
+			return checkfori2pservice, nil
+		}
+	case "darwin":
+		return "", fmt.Errorf("FindSnarkDirectory: Automatic torrent generation is not supported on MacOS, for now copy the files manually")
+	}
+	return "", fmt.Errorf("FindSnarkDirectory: Unable to find snark directory")
+
+}
+
+// RunTBBWithOfflineProfile runs the I2P Browser with the given language
+func (s *Supervisor) RunI2PSiteEditorWithOfflineClearnetProfile(profiledata string) error {
+	defaultpage := "http://127.0.0.1:7685"
+	clearnet := true
+	offline := true
+	if clearnet {
+		log.Print("Generating Clearnet Profile")
+		if err := s.GenerateClearnetProfile(profiledata); err != nil {
+			log.Println("Error generating Clearnet Profile", err)
+			return err
+		}
+	}
+	if offline {
+		if err := s.CopyAWOXPI(profiledata); err != nil {
+			log.Println("Error copying AWO XPI", err)
+			return err
+		}
+	}
+	tbget.ARCH = ARCH()
+	if s.Lang == "" {
+		s.Lang = DEFAULT_TB_LANG
+	}
+	if s.UnpackPath == "" {
+		s.UnpackPath = UNPACK_URL()
+	}
+
+	log.Println("running i2p in tor browser with lang", s.Lang, s.UnpackPath, OS())
+	switch OS() {
+	case "linux":
+		if tbget.FileExists(s.UnpackPath) {
+			args := []string{"--profile", profiledata, defaultpage}
+			args = append(args, s.PTAS()...)
+			log.Println("running Tor browser with lang and Custom Profile", s.Lang, s.UnpackPath, s.FirefoxPath(), args)
+			bcmd := exec.Command(s.FirefoxPath(), args...)
+			bcmd.Stdout = os.Stdout
+			bcmd.Stderr = os.Stderr
+			return bcmd.Run()
+		}
+		log.Println("tor browser not found at", s.FirefoxPath())
+		return fmt.Errorf("tor browser not found at %s", s.FirefoxPath())
+	case "osx":
+		firefoxPath := filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "MacOS", "firefox")
+		args := []string{"--profile", profiledata, defaultpage}
+		args = append(args, s.PTAS()...)
+		log.Println("running Tor browser with lang and Custom Profile", s.Lang, s.UnpackPath, firefoxPath, args)
+		bcmd := exec.Command(firefoxPath, args...)
+		bcmd.Dir = profiledata
+		bcmd.Stdout = os.Stdout
+		bcmd.Stderr = os.Stderr
+
+		return bcmd.Run()
+	case "win":
+		args := []string{"--profile", profiledata, defaultpage}
+		args = append(args, s.PTAS()...)
+		log.Println("running Tor browser with lang and Custom Profile", s.Lang, s.UnpackPath, s.TBPath(), args)
+		bcmd := exec.Command(s.TBPath(), args...)
+		bcmd.Dir = profiledata
+		bcmd.Stdout = os.Stdout
+		bcmd.Stderr = os.Stderr
+		return bcmd.Run()
+	default:
+	}
+	return nil
 }

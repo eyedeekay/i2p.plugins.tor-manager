@@ -18,6 +18,9 @@ import (
 	"github.com/ncruces/zenity"
 	tbget "i2pgit.org/idk/i2p.plugins.tor-manager/get"
 	tbserve "i2pgit.org/idk/i2p.plugins.tor-manager/serve"
+	tbsupervise "i2pgit.org/idk/i2p.plugins.tor-manager/supervise"
+
+	tinymce "github.com/eyedeekay/go-htmleditor"
 )
 
 /*
@@ -190,6 +193,7 @@ func main() {
 	}
 	flag.Parse()
 	if *ptop {
+		log.Println("Using p2p")
 		*mirror = "http://localhost:7657/i2psnark/"
 	}
 	if *password != "" {
@@ -362,17 +366,31 @@ func main() {
 		}
 		if *solidarity {
 			client.Onion.UnpackSite()
-			go func() {
-				if err := client.Onion.ListenAndServe(); err != nil {
-					log.Println("Onion error:", err)
-				}
-			}()
+			go ServeOnion()
 		}
 		go runSysTray(false)
 		if err := client.Serve(); err != nil {
 			log.Fatal(err)
 		}
 	}
+}
+
+func ServeOnion() error {
+	if err := client.Onion.ListenAndServe(); err != nil {
+		log.Println("Onion error:", err)
+	}
+	return nil
+}
+
+func ServeEditor() error {
+	docroot, err := tbsupervise.FindEepsiteDocroot()
+	if err != nil {
+		return err
+	}
+	if err := tinymce.Serve("127.0.0.1", docroot, "index.html", 7685); err != nil {
+		log.Println("Couldn't serve editor", err)
+	}
+	return nil
 }
 
 func pathToMe() (string, error) {

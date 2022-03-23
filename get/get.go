@@ -17,7 +17,6 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
-	"strconv"
 	"strings"
 	"time"
 
@@ -354,6 +353,10 @@ func (wc WriteCounter) PrintProgress() {
 }
 
 func (t *TBDownloader) StartConf() *tor.StartConf {
+	return StartConf(t.TorPath())
+}
+
+func StartConf(tp string) *tor.StartConf {
 	paths := []string{
 		"/bin/tor",
 		"/usr/bin/tor",
@@ -374,7 +377,6 @@ func (t *TBDownloader) StartConf() *tor.StartConf {
 			}
 		}
 	}
-	tp := t.TorPath()
 	if FileExists(tp) {
 		return &tor.StartConf{
 			ExePath:           tp,
@@ -386,8 +388,12 @@ func (t *TBDownloader) StartConf() *tor.StartConf {
 
 // SetupProxy sets up the proxy for the given URL
 func (t *TBDownloader) SetupProxy() error {
+	return SetupProxy(t.Mirror, t.TorPath())
+}
+
+func SetupProxy(mirror, tp string) error {
 	var d proxy.Dialer
-	if t.MirrorIsI2P() {
+	if MirrorIsI2P(mirror) {
 		log.Println("Using I2P mirror, setting up proxy")
 		var err error
 		proxyURL, err := url.Parse("http://127.0.0.1:4444")
@@ -403,10 +409,10 @@ func (t *TBDownloader) SetupProxy() error {
 		}
 		http.DefaultClient.Transport = tr
 	} else {
-		if !strings.Contains(t.Mirror, "127.0.0.1") {
+		if !strings.Contains(mirror, "127.0.0.1") {
 			if tmp, torerr := net.Listen("tcp", "127.0.0.1:9050"); torerr != nil {
 				log.Println("System Tor is running, downloading over that because obviously.")
-				t, err := tor.Start(context.Background(), t.StartConf())
+				t, err := tor.Start(context.Background(), StartConf(tp))
 				if err != nil {
 					if t == nil {
 						return err
@@ -552,32 +558,32 @@ func (t *TBDownloader) BotherToDownload(dl, name string) bool {
 	if !FileExists(path) {
 		return true
 	}
-	stat, err := os.Stat(path)
-	if err != nil {
-		return true
-	}
+	//stat, err := os.Stat(path)
+	//if err != nil {
+	//	return true
+	//}
 	// 86 MB
-	if !strings.Contains(name, ".asc") {
-		contentLength, err := t.FetchContentLength(dl, name)
-		if err != nil {
-			return true
-		}
+	//if !strings.Contains(name, ".asc") {
+	//contentLength, err := t.FetchContentLength(dl, name)
+	//if err != nil {
+	//	return true
+	//}
 
-		l := 4
-		if len(strconv.Itoa(int(contentLength))) < 4 {
-			l = 1
-		}
-		lenString := strconv.Itoa(int(contentLength))[:l]
-		lenSize := strconv.Itoa(int(stat.Size()))[:l]
-		log.Println("comparing sizes:", lenString, lenSize)
+	//l := 4
+	//if len(strconv.Itoa(int(contentLength))) < 4 {
+	//	l = 1
+	//}
+	//lenString := strconv.Itoa(int(contentLength))[:l]
+	//lenSize := strconv.Itoa(int(stat.Size()))[:l]
+	//log.Println("comparing sizes:", lenString, lenSize)
 
-		//if stat.Size() != contentLength {
-		if lenString != lenSize {
-			return true
-		} else {
-			return false
-		}
-	}
+	//if stat.Size() != contentLength {
+	//if lenString != lenSize {
+	//	return true
+	//} else {
+	//	return false
+	//}
+	//}
 	defer ioutil.WriteFile(filepath.Join(t.DownloadPath, name+".last-url"), []byte(dl), 0644)
 	lastURL, err := ioutil.ReadFile(filepath.Join(t.DownloadPath, name+".last-url"))
 	if err != nil {
@@ -887,8 +893,12 @@ func hTTPProxy(host, port string) bool {
 }
 
 func (t *TBDownloader) MirrorIsI2P() bool {
+	return MirrorIsI2P(t.Mirror)
+}
+
+func MirrorIsI2P(mirror string) bool {
 	// check if hostname is an I2P hostname
-	url, err := url.Parse(t.Mirror)
+	url, err := url.Parse(mirror)
 	if err != nil {
 		return false
 	}

@@ -202,6 +202,8 @@ github.com/eyedeekay/checki2cp v0.0.21 h1:DVer7H6RffCWS8Bo3+J6EyppUc1y8lvApKdQnA
 github.com/eyedeekay/checki2cp v0.0.21/go.mod h1:75sGwBgnacHmxxx8RQ7BIeS0gu5Pw916gFb2c80OUTc=
 github.com/eyedeekay/eephttpd v0.0.0-20190903000420-52f5a8485a4e/go.mod h1:wFPQsNBnY95LkuujFEZARo7slafRwoF0D97FFHBoZro=
 github.com/eyedeekay/go-fpw v0.0.0-20200512022837-c8b4dcdc74d4/go.mod h1:RyCx7KuH+5ryvIpUF7SpxiChLtjeuPbVFCIzf8shIFc=
+github.com/eyedeekay/go-htmleditor v0.0.0-20220322223215-1641dd079151 h1:WKf4WMHkRx6CD3QQcLvJr2I/HR65lZiCx61/ffGIzhM=
+github.com/eyedeekay/go-htmleditor v0.0.0-20220322223215-1641dd079151/go.mod h1:P1hV8SQHOTDs3qn5nMAbYHPhQy6GZ62NEv/jvGiXeSE=
 github.com/eyedeekay/go-i2cp v0.0.0-20190716135428-6d41bed718b0 h1:rnn9OlD/3+tATEZNuiMR1C84O5CX8bZL2qqgttprKrw=
 github.com/eyedeekay/go-i2cp v0.0.0-20190716135428-6d41bed718b0/go.mod h1:+P0fIhkqIYjo7exMJRTlSteRMbRyHbiBiKw+YlPWk+c=
 github.com/eyedeekay/go-i2pcontrol v0.0.0-20200110011336-510cca77e350/go.mod h1:bhIQsVpbNNXMtcoZ9UF4hLQleOjaCgKGXiRRhNc8TOA=

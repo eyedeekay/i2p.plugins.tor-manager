@@ -1,9 +1,11 @@
 package tbget
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -201,7 +203,52 @@ func TorrentPath() (string, string) {
 	return fmt.Sprintf("tor-browser%s", windowsonly), extension
 }
 
+func GetTorBrowserVersionFromUpdateURL() (string, error) {
+	// download the json file from TOR_UPDATES_URL
+	// parse the json file to get the latest version
+	// return the latest version
+	err := SetupProxy(TOR_UPDATES_URL, "")
+	if err != nil {
+		return "", err
+	}
+	resp, err := http.Get(TOR_UPDATES_URL)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+	var updates map[string]interface{}
+	err = json.Unmarshal(body, &updates)
+	if err != nil {
+		return "", err
+	}
+	latest := updates["downloads"].(map[string]interface{})["linux64"].(map[string]interface{})["en-US"].(map[string]interface{})
+
+	for key, value := range latest {
+		if key == "binary" {
+			log.Printf("%s: %s\n", key, value)
+			url, err := url.Parse(value.(string))
+			if err != nil {
+				return "", err
+			}
+			spl := strings.Split(url.Path, "/")
+			return spl[len(spl)-1], nil
+		}
+	}
+
+	return "11.0.9", nil
+}
+
 func TorrentDownloaded() bool {
+	version, err := GetTorBrowserVersionFromUpdateURL()
+	if err != nil {
+		panic(err)
+	}
+	log.Println("Tor Browser Version", version)
+
 	cmpsize := 8661000
 	found := false
 	if dir, err := FindSnarkDirectory(); err == nil {
@@ -212,10 +259,10 @@ func TorrentDownloaded() bool {
 				}
 				prefix, suffix := TorrentPath()
 				path = filepath.Base(path)
-				if strings.HasPrefix(path, prefix) && strings.HasSuffix(path, suffix) {
+				if strings.HasPrefix(path, prefix) && strings.Contains(path, version) && strings.HasSuffix(path, suffix) {
 					if !strings.HasSuffix(path, ".torrent") {
 						if info.Size() > int64(cmpsize) {
-							//fmt.Println("TorrentDownloaded: Torrent Download found:", path)
+							fmt.Println("TorrentDownloaded: Torrent Download found:", path, info.Size(), int64(cmpsize))
 							found = true
 							return nil
 						} else {

@@ -11,6 +11,8 @@ require (
 	golang.org/x/net v0.0.0-20211206223403-eba003a116a9
 )
 
+require github.com/eyedeekay/go-htmleditor v0.0.0-20220322223215-1641dd079151 // indirect
+
 require (
 	github.com/eyedeekay/go-I2P-jpackage v0.0.0-20220219044935-be7909c9f4c5
 	github.com/ybbus/jsonrpc/v2 v2.1.6 // indirect
