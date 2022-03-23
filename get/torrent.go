@@ -133,7 +133,7 @@ func FindSnarkDirectory() (string, error) {
 	if SNARK_CONFIG != "" {
 		checkfori2pcustom := filepath.Join(SNARK_CONFIG)
 		if FileExists(checkfori2pcustom) {
-			log.Println("Found snark directory at $SNARK_CONFIG", checkfori2pcustom)
+			//log.Println("Found snark directory at $SNARK_CONFIG", checkfori2pcustom)
 			return checkfori2pcustom, nil
 		}
 	}
@@ -142,7 +142,7 @@ func FindSnarkDirectory() (string, error) {
 	if I2P_CONFIG != "" {
 		checkfori2pcustom := filepath.Join(I2P_CONFIG, "i2psnark")
 		if FileExists(checkfori2pcustom) {
-			log.Println("Found snark directory at $I2P_CONFIG", checkfori2pcustom)
+			//log.Println("Found snark directory at $I2P_CONFIG", checkfori2pcustom)
 			return checkfori2pcustom, nil
 		}
 	}
@@ -151,7 +151,7 @@ func FindSnarkDirectory() (string, error) {
 	if I2P != "" {
 		checkfori2p := filepath.Join(I2P, "i2psnark")
 		if FileExists(checkfori2p) {
-			log.Println("Found snark directory at $I2P", checkfori2p)
+			//log.Println("Found snark directory at $I2P", checkfori2p)
 			return checkfori2p, nil
 		}
 	}
@@ -164,23 +164,23 @@ func FindSnarkDirectory() (string, error) {
 	case "windows":
 		checkfori2plocal := filepath.Join(home, "AppData", "Local", "i2p", "i2psnark")
 		if FileExists(checkfori2plocal) {
-			log.Println("Found snark directory at %APPDATA%\\i2p\\i2psnark", "%APPDATA%\\i2p\\i2psnark")
+			//log.Println("Found snark directory at %APPDATA%\\i2p\\i2psnark", "%APPDATA%\\i2p\\i2psnark")
 			return checkfori2plocal, nil
 		}
 		checkfori2proaming := filepath.Join(home, "AppData", "Roaming", "i2p", "i2psnark")
 		if FileExists(checkfori2proaming) {
-			log.Println("Found snark directory at %APPDATA%\\i2p\\i2psnark", "%APPDATA%\\i2p\\i2psnark")
+			//log.Println("Found snark directory at %APPDATA%\\i2p\\i2psnark", "%APPDATA%\\i2p\\i2psnark")
 			return checkfori2proaming, nil
 		}
 	case "linux":
 		checkfori2phome := filepath.Join(home, ".i2p", "i2psnark")
 		if FileExists(checkfori2phome) {
-			log.Println("Found snark directory at $HOME/.i2p/i2psnark", "$HOME/.i2p/i2psnark")
+			//log.Println("Found snark directory at $HOME/.i2p/i2psnark", "$HOME/.i2p/i2psnark")
 			return checkfori2phome, nil
 		}
 		checkfori2pservice := filepath.Join("/var/lib/i2p/i2p-config", "i2psnark")
 		if FileExists(checkfori2pservice) {
-			log.Println("Found snark directory at /var/lib/i2p/i2p-config/i2psnark", checkfori2pservice)
+			//log.Println("Found snark directory at /var/lib/i2p/i2p-config/i2psnark", checkfori2pservice)
 			return checkfori2pservice, nil
 		}
 	case "darwin":

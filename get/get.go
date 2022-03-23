@@ -585,6 +585,7 @@ func (t *TBDownloader) BotherToDownload(dl, name string) bool {
 			//if lenString != lenSize {
 			//	return true
 			//} else {
+			fmt.Printf("BotherToDownload(): %s is fully downloaded\n", name)
 			return false
 			//}
 		}
