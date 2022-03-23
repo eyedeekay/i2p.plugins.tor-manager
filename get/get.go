@@ -443,6 +443,10 @@ func SetupProxy(mirror, tp string) error {
 func (t *TBDownloader) SingleFileDownload(dl, name string, rangebottom int64) (string, error) {
 	t.MakeTBDirectory()
 	path := filepath.Join(t.DownloadPath, name)
+	if filepath.IsAbs(name) {
+		path = name
+	}
+
 	t.Log("SingleFileDownload()", fmt.Sprintf("Checking for updates %s to %s", dl, path))
 	if !t.BotherToDownload(dl, name) {
 		t.Log("SingleFileDownload()", "File already exists, skipping download")
@@ -642,25 +646,29 @@ func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, stri
 	}
 	version := t.GetVersion()
 	if strings.Contains(t.Mirror, "i2psnark") {
-		if !TorrentDownloaded(ietf) {
+		if !TorrentDownloaded(ietf, t.GetRuntimePair()) {
 			t.Log("DownloadUpdaterForLang()", "Downloading torrent")
+			SetupProxy("http://idk.i2p/", "")
 			//Download the torrent files from their static locations.
 			i2psnark, err := FindSnarkDirectory()
 			if err != nil {
 				return "", "", "", err
 			}
-			asctorrent := filepath.Join(t.NamePerPlatform(ietf, version)+".asc", ".torrent")
+			log.Println("Downloading torrent from", i2psnark)
+			asctorrent := filepath.Join(t.NamePerPlatform(ietf, version) + ".asc" + ".torrent")
+			fmt.Println("Downloading", asctorrent)
 			_, err = t.SingleFileDownload("http://idk.i2p/torbrowser/"+asctorrent, filepath.Join(i2psnark, asctorrent), 0)
 			if err != nil {
 				return "", "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 			}
-			bintorrent := filepath.Join(t.NamePerPlatform(ietf, version), ".torrent")
+			bintorrent := filepath.Join(t.NamePerPlatform(ietf, version) + ".torrent")
+			fmt.Println("Downloading", bintorrent)
 			_, err = t.SingleFileDownload("http://idk.i2p/torbrowser/"+bintorrent, filepath.Join(i2psnark, bintorrent), 0)
 			if err != nil {
 				return "", "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 			}
 		}
-		for !TorrentDownloaded(ietf) {
+		for !TorrentDownloaded(ietf, t.GetRuntimePair()) {
 			log.Println("DownloadUpdaterForLang:", "Waiting for torrent to download")
 			time.Sleep(time.Second * 10)
 		}

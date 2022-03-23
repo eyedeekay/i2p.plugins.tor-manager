@@ -97,7 +97,7 @@ var (
 	chat       = flag.Bool("chat", false, "Open a WebChat client")
 	notor      = flag.Bool("notor", false, "Do not automatically start Tor")
 	nounpack   = flag.Bool("nounpack", false, "Do not unpack the Tor Browser")
-	ptop       = flag.Bool("p2p", tbget.TorrentDownloaded(theLang), "Use bittorrent over I2P to download the initial copy of Tor Browser")
+	ptop       = flag.Bool("p2p", tbget.TorrentDownloaded(theLang, OS()+ARCH()), "Use bittorrent over I2P to download the initial copy of Tor Browser")
 )
 
 func Clearnet() bool {
@@ -158,7 +158,7 @@ func Mirror() string {
 		fmt.Println("Using clearnet mirror")
 		return "https://dist.torproject.org/torbrowser/"
 	}
-	if tbget.Torrent(*lang) {
+	if tbget.Torrent(*lang, OS()+ARCH()) {
 		fmt.Println("Using torrent mirror")
 		return "http://localhost:7657/i2psnark/"
 	}
