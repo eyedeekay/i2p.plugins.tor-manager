@@ -68,8 +68,10 @@ func ARCH() string {
 	}
 }
 
+var theLang = os.Getenv("TBLANG")
+
 var (
-	lang       = flag.String("lang", "", "Language to download")
+	lang       = flag.String("lang", theLang, "Language to download")
 	system     = flag.String("os", OS(), "OS/arch to download")
 	arch       = flag.String("arch", ARCH(), "OS/arch to download")
 	i2pbrowser = flag.Bool("i2pbrowser", false, "Open I2P in Tor Browser")
@@ -95,7 +97,7 @@ var (
 	chat       = flag.Bool("chat", false, "Open a WebChat client")
 	notor      = flag.Bool("notor", false, "Do not automatically start Tor")
 	nounpack   = flag.Bool("nounpack", false, "Do not unpack the Tor Browser")
-	ptop       = flag.Bool("p2p", tbget.TorrentDownloaded(), "Use bittorrent over I2P to download the initial copy of Tor Browser")
+	ptop       = flag.Bool("p2p", tbget.TorrentDownloaded(theLang), "Use bittorrent over I2P to download the initial copy of Tor Browser")
 )
 
 func Clearnet() bool {
@@ -156,7 +158,7 @@ func Mirror() string {
 		fmt.Println("Using clearnet mirror")
 		return "https://dist.torproject.org/torbrowser/"
 	}
-	if tbget.Torrent() {
+	if tbget.Torrent(*lang) {
 		fmt.Println("Using torrent mirror")
 		return "http://localhost:7657/i2psnark/"
 	}

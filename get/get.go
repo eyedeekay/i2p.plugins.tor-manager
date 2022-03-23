@@ -17,6 +17,7 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 	"time"
 
@@ -558,32 +559,33 @@ func (t *TBDownloader) BotherToDownload(dl, name string) bool {
 	if !FileExists(path) {
 		return true
 	}
-	//stat, err := os.Stat(path)
-	//if err != nil {
-	//	return true
-	//}
+	stat, err := os.Stat(path)
+	if err != nil {
+		return true
+	}
 	// 86 MB
-	//if !strings.Contains(name, ".asc") {
-	//contentLength, err := t.FetchContentLength(dl, name)
-	//if err != nil {
-	//	return true
-	//}
+	if !strings.Contains(name, ".asc") {
+		contentLength, err := t.FetchContentLength(dl, name)
+		if err != nil {
+			return true
+		}
 
-	//l := 4
-	//if len(strconv.Itoa(int(contentLength))) < 4 {
-	//	l = 1
-	//}
-	//lenString := strconv.Itoa(int(contentLength))[:l]
-	//lenSize := strconv.Itoa(int(stat.Size()))[:l]
-	//log.Println("comparing sizes:", lenString, lenSize)
+		l := 4
+		if len(strconv.Itoa(int(contentLength))) < 4 {
+			l = 1
+		}
+		lenString := strconv.Itoa(int(contentLength))[:l]
+		lenSize := strconv.Itoa(int(stat.Size()))[:l]
+		fmt.Println("comparing sizes:", lenString, lenSize)
 
-	//if stat.Size() != contentLength {
-	//if lenString != lenSize {
-	//	return true
-	//} else {
-	//	return false
-	//}
-	//}
+		if stat.Size() != contentLength {
+			if lenString != lenSize {
+				return true
+			} else {
+				return false
+			}
+		}
+	}
 	defer ioutil.WriteFile(filepath.Join(t.DownloadPath, name+".last-url"), []byte(dl), 0644)
 	lastURL, err := ioutil.ReadFile(filepath.Join(t.DownloadPath, name+".last-url"))
 	if err != nil {
@@ -640,7 +642,7 @@ func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, stri
 	}
 	version := t.GetVersion()
 	if strings.Contains(t.Mirror, "i2psnark") {
-		if !TorrentDownloaded() {
+		if !TorrentDownloaded(ietf) {
 			t.Log("DownloadUpdaterForLang()", "Downloading torrent")
 			//Download the torrent files from their static locations.
 			i2psnark, err := FindSnarkDirectory()
@@ -658,7 +660,7 @@ func (t *TBDownloader) DownloadUpdaterForLang(ietf string) (string, string, stri
 				return "", "", "", fmt.Errorf("DownloadUpdaterForLang: %s", err)
 			}
 		}
-		for !TorrentDownloaded() {
+		for !TorrentDownloaded(ietf) {
 			log.Println("DownloadUpdaterForLang:", "Waiting for torrent to download")
 			time.Sleep(time.Second * 10)
 		}

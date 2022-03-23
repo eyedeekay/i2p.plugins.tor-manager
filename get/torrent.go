@@ -235,21 +235,21 @@ func GetTorBrowserVersionFromUpdateURL() (string, error) {
 				return "", err
 			}
 			spl := strings.Split(url.Path, "/")
-			return spl[len(spl)-1], nil
+			return spl[len(spl)-2], nil
 		}
 	}
 
 	return "Unknown", nil
 }
 
-func TorrentDownloaded() bool {
+func TorrentDownloaded(lang string) bool {
 	version, err := GetTorBrowserVersionFromUpdateURL()
 	if err != nil {
 		panic(err)
 	}
-	log.Println("Tor Browser Version", version)
+	log.Println("Tor Browser Version", version, lang)
 
-	cmpsize := 86610000
+	cmpsize := 8631000
 	found := false
 	if dir, err := FindSnarkDirectory(); err == nil {
 		err := filepath.Walk(dir,
@@ -259,14 +259,25 @@ func TorrentDownloaded() bool {
 				}
 				prefix, suffix := TorrentPath()
 				path = filepath.Base(path)
-				if strings.HasPrefix(path, prefix) && strings.Contains(path, version) && strings.HasSuffix(path, suffix) {
-					if !strings.HasSuffix(path, ".torrent") {
-						if info.Size() > int64(cmpsize) {
-							fmt.Println("TorrentDownloaded: Torrent Download found:", path, info.Size(), int64(cmpsize))
-							found = true
-							return nil
-						} else {
-							return fmt.Errorf("TorrentDownloaded: Torrent Download found but size is too small: %s", path)
+				if strings.HasPrefix(path, prefix) {
+					//fmt.Println("TorrentDownloaded(): prefix found", prefix)
+					if strings.Contains(path, "_"+lang) {
+						//fmt.Println("TorrentDownloaded(): lang found", lang)
+						if strings.Contains(path, version) {
+							//fmt.Println("TorrentDownloaded(): version found", version)
+							if strings.HasSuffix(path, suffix) {
+								//fmt.Println("TorrentDownloaded(): suffix found", suffix)
+								//fmt.Println("TorrentDownloaded: Torrent Download found:", path, info.Size(), int64(cmpsize))
+								//if !strings.HasSuffix(path, ".torrent") {
+								if info.Size() > int64(cmpsize) {
+									fmt.Println("TorrentDownloaded: Torrent Download complete:", path, info.Size(), int64(cmpsize))
+									found = true
+									return nil
+								} else {
+									fmt.Println("TorrentDownloaded: Torrent Download incomplete:", path, info.Size(), int64(cmpsize))
+									return fmt.Errorf("TorrentDownloaded: Torrent Download found but size is too small: %s", path)
+								}
+							}
 						}
 					}
 				}
@@ -280,11 +291,11 @@ func TorrentDownloaded() bool {
 	return false
 }
 
-func Torrent() bool {
+func Torrent(lang string) bool {
 	if !TorrentReady() {
 		return false
 	}
-	if !TorrentDownloaded() {
+	if !TorrentDownloaded(lang) {
 		return false
 	}
 	return true
