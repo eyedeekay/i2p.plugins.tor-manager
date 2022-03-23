@@ -75,6 +75,7 @@ var (
 	i2pbrowser = flag.Bool("i2pbrowser", false, "Open I2P in Tor Browser")
 	i2pconfig  = flag.Bool("i2pconfig", false, "Open I2P routerconsole in Tor Browser with javscript enabled and non-routerconsole sites disabled")
 	torbrowser = flag.Bool("torbrowser", false, "Open Tor Browser")
+	i2peditor  = flag.Bool("i2peditor", false, "Open I2P Site Editor in Tor Browser")
 	verbose    = flag.Bool("verbose", false, "Verbose output")
 	directory  = flag.String("directory", DefaultDir(), "Directory operate in")
 	host       = flag.String("host", "127.0.0.1", "Host to serve on")
@@ -344,6 +345,10 @@ func main() {
 		}
 	} else if *i2pconfig {
 		if err := client.TBS.RunI2PBAppWithLang(); err != nil {
+			log.Fatal(err)
+		}
+	} else if *i2peditor {
+		if err := client.TBS.RunI2PSiteEditorWithOfflineClearnetProfile(filepath.Join(client.TBD.UnpackPath, "i2p.firefox.editor")); err != nil {
 			log.Fatal(err)
 		}
 	} else if *torbrowser {

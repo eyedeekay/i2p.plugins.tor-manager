@@ -200,6 +200,10 @@ func (m *Client) ServeHTTP(rw http.ResponseWriter, rq *http.Request) {
 			log.Println("Switching theme")
 			m.DarkMode = !m.DarkMode
 			http.Redirect(rw, rq, "/", http.StatusFound)
+		case "/launch-site-editor":
+			log.Println("Starting Site Editor")
+			m.TBS.RunI2PSiteEditorWithOfflineClearnetProfile(filepath.Join(m.TBD.UnpackPath, "i2p.firefox.editor"))
+			http.Redirect(rw, rq, "/", http.StatusFound)
 		default:
 			b, _ := m.Page()
 			rw.Header().Set("Content-Type", "text/html")

@@ -359,51 +359,52 @@ docker: clean xhost
 		#--publish 127.0.0.1:7695:7695 \
 		#-v /tmp/.X11-unix:/tmp/.X11-unix \
 
-LANG?=en-US
+#LANG?=en-US
 TORRENT?=false
 
 all-torrents:
-	LANG=ro make torrents
-	LANG=ru make torrents
-	LANG=tr make torrents
-	LANG=en-US make torrents
-	LANG=ga-IE make torrents
-	LANG=pt-BR make torrents
-	LANG=es-ES make torrents
-	LANG=fa make torrents
-	LANG=it make torrents
-	LANG=ja make torrents
-	LANG=ka make torrents
-	LANG=ar make torrents
-	LANG=ca make torrents
-	LANG=da make torrents
-	LANG=my make torrents
-	LANG=th make torrents
-	LANG=de make torrents
-	LANG=hu make torrents
-	LANG=lt make torrents
-	LANG=he make torrents
-	LANG=ms make torrents
-	LANG=pl make torrents
-	LANG=zh-TW make torrents
-	LANG=id make torrents
-	LANG=ko make torrents
-	LANG=nl make torrents
-	LANG=zh-CN make torrents
-	LANG=el make torrents
-	LANG=fr make torrents
-	LANG=sv-SE make torrents
-	LANG=cs make torrents
-	LANG=es-AR make torrents
-	LANG=nb-NO make torrents
-	LANG=is make torrents
-	LANG=mk make torrents
-	LANG=vi make torrents
-	TORRENT=true LANG=vi make torrents
+	LANG=ro make torrents-$(LANG)
+	LANG=ru make torrents-$(LANG)
+	LANG=tr make torrents-$(LANG)
+	LANG=en-US make torrents-$(LANG)
+	LANG=ga-IE make torrents-$(LANG)
+	LANG=pt-BR make torrents-$(LANG)
+	LANG=es-ES make torrents-$(LANG)
+	LANG=fa make torrents-$(LANG)
+	LANG=it make torrents-$(LANG)
+	LANG=ja make torrents-$(LANG)
+	LANG=ka make torrents-$(LANG)
+	LANG=ar make torrents-$(LANG)
+	LANG=ca make torrents-$(LANG)
+	LANG=da make torrents-$(LANG)
+	LANG=my make torrents-$(LANG)
+	LANG=th make torrents-$(LANG)
+	LANG=de make torrents-$(LANG)
+	LANG=hu make torrents-$(LANG)
+	LANG=lt make torrents-$(LANG)
+	LANG=he make torrents-$(LANG)
+	LANG=ms make torrents-$(LANG)
+	LANG=pl make torrents-$(LANG)
+	LANG=zh-TW make torrents-$(LANG)
+	LANG=id make torrents-$(LANG)
+	LANG=ko make torrents-$(LANG)
+	LANG=nl make torrents-$(LANG)
+	LANG=zh-CN make torrents-$(LANG)
+	LANG=el make torrents-$(LANG)
+	LANG=fr make torrents-$(LANG)
+	LANG=sv-SE make torrents-$(LANG)
+	LANG=cs make torrents-$(LANG)
+	LANG=es-AR make torrents-$(LANG)
+	LANG=nb-NO make torrents-$(LANG)
+	LANG=is make torrents-$(LANG)
+	LANG=mk make torrents-$(LANG)
+	LANG=vi make torrents-$(LANG)
+	TORRENT=true LANG=vi make torrents-$(LANG)
 
-torrents:
+torrents-$(LANG):
 	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os win -lang "$(LANG)" #-p2p=false #-torrent $(TORRENT)
 	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os osx -lang "$(LANG)" #-p2p=false #-torrent $(TORRENT)
 	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os linux -lang "$(LANG)" #-p2p=false #-torrent $(TORRENT)
 	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os win -arch 32 -lang "$(LANG)" #-p2p=false #-torrent $(TORRENT)
 	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os linux -arch 32 -lang "$(LANG)" #-p2p=false #-torrent $(TORRENT)
+	touch torrents-$(LANG)
