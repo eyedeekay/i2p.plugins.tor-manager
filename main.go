@@ -176,6 +176,10 @@ var snowflake *bool
 var client *tbserve.Client
 
 func main() {
+	if err := NSISCompat(); err != nil {
+		log.Println("NSIS compat mode failure", err)
+		os.Exit(0)
+	}
 	filename := filepath.Base(os.Args[0])
 	SnowflakeFlag()
 	usage := flag.Usage
