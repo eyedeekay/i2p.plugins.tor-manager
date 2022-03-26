@@ -119,7 +119,7 @@ bsd:
 #	GOOS=openbsd GOARCH=amd64 make build su3
 
 dep:
-	#cp "$(HOME)/build/shellservice.jar" tor-browser/lib/shellservice.jar -v
+#	#cp "$(HOME)/build/shellservice.jar" tor-browser/lib/shellservice.jar -v
 
 su3:
 	i2p.plugin.native -name=$(BINARY)-$(GOOS)-$(GOARCH) \
