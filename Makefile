@@ -105,7 +105,7 @@ windows:
 	GOOS=windows GOARCH=386 make winplugin su3 unembed-linux build unbackup-embed
 
 linux:
-	GOOS=linux GOARCH=amd64 make docker su3
+	GOOS=linux GOARCH=amd64 make build su3
 #	linplugin su3 unembed-windows build unbackup-embed
 #	GOOS=linux GOARCH=arm64 make linplugin su3 unembed-windows build unbackup-embed
 	PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig GOOS=linux GOARCH=386 make linplugin-nosystray su3 unembed-windows nosystray unbackup-embed
