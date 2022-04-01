@@ -121,9 +121,12 @@ bsd:
 dep:
 #	#cp "$(HOME)/build/shellservice.jar" tor-browser/lib/shellservice.jar -v
 
+SIGNER_DIR=$(HOME)/i2p-go-keys/
+
 su3:
 	i2p.plugin.native -name=$(BINARY)-$(GOOS)-$(GOARCH) \
 		-signer=$(SIGNER) \
+		-signer-dir=$(SIGNER_DIR) \
 		-version "$(VERSION)" \
 		-author=$(SIGNER) \
 		-autostart=true \
