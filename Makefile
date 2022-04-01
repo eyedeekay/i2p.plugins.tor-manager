@@ -31,6 +31,8 @@ winbinary:
 nosystray:
 	CGO_ENABLED=0 go build $(STATIC) -tags="netgo osusergo nosystray" -o $(BINARY)-$(GOOS)-$(GOARCH)-static .
 	cp i2p.plugins.tor-manager-linux-386-static i2p.plugins.tor-manager-linux-386; true
+	cp i2p.plugins.tor-manager-darwin-amd64-static i2p.plugins.tor-manager-darwin-amd64; true
+	cp i2p.plugins.tor-manager-darwin-arm64-static i2p.plugins.tor-manager-darwin-arm64; true
 
 lint:
 	golint supervise/*.go
