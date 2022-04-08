@@ -8,7 +8,9 @@ GOARCH?="amd64"
 
 ARG=-v -tags netgo -ldflags '-w' # -extldflags "-static"'
 #FLAGS=/usr/lib/x86_64-linux-gnu/libboost_system.a /usr/lib/x86_64-linux-gnu/libboost_date_time.a /usr/lib/x86_64-linux-gnu/libboost_filesystem.a /usr/lib/x86_64-linux-gnu/libboost_program_options.a /usr/lib/x86_64-linux-gnu/libssl.a /usr/lib/x86_64-linux-gnu/libcrypto.a /usr/lib/x86_64-linux-gnu/libz.a
-STATIC=-v -tags netgo -ldflags '-w -extldflags "-static"'
+STATIC=-v -tags "netgo osusergo nosystray" -ldflags '-w -extldflags "-static"'
+OSXFLAGS=-v -tags "netgo osusergo systray" -ldflags '-w -extldflags "-static"' 
+# -gcflags='-DDARWIN -x objective-c -fobjc-arc -ldflags=framework=Cocoa'
 #NOSTATIC=-v -tags netgo -ldflags '-w -extldflags "-ldl $(FLAGS)"'
 WINGUI=-ldflags '-H=windowsgui'
 
@@ -29,10 +31,19 @@ winbinary:
 		GOOS=windows go build $(WINGUI) -tags="netgo osusergo systray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
 nosystray:
-	CGO_ENABLED=0 go build $(STATIC) -tags="netgo osusergo nosystray" -o $(BINARY)-$(GOOS)-$(GOARCH)-static .
+	CGO_ENABLED=0 go build $(STATIC) -o $(BINARY)-$(GOOS)-$(GOARCH)-static .
 	cp i2p.plugins.tor-manager-linux-386-static i2p.plugins.tor-manager-linux-386; true
 	cp i2p.plugins.tor-manager-darwin-amd64-static i2p.plugins.tor-manager-darwin-amd64; true
 	cp i2p.plugins.tor-manager-darwin-arm64-static i2p.plugins.tor-manager-darwin-arm64; true
+
+osxsystray:
+	export CGO_ENABLED=1 && \
+		export GOOS=darwin && \
+		export GOARCH=amd64 && \
+		make raw
+
+raw:
+	/usr/bin/go build $(OSXFLAGS) -o $(BINARY)-$(GOOS)-$(GOARCH)-static .
 
 lint:
 	golint supervise/*.go
@@ -100,7 +111,7 @@ linplugin-nosystray:
 	GOOS=linux make backup-embed nosystray unbackup-embed
 
 osxplugin:
-	GOOS=darwin make backup-embed nosystray unbackup-embed
+	GOOS=darwin make backup-embed osxsystray unbackup-embed
 
 windows:
 	GOOS=windows GOARCH=amd64 make winplugin su3 unembed-linux build unbackup-embed
