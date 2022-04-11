@@ -464,3 +464,5 @@ torrents-$(TBLANG):
 	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os win -arch 32 -lang "$(TBLANG)" -p2p=false
 	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager -nounpack -notor -os linux -arch 32 -lang "$(TBLANG)" -p2p=false
 	touch torrents-$(TBLANG)
+
+distclean: clean
