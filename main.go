@@ -164,8 +164,10 @@ func Mirror() string {
 		return "http://localhost:7657/i2psnark/"
 	}
 	if tbget.TestHTTPDefaultProxy() {
-		fmt.Println("Using I2P mirror")
-		return "http://dist.torproject.i2p/torbrowser/"
+		//fmt.Println("Using I2P mirror")
+		//return "http://dist.torproject.i2p/torbrowser/"
+		fmt.Println("Using clearnet mirror instead of I2P mirror due to hash sum mismatch issue")
+		return "https://dist.torproject.org/torbrowser/"
 	}
 	fmt.Println("Using clearnet mirror")
 	return "https://dist.torproject.org/torbrowser/"
