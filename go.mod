@@ -3,15 +3,16 @@ module i2pgit.org/idk/i2p.plugins.tor-manager
 go 1.17
 
 require (
+	fyne.io/systray v1.9.0
 	github.com/cloudfoundry/jibber_jabber v0.0.0-20151120183258-bcc4c8345a21
-	github.com/getlantern/systray v1.2.0
+	github.com/eyedeekay/go-htmleditor v0.0.0-20220322223215-1641dd079151
 	github.com/go-ole/go-ole v1.2.6
 	github.com/magisterquis/connectproxy v0.0.0-20200725203833-3582e84f0c9b
 	golang.org/x/crypto v0.0.0-20220112180741-5e0467b6c7ce
 	golang.org/x/net v0.0.0-20211206223403-eba003a116a9
 )
 
-require github.com/eyedeekay/go-htmleditor v0.0.0-20220322223215-1641dd079151 // indirect
+require github.com/godbus/dbus/v5 v5.0.4 // indirect
 
 require (
 	github.com/eyedeekay/go-I2P-jpackage v0.0.0-20220219044935-be7909c9f4c5
@@ -65,15 +66,8 @@ require (
 	github.com/eyedeekay/goSam v0.32.31-0.20210415231611-c6d9c0e340b8 // indirect
 	github.com/eyedeekay/sam-forwarder v0.32.1 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
-	github.com/getlantern/context v0.0.0-20190109183933-c447772a6520 // indirect
-	github.com/getlantern/errors v1.0.1 // indirect
-	github.com/getlantern/golog v0.0.0-20210606115803-bce9f9fe5a5f // indirect
-	github.com/getlantern/hex v0.0.0-20190417191902-c6586a6fe0b7 // indirect
-	github.com/getlantern/hidden v0.0.0-20201229170000-e66e7f878730 // indirect
-	github.com/getlantern/ops v0.0.0-20200403153110-8476b16edcd6 // indirect
 	github.com/glycerine/go-unsnap-stream v0.0.0-20190901134440-81cf024a9e0a // indirect
 	github.com/go-acme/lego/v3 v3.7.0 // indirect
-	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/uuid v1.3.0 // indirect
@@ -105,7 +99,6 @@ require (
 	github.com/mwitkow/go-http-dialer v0.0.0-20161116154839-378f744fb2b8 // indirect
 	github.com/ncruces/zenity v0.7.12
 	github.com/nwaples/rardecode v1.1.2 // indirect
-	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
 	github.com/pelletier/go-toml v1.8.0 // indirect
 	github.com/phayes/freeport v0.0.0-20180830031419-95f893ade6f2 // indirect
 	github.com/philhofer/fwd v1.0.0 // indirect

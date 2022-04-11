@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/eyedeekay/go-i2pcontrol"
-	"github.com/getlantern/systray"
+	"fyne.io/systray"
 	"i2pgit.org/idk/i2p.plugins.tor-manager/icon"
 )
 
