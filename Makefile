@@ -1,12 +1,12 @@
 VERSION=0.0.12
-#CGO_ENABLED=0
-#export CGO_ENABLED=0
+CGO_ENABLED=0
+export CGO_ENABLED=0
 export PKG_CONFIG_PATH=/usr/lib/$(uname -m)-linux-musl/pkgconfig
 
 GOOS?=$(shell uname -s | tr A-Z a-z)
 GOARCH?="amd64"
 
-ARG=-v -tags netgo -ldflags '-w' # -extldflags "-static"'
+ARG=-v -tags "netgo osusergo nosystray" -ldflags '-w -extldflags "-static"'
 #FLAGS=/usr/lib/x86_64-linux-gnu/libboost_system.a /usr/lib/x86_64-linux-gnu/libboost_date_time.a /usr/lib/x86_64-linux-gnu/libboost_filesystem.a /usr/lib/x86_64-linux-gnu/libboost_program_options.a /usr/lib/x86_64-linux-gnu/libssl.a /usr/lib/x86_64-linux-gnu/libcrypto.a /usr/lib/x86_64-linux-gnu/libz.a
 STATIC=-v -tags "netgo osusergo nosystray" -ldflags '-w -extldflags "-static"'
 OSXFLAGS=-v -tags "netgo osusergo systray" -ldflags '-w -extldflags "-static"' 
