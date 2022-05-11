@@ -18,7 +18,9 @@ configuration.
 
  - [![Launch I2P in Tor Browser](garliconion.png) - Launch I2P in Tor Browser](/launch-i2p-browser)
  - [![Launch Tor Browser](onion.png) - Launch Tor Browser](/launch-tor-browser)
- 
+ - [![Launch Hardened Clearnet Browser](www.png) - Launch Hardened Clearnet Browser](/launch-firefox-browser)
+ - [![Launch Offline Browser](offline.png) - Launch Offline Browser](/launch-offline-browser)
+
 ## Tor Controls
 
 `

@@ -35,6 +35,8 @@ TODO: A "Default" config file which uses hardened Tor Browser for clearnet
 //go:embed tor-browser/NOT-TPO-signing-key.pub
 //go:embed garliconion.png
 //go:embed onion.png
+//go:embed www.png
+//go:embed offline.png
 //go:embed torbrowser.desktop
 //go:embed i2ptorbrowser.desktop
 var content embed.FS

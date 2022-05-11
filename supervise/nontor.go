@@ -65,6 +65,20 @@ user_pref("network.IDN_show_punycode", true);
 user_pref("privacy.prioritizeonions.showNotification", false);
 `)
 
+var offlinebrowserjs = append(secbrowserjs, []byte(`
+//set the proxy to 127.0.0.1:1, which will fail all requests
+user_pref("network.proxy.type", 1);
+user_pref("network.proxy.http", "127.0.0.1");
+user_pref("network.proxy.http_port", 1);
+user_pref("network.proxy.ssl", "127.0.0.1");
+user_pref("network.proxy.ssl_port", 1);
+user_pref("network.proxy.ftp", "127.0.0.1");
+user_pref("network.proxy.ftp_port", 1);
+user_pref("network.proxy.socks", "127.0.0.1");
+user_pref("network.proxy.socks_port", 1);
+user_pref("network.proxy.share_proxy_settings", true);
+`)...)
+
 var secbrowserhtml = []byte(`
 <!DOCTYPE html>
 <html>

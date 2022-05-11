@@ -175,6 +175,8 @@ most of the improvements on Tor Browser Launcher also apply to TB-Updater, the
 
 <a href="https://www.flaticon.com/free-icons/garlic" title="garlic icons">Garlic icons created by Icongeek26 - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/onion" title="onion icons">Onion icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/search" title="search icons">Search icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/offline" title="offline icons">Offline icons created by Flat Icons - Flaticon</a>
 
 ### More Screenshots:
 

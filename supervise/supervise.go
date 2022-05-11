@@ -355,6 +355,26 @@ func (s *Supervisor) RunI2PBAppWithLang() error {
 	return s.RunTBBWithOfflineClearnetProfile(s.I2PAppDataPath(), true, false)
 }
 
+func (s *Supervisor) generateOfflineProfile(profiledata string) error {
+	apath, err := filepath.Abs(profiledata)
+	if err != nil {
+		return err
+	}
+	if !tbget.FileExists(filepath.Join(apath, "user.js")) {
+		err := ioutil.WriteFile(filepath.Join(apath, "user.js"), offlinebrowserjs, 0644)
+		if err != nil {
+			return err
+		}
+	}
+	if !tbget.FileExists(filepath.Join(apath, "pref.js")) {
+		err := ioutil.WriteFile(filepath.Join(apath, "pref.js"), offlinebrowserjs, 0644)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (s *Supervisor) GenerateClearnetProfile(profiledata string) error {
 	apath, err := filepath.Abs(profiledata)
 	if err != nil {
@@ -462,10 +482,12 @@ func (s *Supervisor) RunTBBWithOfflineClearnetProfile(profiledata string, offlin
 			log.Println("Error copying AWO XPI", err)
 			return err
 		}
+		if err := s.generateOfflineProfile(profiledata); err != nil {
+			log.Println("Error generating Offline Profile", err)
+			return err
+		}
 		if !strings.Contains(filepath.Base(profiledata), "i2p") {
 			defaultpage = profiledata + "/index.html"
-		} else {
-			defaultpage = "http://127.0.0.1:7657/home"
 		}
 	}
 	if len(s.PTAS()) > 0 {

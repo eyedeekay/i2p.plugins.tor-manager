@@ -106,6 +106,18 @@ func (m *Client) servePNG(rw http.ResponseWriter, rq *http.Request) {
 				return
 			}
 		}
+		if strings.HasSuffix(rq.URL.Path, "www.png") {
+			if bytes, err := m.TBD.Profile.ReadFile("www.png"); err == nil {
+				rw.Write(bytes)
+				return
+			}
+		}
+		if strings.HasSuffix(rq.URL.Path, "offline.png") {
+			if bytes, err := m.TBD.Profile.ReadFile("offline.png"); err == nil {
+				rw.Write(bytes)
+				return
+			}
+		}
 		return
 	}
 	rw.Header().Set("Content-Type", "image/png")
