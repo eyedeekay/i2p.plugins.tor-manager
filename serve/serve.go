@@ -190,11 +190,11 @@ func (m *Client) ServeHTTP(rw http.ResponseWriter, rq *http.Request) {
 			http.Redirect(rw, rq, "/", http.StatusFound)
 		case "/launch-firefox-browser":
 			log.Println("Starting Hardened Firefox Browser")
-			go m.TBS.RunTBBWithOfflineClearnetProfile("i2p.firefox", false, true)
+			go m.TBS.RunTBBWithOfflineClearnetProfile("profile.firefox", false, true)
 			http.Redirect(rw, rq, "/", http.StatusFound)
 		case "/launch-offline-browser":
 			log.Println("Starting Hardened Firefox Browser in offline mode")
-			go m.TBS.RunTBBWithOfflineClearnetProfile("i2p.firefox.offline", true, true)
+			go m.TBS.RunTBBWithOfflineClearnetProfile("profile.firefox.offline", true, true)
 			http.Redirect(rw, rq, "/", http.StatusFound)
 		case "/start-tor":
 			log.Println("Starting Tor")

@@ -10,8 +10,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/eyedeekay/go-i2pcontrol"
 	"fyne.io/systray"
+	"github.com/eyedeekay/go-i2pcontrol"
 	"i2pgit.org/idk/i2p.plugins.tor-manager/icon"
 )
 
@@ -36,6 +36,7 @@ func onReady() {
 		subMenuBottom := subMenuTop.AddSubMenuItem("Launch Tor Browser configured for I2P", "Modify and launch the Tor Browser Bundle for I2P")
 		subMenuBottom2 := subMenuTop.AddSubMenuItem("Launch the Tor Browser", "Launch the standard Tor Browser bundle")
 		subMenuBottom3 := subMenuTop.AddSubMenuItem("Launch Hardened Firefox in Clearnet Mode", "Launch the Tor Browser bundle, but without Tor")
+		subMenuBottom4 := subMenuTop.AddSubMenuItem("Launch Offline Browser", "Launch the Tor Browser bundle configured to have no access to the internet at all")
 		systray.AddSeparator()
 		go onSnowflakeReady()
 		systray.AddSeparator()
@@ -63,7 +64,12 @@ func onReady() {
 				}
 			case <-subMenuBottom3.ClickedCh:
 				fmt.Println("Launching Hardened Firefox in Clearnet Mode")
-				if err := client.TBS.RunTBBWithOfflineClearnetProfile(*profile, false, true); err != nil {
+				if err := client.TBS.RunTBBWithOfflineClearnetProfile("profile.firefox", false, true); err != nil {
+					log.Println(err)
+				}
+			case <-subMenuBottom4.ClickedCh:
+				fmt.Println("Launching Hardened Firefox in Clearnet Mode")
+				if err := client.TBS.RunTBBWithOfflineClearnetProfile("profile.firefox.offline", true, true); err != nil {
 					log.Println(err)
 				}
 			case <-mQuit.ClickedCh:

@@ -12,7 +12,7 @@ require (
 	golang.org/x/net v0.0.0-20211206223403-eba003a116a9
 )
 
-require github.com/godbus/dbus/v5 v5.0.4 // indirect
+require github.com/godbus/dbus/v5 v5.1.0 // indirect
 
 require (
 	github.com/eyedeekay/go-I2P-jpackage v0.0.0-20220219044935-be7909c9f4c5
@@ -33,7 +33,7 @@ require (
 	github.com/otiai10/copy v1.7.0
 	github.com/russross/blackfriday v2.0.0+incompatible
 	github.com/ulikunitz/xz v0.5.10
-	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
+	golang.org/x/sys v0.0.0-20220503163025-988cb79eb6c6 // indirect
 	howett.net/plist v1.0.0 // indirect
 )
 
@@ -168,3 +168,5 @@ require (
 //replace github.com/getlantern/systray v1.1.0 => github.com/eyedeekay/systray v1.1.1-0.20220213191004-800d7458fdfd
 
 replace github.com/eyedeekay/go-I2P-jpackage => ../../../github.com/eyedeekay/go-I2P-jpackage
+
+replace fyne.io/systray v1.9.0 => fyne.io/systray v1.9.1-0.20220508132247-214b548ccb52
