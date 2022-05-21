@@ -392,8 +392,14 @@ func (t *TBDownloader) SetupProxy() error {
 	return SetupProxy(t.Mirror, t.TorPath())
 }
 
+func unSetupProxy() {
+	http.DefaultClient.Transport = nil
+}
+
 func SetupProxy(mirror, tp string) error {
 	var d proxy.Dialer
+	http.DefaultClient.Transport = nil
+	defer unSetupProxy()
 	if MirrorIsI2P(mirror) {
 		log.Println("Using I2P mirror, setting up proxy")
 		var err error
@@ -410,7 +416,7 @@ func SetupProxy(mirror, tp string) error {
 		}
 		http.DefaultClient.Transport = tr
 	} else {
-		if !strings.Contains(mirror, "127.0.0.1") {
+		if !strings.Contains(mirror, "127.0.0.1") && !strings.Contains(mirror, "localhost") {
 			if tmp, torerr := net.Listen("tcp", "127.0.0.1:9050"); torerr != nil {
 				log.Println("System Tor is running, downloading over that because obviously.")
 				t, err := tor.Start(context.Background(), StartConf(tp))

@@ -12,7 +12,11 @@ require (
 	golang.org/x/net v0.0.0-20211206223403-eba003a116a9
 )
 
-require github.com/godbus/dbus/v5 v5.1.0 // indirect
+require (
+	github.com/godbus/dbus/v5 v5.1.0 // indirect
+	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
+	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
+)
 
 require (
 	github.com/eyedeekay/go-I2P-jpackage v0.0.0-20220219044935-be7909c9f4c5

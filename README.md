@@ -147,7 +147,8 @@ Improvements on Tor Browser Launcher include:
  - Works everywhere Tor Browser does, not just Linux. Including:
   Linux, Mac, Windows, AMD64, X86, and M1
  - Embeds all required resources into a single binary which unpacks itself to a directory
-  of the user's choice. Never touches any other directory.
+  of the user's choice. Never touches any other directory(in ~/.cache or ~/.local, etc),
+  unless specifically instructed to.
  - Easy to package by placing a single static binary into a boilerplate package.
  - Automatically generate an AppArmor profile which works for custom installation directory
  - Accepts a custom profile argument without interfering with normal Tor Browser
@@ -160,6 +161,17 @@ Improvements on Tor Browser Launcher include:
  - Embeds an I2P router in case the host system doesn't have an I2P router
  - Encrypt the working directory automatically when it's not in use.
  - No python. Language wars are stupid, but so is python.
+
+Things Tor Browser Launcher does that this does not(yet):
+
+ - Micah went to far greater effort to assure that TPO's HTTPS certificate was
+ authentic and avoid the Certificate Authority/PKI system. As a result, CA's are
+ untrusted entities when downloading from the default Tor Project site. This is
+ probably a pretty good idea.
+ - This application does not offer a choice of downloading Tor Browser over the
+ clearnet if there is literally any other option available to it. This is roughly equivalent
+ to downloading Tor Browser over system Tor being always on in Tor Browser Launcher.
+ - This application does not play dial-up noises.
 
 #### [TB-Updater(Whonix)](https://github.com/whonix/tb-updater)
 

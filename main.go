@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -72,8 +73,24 @@ func ARCH() string {
 
 var theLang = os.Getenv("TBLANG")
 
+func defaultLang() string {
+	if theLang != "" {
+		return theLang
+	}
+	lang, _ := jibber_jabber.DetectIETF()
+	return lang
+}
+
+func defaultTor() bool {
+	_, err := net.Listen("TCP", "127.0.0.1:9050")
+	if err != nil {
+		return true
+	}
+	return false
+}
+
 var (
-	lang       = flag.String("lang", theLang, "Language to download")
+	lang       = flag.String("lang", defaultLang(), "Language to download")
 	system     = flag.String("os", OS(), "OS/arch to download")
 	arch       = flag.String("arch", ARCH(), "OS/arch to download")
 	i2pbrowser = flag.Bool("i2pbrowser", false, "Open I2P in Tor Browser")
@@ -92,14 +109,14 @@ var (
 	profile    = flag.String("profile", "", "use a custom profile path, normally blank")
 	help       = flag.Bool("help", false, "Print help and quit")
 	mirror     = flag.String("mirror", Mirror(), "Mirror to use. I2P will be used if an I2P proxy is present, if system Tor is available, it will be downloaded over the Tor proxy.")
-	solidarity = flag.Bool("onion", false, "Serve an onion site which shows some I2P propaganda")
+	solidarity = flag.Bool("onion", defaultTor(), "Serve an onion site which shows some I2P propaganda")
 	torrent    = flag.Bool("torrent", tbget.TorrentReady(), "Create a torrent of the downloaded files and seed it over I2P using an Open Tracker")
 	destruct   = flag.Bool("destruct", false, "Destructively delete the working directory when finished")
 	password   = flag.String("password", Password(), "Password to encrypt the working directory with. Implies -destruct, only the encrypted container will be saved.")
 	chat       = flag.Bool("chat", false, "Open a WebChat client")
 	notor      = flag.Bool("notor", false, "Do not automatically start Tor")
 	nounpack   = flag.Bool("nounpack", false, "Do not unpack the Tor Browser")
-	ptop       = flag.Bool("p2p", tbget.TorrentDownloaded(theLang, OS()+ARCH()), "Use bittorrent over I2P to download the initial copy of Tor Browser")
+	ptop       = flag.Bool("p2p", tbget.TorrentDownloaded(defaultLang(), OS()+ARCH()), "Use bittorrent over I2P to download the initial copy of Tor Browser")
 	torversion = flag.Bool("torversion", false, "Print the version of Tor Browser that will be downloaded and exit")
 )
 

@@ -12,6 +12,7 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/cloudfoundry/jibber_jabber"
 	"github.com/eyedeekay/sam3/i2pkeys"
 	cp "github.com/otiai10/copy"
 	"github.com/xgfone/bt/bencode"
@@ -250,6 +251,13 @@ func GetTorBrowserVersionFromUpdateURL() (string, error) {
 }
 
 func TorrentDownloaded(ietf, rtpair string) bool {
+	if ietf == "" {
+		var err error
+		ietf, err = jibber_jabber.DetectIETF()
+		if err != nil {
+			panic(err)
+		}
+	}
 	version, err := GetTorBrowserVersionFromUpdateURL()
 	if err != nil {
 		panic(err)
@@ -262,13 +270,10 @@ func TorrentDownloaded(ietf, rtpair string) bool {
 	if strings.Contains(rtpair, "osx") {
 		extension = "dmg"
 	}
-
-	if ietf == "" {
-		ietf = "en-US"
-	}
 	cmpsize, err := FetchContentLength(fmt.Sprintf("https://dist.torproject.org/torbrowser/%s/tor-browser-%s-%s_%s.%s", version, rtpair, version, ietf, extension), fmt.Sprintf("tor-browser-%s-%s_%s.%s", rtpair, version, ietf, extension))
 	if err != nil {
-		panic(err)
+		//panic(err)
+		return TorrentDownloaded(ietf, rtpair)
 	}
 	found := false
 	if dir, err := FindSnarkDirectory(); err == nil {
