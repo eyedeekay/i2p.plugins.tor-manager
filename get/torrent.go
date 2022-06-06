@@ -13,7 +13,7 @@ import (
 	"strings"
 
 	"github.com/cloudfoundry/jibber_jabber"
-	"github.com/eyedeekay/sam3/i2pkeys"
+	"github.com/eyedeekay/i2pkeys"
 	cp "github.com/otiai10/copy"
 	"github.com/xgfone/bt/bencode"
 	"github.com/xgfone/bt/metainfo"
