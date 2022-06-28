@@ -176,7 +176,7 @@ su3-mirror:
 		-command="$(BINARY)-$(GOOS)-$(GOARCH) -notor -nevertor -mirrorall -bemirror" \
 		-license=MIT \
 		-res=tor-browser/
-	unzip -o $(BINARY)-$(GOOS)-$(GOARCH).zip -d $(BINARY)-$(GOOS)-$(GOARCH)-zip
+	unzip -o $(BINARY)-$(GOOS)-$(GOARCH)-Mirrorkit.zip -d $(BINARY)-$(GOOS)-$(GOARCH)-Mirrorkit-zip
 
 sum:
 	sha256sum $(BINARY)-$(GOOS)-$(GOARCH).su3
