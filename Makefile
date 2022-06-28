@@ -229,7 +229,24 @@ early-release: clean linux windows version upload-linux upload-windows
 
 release: clean all version upload-all
 
-index: index-clearnet index-offline index-usage index-onion
+README: pluginslist
+	cat top.md plugins.md bottom.md > README.md
+
+pluginslist:
+	@echo "Plugin:" > plugins.md
+	@echo "-------" >> plugins.md
+	@echo "" >> plugins.md
+	@echo "Clearnet visitor? You'll need to use the [Github Releases Mirror](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/)." >> plugins.md
+	@echo "" >> plugins.md
+	@echo "- [i2p.plugins.tor-manager-linux-386](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/$(VERSION)/i2p.plugins.tor-manager-linux-386.su3)" >> plugins.md
+	@echo "- [i2p.plugins.tor-manager-windows-amd64](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/$(VERSION)/i2p.plugins.tor-manager-windows-amd64.su3)" >> plugins.md
+	@echo "- [i2p.plugins.tor-manager-darwin-arm64](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/$(VERSION)/i2p.plugins.tor-manager-darwin-arm64.su3)" >> plugins.md
+	@echo "- [i2p.plugins.tor-manager-linux-amd64](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/$(VERSION)/i2p.plugins.tor-manager-linux-amd64.su3)" >> plugins.md
+	@echo "- [i2p.plugins.tor-manager-windows-386](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/$(VERSION)/i2p.plugins.tor-manager-windows-386.su3)" >> plugins.md
+	@echo "- [i2p.plugins.tor-manager-darwin-amd64](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/$(VERSION)/i2p.plugins.tor-manager-darwin-amd64.su3)" >> plugins.md
+
+
+index: README index-clearnet index-offline index-usage index-onion
 	@echo "<!DOCTYPE html>" > index.html
 	@echo "<html>" >> index.html
 	@echo "<head>" >> index.html
