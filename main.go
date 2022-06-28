@@ -118,6 +118,8 @@ var (
 	nounpack   = flag.Bool("nounpack", false, "Do not unpack the Tor Browser")
 	ptop       = flag.Bool("p2p", tbget.TorrentDownloaded(defaultLang(), OS()+ARCH()), "Use bittorrent over I2P to download the initial copy of Tor Browser")
 	torversion = flag.Bool("torversion", false, "Print the version of Tor Browser that will be downloaded and exit")
+	mirrorall  = flag.Bool("mirrorall", false, "Download and mirror every language and OS/arch combination")
+	nevertor   = flag.Bool("nevertor", false, "Never use Tor for downloading Tor Browser")
 )
 
 func Clearnet() bool {
@@ -221,6 +223,18 @@ func main() {
 		fmt.Printf("\n")
 	}
 	flag.Parse()
+	if *nevertor {
+		err := os.Setenv("TOR_MANAGER_NEVER_USE_TOR", "true")
+		if err != nil {
+			log.Panicln(err)
+		}
+	}
+	if *mirrorall {
+		err := mirrorAll()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 	if *torversion {
 		torbrowserversion, err := tbget.GetTorBrowserVersionFromUpdateURL()
 		if err != nil {

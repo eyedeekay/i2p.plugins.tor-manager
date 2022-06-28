@@ -396,6 +396,8 @@ func unSetupProxy() {
 	http.DefaultClient.Transport = nil
 }
 
+var t *tor.Tor
+
 func SetupProxy(mirror, tp string) error {
 	var d proxy.Dialer
 	http.DefaultClient.Transport = nil
@@ -416,28 +418,34 @@ func SetupProxy(mirror, tp string) error {
 		}
 		http.DefaultClient.Transport = tr
 	} else {
-		if !strings.Contains(mirror, "127.0.0.1") && !strings.Contains(mirror, "localhost") {
-			if tmp, torerr := net.Listen("tcp", "127.0.0.1:9050"); torerr != nil {
-				log.Println("System Tor is running, downloading over that because obviously.")
-				t, err := tor.Start(context.Background(), StartConf(tp))
-				if err != nil {
+		nut := os.Getenv("TOR_MANAGER_NEVER_USE_TOR")
+		if nut != "true" {
+			if !strings.Contains(mirror, "127.0.0.1") && !strings.Contains(mirror, "localhost") {
+				if tmp, torerr := net.Listen("tcp", "127.0.0.1:9050"); torerr != nil {
+					log.Println("System Tor is running, downloading over that because obviously.")
+					var err error
 					if t == nil {
+						t, err = tor.Start(context.Background(), StartConf(tp))
+						if err != nil {
+							if t == nil {
+								return err
+							}
+						}
+					}
+					//defer t.Close()
+					// Wait at most a minute to start network and get
+					dialCtx, _ := context.WithTimeout(context.Background(), time.Minute)
+					//defer dialCancel()
+					// Make connection
+					dialer, err := t.Dialer(dialCtx, nil)
+					if err != nil {
 						return err
 					}
+					tr := &http.Transport{DialContext: dialer.DialContext}
+					http.DefaultClient.Transport = tr
+				} else {
+					tmp.Close()
 				}
-				//defer t.Close()
-				// Wait at most a minute to start network and get
-				dialCtx, _ := context.WithTimeout(context.Background(), time.Minute)
-				//defer dialCancel()
-				// Make connection
-				dialer, err := t.Dialer(dialCtx, nil)
-				if err != nil {
-					return err
-				}
-				tr := &http.Transport{DialContext: dialer.DialContext}
-				http.DefaultClient.Transport = tr
-			} else {
-				tmp.Close()
 			}
 		}
 	}

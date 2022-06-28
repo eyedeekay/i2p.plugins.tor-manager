@@ -61,6 +61,8 @@ func (t *TBDownloader) GenerateMissingTorrents() error {
 			if err != nil {
 				return err
 			}
+			snark = filepath.Join(snark, "torbrowser")
+			os.MkdirAll(snark, 0755)
 			sf := filepath.Join(snark, f)
 			sfp := filepath.Join(snark, f+".torrent")
 			if !FileExists(sf) {
@@ -260,7 +262,7 @@ func TorrentDownloaded(ietf, rtpair string) bool {
 	}
 	version, err := GetTorBrowserVersionFromUpdateURL()
 	if err != nil {
-		panic(err)
+		return false
 	}
 	log.Println("Tor Browser Version", version, ietf)
 	extension := "exe"
@@ -277,7 +279,7 @@ func TorrentDownloaded(ietf, rtpair string) bool {
 	}
 	found := false
 	if dir, err := FindSnarkDirectory(); err == nil {
-		err := filepath.Walk(dir,
+		err := filepath.Walk(dir+"/torbrowser",
 			func(path string, info os.FileInfo, err error) error {
 				if err != nil {
 					return err
