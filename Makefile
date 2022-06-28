@@ -157,6 +157,27 @@ su3:
 		-res=tor-browser/
 	unzip -o $(BINARY)-$(GOOS)-$(GOARCH).zip -d $(BINARY)-$(GOOS)-$(GOARCH)-zip
 
+su3-mirror:
+	i2p.plugin.native -name=$(BINARY)-$(GOOS)-$(GOARCH)-Mirrorkit \
+		-signer=$(SIGNER) \
+		-signer-dir=$(SIGNER_DIR) \
+		-version "$(VERSION)" \
+		-author=$(SIGNER) \
+		-autostart=true \
+		-clientname=$(BINARY)-Mirrorkit \
+		-consolename="$(BINARY) - $(CONSOLEPOSTNAME) - Mirrorkit" \
+		-delaystart="1" \
+		-desc="`cat desc` - this is the automatic Tor Browser mirror-generator" \
+		-exename=$(BINARY)-$(GOOS)-$(GOARCH) \
+		-icondata=icon/icon.png \
+		-consoleurl="http://127.0.0.1:7695" \
+		-updateurl="http://idk.i2p/$(BINARY)/$(BINARY)-$(GOOS)-$(GOARCH).su3" \
+		-website="http://idk.i2p/$(BINARY)/" \
+		-command="$(BINARY)-$(GOOS)-$(GOARCH) -notor -nevertor -mirrorall -bemirror" \
+		-license=MIT \
+		-res=tor-browser/
+	unzip -o $(BINARY)-$(GOOS)-$(GOARCH).zip -d $(BINARY)-$(GOOS)-$(GOARCH)-zip
+
 sum:
 	sha256sum $(BINARY)-$(GOOS)-$(GOARCH).su3
 
