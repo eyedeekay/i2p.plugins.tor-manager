@@ -230,7 +230,11 @@ func main() {
 		}
 	}
 	if *mirrorall {
-		err := mirrorAll()
+		err := os.Setenv("TOR_MANAGER_NEVER_USE_TOR", "true")
+		if err != nil {
+			log.Panicln(err)
+		}
+		err = mirrorAll()
 		if err != nil {
 			log.Fatal(err)
 		}

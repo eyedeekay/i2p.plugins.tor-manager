@@ -65,5 +65,10 @@ func mirrorPlatform(path, ietf, platform, arch string) error {
 	cmd.Env = os.Environ()
 	cmd.Env = append(cmd.Env, "TOR_MANAGER_CLEARNET_MIRROR=true")
 	cmd.Env = append(cmd.Env, "TOR_MANAGER_REQUIRE_PASSWORD=false")
-	return cmd.Run()
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return err
+	}
+	log.Println(string(output))
+	return nil
 }
