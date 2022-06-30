@@ -72,7 +72,8 @@ func (s *Supervisor) TBPath() string {
 	case "linux":
 		return filepath.Join(s.UnpackPath, "Browser", "start-tor-browser")
 	case "osx":
-		return filepath.Join(s.UnpackPath, "Browser", "Tor Browser.app", "Contents", "MacOS", "start-tor-browser")
+		//return filepath.Join(s.UnpackPath, "Browser", "Tor Browser.app", "Contents", "MacOS", "start-tor-browser")
+		return filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "MacOS", "firefox")
 	case "windows":
 		return filepath.Join(s.TBDirectory(), "firefox.exe")
 	default:
@@ -82,17 +83,27 @@ func (s *Supervisor) TBPath() string {
 
 // FirefoxPath returns the path to the Firefox executable inside Tor Browser
 func (s *Supervisor) FirefoxPath() string {
+	return s.SpecificFirefoxPath(s.UnpackPath)
+}
+
+// FirefoxPath returns the path to the Firefox executable inside Tor Browser
+func (s *Supervisor) SpecificFirefoxPath(unpackedFirefox string) string {
 	switch OS() {
 	case "linux":
-		return filepath.Join(s.UnpackPath, "Browser", "firefox.real")
+		return filepath.Join(s.SpecificTBDirectory(unpackedFirefox), "firefox.real")
 	case "windows":
-		return filepath.Join(s.UnpackPath, "Browser", "firefox.exe")
+		return filepath.Join(s.SpecificTBDirectory(unpackedFirefox), "firefox.exe")
 	default:
-		return filepath.Join(s.UnpackPath, "Browser", "firefox")
+		return filepath.Join(s.SpecificTBDirectory(unpackedFirefox), "firefox")
 	}
 }
 
-// TBDirectory returns the path to the Tor Browser Bundle directory
+// SpecificTBDirectory returns the path to the Tor Browser firefox directory within an unpacked TBB
+func (s *Supervisor) SpecificTBDirectory(unpacked string) string {
+	return filepath.Join(unpacked, "Browser")
+}
+
+// TBDirectory returns the path to the Tor Browser firefox directory
 func (s *Supervisor) TBDirectory() string {
 	return filepath.Join(s.UnpackPath, "Browser")
 }
@@ -253,7 +264,7 @@ func (s *Supervisor) RunTBWithLang() error {
 		log.Println("tor browser not found at", s.TBPath())
 		return fmt.Errorf("tor browser not found at %s", s.TBPath())
 	case "osx":
-		firefoxPath := filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "MacOS", "firefox")
+		firefoxPath := s.TBPath() //FirefoxPath
 		bcmd := exec.Command(firefoxPath)
 		bcmd.Dir = s.UnpackPath
 		bcmd.Stdout = os.Stdout
@@ -300,7 +311,7 @@ func (s *Supervisor) RunTBHelpWithLang() error {
 		log.Println("tor browser not found at", s.TBPath())
 		return fmt.Errorf("tor browser not found at %s", s.TBPath())
 	case "osx":
-		firefoxPath := filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "MacOS", "firefox")
+		firefoxPath := s.TBPath()
 		bcmd := exec.Command(firefoxPath, "--help")
 		bcmd.Stdout = os.Stdout
 		bcmd.Stderr = os.Stderr
@@ -468,6 +479,10 @@ func (s *Supervisor) CopyAWOXPI(profiledata string) error {
 
 // RunTBBWithOfflineProfile runs the I2P Browser with the given language
 func (s *Supervisor) RunTBBWithOfflineClearnetProfile(profiledata string, offline, clearnet bool) error {
+	return s.RunSpecificTBBWithOfflineClearnetProfile(profiledata, s.UnpackPath, offline, clearnet, false)
+}
+
+func (s *Supervisor) RunSpecificTBBWithOfflineClearnetProfile(profiledata, torbrowserdata string, offline, clearnet, editor bool) error {
 	defaultpage := "about:blank"
 	if clearnet {
 		log.Print("Generating Clearnet Profile")
@@ -490,36 +505,62 @@ func (s *Supervisor) RunTBBWithOfflineClearnetProfile(profiledata string, offlin
 			defaultpage = profiledata + "/index.html"
 		}
 	}
+
 	if len(s.PTAS()) > 0 {
 		defaultpage = s.PTAS()[0]
+	}
+	if editor {
+		defaultpage = "http://127.0.0.1:7685"
+		clearnet := true
+		offline := true
+		if clearnet {
+			log.Print("Generating Clearnet Profile")
+			if err := s.GenerateClearnetProfile(profiledata); err != nil {
+				log.Println("Error generating Clearnet Profile", err)
+				return err
+			}
+		}
+		if offline {
+			if err := s.CopyAWOXPI(profiledata); err != nil {
+				log.Println("Error copying AWO XPI", err)
+				return err
+			}
+		}
+		tbget.ARCH = ARCH()
+		if s.Lang == "" {
+			s.Lang = DEFAULT_TB_LANG
+		}
+		if s.UnpackPath == "" {
+			s.UnpackPath = UNPACK_URL()
+		}
 	}
 	tbget.ARCH = ARCH()
 	if s.Lang == "" {
 		s.Lang = DEFAULT_TB_LANG
 	}
-	if s.UnpackPath == "" {
-		s.UnpackPath = UNPACK_URL()
+	if torbrowserdata == "" {
+		torbrowserdata = UNPACK_URL()
 	}
 
-	log.Println("running i2p in tor browser with lang", s.Lang, s.UnpackPath, OS())
+	log.Println("running i2p in tor browser with lang", s.Lang, torbrowserdata, OS())
 	switch OS() {
 	case "linux":
-		if tbget.FileExists(s.UnpackPath) {
+		if tbget.FileExists(torbrowserdata) {
 			args := []string{"--profile", profiledata, defaultpage}
 			args = append(args, s.PTAS()...)
-			log.Println("running Tor browser with lang and Custom Profile", s.Lang, s.UnpackPath, s.FirefoxPath(), args)
-			bcmd := exec.Command(s.FirefoxPath(), args...)
+			log.Println("running Tor browser with lang and Custom Profile", s.Lang, torbrowserdata, s.SpecificFirefoxPath(torbrowserdata), args)
+			bcmd := exec.Command(s.SpecificFirefoxPath(torbrowserdata), args...)
 			bcmd.Stdout = os.Stdout
 			bcmd.Stderr = os.Stderr
 			return bcmd.Run()
 		}
-		log.Println("tor browser not found at", s.FirefoxPath())
-		return fmt.Errorf("tor browser not found at %s", s.FirefoxPath())
+		log.Println("tor browser not found at", s.SpecificFirefoxPath(torbrowserdata))
+		return fmt.Errorf("tor browser not found at %s", s.SpecificFirefoxPath(torbrowserdata))
 	case "osx":
-		firefoxPath := filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "MacOS", "firefox")
+		firefoxPath := s.TBPath()
 		args := []string{"--profile", profiledata, defaultpage}
 		args = append(args, s.PTAS()...)
-		log.Println("running Tor browser with lang and Custom Profile", s.Lang, s.UnpackPath, firefoxPath, args)
+		log.Println("running Tor browser with lang and Custom Profile", s.Lang, torbrowserdata, firefoxPath, args)
 		bcmd := exec.Command(firefoxPath, args...)
 		bcmd.Dir = profiledata
 		bcmd.Stdout = os.Stdout
@@ -529,8 +570,8 @@ func (s *Supervisor) RunTBBWithOfflineClearnetProfile(profiledata string, offlin
 	case "win":
 		args := []string{"--profile", profiledata, defaultpage}
 		args = append(args, s.PTAS()...)
-		log.Println("running Tor browser with lang and Custom Profile", s.Lang, s.UnpackPath, s.TBPath(), args)
-		bcmd := exec.Command(s.TBPath(), args...)
+		log.Println("running Tor browser with lang and Custom Profile", s.Lang, torbrowserdata, s.SpecificFirefoxPath(torbrowserdata), args)
+		bcmd := exec.Command(s.SpecificFirefoxPath(torbrowserdata), args...)
 		bcmd.Dir = profiledata
 		bcmd.Stdout = os.Stdout
 		bcmd.Stderr = os.Stderr
@@ -714,65 +755,5 @@ func FindEepsiteDocroot() (string, error) {
 
 // RunTBBWithOfflineProfile runs the I2P Browser with the given language
 func (s *Supervisor) RunI2PSiteEditorWithOfflineClearnetProfile(profiledata string) error {
-	defaultpage := "http://127.0.0.1:7685"
-	clearnet := true
-	offline := true
-	if clearnet {
-		log.Print("Generating Clearnet Profile")
-		if err := s.GenerateClearnetProfile(profiledata); err != nil {
-			log.Println("Error generating Clearnet Profile", err)
-			return err
-		}
-	}
-	if offline {
-		if err := s.CopyAWOXPI(profiledata); err != nil {
-			log.Println("Error copying AWO XPI", err)
-			return err
-		}
-	}
-	tbget.ARCH = ARCH()
-	if s.Lang == "" {
-		s.Lang = DEFAULT_TB_LANG
-	}
-	if s.UnpackPath == "" {
-		s.UnpackPath = UNPACK_URL()
-	}
-
-	log.Println("running i2p in tor browser with lang", s.Lang, s.UnpackPath, OS())
-	switch OS() {
-	case "linux":
-		if tbget.FileExists(s.UnpackPath) {
-			args := []string{"--profile", profiledata, defaultpage}
-			args = append(args, s.PTAS()...)
-			log.Println("running Tor browser with lang and Custom Profile", s.Lang, s.UnpackPath, s.FirefoxPath(), args)
-			bcmd := exec.Command(s.FirefoxPath(), args...)
-			bcmd.Stdout = os.Stdout
-			bcmd.Stderr = os.Stderr
-			return bcmd.Run()
-		}
-		log.Println("tor browser not found at", s.FirefoxPath())
-		return fmt.Errorf("tor browser not found at %s", s.FirefoxPath())
-	case "osx":
-		firefoxPath := filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "MacOS", "firefox")
-		args := []string{"--profile", profiledata, defaultpage}
-		args = append(args, s.PTAS()...)
-		log.Println("running Tor browser with lang and Custom Profile", s.Lang, s.UnpackPath, firefoxPath, args)
-		bcmd := exec.Command(firefoxPath, args...)
-		bcmd.Dir = profiledata
-		bcmd.Stdout = os.Stdout
-		bcmd.Stderr = os.Stderr
-
-		return bcmd.Run()
-	case "win":
-		args := []string{"--profile", profiledata, defaultpage}
-		args = append(args, s.PTAS()...)
-		log.Println("running Tor browser with lang and Custom Profile", s.Lang, s.UnpackPath, s.TBPath(), args)
-		bcmd := exec.Command(s.TBPath(), args...)
-		bcmd.Dir = profiledata
-		bcmd.Stdout = os.Stdout
-		bcmd.Stderr = os.Stderr
-		return bcmd.Run()
-	default:
-	}
-	return nil
+	return s.RunSpecificTBBWithOfflineClearnetProfile(profiledata, s.UnpackPath, true, true, true)
 }

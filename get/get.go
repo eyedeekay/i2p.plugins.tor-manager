@@ -29,6 +29,7 @@ import (
 	"github.com/itchio/damage/hdiutil"
 	"github.com/itchio/headway/state"
 	"github.com/magisterquis/connectproxy"
+	cp "github.com/otiai10/copy"
 	"github.com/ulikunitz/xz"
 
 	"golang.org/x/net/proxy"
@@ -713,6 +714,10 @@ func (t *TBDownloader) BrowserDir() string {
 	return filepath.Join(t.UnpackPath, "tor-browser_"+t.Lang)
 }
 
+func (t *TBDownloader) I2PBrowserDir() string {
+	return filepath.Join(t.UnpackPath, "i2p-browser_"+t.Lang)
+}
+
 // UnpackUpdater unpacks the updater to the given path.
 // it returns the path or an erorr if one is encountered.
 func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
@@ -732,7 +737,12 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 			if err != nil {
 				return "", fmt.Errorf("UnpackUpdater: windows exec fail %s", err)
 			}
+			if err := cp.Copy(t.BrowserDir(), t.I2PBrowserDir()); err != nil {
+				return "", fmt.Errorf("UnpackUpdater: copy fail %s", err)
+			}
 		}
+		// copy BrowserDir() to I2PBrowserDir()
+
 		return installPath, nil
 	}
 	if t.OS == "osx" {
@@ -803,6 +813,9 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 		if t.Verbose {
 			fmt.Printf("Unpacked %s\n", header.Name)
 		}
+	}
+	if err := cp.Copy(t.BrowserDir(), t.I2PBrowserDir()); err != nil {
+		return "", fmt.Errorf("UnpackUpdater: copy fail %s", err)
 	}
 	return t.BrowserDir(), nil
 }
