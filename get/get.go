@@ -757,8 +757,12 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 		}
 		host := hdiutil.NewHost(consumer)
 		if !FileExists(t.BrowserDir()) {
-			_, err := damage.Mount(host, binpath, t.BrowserDir())
-			if err != nil {
+			if _, err := damage.Mount(host, binpath, t.BrowserDir()); err != nil {
+				return "", fmt.Errorf("UnpackUpdater: osx open/mount fail %s", err)
+			}
+		}
+		if !FileExists(t.I2PBrowserDir()) {
+			if _, err := damage.Mount(host, binpath, t.I2PBrowserDir()); err != nil {
 				return "", fmt.Errorf("UnpackUpdater: osx open/mount fail %s", err)
 			}
 		}
