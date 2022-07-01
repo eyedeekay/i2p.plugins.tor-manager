@@ -425,9 +425,12 @@ distclean: clean
 
 signer=70D2060738BEF80523ACAFF7D75C03B39B5E14E1
 
-flatpak:
-	flatpak-builder --gpg-sign="$(signer)" --force-clean --disable-cache build-dir org.i2pgit.idk.i2p.plugins.tor-manager.yml
+flatpak: clean-flatpak
+	flatpak-builder --gpg-sign="$(signer)" --user --force-clean --disable-cache build-dir org.i2pgit.idk.i2p.plugins.tor-manager.yml
 	flatpak-builder --gpg-sign="$(signer)" --user --install --force-clean build-dir org.i2pgit.idk.i2p.plugins.tor-manager.yml
+
+clean-flatpak:
+	rm -rf .flatpak-builder build-dir
 
 flatpak-deps: shared-modules
 	flatpak install flathub org.kde.Platform//5.15-21.08 org.kde.Sdk//5.15-21.08
