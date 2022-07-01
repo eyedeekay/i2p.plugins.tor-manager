@@ -23,3 +23,7 @@ tmp-i2pbrowser
 config
 i2p.plugins.native
 torrents-*
+.flatpak-builder
+build-dir
+shared-modules
+log
