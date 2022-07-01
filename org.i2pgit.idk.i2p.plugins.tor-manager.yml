@@ -37,6 +37,7 @@ modules:
     build-commands:
       - install -D -m755 i2p.plugins.tor-manager /app/bin/i2p.plugins.tor-manager
       - install -D -m755 flatpak.sh /app/bin/i2p.plugins.tor-manager.sh
+      - install -D i2p.plugins.tor-manager.desktop /app/share/applications/i2p.plugins.tor-manager.desktop
     sources:
       - type: file
         path: i2p.plugins.tor-manager
