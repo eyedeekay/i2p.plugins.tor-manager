@@ -70,10 +70,10 @@ func (s *Supervisor) PTAS() []string {
 func (s *Supervisor) TBPath() string {
 	switch OS() {
 	case "linux":
-		return filepath.Join(s.UnpackPath, "Browser", "start-tor-browser")
+		return filepath.Join(s.TBUnpackPath(), "Browser", "start-tor-browser")
 	case "osx":
-		//return filepath.Join(s.UnpackPath, "Browser", "Tor Browser.app", "Contents", "MacOS", "start-tor-browser")
-		return filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "MacOS", "firefox")
+		//return filepath.Join(s.TBUnpackPath(), "Browser", "Tor Browser.app", "Contents", "MacOS", "start-tor-browser")
+		return filepath.Join(s.TBUnpackPath(), "Tor Browser.app", "Contents", "MacOS", "firefox")
 	case "windows":
 		return filepath.Join(s.TBDirectory(), "firefox.exe")
 	default:
@@ -83,7 +83,7 @@ func (s *Supervisor) TBPath() string {
 
 // FirefoxPath returns the path to the Firefox executable inside Tor Browser
 func (s *Supervisor) FirefoxPath() string {
-	return s.SpecificFirefoxPath(s.UnpackPath)
+	return s.SpecificFirefoxPath(s.TBUnpackPath())
 }
 
 // FirefoxPath returns the path to the Firefox executable inside Tor Browser
@@ -105,25 +105,25 @@ func (s *Supervisor) SpecificTBDirectory(unpacked string) string {
 
 // TBDirectory returns the path to the Tor Browser firefox directory
 func (s *Supervisor) TBDirectory() string {
-	return filepath.Join(s.UnpackPath, "Browser")
+	return filepath.Join(s.TBUnpackPath(), "Browser")
 }
 
 // TorPath returns the path to the Tor executable
 func (s *Supervisor) TorPath() string {
 	if OS() == "osx" {
-		return filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "Resources", "TorBrowser", "Tor", "tor")
+		return filepath.Join(s.TBUnpackPath(), "Tor Browser.app", "Contents", "Resources", "TorBrowser", "Tor", "tor")
 	}
-	return filepath.Join(s.UnpackPath, "Browser", "TorBrowser", "Tor", "tor")
+	return filepath.Join(s.TBUnpackPath(), "Browser", "TorBrowser", "Tor", "tor")
 }
 
 // TorDataPath returns the path to the Tor Browser Bundle Data directory
 func (s *Supervisor) TorDataPath() string {
-	return filepath.Join(s.UnpackPath, "Browser", "TorBrowser", "Data")
+	return filepath.Join(s.TBUnpackPath(), "Browser", "TorBrowser", "Data")
 }
 
 // I2PProfilePath returns the path to the I2P profile
 func (s *Supervisor) I2PProfilePath() string {
-	fp := filepath.Join(filepath.Dir(s.UnpackPath), ".i2p.firefox")
+	fp := filepath.Join(filepath.Dir(s.IBBUnpackPath()), ".i2p.firefox")
 	if !tbget.FileExists(fp) {
 		log.Printf("i2p data not found at %s, unpacking", fp)
 		if s.Profile != nil {
@@ -137,7 +137,7 @@ func (s *Supervisor) I2PProfilePath() string {
 
 // I2PProfilePath returns the path to the I2P profile
 func (s *Supervisor) I2PAppProfilePath() string {
-	fp := filepath.Join(filepath.Dir(s.UnpackPath), ".i2p.firefox.config")
+	fp := filepath.Join(filepath.Dir(s.IBBUnpackPath()), ".i2p.firefox.config")
 	if !tbget.FileExists(fp) {
 		log.Printf("i2p app data not found at %s, unpacking", fp)
 		if s.Profile != nil {
@@ -152,7 +152,7 @@ func (s *Supervisor) I2PAppProfilePath() string {
 // I2PDataPath returns the path to the I2P data directory
 func (s *Supervisor) I2PDataPath() string {
 	fp := s.I2PProfilePath()
-	up := filepath.Join(filepath.Dir(s.UnpackPath), "i2p.firefox")
+	up := filepath.Join(filepath.Dir(s.IBBUnpackPath()), "i2p.firefox")
 	if tbget.FileExists(up) {
 		return up
 	}
@@ -165,10 +165,10 @@ func (s *Supervisor) I2PDataPath() string {
 	return up
 }
 
-// UnpackI2PData unpacks the I2P data into the s.UnpackPath
+// UnpackI2PData unpacks the I2P data into the s.IBBUnpackPath()
 func (s *Supervisor) UnpackI2PData() error {
 	return fs.WalkDir(s.Profile, ".", func(embedpath string, d fs.DirEntry, err error) error {
-		fp := filepath.Join(filepath.Dir(s.UnpackPath), ".i2p.firefox")
+		fp := filepath.Join(filepath.Dir(s.IBBUnpackPath()), ".i2p.firefox")
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -193,7 +193,7 @@ func (s *Supervisor) UnpackI2PData() error {
 // I2PAppDataPath returns the path to the I2P application data directory
 func (s *Supervisor) I2PAppDataPath() string {
 	fp := s.I2PAppProfilePath()
-	up := filepath.Join(filepath.Dir(s.UnpackPath), "i2p.firefox.config")
+	up := filepath.Join(filepath.Dir(s.IBBUnpackPath()), "i2p.firefox.config")
 	if tbget.FileExists(up) {
 		return up
 	}
@@ -206,10 +206,10 @@ func (s *Supervisor) I2PAppDataPath() string {
 	return up
 }
 
-// UnpackI2PAppData unpacks the I2P application data into the s.UnpackPath
+// UnpackI2PAppData unpacks the I2P application data into the s.IBBUnpackPath()
 func (s *Supervisor) UnpackI2PAppData() error {
 	return fs.WalkDir(s.Profile, ".", func(embedpath string, d fs.DirEntry, err error) error {
-		fp := filepath.Join(filepath.Dir(s.UnpackPath), ".i2p.firefox.config")
+		fp := filepath.Join(filepath.Dir(s.IBBUnpackPath()), ".i2p.firefox.config")
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -249,11 +249,11 @@ func (s *Supervisor) RunTBWithLang() error {
 		return nil
 	}
 
-	log.Println("running tor browser with lang", s.Lang, s.UnpackPath, OS())
+	log.Println("running tor browser with lang", s.Lang, s.TBUnpackPath(), OS())
 	switch OS() {
 	case "linux":
-		if tbget.FileExists(s.UnpackPath) {
-			log.Println("running tor browser with lang", s.Lang, s.UnpackPath)
+		if tbget.FileExists(s.TBUnpackPath()) {
+			log.Println("running tor browser with lang", s.Lang, s.TBUnpackPath())
 			args := []string{}
 			args = append(args, s.PTAS()...)
 			bcmd := exec.Command(s.TBPath(), args...)
@@ -266,7 +266,7 @@ func (s *Supervisor) RunTBWithLang() error {
 	case "osx":
 		firefoxPath := s.TBPath() //FirefoxPath
 		bcmd := exec.Command(firefoxPath)
-		bcmd.Dir = s.UnpackPath
+		bcmd.Dir = s.TBUnpackPath()
 		bcmd.Stdout = os.Stdout
 		bcmd.Stderr = os.Stderr
 
@@ -298,11 +298,11 @@ func (s *Supervisor) RunTBHelpWithLang() error {
 		return nil
 	}
 
-	log.Println("running tor browser with lang", s.Lang, s.UnpackPath, OS())
+	log.Println("running tor browser with lang", s.Lang, s.TBUnpackPath(), OS())
 	switch OS() {
 	case "linux":
-		if tbget.FileExists(s.UnpackPath) {
-			log.Println("running tor browser with lang", s.Lang, s.UnpackPath)
+		if tbget.FileExists(s.TBUnpackPath()) {
+			log.Println("running tor browser with lang", s.Lang, s.TBUnpackPath())
 			bcmd := exec.Command(s.TBPath(), "--help")
 			bcmd.Stdout = os.Stdout
 			bcmd.Stderr = os.Stderr
@@ -353,7 +353,7 @@ func (s *Supervisor) RunI2PBWithLang() error {
 	}
 	// export TOR_HIDE_BROWSER_LOGO=1
 	os.Setenv("TOR_HIDE_BROWSER_LOGO", "1")
-	return s.RunTBBWithProfile(s.I2PDataPath())
+	return s.RunSpecificTBBWithOfflineClearnetProfile(s.I2PDataPath(), s.IBBUnpackPath(), false, false, false)
 }
 
 // RunI2PBAppWithLang runs the I2P Browser with the given language
@@ -363,7 +363,7 @@ func (s *Supervisor) RunI2PBAppWithLang() error {
 	}
 	// export TOR_HIDE_BROWSER_LOGO=1
 	os.Setenv("TOR_HIDE_BROWSER_LOGO", "1")
-	return s.RunTBBWithOfflineClearnetProfile(s.I2PAppDataPath(), true, false)
+	return s.RunSpecificTBBWithOfflineClearnetProfile(s.I2PAppDataPath(), s.IBBUnpackPath(), true, false, false)
 }
 
 func (s *Supervisor) generateOfflineProfile(profiledata string) error {
@@ -430,7 +430,7 @@ func (s *Supervisor) GenerateClearnetProfile(profiledata string) error {
 
 	opath := filepath.Join(odir, "uBlock0@raymondhill.net.xpi")
 
-	ipath := filepath.Join(filepath.Dir(s.UnpackPath), ".i2p.firefox", "extensions", "uBlock0@raymondhill.net.xpi")
+	ipath := filepath.Join(filepath.Dir(s.TBUnpackPath()), ".i2p.firefox", "extensions", "uBlock0@raymondhill.net.xpi")
 	if err := copy.Copy(ipath, opath); err != nil {
 		return err
 	}
@@ -470,7 +470,7 @@ func (s *Supervisor) CopyAWOXPI(profiledata string) error {
 		}
 	}
 
-	ipath := filepath.Join(filepath.Dir(s.UnpackPath), "awo@eyedeekay.github.io.xpi")
+	ipath := filepath.Join(filepath.Dir(s.TBUnpackPath()), "awo@eyedeekay.github.io.xpi")
 	if err := copy.Copy(ipath, opath); err != nil {
 		return err
 	}
@@ -479,7 +479,7 @@ func (s *Supervisor) CopyAWOXPI(profiledata string) error {
 
 // RunTBBWithOfflineProfile runs the I2P Browser with the given language
 func (s *Supervisor) RunTBBWithOfflineClearnetProfile(profiledata string, offline, clearnet bool) error {
-	return s.RunSpecificTBBWithOfflineClearnetProfile(profiledata, s.UnpackPath, offline, clearnet, false)
+	return s.RunSpecificTBBWithOfflineClearnetProfile(profiledata, s.TBUnpackPath(), offline, clearnet, false)
 }
 
 func (s *Supervisor) RunSpecificTBBWithOfflineClearnetProfile(profiledata, torbrowserdata string, offline, clearnet, editor bool) error {
@@ -617,11 +617,11 @@ func (s *Supervisor) RunTorWithLang() error {
 		return nil
 	}
 
-	log.Println("running tor with lang", s.Lang, s.UnpackPath)
+	log.Println("running tor with lang", s.Lang, s.TBUnpackPath())
 	switch OS() {
 	case "linux":
-		if tbget.FileExists(s.UnpackPath) {
-			log.Println("running tor with lang", s.Lang, s.UnpackPath)
+		if tbget.FileExists(s.TBUnpackPath()) {
+			log.Println("running tor with lang", s.Lang, s.TBUnpackPath())
 			s.torcmd = exec.Command(s.TorPath())
 			s.torcmd.Stdout = os.Stdout
 			s.torcmd.Stderr = os.Stderr
@@ -630,7 +630,7 @@ func (s *Supervisor) RunTorWithLang() error {
 		log.Println("tor not found at", s.TorPath())
 		return fmt.Errorf("tor not found at %s", s.TorPath())
 	case "osx":
-		torPath := filepath.Join(s.UnpackPath, "Tor Browser.app", "Contents", "Resources", "TorBrowser", "Tor", "tor")
+		torPath := filepath.Join(s.TBUnpackPath(), "Tor Browser.app", "Contents", "Resources", "TorBrowser", "Tor", "tor")
 		s.torcmd = exec.Command(torPath)
 		s.torcmd.Dir = filepath.Dir(torPath)
 		s.torcmd.Stdout = os.Stdout
@@ -688,6 +688,14 @@ func NewSupervisor(tbPath, lang string) *Supervisor {
 		UnpackPath: tbPath,
 		Lang:       lang,
 	}
+}
+
+func (s *Supervisor) TBUnpackPath() string {
+	return s.UnpackPath
+}
+
+func (s *Supervisor) IBBUnpackPath() string {
+	return strings.Replace(s.TBUnpackPath(), "tor-browser", "i2p-browser", -1)
 }
 
 func FindEepsiteDocroot() (string, error) {
@@ -755,5 +763,5 @@ func FindEepsiteDocroot() (string, error) {
 
 // RunTBBWithOfflineProfile runs the I2P Browser with the given language
 func (s *Supervisor) RunI2PSiteEditorWithOfflineClearnetProfile(profiledata string) error {
-	return s.RunSpecificTBBWithOfflineClearnetProfile(profiledata, s.UnpackPath, true, true, true)
+	return s.RunSpecificTBBWithOfflineClearnetProfile(profiledata, s.IBBUnpackPath(), true, true, true)
 }

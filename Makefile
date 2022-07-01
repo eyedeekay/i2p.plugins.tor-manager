@@ -422,3 +422,32 @@ all-torrents:
 	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false TOR_MANAGER_NEVER_USE_TOR=true ./i2p.plugins.tor-manager -notor -mirrorall
 
 distclean: clean
+
+signer=70D2060738BEF80523ACAFF7D75C03B39B5E14E1
+
+flatpak:
+	flatpak-builder --gpg-sign="$(signer)" --force-clean --disable-cache build-dir org.i2pgit.idk.i2p.plugins.tor-manager.yml
+	flatpak-builder --gpg-sign="$(signer)" --user --install --force-clean build-dir org.i2pgit.idk.i2p.plugins.tor-manager.yml
+
+flatpak-deps: shared-modules
+	flatpak install flathub org.kde.Platform//5.15-21.08 org.kde.Sdk//5.15-21.08
+
+shared-modules:
+	git clone https://github.com/flathub/shared-modules.git && \
+		cd shared-modules && \
+		git checkout 8ce6437c269ef28c49984c11246d27be433c21d5
+
+flatpak-repo: flatpak
+	flatpak-builder --gpg-sign="$(signer)" --repo=repo --force-clean build-dir org.i2pgit.idk.i2p.plugins.tor-manager.yml
+
+flatpak-add:
+	flatpak --user remote-add --no-gpg-verify org.i2pgit.idk.i2p.plugins.tor-manager-dev repo
+
+flatpak-install: flatpak-repo flatpak-add
+	flatpak --user install org.i2pgit.idk.i2p.plugins.tor-manager-dev org.i2pgit.idk.i2p.plugins.tor-manager
+
+flatpak-update: flatpak-repo
+	flatpak --user update org.i2pgit.idk.i2p.plugins.tor-manager
+
+run-flatpak:
+	flatpak run org.i2pgit.idk.i2p.plugins.tor-manager

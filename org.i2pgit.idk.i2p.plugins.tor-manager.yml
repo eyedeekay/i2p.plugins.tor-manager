@@ -1,0 +1,44 @@
+app-id: org.i2pgit.idk.i2p.plugins.tor-manager
+runtime: org.kde.Platform
+runtime-version: 5.15-21.08
+sdk: org.kde.Sdk
+separate-locales: false
+command: i2p.plugins.tor-manager.sh
+finish-args:
+  - --share=ipc
+  - --share=network
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --talk-name=org.freedesktop.Notifications
+  - --device=dri
+  - --socket=pulseaudio
+  - --filesystem=xdg-download
+  - --env=MOZ_ENABLE_WAYLAND=1
+modules:
+  - shared-modules/dbus-glib/dbus-glib-0.110.json
+  - name: libnotify
+    buildsystem: meson
+    config-opts:
+      - -Dtests=false
+      - -Dintrospection=disabled
+      - -Dman=false
+      - -Dgtk_doc=false
+      - -Ddocbook_docs=disabled
+    sources:
+      - type: archive
+        url: https://download.gnome.org/sources/libnotify/0.7/libnotify-0.7.12.tar.xz
+        sha256: 744b2b37508135f8261b755a9debe6e09add421adc75bde930f6e198b70ab46e
+        x-checker-data:
+          type: anitya
+          project-id: 13149
+          url-template: https://download.gnome.org/sources/libnotify/$major.$minor/libnotify-$version.tar.xz
+  - name: i2p.plugins.tor-manager
+    buildsystem: simple
+    build-commands:
+      - install -D -m755 i2p.plugins.tor-manager /app/bin/i2p.plugins.tor-manager
+      - install -D -m755 flatpak.sh /app/bin/i2p.plugins.tor-manager.sh
+    sources:
+      - type: file
+        path: i2p.plugins.tor-manager
+      - type: file
+        path: flatpak.sh

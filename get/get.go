@@ -773,8 +773,10 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 		return t.BrowserDir(), nil
 	}
 	if FileExists(t.BrowserDir()) {
-		if err := cp.Copy(t.BrowserDir(), t.I2PBrowserDir()); err != nil {
-			return "", fmt.Errorf("UnpackUpdater: copy fail %s", err)
+		if !FileExists(t.I2PBrowserDir()) {
+			if err := cp.Copy(t.BrowserDir(), t.I2PBrowserDir()); err != nil {
+				return "", fmt.Errorf("UnpackUpdater: copy fail %s", err)
+			}
 		}
 		return t.BrowserDir(), nil
 	}
@@ -819,6 +821,11 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 		file.Chmod(mode)
 		if t.Verbose {
 			fmt.Printf("Unpacked %s\n", header.Name)
+		}
+	}
+	if !FileExists(t.I2PBrowserDir()) {
+		if err := cp.Copy(t.BrowserDir(), t.I2PBrowserDir()); err != nil {
+			return "", fmt.Errorf("UnpackUpdater: copy fail %s", err)
 		}
 	}
 	return t.BrowserDir(), nil
