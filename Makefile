@@ -425,7 +425,8 @@ distclean: clean
 
 signer=70D2060738BEF80523ACAFF7D75C03B39B5E14E1
 
-flatpak: clean-flatpak
+flatpak: clean-flatpak linplugin
+	cp -v i2p.plugins.tor-manager-linux-amd64 i2p.plugins.tor-manager
 	flatpak-builder --gpg-sign="$(signer)" --user --force-clean --disable-cache build-dir org.i2pgit.idk.i2p.plugins.tor-manager.yml
 	flatpak-builder --gpg-sign="$(signer)" --user --install --force-clean build-dir org.i2pgit.idk.i2p.plugins.tor-manager.yml
 
@@ -446,6 +447,10 @@ flatpak-repo: flatpak
 flatpak-add:
 	flatpak --user remote-add --no-gpg-verify org.i2pgit.idk.i2p.plugins.tor-manager-dev repo
 
+flatpak-remote-add:
+	gpg --export D75C03B39B5E14E1 > org.i2pgit.idk.i2p.plugins.tor-manager/key.gpg
+	flatpak --user remote-add --gpg-import=https://eyedeekay.github.io/flatpak.repo.i2p.plugins.tor-manager/key.gpg org.i2pgit.idk.i2p.plugins.tor-manager https://eyedeekay.github.io/flatpak.repo.i2p.plugins.tor-manager
+
 flatpak-install: flatpak-repo flatpak-add
 	flatpak --user install org.i2pgit.idk.i2p.plugins.tor-manager-dev org.i2pgit.idk.i2p.plugins.tor-manager
 
@@ -454,3 +459,10 @@ flatpak-update: flatpak-repo
 
 run-flatpak:
 	flatpak run org.i2pgit.idk.i2p.plugins.tor-manager
+
+flatpak.repo.i2p.plugins.tor-manager:
+	git clone git@github.com:eyedeekay/flatpak.repo.i2p.plugins.tor-manager.git
+
+flatpak-upload: flatpak-repo flatpak.repo.i2p.plugins.tor-manager
+	cp -rv repo/* flatpak.repo.i2p.plugins.tor-manager/
+	cd flatpak.repo.i2p.plugins.tor-manager && ./find.sh

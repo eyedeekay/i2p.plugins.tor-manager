@@ -27,3 +27,6 @@ torrents-*
 build-dir
 shared-modules
 log
+flatpak.repo.i2p.plugins.tor-manager
+repo
+key.gpg
