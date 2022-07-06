@@ -505,10 +505,6 @@ func (s *Supervisor) RunSpecificTBBWithOfflineClearnetProfile(profiledata, torbr
 			defaultpage = profiledata + "/index.html"
 		}
 	}
-
-	if len(s.PTAS()) > 0 {
-		defaultpage = s.PTAS()[0]
-	}
 	if editor {
 		defaultpage = "http://127.0.0.1:7685"
 		clearnet := true
@@ -534,6 +530,10 @@ func (s *Supervisor) RunSpecificTBBWithOfflineClearnetProfile(profiledata, torbr
 			s.UnpackPath = UNPACK_URL()
 		}
 	}
+	return s.RunSpecificTBBWithOfflineClearnetProfileAndPage(profiledata, torbrowserdata, offline, clearnet, defaultpage)
+}
+
+func (s *Supervisor) RunSpecificTBBWithOfflineClearnetProfileAndPage(profiledata, torbrowserdata string, offline, clearnet bool, defaultpage string) error {
 	tbget.ARCH = ARCH()
 	if s.Lang == "" {
 		s.Lang = DEFAULT_TB_LANG
