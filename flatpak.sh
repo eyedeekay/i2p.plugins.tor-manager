@@ -1,2 +1,2 @@
 #! /usr/bin/env sh
-TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false TOR_MANAGER_NEVER_USE_TOR=true /app/bin/i2p.plugins.tor-manager -nevertor -i2pbrowser
+TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false TOR_MANAGER_NEVER_USE_TOR=true /app/bin/i2p.plugins.tor-manager -nevertor -i2pbrowser -directory ~/.var/app/org.i2pgit.idk.i2p.plugins.tor-manager
