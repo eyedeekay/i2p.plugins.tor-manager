@@ -63,6 +63,16 @@ install:
 	install garliconion.png /var/lib/i2pbrowser/icons/garliconion.png
 	install onion.png /var/lib/i2pbrowser/icons/onion.png
 
+uninstall:
+	rm -rf /var/lib/i2pbrowser/icons
+	rm -vf $(PREFIX)/bin/$(BINARY)-$(GOOS)-$(GOARCH) \
+		$(PREFIX)/bin/i2pbrowser \
+		$(PREFIX)/bin/torbrowser \
+		/usr/share/applications/i2ptorbrowser.desktop \
+		/usr/share/applications/torbrowser.desktop \
+		/var/lib/i2pbrowser/icons/garliconion.png \
+		/var/lib/i2pbrowser/icons/onion.png
+
 build: dep binary
 
 winbuild: dep winbinary
