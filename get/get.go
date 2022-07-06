@@ -424,6 +424,20 @@ func SetupProxy(mirror, tp string) error {
 			if !strings.Contains(mirror, "127.0.0.1") && !strings.Contains(mirror, "localhost") {
 				if tmp, torerr := net.Listen("tcp", "127.0.0.1:9050"); torerr != nil {
 					log.Println("System Tor is running, downloading over that because obviously.")
+					is_flatpak := os.Getenv("APP_ID") != ""
+					if is_flatpak {
+						log.Println("Flatpak detected, using Tor without bine")
+						url_i := url.URL{}
+						url_proxy, err := url_i.Parse("socks5://127.0.0.1:9050")
+						if err != nil {
+							return err
+						}
+
+						tr := &http.Transport{}
+						tr.Proxy = http.ProxyURL(url_proxy) // set proxy
+						http.DefaultClient.Transport = tr
+						return nil
+					}
 					var err error
 					if t == nil {
 						t, err = tor.Start(context.Background(), StartConf(tp))
