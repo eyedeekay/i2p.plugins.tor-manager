@@ -1,13 +1,54 @@
+i2p.plugins.tor-manager (0.0.13-1) UNRELEASED; urgency=medium
+
+  * tag 0.0.13
+
+ -- idk <hankhill19580@gmail.com> Thu, 07 Jul 2022 11:24:17 -0400
+
+
 i2p.plugins.tor-manager (0.0.12-1) UNRELEASED; urgency=medium
 
   * tag 0.0.12
+  * 239f269 add resource attribution to LICENSE file
+  * cf6eaf8 add flatpak desktop files
+  * 6640575 add flatpak desktop files
+  * 831911e work on maintainint 2 TBB copies
+  * cb8730a work on maintainint 2 TBB copies
+  * 259f110 work on maintainint 2 TBB copies
+  * 5c48249 exit after mirroring everything
+  * 7a6e73b improve mirroring functionality
+  * 8970a1f improve mirroring functionality
+  * 15a5b45 improve mirroring functionality
+  * 450512f improve mirroring functionality
+  * 6d0196b improve mirroring functionality
+  * f6478b9 don't create so many Tor clients, build mirroring into the system, download to subdir of i2psnark dir
+  * 8228621 update the modules again
+  * f8d890f unset transport before and after re-setting transport
+  * d2a035d add hardened firefox, offline mode to menu
+  * 63b7289 add hardened firefox, offline mode to menu
 
- -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:34 -0400
+ -- idk <hankhill19580@gmail.com> Thu, 07 Jul 2022 11:24:17 -0400
 
 
 i2p.plugins.tor-manager (0.0.10-1) UNRELEASED; urgency=medium
 
   * tag 0.0.10
+  * 239f269 add resource attribution to LICENSE file
+  * cf6eaf8 add flatpak desktop files
+  * 6640575 add flatpak desktop files
+  * 831911e work on maintainint 2 TBB copies
+  * cb8730a work on maintainint 2 TBB copies
+  * 259f110 work on maintainint 2 TBB copies
+  * 5c48249 exit after mirroring everything
+  * 7a6e73b improve mirroring functionality
+  * 8970a1f improve mirroring functionality
+  * 15a5b45 improve mirroring functionality
+  * 450512f improve mirroring functionality
+  * 6d0196b improve mirroring functionality
+  * f6478b9 don't create so many Tor clients, build mirroring into the system, download to subdir of i2psnark dir
+  * 8228621 update the modules again
+  * f8d890f unset transport before and after re-setting transport
+  * d2a035d add hardened firefox, offline mode to menu
+  * 63b7289 add hardened firefox, offline mode to menu
   * 943de35 clarify why I2P mirror is not in use yet
   * 1fe014e try and get the systray tto work on OSX
   * 6deedad switch to wget-ds to download su3 files
@@ -15,12 +56,29 @@ i2p.plugins.tor-manager (0.0.10-1) UNRELEASED; urgency=medium
   * b5f30e6 add compatibility mode for NSIS args
   * 06bb27f start another manifesto
 
- -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:34 -0400
+ -- idk <hankhill19580@gmail.com> Thu, 07 Jul 2022 11:24:17 -0400
 
 
 i2p.plugins.tor-manager (0.0.8-1) UNRELEASED; urgency=medium
 
   * tag 0.0.8
+  * 239f269 add resource attribution to LICENSE file
+  * cf6eaf8 add flatpak desktop files
+  * 6640575 add flatpak desktop files
+  * 831911e work on maintainint 2 TBB copies
+  * cb8730a work on maintainint 2 TBB copies
+  * 259f110 work on maintainint 2 TBB copies
+  * 5c48249 exit after mirroring everything
+  * 7a6e73b improve mirroring functionality
+  * 8970a1f improve mirroring functionality
+  * 15a5b45 improve mirroring functionality
+  * 450512f improve mirroring functionality
+  * 6d0196b improve mirroring functionality
+  * f6478b9 don't create so many Tor clients, build mirroring into the system, download to subdir of i2psnark dir
+  * 8228621 update the modules again
+  * f8d890f unset transport before and after re-setting transport
+  * d2a035d add hardened firefox, offline mode to menu
+  * 63b7289 add hardened firefox, offline mode to menu
   * 943de35 clarify why I2P mirror is not in use yet
   * 1fe014e try and get the systray tto work on OSX
   * 6deedad switch to wget-ds to download su3 files
@@ -41,12 +99,29 @@ i2p.plugins.tor-manager (0.0.8-1) UNRELEASED; urgency=medium
   * 89319b9 Start working on containerized 32-bit builds
   * f122740 move I2P launcher to own file
 
- -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:34 -0400
+ -- idk <hankhill19580@gmail.com> Thu, 07 Jul 2022 11:24:18 -0400
 
 
 i2p.plugins.tor-manager (0.0.7-1) UNRELEASED; urgency=medium
 
   * tag 0.0.7
+  * 239f269 add resource attribution to LICENSE file
+  * cf6eaf8 add flatpak desktop files
+  * 6640575 add flatpak desktop files
+  * 831911e work on maintainint 2 TBB copies
+  * cb8730a work on maintainint 2 TBB copies
+  * 259f110 work on maintainint 2 TBB copies
+  * 5c48249 exit after mirroring everything
+  * 7a6e73b improve mirroring functionality
+  * 8970a1f improve mirroring functionality
+  * 15a5b45 improve mirroring functionality
+  * 450512f improve mirroring functionality
+  * 6d0196b improve mirroring functionality
+  * f6478b9 don't create so many Tor clients, build mirroring into the system, download to subdir of i2psnark dir
+  * 8228621 update the modules again
+  * f8d890f unset transport before and after re-setting transport
+  * d2a035d add hardened firefox, offline mode to menu
+  * 63b7289 add hardened firefox, offline mode to menu
   * 943de35 clarify why I2P mirror is not in use yet
   * 1fe014e try and get the systray tto work on OSX
   * 6deedad switch to wget-ds to download su3 files
@@ -93,12 +168,29 @@ i2p.plugins.tor-manager (0.0.7-1) UNRELEASED; urgency=medium
   * 81ee0b9 auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
   * b165d9e add an arm64 variant, not supported by Tor Project Official but contributed by a community member, to make it work on Raspberry Pi's.
 
- -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:34 -0400
+ -- idk <hankhill19580@gmail.com> Thu, 07 Jul 2022 11:24:18 -0400
 
 
 i2p.plugins.tor-manager (0.0.6-1) UNRELEASED; urgency=medium
 
   * tag 0.0.6
+  * 239f269 add resource attribution to LICENSE file
+  * cf6eaf8 add flatpak desktop files
+  * 6640575 add flatpak desktop files
+  * 831911e work on maintainint 2 TBB copies
+  * cb8730a work on maintainint 2 TBB copies
+  * 259f110 work on maintainint 2 TBB copies
+  * 5c48249 exit after mirroring everything
+  * 7a6e73b improve mirroring functionality
+  * 8970a1f improve mirroring functionality
+  * 15a5b45 improve mirroring functionality
+  * 450512f improve mirroring functionality
+  * 6d0196b improve mirroring functionality
+  * f6478b9 don't create so many Tor clients, build mirroring into the system, download to subdir of i2psnark dir
+  * 8228621 update the modules again
+  * f8d890f unset transport before and after re-setting transport
+  * d2a035d add hardened firefox, offline mode to menu
+  * 63b7289 add hardened firefox, offline mode to menu
   * 943de35 clarify why I2P mirror is not in use yet
   * 1fe014e try and get the systray tto work on OSX
   * 6deedad switch to wget-ds to download su3 files
@@ -145,12 +237,29 @@ i2p.plugins.tor-manager (0.0.6-1) UNRELEASED; urgency=medium
   * 81ee0b9 auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
   * b165d9e add an arm64 variant, not supported by Tor Project Official but contributed by a community member, to make it work on Raspberry Pi's.
 
- -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:34 -0400
+ -- idk <hankhill19580@gmail.com> Thu, 07 Jul 2022 11:24:18 -0400
 
 
 i2p.plugins.tor-manager (0.0.5-1) UNRELEASED; urgency=medium
 
   * tag 0.0.5
+  * 239f269 add resource attribution to LICENSE file
+  * cf6eaf8 add flatpak desktop files
+  * 6640575 add flatpak desktop files
+  * 831911e work on maintainint 2 TBB copies
+  * cb8730a work on maintainint 2 TBB copies
+  * 259f110 work on maintainint 2 TBB copies
+  * 5c48249 exit after mirroring everything
+  * 7a6e73b improve mirroring functionality
+  * 8970a1f improve mirroring functionality
+  * 15a5b45 improve mirroring functionality
+  * 450512f improve mirroring functionality
+  * 6d0196b improve mirroring functionality
+  * f6478b9 don't create so many Tor clients, build mirroring into the system, download to subdir of i2psnark dir
+  * 8228621 update the modules again
+  * f8d890f unset transport before and after re-setting transport
+  * d2a035d add hardened firefox, offline mode to menu
+  * 63b7289 add hardened firefox, offline mode to menu
   * 943de35 clarify why I2P mirror is not in use yet
   * 1fe014e try and get the systray tto work on OSX
   * 6deedad switch to wget-ds to download su3 files
@@ -211,12 +320,29 @@ i2p.plugins.tor-manager (0.0.5-1) UNRELEASED; urgency=medium
   * 5e6b49c add snowflake, alter default behavior based on whether we're a plugin
   * 552a5c1 add snowflake, alter default behavior based on whether we're a plugin
 
- -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:35 -0400
+ -- idk <hankhill19580@gmail.com> Thu, 07 Jul 2022 11:24:18 -0400
 
 
 i2p.plugins.tor-manager (0.0.4-1) UNRELEASED; urgency=medium
 
   * tag 0.0.4
+  * 239f269 add resource attribution to LICENSE file
+  * cf6eaf8 add flatpak desktop files
+  * 6640575 add flatpak desktop files
+  * 831911e work on maintainint 2 TBB copies
+  * cb8730a work on maintainint 2 TBB copies
+  * 259f110 work on maintainint 2 TBB copies
+  * 5c48249 exit after mirroring everything
+  * 7a6e73b improve mirroring functionality
+  * 8970a1f improve mirroring functionality
+  * 15a5b45 improve mirroring functionality
+  * 450512f improve mirroring functionality
+  * 6d0196b improve mirroring functionality
+  * f6478b9 don't create so many Tor clients, build mirroring into the system, download to subdir of i2psnark dir
+  * 8228621 update the modules again
+  * f8d890f unset transport before and after re-setting transport
+  * d2a035d add hardened firefox, offline mode to menu
+  * 63b7289 add hardened firefox, offline mode to menu
   * 943de35 clarify why I2P mirror is not in use yet
   * 1fe014e try and get the systray tto work on OSX
   * 6deedad switch to wget-ds to download su3 files
@@ -338,12 +464,29 @@ i2p.plugins.tor-manager (0.0.4-1) UNRELEASED; urgency=medium
   * 2817995 Create shortcuts on OSX, return AMD64 on M1 Mac
   * 0d68860 fix error catching in main. don't swallow them, report them.
 
- -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:35 -0400
+ -- idk <hankhill19580@gmail.com> Thu, 07 Jul 2022 11:24:18 -0400
 
 
 i2p.plugins.tor-manager (0.0.3-1) UNRELEASED; urgency=medium
 
   * tag 0.0.3
+  * 239f269 add resource attribution to LICENSE file
+  * cf6eaf8 add flatpak desktop files
+  * 6640575 add flatpak desktop files
+  * 831911e work on maintainint 2 TBB copies
+  * cb8730a work on maintainint 2 TBB copies
+  * 259f110 work on maintainint 2 TBB copies
+  * 5c48249 exit after mirroring everything
+  * 7a6e73b improve mirroring functionality
+  * 8970a1f improve mirroring functionality
+  * 15a5b45 improve mirroring functionality
+  * 450512f improve mirroring functionality
+  * 6d0196b improve mirroring functionality
+  * f6478b9 don't create so many Tor clients, build mirroring into the system, download to subdir of i2psnark dir
+  * 8228621 update the modules again
+  * f8d890f unset transport before and after re-setting transport
+  * d2a035d add hardened firefox, offline mode to menu
+  * 63b7289 add hardened firefox, offline mode to menu
   * 943de35 clarify why I2P mirror is not in use yet
   * 1fe014e try and get the systray tto work on OSX
   * 6deedad switch to wget-ds to download su3 files
@@ -483,12 +626,29 @@ i2p.plugins.tor-manager (0.0.3-1) UNRELEASED; urgency=medium
   * cdc9637 Give it the ability to make it's own shortcuts
   * fc842f8 Give it the ability to make it's own shortcuts
 
- -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:35 -0400
+ -- idk <hankhill19580@gmail.com> Thu, 07 Jul 2022 11:24:18 -0400
 
 
 i2p.plugins.tor-manager (0.0.02-1) UNRELEASED; urgency=medium
 
   * tag 0.0.02
+  * 239f269 add resource attribution to LICENSE file
+  * cf6eaf8 add flatpak desktop files
+  * 6640575 add flatpak desktop files
+  * 831911e work on maintainint 2 TBB copies
+  * cb8730a work on maintainint 2 TBB copies
+  * 259f110 work on maintainint 2 TBB copies
+  * 5c48249 exit after mirroring everything
+  * 7a6e73b improve mirroring functionality
+  * 8970a1f improve mirroring functionality
+  * 15a5b45 improve mirroring functionality
+  * 450512f improve mirroring functionality
+  * 6d0196b improve mirroring functionality
+  * f6478b9 don't create so many Tor clients, build mirroring into the system, download to subdir of i2psnark dir
+  * 8228621 update the modules again
+  * f8d890f unset transport before and after re-setting transport
+  * d2a035d add hardened firefox, offline mode to menu
+  * 63b7289 add hardened firefox, offline mode to menu
   * 943de35 clarify why I2P mirror is not in use yet
   * 1fe014e try and get the systray tto work on OSX
   * 6deedad switch to wget-ds to download su3 files
@@ -654,6 +814,6 @@ i2p.plugins.tor-manager (0.0.02-1) UNRELEASED; urgency=medium
   * 1cecd5a Automatically set os and arch args to match the json in downloads.json. When the exe you run is named "i2pbrowser" set i2pbrowser=true
   * 2b810b4 Automatically set os and arch args to match the json in downloads.json. When the exe you run is named "i2pbrowser" set i2pbrowser=true
 
- -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:35 -0400
+ -- idk <hankhill19580@gmail.com> Thu, 07 Jul 2022 11:24:18 -0400
 
 
