@@ -1,12 +1,12 @@
 #!/usr/bin/make -f
 
-export DH_GOLANG_INSTALL_EXTRA := tor-browser/TPO-signing-key.pub tor-browser/unpack/awo@eyedeekay.github.io.xpi tor-browser/unpack/i2p.firefox tor-browser/unpack/i2p.firefox.config onion.png garliconion.png i2ptorbrowser.desktop torbrowser.desktop vendor
+export DH_GOLANG_INSTALL_EXTRA := tor-browser/TPO-signing-key.pub tor-browser/NOT-TPO-signing-key.pub tor-browser/unpack/awo@eyedeekay.github.io.xpi tor-browser/unpack/i2p.firefox tor-browser/unpack/i2p.firefox.config onion.png garliconion.png offline.png i2ptorbrowser.desktop tor-browser/www/blizzard.png torbrowser.desktop vendor tor-browser/www
 export DH_GOLANG_INSTALL_EXTRA += ../../../github.com/jchavannes/go-pgp/pgp ../../../github.com/justinas/nosurf ../../../github.com/eyedeekay/sam3 ../../../github.com/eyedeekay/goSam ../../../github.com/eyedeekay/checki2cp ../../../github.com/eyedeekay/go-i2cp ../../../github.com/eyedeekay/sam-forwarder ../../../github.com/eyedeekay/httptunnel ../../../github.com/itchio/damage ../../../github.com/itchio/headway ../../../github.com/otiai10/copy ../../../github.com/gtank/cryptopasta ../../../github.com/boreq/friendlyhash ../../../github.com/phayes/freeport ../../../github.com/mwitkow/go-http-dialer ../../../github.com/zieckey/goini ../../../howett.net/plist/
 # 
 
 
 %:
-	dh $@ --builddirectory=_build --buildsystem=golang --with=golang
+	dh $@ --builddirectory=_build/ --buildsystem=golang --with=golang
 
 #override_dh_auto_configure:
 #	mkdir -p _build/src/github.com/jchavannes/go-pgp/ _build/src/github.com/justinas/
