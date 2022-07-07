@@ -79,7 +79,7 @@ winbuild: dep winbinary
 	
 p: dep binary su3
 
-clean:
+clean: clean-flatpak
 	rm -f $(BINARY)-plugin plugin $(BINARY)-*zip -r $(BINARY)-$(GOOS)-$(GOARCH) $(BINARY)-$(GOOS)-$(GOARCH).exe tmp tor-browser/torbrowser-*.* $(BINARY) $(BINARY).exe tmp-i2pbrowser
 	rm -f *.su3 *.zip $(BINARY)-$(GOOS)-$(GOARCH) $(BINARY)-*
 	git clean -df
@@ -343,6 +343,8 @@ deb: clean
 		--exclude="i2p.plugins.tor-manager" \
 		--exclude="i2p.plugins.tor-manager.exe" \
 		--exclude="tmp" \
+		--exclude="repo" \
+		--exclude="flatpak.repo.i2p.plugins.tor-manager" \
 		-cvzf ../i2p.plugins.tor-manager_$(VERSION).orig.tar.gz	.
 	dpkg-buildpackage -us -uc
 
