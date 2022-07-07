@@ -1,0 +1,659 @@
+i2p.plugins.tor-manager (0.0.12-1) UNRELEASED; urgency=medium
+
+  * tag 0.0.12
+
+ -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:34 -0400
+
+
+i2p.plugins.tor-manager (0.0.10-1) UNRELEASED; urgency=medium
+
+  * tag 0.0.10
+  * 943de35 clarify why I2P mirror is not in use yet
+  * 1fe014e try and get the systray tto work on OSX
+  * 6deedad switch to wget-ds to download su3 files
+  * dcba130 comment out shellservice copy line it's not required anymore
+  * b5f30e6 add compatibility mode for NSIS args
+  * 06bb27f start another manifesto
+
+ -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:34 -0400
+
+
+i2p.plugins.tor-manager (0.0.8-1) UNRELEASED; urgency=medium
+
+  * tag 0.0.8
+  * 943de35 clarify why I2P mirror is not in use yet
+  * 1fe014e try and get the systray tto work on OSX
+  * 6deedad switch to wget-ds to download su3 files
+  * dcba130 comment out shellservice copy line it's not required anymore
+  * b5f30e6 add compatibility mode for NSIS args
+  * 06bb27f start another manifesto
+  * 1210b6c More torrent subsystem upgrades
+  * 4057c96 More torrent subsystem upgrades
+  * e6a46e8 More torrent subsystem upgrades
+  * 589f825 More torrent subsystem upgrades
+  * 20e21b5 More torrent subsystem upgrades
+  * 3ce1c7d More torrent subsystem upgrades
+  * 58a23a2 Make torrent updates a little better
+  * 35085d3 unset default lang in makefile
+  * 7342f67 unset default lang in makefile
+  * 7a36c48 Fix torrent downloaded size check. More-or-less..
+  * 9ce7c2d Add ability to get the Tor version without instantiating a whole object.
+  * 89319b9 Start working on containerized 32-bit builds
+  * f122740 move I2P launcher to own file
+
+ -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:34 -0400
+
+
+i2p.plugins.tor-manager (0.0.7-1) UNRELEASED; urgency=medium
+
+  * tag 0.0.7
+  * 943de35 clarify why I2P mirror is not in use yet
+  * 1fe014e try and get the systray tto work on OSX
+  * 6deedad switch to wget-ds to download su3 files
+  * dcba130 comment out shellservice copy line it's not required anymore
+  * b5f30e6 add compatibility mode for NSIS args
+  * 06bb27f start another manifesto
+  * 1210b6c More torrent subsystem upgrades
+  * 4057c96 More torrent subsystem upgrades
+  * e6a46e8 More torrent subsystem upgrades
+  * 589f825 More torrent subsystem upgrades
+  * 20e21b5 More torrent subsystem upgrades
+  * 3ce1c7d More torrent subsystem upgrades
+  * 58a23a2 Make torrent updates a little better
+  * 35085d3 unset default lang in makefile
+  * 7342f67 unset default lang in makefile
+  * 7a36c48 Fix torrent downloaded size check. More-or-less..
+  * 9ce7c2d Add ability to get the Tor version without instantiating a whole object.
+  * 89319b9 Start working on containerized 32-bit builds
+  * f122740 move I2P launcher to own file
+  * 7c05405 undo embedded plugin generator
+  * 7059c99 deal with buildsystem issues
+  * 9e3dea0 Add dockerfile, dockerignore
+  * c0937c6 Fix TorrentDownloaded function
+  * 75fbed7 Fix TorrentDownloaded function
+  * 47807ef Fix TorrentDownloaded function
+  * 44bb0b3 Fix TorrentDownloaded function
+  * aa20334 Fix TorrentDownloaded function
+  * 517611e add ability to specify snark only directory
+  * d44ceda Add mirror and torrent generation tools
+  * da14a3a add socks outproxy to README
+  * ab686d6 add socks outproxy to README
+  * c57734d add a bunch of requested features, tor disablement, fix static builds
+  * 0c2cb7c Adds most of the Torrent Download option. Defaults to on if the torrent is already downloaded.
+  * 6437de0 fix some issues reported from Matrix
+  * 12848c3 fix some issues reported from Matrix
+  * 3981f53 create a StartConf which is aware of the unpacked Tor path
+  * b8c7a4f Use zenity password setter in static builds
+  * d64cb90 Use zenity password setter in static builds
+  * 6cb3f81 use precise content-length
+  * 9ad63bf auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 3b9a67f auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 10be072 auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * c5ab4bf auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 81ee0b9 auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * b165d9e add an arm64 variant, not supported by Tor Project Official but contributed by a community member, to make it work on Raspberry Pi's.
+
+ -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:34 -0400
+
+
+i2p.plugins.tor-manager (0.0.6-1) UNRELEASED; urgency=medium
+
+  * tag 0.0.6
+  * 943de35 clarify why I2P mirror is not in use yet
+  * 1fe014e try and get the systray tto work on OSX
+  * 6deedad switch to wget-ds to download su3 files
+  * dcba130 comment out shellservice copy line it's not required anymore
+  * b5f30e6 add compatibility mode for NSIS args
+  * 06bb27f start another manifesto
+  * 1210b6c More torrent subsystem upgrades
+  * 4057c96 More torrent subsystem upgrades
+  * e6a46e8 More torrent subsystem upgrades
+  * 589f825 More torrent subsystem upgrades
+  * 20e21b5 More torrent subsystem upgrades
+  * 3ce1c7d More torrent subsystem upgrades
+  * 58a23a2 Make torrent updates a little better
+  * 35085d3 unset default lang in makefile
+  * 7342f67 unset default lang in makefile
+  * 7a36c48 Fix torrent downloaded size check. More-or-less..
+  * 9ce7c2d Add ability to get the Tor version without instantiating a whole object.
+  * 89319b9 Start working on containerized 32-bit builds
+  * f122740 move I2P launcher to own file
+  * 7c05405 undo embedded plugin generator
+  * 7059c99 deal with buildsystem issues
+  * 9e3dea0 Add dockerfile, dockerignore
+  * c0937c6 Fix TorrentDownloaded function
+  * 75fbed7 Fix TorrentDownloaded function
+  * 47807ef Fix TorrentDownloaded function
+  * 44bb0b3 Fix TorrentDownloaded function
+  * aa20334 Fix TorrentDownloaded function
+  * 517611e add ability to specify snark only directory
+  * d44ceda Add mirror and torrent generation tools
+  * da14a3a add socks outproxy to README
+  * ab686d6 add socks outproxy to README
+  * c57734d add a bunch of requested features, tor disablement, fix static builds
+  * 0c2cb7c Adds most of the Torrent Download option. Defaults to on if the torrent is already downloaded.
+  * 6437de0 fix some issues reported from Matrix
+  * 12848c3 fix some issues reported from Matrix
+  * 3981f53 create a StartConf which is aware of the unpacked Tor path
+  * b8c7a4f Use zenity password setter in static builds
+  * d64cb90 Use zenity password setter in static builds
+  * 6cb3f81 use precise content-length
+  * 9ad63bf auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 3b9a67f auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 10be072 auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * c5ab4bf auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 81ee0b9 auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * b165d9e add an arm64 variant, not supported by Tor Project Official but contributed by a community member, to make it work on Raspberry Pi's.
+
+ -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:34 -0400
+
+
+i2p.plugins.tor-manager (0.0.5-1) UNRELEASED; urgency=medium
+
+  * tag 0.0.5
+  * 943de35 clarify why I2P mirror is not in use yet
+  * 1fe014e try and get the systray tto work on OSX
+  * 6deedad switch to wget-ds to download su3 files
+  * dcba130 comment out shellservice copy line it's not required anymore
+  * b5f30e6 add compatibility mode for NSIS args
+  * 06bb27f start another manifesto
+  * 1210b6c More torrent subsystem upgrades
+  * 4057c96 More torrent subsystem upgrades
+  * e6a46e8 More torrent subsystem upgrades
+  * 589f825 More torrent subsystem upgrades
+  * 20e21b5 More torrent subsystem upgrades
+  * 3ce1c7d More torrent subsystem upgrades
+  * 58a23a2 Make torrent updates a little better
+  * 35085d3 unset default lang in makefile
+  * 7342f67 unset default lang in makefile
+  * 7a36c48 Fix torrent downloaded size check. More-or-less..
+  * 9ce7c2d Add ability to get the Tor version without instantiating a whole object.
+  * 89319b9 Start working on containerized 32-bit builds
+  * f122740 move I2P launcher to own file
+  * 7c05405 undo embedded plugin generator
+  * 7059c99 deal with buildsystem issues
+  * 9e3dea0 Add dockerfile, dockerignore
+  * c0937c6 Fix TorrentDownloaded function
+  * 75fbed7 Fix TorrentDownloaded function
+  * 47807ef Fix TorrentDownloaded function
+  * 44bb0b3 Fix TorrentDownloaded function
+  * aa20334 Fix TorrentDownloaded function
+  * 517611e add ability to specify snark only directory
+  * d44ceda Add mirror and torrent generation tools
+  * da14a3a add socks outproxy to README
+  * ab686d6 add socks outproxy to README
+  * c57734d add a bunch of requested features, tor disablement, fix static builds
+  * 0c2cb7c Adds most of the Torrent Download option. Defaults to on if the torrent is already downloaded.
+  * 6437de0 fix some issues reported from Matrix
+  * 12848c3 fix some issues reported from Matrix
+  * 3981f53 create a StartConf which is aware of the unpacked Tor path
+  * b8c7a4f Use zenity password setter in static builds
+  * d64cb90 Use zenity password setter in static builds
+  * 6cb3f81 use precise content-length
+  * 9ad63bf auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 3b9a67f auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 10be072 auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * c5ab4bf auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 81ee0b9 auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * b165d9e add an arm64 variant, not supported by Tor Project Official but contributed by a community member, to make it work on Raspberry Pi's.
+  * 9edebd1 portables can only be 64 bit unless I find out something new about jpackage
+  * 4602d7c make portable zip target
+  * abc6e81 enable systray by default
+  * adb7b5a Working directory encryption!
+  * 244e7f4 Working directory encryption!
+  * 9e4d33f Working directory encryption!
+  * 63e76a6 make password dialog non-required
+  * 3a1bc74 embed default snowflake site
+  * 57e397a add the ability to use a password for the ntire working direcoty
+  * e0d7424 add ability to encrypt working directory
+  * 06b6bf6 Add self-destructing option
+  * 01da2b0 Add the snowflake to the menu
+  * 5e6b49c add snowflake, alter default behavior based on whether we're a plugin
+  * 552a5c1 add snowflake, alter default behavior based on whether we're a plugin
+
+ -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:35 -0400
+
+
+i2p.plugins.tor-manager (0.0.4-1) UNRELEASED; urgency=medium
+
+  * tag 0.0.4
+  * 943de35 clarify why I2P mirror is not in use yet
+  * 1fe014e try and get the systray tto work on OSX
+  * 6deedad switch to wget-ds to download su3 files
+  * dcba130 comment out shellservice copy line it's not required anymore
+  * b5f30e6 add compatibility mode for NSIS args
+  * 06bb27f start another manifesto
+  * 1210b6c More torrent subsystem upgrades
+  * 4057c96 More torrent subsystem upgrades
+  * e6a46e8 More torrent subsystem upgrades
+  * 589f825 More torrent subsystem upgrades
+  * 20e21b5 More torrent subsystem upgrades
+  * 3ce1c7d More torrent subsystem upgrades
+  * 58a23a2 Make torrent updates a little better
+  * 35085d3 unset default lang in makefile
+  * 7342f67 unset default lang in makefile
+  * 7a36c48 Fix torrent downloaded size check. More-or-less..
+  * 9ce7c2d Add ability to get the Tor version without instantiating a whole object.
+  * 89319b9 Start working on containerized 32-bit builds
+  * f122740 move I2P launcher to own file
+  * 7c05405 undo embedded plugin generator
+  * 7059c99 deal with buildsystem issues
+  * 9e3dea0 Add dockerfile, dockerignore
+  * c0937c6 Fix TorrentDownloaded function
+  * 75fbed7 Fix TorrentDownloaded function
+  * 47807ef Fix TorrentDownloaded function
+  * 44bb0b3 Fix TorrentDownloaded function
+  * aa20334 Fix TorrentDownloaded function
+  * 517611e add ability to specify snark only directory
+  * d44ceda Add mirror and torrent generation tools
+  * da14a3a add socks outproxy to README
+  * ab686d6 add socks outproxy to README
+  * c57734d add a bunch of requested features, tor disablement, fix static builds
+  * 0c2cb7c Adds most of the Torrent Download option. Defaults to on if the torrent is already downloaded.
+  * 6437de0 fix some issues reported from Matrix
+  * 12848c3 fix some issues reported from Matrix
+  * 3981f53 create a StartConf which is aware of the unpacked Tor path
+  * b8c7a4f Use zenity password setter in static builds
+  * d64cb90 Use zenity password setter in static builds
+  * 6cb3f81 use precise content-length
+  * 9ad63bf auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 3b9a67f auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 10be072 auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * c5ab4bf auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 81ee0b9 auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * b165d9e add an arm64 variant, not supported by Tor Project Official but contributed by a community member, to make it work on Raspberry Pi's.
+  * 9edebd1 portables can only be 64 bit unless I find out something new about jpackage
+  * 4602d7c make portable zip target
+  * abc6e81 enable systray by default
+  * adb7b5a Working directory encryption!
+  * 244e7f4 Working directory encryption!
+  * 9e4d33f Working directory encryption!
+  * 63e76a6 make password dialog non-required
+  * 3a1bc74 embed default snowflake site
+  * 57e397a add the ability to use a password for the ntire working direcoty
+  * e0d7424 add ability to encrypt working directory
+  * 06b6bf6 Add self-destructing option
+  * 01da2b0 Add the snowflake to the menu
+  * 5e6b49c add snowflake, alter default behavior based on whether we're a plugin
+  * 552a5c1 add snowflake, alter default behavior based on whether we're a plugin
+  * 422e59c Build both with and without embedded routers
+  * 4d09f6f Fix a silly bug I caused on OSX
+  * c3464b5 In-I2P mirror fails if the file download is incomplete. Need to switch to torrents ASAP.
+  * afbe44d In-I2P mirror fails if the file download is incomplete. Need to switch to torrents ASAP.
+  * a9079fa In-I2P mirror fails if the file download is incomplete. Need to switch to torrents ASAP.
+  * 40a306d check in onion service capability
+  * f83e202 early-run tor, enable onion site
+  * 78ca9e8 early-run tor, enable onion site
+  * 1778f41 early-run tor, enable onion site
+  * b16b9ce early-run tor, enable onion site
+  * 3e816e2 Start a static onion site for it
+  * 9089b84 Start a static onion site for it
+  * 9f71628 Start a static onion site for it
+  * 681e0e8 various nits to running local services
+  * 7f2c89f Start some more premise/guidelines docs
+  * b7adee1 start onion PR campaign project
+  * be12a18 start onion PR campaign project
+  * 26f3d34 Place Mirror service keys into unpack directory
+  * 5902ed5 affix path to tor-mirror
+  * 45602ee Fix some logging issues
+  * f38f6c2 actually implement torrent-based sharing of tor browser
+  * 1e21935 Actually, going to wait a little longer
+  * 6b46972 Migrate to Protonmail's much better GPG library
+  * fb6997a add some firefox wrapping stuff
+  * 11b59f5 reduce sleep time on wait for http proxy
+  * 2b07dc3 correct html on alternative browser homepages
+  * 789e2d6 Make systray block until graceful shutdown finishes
+  * c17b38f make it build better on Windows again
+  * 5057f0e walk back i2pd support for the time being until I find a cross-compilation process I can deal with. Probably replace it with a jpackage and make it self update too.
+  * 38287a8 Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features, breaks fully static builds when using the systray
+  * 85506c2 Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features, breaks fully static builds when using the systray
+  * db65d92 Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features, breaks fully static builds for now.
+  * 826419b Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features.
+  * e9bd35c Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features.
+  * 3352191 Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features.
+  * b231ea0 Merge branch 'embed-i2pd' into 'main'
+  * c64a7fa Set torlauncer.start-tor true in i2p.firefox profile so we can use it as an outproxy even when we're not in long-running mode
+  * 8ec37c0 Fix broken links in the github readme
+  * 064731e Fix broken links in the github readme
+  * fbcf10d don't quit the app on a failed conditional host I2P launch anymore, wait until after we've tried i2pd
+  * ef30907 Document differences between this and similar projects
+  * 5401e60 Document differences between this and similar projects
+  * 8f4339f Enable embedded i2pd router
+  * 35f8586 Embed an i2pd router, and launch it as a last resort.
+  * 9e9e63d Embed an i2pd router, and launch it as a last resort.
+  * cb18068 set default page equal to trailing argument 0 if there is at least one trailing argument.
+  * ee6d46f Add Firefox mode, Work offline docs update, custom profile paths
+  * 47f29d7 Add Firefox mode, Work offline docs update, custom profile paths
+  * 2733a3a Add Firefox mode, Work offline docs update, custom profile paths
+  * e4130a3 Add Firefox mode, Work offline docs update, custom profile paths
+  * 3950c0a Add Firefox mode, Work offline docs update, custom profile paths
+  * f2e2d3d Add Firefox mode, Work offline docs update, custom profile paths
+  * ab9f597 Add Firefox mode, Work offline docs update, custom profile paths
+  * 84b91cf Add Firefox mode, Work offline docs update, custom profile paths
+  * ff1e3b3 re-enable Debian package, mostly
+  * 72e134f Add some new options, commented out.
+  * 3c2ebcb Add additional extensions and documentation of why
+  * e3d37a2 Add additional extensions and documentation of why
+  * c5680ab Add additional extensions and documentation of why
+  * 2817995 Create shortcuts on OSX, return AMD64 on M1 Mac
+  * 0d68860 fix error catching in main. don't swallow them, report them.
+
+ -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:35 -0400
+
+
+i2p.plugins.tor-manager (0.0.3-1) UNRELEASED; urgency=medium
+
+  * tag 0.0.3
+  * 943de35 clarify why I2P mirror is not in use yet
+  * 1fe014e try and get the systray tto work on OSX
+  * 6deedad switch to wget-ds to download su3 files
+  * dcba130 comment out shellservice copy line it's not required anymore
+  * b5f30e6 add compatibility mode for NSIS args
+  * 06bb27f start another manifesto
+  * 1210b6c More torrent subsystem upgrades
+  * 4057c96 More torrent subsystem upgrades
+  * e6a46e8 More torrent subsystem upgrades
+  * 589f825 More torrent subsystem upgrades
+  * 20e21b5 More torrent subsystem upgrades
+  * 3ce1c7d More torrent subsystem upgrades
+  * 58a23a2 Make torrent updates a little better
+  * 35085d3 unset default lang in makefile
+  * 7342f67 unset default lang in makefile
+  * 7a36c48 Fix torrent downloaded size check. More-or-less..
+  * 9ce7c2d Add ability to get the Tor version without instantiating a whole object.
+  * 89319b9 Start working on containerized 32-bit builds
+  * f122740 move I2P launcher to own file
+  * 7c05405 undo embedded plugin generator
+  * 7059c99 deal with buildsystem issues
+  * 9e3dea0 Add dockerfile, dockerignore
+  * c0937c6 Fix TorrentDownloaded function
+  * 75fbed7 Fix TorrentDownloaded function
+  * 47807ef Fix TorrentDownloaded function
+  * 44bb0b3 Fix TorrentDownloaded function
+  * aa20334 Fix TorrentDownloaded function
+  * 517611e add ability to specify snark only directory
+  * d44ceda Add mirror and torrent generation tools
+  * da14a3a add socks outproxy to README
+  * ab686d6 add socks outproxy to README
+  * c57734d add a bunch of requested features, tor disablement, fix static builds
+  * 0c2cb7c Adds most of the Torrent Download option. Defaults to on if the torrent is already downloaded.
+  * 6437de0 fix some issues reported from Matrix
+  * 12848c3 fix some issues reported from Matrix
+  * 3981f53 create a StartConf which is aware of the unpacked Tor path
+  * b8c7a4f Use zenity password setter in static builds
+  * d64cb90 Use zenity password setter in static builds
+  * 6cb3f81 use precise content-length
+  * 9ad63bf auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 3b9a67f auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 10be072 auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * c5ab4bf auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 81ee0b9 auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * b165d9e add an arm64 variant, not supported by Tor Project Official but contributed by a community member, to make it work on Raspberry Pi's.
+  * 9edebd1 portables can only be 64 bit unless I find out something new about jpackage
+  * 4602d7c make portable zip target
+  * abc6e81 enable systray by default
+  * adb7b5a Working directory encryption!
+  * 244e7f4 Working directory encryption!
+  * 9e4d33f Working directory encryption!
+  * 63e76a6 make password dialog non-required
+  * 3a1bc74 embed default snowflake site
+  * 57e397a add the ability to use a password for the ntire working direcoty
+  * e0d7424 add ability to encrypt working directory
+  * 06b6bf6 Add self-destructing option
+  * 01da2b0 Add the snowflake to the menu
+  * 5e6b49c add snowflake, alter default behavior based on whether we're a plugin
+  * 552a5c1 add snowflake, alter default behavior based on whether we're a plugin
+  * 422e59c Build both with and without embedded routers
+  * 4d09f6f Fix a silly bug I caused on OSX
+  * c3464b5 In-I2P mirror fails if the file download is incomplete. Need to switch to torrents ASAP.
+  * afbe44d In-I2P mirror fails if the file download is incomplete. Need to switch to torrents ASAP.
+  * a9079fa In-I2P mirror fails if the file download is incomplete. Need to switch to torrents ASAP.
+  * 40a306d check in onion service capability
+  * f83e202 early-run tor, enable onion site
+  * 78ca9e8 early-run tor, enable onion site
+  * 1778f41 early-run tor, enable onion site
+  * b16b9ce early-run tor, enable onion site
+  * 3e816e2 Start a static onion site for it
+  * 9089b84 Start a static onion site for it
+  * 9f71628 Start a static onion site for it
+  * 681e0e8 various nits to running local services
+  * 7f2c89f Start some more premise/guidelines docs
+  * b7adee1 start onion PR campaign project
+  * be12a18 start onion PR campaign project
+  * 26f3d34 Place Mirror service keys into unpack directory
+  * 5902ed5 affix path to tor-mirror
+  * 45602ee Fix some logging issues
+  * f38f6c2 actually implement torrent-based sharing of tor browser
+  * 1e21935 Actually, going to wait a little longer
+  * 6b46972 Migrate to Protonmail's much better GPG library
+  * fb6997a add some firefox wrapping stuff
+  * 11b59f5 reduce sleep time on wait for http proxy
+  * 2b07dc3 correct html on alternative browser homepages
+  * 789e2d6 Make systray block until graceful shutdown finishes
+  * c17b38f make it build better on Windows again
+  * 5057f0e walk back i2pd support for the time being until I find a cross-compilation process I can deal with. Probably replace it with a jpackage and make it self update too.
+  * 38287a8 Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features, breaks fully static builds when using the systray
+  * 85506c2 Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features, breaks fully static builds when using the systray
+  * db65d92 Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features, breaks fully static builds for now.
+  * 826419b Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features.
+  * e9bd35c Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features.
+  * 3352191 Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features.
+  * b231ea0 Merge branch 'embed-i2pd' into 'main'
+  * c64a7fa Set torlauncer.start-tor true in i2p.firefox profile so we can use it as an outproxy even when we're not in long-running mode
+  * 8ec37c0 Fix broken links in the github readme
+  * 064731e Fix broken links in the github readme
+  * fbcf10d don't quit the app on a failed conditional host I2P launch anymore, wait until after we've tried i2pd
+  * ef30907 Document differences between this and similar projects
+  * 5401e60 Document differences between this and similar projects
+  * 8f4339f Enable embedded i2pd router
+  * 35f8586 Embed an i2pd router, and launch it as a last resort.
+  * 9e9e63d Embed an i2pd router, and launch it as a last resort.
+  * cb18068 set default page equal to trailing argument 0 if there is at least one trailing argument.
+  * ee6d46f Add Firefox mode, Work offline docs update, custom profile paths
+  * 47f29d7 Add Firefox mode, Work offline docs update, custom profile paths
+  * 2733a3a Add Firefox mode, Work offline docs update, custom profile paths
+  * e4130a3 Add Firefox mode, Work offline docs update, custom profile paths
+  * 3950c0a Add Firefox mode, Work offline docs update, custom profile paths
+  * f2e2d3d Add Firefox mode, Work offline docs update, custom profile paths
+  * ab9f597 Add Firefox mode, Work offline docs update, custom profile paths
+  * 84b91cf Add Firefox mode, Work offline docs update, custom profile paths
+  * ff1e3b3 re-enable Debian package, mostly
+  * 72e134f Add some new options, commented out.
+  * 3c2ebcb Add additional extensions and documentation of why
+  * e3d37a2 Add additional extensions and documentation of why
+  * c5680ab Add additional extensions and documentation of why
+  * 2817995 Create shortcuts on OSX, return AMD64 on M1 Mac
+  * 0d68860 fix error catching in main. don't swallow them, report them.
+  * 52b4abf improve how it manages Firefox processes
+  * 746d8ed update Windows description
+  * 79571c1 add an -offline(work offline) flag
+  * 749aafb add an -offline(work offline) flag
+  * 791e946 Add Firefox help when --help flag is set
+  * 5ed9088 Add Firefox help when --help flag is set
+  * adabb76 Only wait for I2P proxy if I2PBrowser is true
+  * 921cd89 Only wait for I2P proxy if I2PBrowser is true
+  * 67cf688 Fix all the linter errors I care about
+  * 1367cea Fix all the linter errors I care about
+  * c9a77dc add the ability to manage a Firefox browser too.
+  * 1bac06a Fix some path determination stuff
+  * edb4ce1 If a router isn't started, start one. If an HTTP proxy isn't started, start one.
+  * 23ba452 If a router isn't started, start one. If an HTTP proxy isn't started, start one.
+  * e32d28f Add apparmor profile generation and default apparmor profiles
+  * 240e135 Add apparmor profile generation and default apparmor profiles
+  * cdc9637 Give it the ability to make it's own shortcuts
+  * fc842f8 Give it the ability to make it's own shortcuts
+
+ -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:35 -0400
+
+
+i2p.plugins.tor-manager (0.0.02-1) UNRELEASED; urgency=medium
+
+  * tag 0.0.02
+  * 943de35 clarify why I2P mirror is not in use yet
+  * 1fe014e try and get the systray tto work on OSX
+  * 6deedad switch to wget-ds to download su3 files
+  * dcba130 comment out shellservice copy line it's not required anymore
+  * b5f30e6 add compatibility mode for NSIS args
+  * 06bb27f start another manifesto
+  * 1210b6c More torrent subsystem upgrades
+  * 4057c96 More torrent subsystem upgrades
+  * e6a46e8 More torrent subsystem upgrades
+  * 589f825 More torrent subsystem upgrades
+  * 20e21b5 More torrent subsystem upgrades
+  * 3ce1c7d More torrent subsystem upgrades
+  * 58a23a2 Make torrent updates a little better
+  * 35085d3 unset default lang in makefile
+  * 7342f67 unset default lang in makefile
+  * 7a36c48 Fix torrent downloaded size check. More-or-less..
+  * 9ce7c2d Add ability to get the Tor version without instantiating a whole object.
+  * 89319b9 Start working on containerized 32-bit builds
+  * f122740 move I2P launcher to own file
+  * 7c05405 undo embedded plugin generator
+  * 7059c99 deal with buildsystem issues
+  * 9e3dea0 Add dockerfile, dockerignore
+  * c0937c6 Fix TorrentDownloaded function
+  * 75fbed7 Fix TorrentDownloaded function
+  * 47807ef Fix TorrentDownloaded function
+  * 44bb0b3 Fix TorrentDownloaded function
+  * aa20334 Fix TorrentDownloaded function
+  * 517611e add ability to specify snark only directory
+  * d44ceda Add mirror and torrent generation tools
+  * da14a3a add socks outproxy to README
+  * ab686d6 add socks outproxy to README
+  * c57734d add a bunch of requested features, tor disablement, fix static builds
+  * 0c2cb7c Adds most of the Torrent Download option. Defaults to on if the torrent is already downloaded.
+  * 6437de0 fix some issues reported from Matrix
+  * 12848c3 fix some issues reported from Matrix
+  * 3981f53 create a StartConf which is aware of the unpacked Tor path
+  * b8c7a4f Use zenity password setter in static builds
+  * d64cb90 Use zenity password setter in static builds
+  * 6cb3f81 use precise content-length
+  * 9ad63bf auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 3b9a67f auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 10be072 auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * c5ab4bf auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * 81ee0b9 auto-resume failed downloads, use system tor if it's there and we're not downloading from an I2P mirror
+  * b165d9e add an arm64 variant, not supported by Tor Project Official but contributed by a community member, to make it work on Raspberry Pi's.
+  * 9edebd1 portables can only be 64 bit unless I find out something new about jpackage
+  * 4602d7c make portable zip target
+  * abc6e81 enable systray by default
+  * adb7b5a Working directory encryption!
+  * 244e7f4 Working directory encryption!
+  * 9e4d33f Working directory encryption!
+  * 63e76a6 make password dialog non-required
+  * 3a1bc74 embed default snowflake site
+  * 57e397a add the ability to use a password for the ntire working direcoty
+  * e0d7424 add ability to encrypt working directory
+  * 06b6bf6 Add self-destructing option
+  * 01da2b0 Add the snowflake to the menu
+  * 5e6b49c add snowflake, alter default behavior based on whether we're a plugin
+  * 552a5c1 add snowflake, alter default behavior based on whether we're a plugin
+  * 422e59c Build both with and without embedded routers
+  * 4d09f6f Fix a silly bug I caused on OSX
+  * c3464b5 In-I2P mirror fails if the file download is incomplete. Need to switch to torrents ASAP.
+  * afbe44d In-I2P mirror fails if the file download is incomplete. Need to switch to torrents ASAP.
+  * a9079fa In-I2P mirror fails if the file download is incomplete. Need to switch to torrents ASAP.
+  * 40a306d check in onion service capability
+  * f83e202 early-run tor, enable onion site
+  * 78ca9e8 early-run tor, enable onion site
+  * 1778f41 early-run tor, enable onion site
+  * b16b9ce early-run tor, enable onion site
+  * 3e816e2 Start a static onion site for it
+  * 9089b84 Start a static onion site for it
+  * 9f71628 Start a static onion site for it
+  * 681e0e8 various nits to running local services
+  * 7f2c89f Start some more premise/guidelines docs
+  * b7adee1 start onion PR campaign project
+  * be12a18 start onion PR campaign project
+  * 26f3d34 Place Mirror service keys into unpack directory
+  * 5902ed5 affix path to tor-mirror
+  * 45602ee Fix some logging issues
+  * f38f6c2 actually implement torrent-based sharing of tor browser
+  * 1e21935 Actually, going to wait a little longer
+  * 6b46972 Migrate to Protonmail's much better GPG library
+  * fb6997a add some firefox wrapping stuff
+  * 11b59f5 reduce sleep time on wait for http proxy
+  * 2b07dc3 correct html on alternative browser homepages
+  * 789e2d6 Make systray block until graceful shutdown finishes
+  * c17b38f make it build better on Windows again
+  * 5057f0e walk back i2pd support for the time being until I find a cross-compilation process I can deal with. Probably replace it with a jpackage and make it self update too.
+  * 38287a8 Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features, breaks fully static builds when using the systray
+  * 85506c2 Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features, breaks fully static builds when using the systray
+  * db65d92 Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features, breaks fully static builds for now.
+  * 826419b Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features.
+  * e9bd35c Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features.
+  * 3352191 Set up a system tray application. Download Tor Browser over I2P. This accomplishes all basic features.
+  * b231ea0 Merge branch 'embed-i2pd' into 'main'
+  * c64a7fa Set torlauncer.start-tor true in i2p.firefox profile so we can use it as an outproxy even when we're not in long-running mode
+  * 8ec37c0 Fix broken links in the github readme
+  * 064731e Fix broken links in the github readme
+  * fbcf10d don't quit the app on a failed conditional host I2P launch anymore, wait until after we've tried i2pd
+  * ef30907 Document differences between this and similar projects
+  * 5401e60 Document differences between this and similar projects
+  * 8f4339f Enable embedded i2pd router
+  * 35f8586 Embed an i2pd router, and launch it as a last resort.
+  * 9e9e63d Embed an i2pd router, and launch it as a last resort.
+  * cb18068 set default page equal to trailing argument 0 if there is at least one trailing argument.
+  * ee6d46f Add Firefox mode, Work offline docs update, custom profile paths
+  * 47f29d7 Add Firefox mode, Work offline docs update, custom profile paths
+  * 2733a3a Add Firefox mode, Work offline docs update, custom profile paths
+  * e4130a3 Add Firefox mode, Work offline docs update, custom profile paths
+  * 3950c0a Add Firefox mode, Work offline docs update, custom profile paths
+  * f2e2d3d Add Firefox mode, Work offline docs update, custom profile paths
+  * ab9f597 Add Firefox mode, Work offline docs update, custom profile paths
+  * 84b91cf Add Firefox mode, Work offline docs update, custom profile paths
+  * ff1e3b3 re-enable Debian package, mostly
+  * 72e134f Add some new options, commented out.
+  * 3c2ebcb Add additional extensions and documentation of why
+  * e3d37a2 Add additional extensions and documentation of why
+  * c5680ab Add additional extensions and documentation of why
+  * 2817995 Create shortcuts on OSX, return AMD64 on M1 Mac
+  * 0d68860 fix error catching in main. don't swallow them, report them.
+  * 52b4abf improve how it manages Firefox processes
+  * 746d8ed update Windows description
+  * 79571c1 add an -offline(work offline) flag
+  * 749aafb add an -offline(work offline) flag
+  * 791e946 Add Firefox help when --help flag is set
+  * 5ed9088 Add Firefox help when --help flag is set
+  * adabb76 Only wait for I2P proxy if I2PBrowser is true
+  * 921cd89 Only wait for I2P proxy if I2PBrowser is true
+  * 67cf688 Fix all the linter errors I care about
+  * 1367cea Fix all the linter errors I care about
+  * c9a77dc add the ability to manage a Firefox browser too.
+  * 1bac06a Fix some path determination stuff
+  * edb4ce1 If a router isn't started, start one. If an HTTP proxy isn't started, start one.
+  * 23ba452 If a router isn't started, start one. If an HTTP proxy isn't started, start one.
+  * e32d28f Add apparmor profile generation and default apparmor profiles
+  * 240e135 Add apparmor profile generation and default apparmor profiles
+  * cdc9637 Give it the ability to make it's own shortcuts
+  * fc842f8 Give it the ability to make it's own shortcuts
+  * 025b372 Windows fixes for launching Tor and/or Tor Browser
+  * 0f0caa7 Windows fixes for launching Tor and/or Tor Browser
+  * 80971e2 Windows fixes for launching Tor and/or Tor Browser
+  * eb49ddd Windows fixes for launching Tor and/or Tor Browser
+  * 54b47d8 Windows fixes for launching Tor and/or Tor Browser
+  * 93583ab Windows fixes for launching Tor and/or Tor Browser
+  * 15cdc02 Use path instead of filepath for referencing embeds
+  * bd23b2a Checkin Windows fixes from the Windows machine
+  * 200663e Set verbosity earlier. Don't bother manual mirror hostname setting yet.
+  * 868ae5e More logging, make it nicer on Windows
+  * 6cba862 More logging, make it nicer on Windows
+  * a948f59 Create directories automatically, mirror Tor Browser and our profile too, allow customizing the ports. Some probably unnecessary defensive coding.
+  * d92a5b2 Create directories automatically, mirror Tor Browser and our profile too, allow customizing the ports. Some probably unnecessary defensive coding.
+  * e191238 make debian packages build
+  * b1875cb make debian packages build
+  * 86ad5a4 make debian packages build
+  * 6a7b1cc make debian packages build
+  * 50a302c make debian packages build
+  * c004aaf make debian packages build
+  * 7d9eb12 debian packaging because it's so freaking easy
+  * 433bd78 debian packaging because it's so freaking easy
+  * 7fc4f7c debian packaging because it's so freaking easy
+  * fa6421b Add a make install target
+  * 8b7fbed Add a make install target
+  * 1cecd5a Automatically set os and arch args to match the json in downloads.json. When the exe you run is named "i2pbrowser" set i2pbrowser=true
+  * 2b810b4 Automatically set os and arch args to match the json in downloads.json. When the exe you run is named "i2pbrowser" set i2pbrowser=true
+
+ -- idk <hankhill19580@gmail.com> Wed, 06 Jul 2022 21:49:35 -0400
+
+

@@ -334,9 +334,7 @@ tor-browser/TPO-signing-key.pub:
 	gpg -r 0xEF6E286DDA85EA2A4BA7DE684E2C6E8793298290 --armor --output ./tor-browser/TPO-signing-key.pub --export 
 
 deb: clean
-	mv "hankhill19580_at_gmail.com.crl" ../; true
-	mv "hankhill19580_at_gmail.com.crt" ../; true
-	mv "hankhill19580_at_gmail.com.pem" ../; true
+	./changelog.sh
 	rm ../i2p.plugins.tor-manager_$(VERSION).orig.tar.gz -f
 	tar --exclude=".git" \
 		--exclude="hankhill19580_at_gmail.com.crl" \
@@ -347,9 +345,6 @@ deb: clean
 		--exclude="tmp" \
 		-cvzf ../i2p.plugins.tor-manager_$(VERSION).orig.tar.gz	.
 	dpkg-buildpackage -us -uc
-	mv "../hankhill19580_at_gmail.com.crl" ./
-	mv "../hankhill19580_at_gmail.com.crt" ./
-	mv "../hankhill19580_at_gmail.com.pem" ./
 
 debsrc: clean
 	mv "hankhill19580_at_gmail.com.crl" ../; true
