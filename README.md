@@ -5,7 +5,8 @@ usable on Windows, Linux, and OSX, as is the freestanding binary.
 This also functions as a freestanding update for the Tor Browser
 Bundle and is capable of configuring Tor Browser from the terminal
 and updating it without running it, should the user choose to operate
-this way.
+this way. This is now more like a fully-fledged browser management
+tool that also manages a long-running Tor process if it needs it.
 
 This project explicitly views I2P and Tor as complementary privacy
 tools and explores good ways of combining them in a user-facing tool.
