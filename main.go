@@ -4,6 +4,7 @@ import (
 	"embed"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net"
 	"os"
@@ -40,7 +41,23 @@ TODO: A "Default" config file which uses hardened Tor Browser for clearnet
 //go:embed offline.png
 //go:embed torbrowser.desktop
 //go:embed i2ptorbrowser.desktop
+//go:embed LICENSE
 var content embed.FS
+
+// print license, then exit 0
+func LICENSE() {
+	//get LICENSE from embedded content
+	license, err := content.Open("LICENSE")
+	if err != nil {
+		log.Fatal(err)
+	}
+	license_bytes, err := ioutil.ReadAll(license)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(license_bytes))
+	os.Exit(0)
+}
 
 func OS() string {
 	switch runtime.GOOS {
@@ -120,6 +137,7 @@ var (
 	torversion = flag.Bool("torversion", false, "Print the version of Tor Browser that will be downloaded and exit")
 	mirrorall  = flag.Bool("mirrorall", false, "Download and mirror every language and OS/arch combination")
 	nevertor   = flag.Bool("nevertor", false, "Never use Tor for downloading Tor Browser")
+	license    = flag.Bool("license", false, "Print the license and exit")
 )
 
 func Clearnet() bool {
@@ -137,6 +155,13 @@ func Password() string {
 	if require_password == "" && !PluginStat() {
 		require_password = "true"
 	}
+	// search os.Args for -license flag and if it's present, set to false
+	for _, arg := range os.Args {
+		if arg == "-license" {
+			require_password = "false"
+		}
+	}
+
 	switch require_password {
 	case "true", "1", "yes", "on":
 		passwd, err := zenity.Entry(
@@ -199,6 +224,11 @@ var snowflake *bool
 var client *tbserve.Client
 
 func main() {
+	for _, arg := range os.Args {
+		if arg == "-license" {
+			LICENSE()
+		}
+	}
 	if err := NSISCompat(); err != nil {
 		log.Println("NSIS compat mode failure", err)
 		os.Exit(0)
