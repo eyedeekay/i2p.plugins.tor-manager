@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"flag"
 	"log"
 	"net"
 	"net/http"
@@ -10,6 +9,8 @@ import (
 	"os/signal"
 	"strings"
 	"time"
+
+	flag "github.com/spf13/pflag"
 
 	i2phttpproxy "github.com/eyedeekay/httptunnel"
 	i2pbrowserproxy "github.com/eyedeekay/httptunnel/multiproxy"

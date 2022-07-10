@@ -2,7 +2,6 @@ package main
 
 import (
 	"embed"
-	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -12,6 +11,8 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	flag "github.com/spf13/pflag"
 
 	"github.com/cloudfoundry/jibber_jabber"
 	"github.com/itchio/damage"
@@ -252,6 +253,10 @@ func main() {
 		}
 		fmt.Printf("\n")
 	}
+	args, trailers := CleanupArgs()
+	log.Printf("Args: %v\n", args)
+	log.Printf("Trailers: %v\n", trailers)
+	os.Args = args
 	flag.Parse()
 	if *nevertor {
 		err := os.Setenv("TOR_MANAGER_NEVER_USE_TOR", "true")
@@ -383,7 +388,7 @@ func main() {
 	client.Host = *host
 	client.Port = *port
 	client.TBS.Profile = &content
-	client.TBS.PassThroughArgs = flag.Args()
+	client.TBS.PassThroughArgs = trailers
 	if runtime.GOOS == "darwin" {
 		consumer := &state.Consumer{
 			OnMessage: func(lvl string, msg string) {

@@ -49,21 +49,7 @@ type Supervisor struct {
 
 // PTAS is the validator for the pass-through arguments
 func (s *Supervisor) PTAS() []string {
-	// loop over the arguments and make sure that we remove any --profile, -P args
-	// and blank them out.
-	var args []string
-	for index, arg := range s.PassThroughArgs {
-		if arg == "--profile" || arg == "-P" || arg == "-profile" {
-			continue
-		}
-		if index > 0 {
-			if s.PassThroughArgs[index-1] == "--profile" || s.PassThroughArgs[index-1] == "-P" || s.PassThroughArgs[index-1] == "-profile" {
-				continue
-			}
-		}
-		args = append(args, arg)
-	}
-	return args
+	return s.PassThroughArgs
 }
 
 // TBPath returns the path to the Tor Browser Bundle launcher

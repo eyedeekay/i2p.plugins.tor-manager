@@ -5,11 +5,12 @@ package main
 
 import (
 	"embed"
-	"flag"
 	"io"
 	"log"
 	"net/http"
 	"os"
+
+	flag "github.com/spf13/pflag"
 
 	"fyne.io/systray"
 

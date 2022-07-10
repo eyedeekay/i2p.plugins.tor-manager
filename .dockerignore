@@ -1,1 +1,7 @@
 .git
+flatpak.repo.i2p.plugins.tor-manager
+repo
+shared-modules
+debian
+_build
+.vscode
