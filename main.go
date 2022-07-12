@@ -15,6 +15,7 @@ import (
 	flag "github.com/spf13/pflag"
 
 	"github.com/cloudfoundry/jibber_jabber"
+	"github.com/eyedeekay/go-I2P-jpackage"
 	"github.com/itchio/damage"
 	"github.com/itchio/damage/hdiutil"
 	"github.com/itchio/headway/state"
@@ -57,6 +58,7 @@ func LICENSE() {
 		log.Fatal(err)
 	}
 	fmt.Println(string(license_bytes))
+	I2P.PrintLicenses()
 	os.Exit(0)
 }
 
