@@ -13,8 +13,6 @@ require (
 	golang.org/x/net v0.0.0-20220531201128-c960675eff93
 )
 
-require github.com/eyedeekay/go-I2P-jpackage v1.7.0
-
 require (
 	github.com/eyedeekay/checki2cp v0.0.21
 	github.com/eyedeekay/go-i2pcontrol v0.0.0-20201227222421-6e9f31a29a91
@@ -34,8 +32,10 @@ require (
 	github.com/ProtonMail/go-crypto v0.0.0-20220517143526-88bb52951d5b
 	github.com/cretz/bine v0.2.0
 	github.com/dustin/go-humanize v1.0.0
+	github.com/eyedeekay/go-I2P-jpackage v0.0.0-00010101000000-000000000000
 	github.com/mholt/archiver v3.1.1+incompatible
 	github.com/ncruces/zenity v0.8.7
+	github.com/spf13/pflag v1.0.5
 	github.com/xgfone/bt v0.4.2
 	i2pgit.org/idk/blizzard v0.0.0-20220603220744-e65539f077d8
 	i2pgit.org/idk/libbrb v0.0.0-20220604231843-8dc7351e849a
@@ -124,7 +124,6 @@ require (
 	github.com/spf13/afero v1.8.2 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
-	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.12.0 // indirect
 	github.com/src-d/gcfg v1.4.0 // indirect
 	github.com/steveyen/gtreap v0.1.0 // indirect
