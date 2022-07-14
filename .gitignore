@@ -36,3 +36,4 @@ shared-modules
 debian
 _build
 .vscode
+AppDir

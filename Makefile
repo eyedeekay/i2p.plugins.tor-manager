@@ -347,9 +347,6 @@ deb: clean
 	dpkg-buildpackage -us -uc
 
 debsrc: clean
-	mv "hankhill19580_at_gmail.com.crl" ../; true
-	mv "hankhill19580_at_gmail.com.crt" ../; true
-	mv "hankhill19580_at_gmail.com.pem" ../; true
 	rm ../i2p.plugins.tor-manager_$(VERSION).orig.tar.gz -f
 	tar --exclude=".git" \
 		--exclude="hankhill19580_at_gmail.com.crl" \
@@ -362,9 +359,6 @@ debsrc: clean
 		--exclude="flatpak.repo.i2p.plugins.tor-manager" \
 		-cvzf ../i2p.plugins.tor-manager_$(VERSION).orig.tar.gz	.
 	debuild -S
-	mv "../hankhill19580_at_gmail.com.crl" ./
-	mv "../hankhill19580_at_gmail.com.crt" ./
-	mv "../hankhill19580_at_gmail.com.pem" ./
 
 DATE=`date +%Y/%m/%d`
 
@@ -476,3 +470,19 @@ flatpak.repo.i2p.plugins.tor-manager:
 flatpak-upload: flatpak-repo flatpak.repo.i2p.plugins.tor-manager
 	cp -rv repo/* flatpak.repo.i2p.plugins.tor-manager/
 	cd flatpak.repo.i2p.plugins.tor-manager && ./find.sh
+
+clean-appimage:
+	rm -rf AppDir
+
+appimage: clean-appimage
+	mkdir -p AppDir/usr/bin AppDir/usr/lib AppDir/usr/share/applications AppDir/usr/share/icons AppDir/var/lib/i2pbrowser/icons
+	cp -v i2p.plugins.tor-manager AppDir/usr/bin/i2p.plugins.tor-manager
+	cp -v i2ptorbrowser.desktop AppDir/usr/share/applications/i2p.plugins.tor-manager.desktop
+	cp -v i2ptorbrowser.desktop AppDir/i2p.plugins.tor-manager.desktop
+	cp -v garliconion.png AppDir/var/lib/i2pbrowser/icons/garliconion.png
+	cp -v garliconion.png AppDir/I2P_in-Tor-Browser-x86_64.png
+	cp -v garliconion.png AppDir/.DirIcon
+	cp -v i2p.plugins.tor-manager AppDir/AppRun
+	find AppDir -name '*.desktop' -exec sed -i 's|garliconion.png|garliconion|g' {} \;
+	chmod +x AppDir/AppRun
+	~/Downloads/appimagetool-x86_64.AppImage AppDir/
