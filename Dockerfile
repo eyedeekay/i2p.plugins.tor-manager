@@ -1,4 +1,5 @@
 FROM debian:stable-backports
+ENV GOPATH /go
 RUN echo "deb http://deb.debian.org/debian oldstable main" >> /etc/apt/sources.list &&  \
     apt-get update && apt-get dist-upgrade -y && \
     apt-get install -y --no-install-recommends \
@@ -62,7 +63,7 @@ RUN echo "deb http://deb.debian.org/debian oldstable main" >> /etc/apt/sources.l
     # unzip ShellExecAsUserUnicodeUpdate.zip -d /usr/share/nsis/Plugins/x86-unicode && \
     # 7zr x ShellExecAsUser_amd64-Unicode.7z -o/usr/share/nsis/Plugins/amd64-unicode
 RUN    git clone https://github.com/eyedeekay/go-I2P-jpackage /go/src/github.com/eyedeekay/go-I2P-jpackage
-RUN    cd /go/src/github.com/eyedeekay/go-I2P-jpackage
+WORKDIR /go/src/github.com/eyedeekay/go-I2P-jpackage
 RUN    touch /go/src/github.com/eyedeekay/go-I2P-jpackage/build.windows.I2P.tar.xz
 RUN    touch /go/src/github.com/eyedeekay/go-I2P-jpackage/build.linux.I2P.tar.xz
 RUN    make
