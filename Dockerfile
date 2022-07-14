@@ -25,7 +25,6 @@ RUN echo "deb http://deb.debian.org/debian oldstable main" >> /etc/apt/sources.l
         debhelper \
         ant \
         debconf \
-        default-jdk \
         libjetty9-java \
         libservlet3.1-java \
         libtaglibs-standard-jstlel-java \
@@ -64,9 +63,9 @@ RUN echo "deb http://deb.debian.org/debian oldstable main" >> /etc/apt/sources.l
     # 7zr x ShellExecAsUser_amd64-Unicode.7z -o/usr/share/nsis/Plugins/amd64-unicode
 RUN    git clone https://github.com/eyedeekay/go-I2P-jpackage /go/src/github.com/eyedeekay/go-I2P-jpackage
 WORKDIR /go/src/github.com/eyedeekay/go-I2P-jpackage
-RUN    touch /go/src/github.com/eyedeekay/go-I2P-jpackage/build.windows.I2P.tar.xz
-RUN    touch /go/src/github.com/eyedeekay/go-I2P-jpackage/build.linux.I2P.tar.xz
-RUN    make
+#RUN    touch /go/src/github.com/eyedeekay/go-I2P-jpackage/build.windows.I2P.tar.xz
+#RUN    touch /go/src/github.com/eyedeekay/go-I2P-jpackage/build.linux.I2P.tar.xz
+RUN    make || ls i2p.firefox -lah
 RUN    git clone https://i2pgit.org/idk/i2p.plugins.tor-manager /go/src/i2pgit.org/idk/i2p.plugins.tor-manager
 WORKDIR /go/src/i2pgit.org/idk/i2p.plugins.tor-manager
 #CMD ls /go/src/i2pgit.org/idk/i2p.plugins.tor-manager /go/src/github.com/eyedeekay/go-I2P-jpackage
