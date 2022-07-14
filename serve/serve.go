@@ -28,6 +28,7 @@ import (
 type Client struct {
 	hostname string
 	TBD      *tbget.TBDownloader
+	FFD      *tbget.FFDownloader
 	TBS      *TBSupervise.Supervisor
 	Onion    *i2pdotonion.I2POnionService
 	DarkMode bool
@@ -113,17 +114,17 @@ func NewClient(verbose bool, lang, OS, arch, mirror string, content *embed.FS, n
 // NewFirefoxClient creates a new Client.
 func NewFirefoxClient(verbose bool, lang, os, arch, mirror string, content *embed.FS) (*Client, error) {
 	m := &Client{
-		TBD: tbget.NewFirefoxDownloader(lang, os, arch, content),
+		FFD: tbget.NewFirefoxDownloader(lang, os, arch, content),
 	}
-	m.TBD.Mirror = mirror
-	m.TBD.Verbose = verbose
-	m.TBD.MakeTBDirectory()
-	tgz, sig, err := m.TBD.DownloadFirefoxUpdaterForLang(lang)
+	m.FFD.Mirror = mirror
+	m.FFD.Verbose = verbose
+	m.FFD.MakeTBDirectory()
+	tgz, sig, err := m.FFD.DownloadFirefoxUpdaterForLang(lang)
 	if err != nil {
 		panic(err)
 	}
 	var home string
-	if home, err = m.TBD.CheckFirefoxSignature(tgz, sig); err != nil {
+	if home, err = m.FFD.CheckFirefoxSignature(tgz, sig); err != nil {
 		log.Fatal(err)
 	} else {
 		log.Printf("Signature check passed: %s %s", tgz, sig)

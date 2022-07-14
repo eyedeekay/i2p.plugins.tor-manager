@@ -26,7 +26,7 @@ func NewFirefoxDownloader(lang string, os, arch string, content *embed.FS) *FFDo
 	return &FFDownloader{
 		Lang:         lang,
 		DownloadPath: DOWNLOAD_FIREFOX_PATH(),
-		UnpackPath:   UNPACK_PATH(),
+		UnpackPath:   UNPACK_FIREFOX_PATH(),
 		OS:           os,
 		ARCH:         arch,
 		Verbose:      false,
@@ -35,10 +35,16 @@ func NewFirefoxDownloader(lang string, os, arch string, content *embed.FS) *FFDo
 	}
 }
 
-// DOWNLOAD_PATH returns the path to the downloads.
+// DOWNLOAD_FIREFOX_PATH returns the path to the downloads.
 func DOWNLOAD_FIREFOX_PATH() string {
 	var DOWNLOAD_PATH = filepath.Join(DefaultDir(), "firefox")
 	return DOWNLOAD_PATH
+}
+
+// UNPACK_FIREFOX_PATH returns the path to the unpacked files.
+func UNPACK_FIREFOX_PATH() string {
+	var UNPACK_FIREFOX_PATH = filepath.Join(DefaultDir(), "unpack-firefox")
+	return UNPACK_FIREFOX_PATH
 }
 
 func (t FFDownloader) GetRuntimePair() string {
@@ -261,4 +267,9 @@ func (t *FFDownloader) CheckFirefoxSignature(binpath, sigpath string) (string, e
 func (t *FFDownloader) BoolCheckFirefoxSignature(binpath, sigpath string) bool {
 	_, err := t.CheckFirefoxSignature(binpath, sigpath)
 	return err == nil
+}
+
+func (t FFDownloader) MakeTBDirectory() {
+	tbd := TBDownloader(t)
+	tbd.MakeTBDirectory()
 }
