@@ -6,6 +6,7 @@ import (
 	"embed"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"os/exec"
@@ -16,11 +17,13 @@ import (
 // FFOX_UPDATES_URL is the URL to the Firefox updates page
 const FFOX_UPDATES_URL string = "https://download.mozilla.org/?product=firefox-latest&os=%s&lang=%s"
 
-// NewFirefoxDownloader returns a new TBDownloader with the given language, using the TBDownloader's OS/ARCH pair
-func NewFirefoxDownloader(lang string, os, arch string, content *embed.FS) *TBDownloader {
+type FFDownloader TBDownloader
+
+// NewFirefoxDownloader returns a new FFDownloader with the given language, using the FFDownloader's OS/ARCH pair
+func NewFirefoxDownloader(lang string, os, arch string, content *embed.FS) *FFDownloader {
 	OS = os
 	ARCH = arch
-	return &TBDownloader{
+	return &FFDownloader{
 		Lang:         lang,
 		DownloadPath: DOWNLOAD_FIREFOX_PATH(),
 		UnpackPath:   UNPACK_PATH(),
@@ -38,30 +41,35 @@ func DOWNLOAD_FIREFOX_PATH() string {
 	return DOWNLOAD_PATH
 }
 
+func (t FFDownloader) GetRuntimePair() string {
+	tbd := TBDownloader(t)
+	return tbd.GetRuntimePair()
+}
+
 // GetLatestFirefoxVersionURL returns the URL to the latest Firefox version for the given os and lang
-func (t *TBDownloader) GetLatestFirefoxVersionURL(os, lang string) string {
+func (t *FFDownloader) GetLatestFirefoxVersionURL(os, lang string) string {
 	return fmt.Sprintf(FFOX_UPDATES_URL, t.GetRuntimePair(), lang)
 }
 
 // GetLatestFirefoxVersionLinuxSigURL returns the URL to the latest Firefox version detatched signature for the given os and lang
-func (t *TBDownloader) GetLatestFirefoxVersionLinuxSigURL(os, lang string) string {
+func (t *FFDownloader) GetLatestFirefoxVersionLinuxSigURL(os, lang string) string {
 	return t.GetLatestFirefoxVersionURL(os, lang) + ".asc"
 }
 
 // GetFirefoxUpdater gets the updater URL for the t.Lang. It returns
 // the URL, a detatched sig if available for the platform, or an error
-func (t *TBDownloader) GetFirefoxUpdater() (string, string, error) {
+func (t *FFDownloader) GetFirefoxUpdater() (string, string, error) {
 	return t.GetLatestFirefoxVersionURL(t.OS, t.Lang), t.GetLatestFirefoxVersionLinuxSigURL(t.OS, t.Lang), nil
 }
 
 // GetFirefoxUpdaterForLang gets the updater URL for the given language, overriding
 // the t.Lang. It returns the URL, a detatched sig if available for the platform, or an error
-func (t *TBDownloader) GetFirefoxUpdaterForLang(ietf string) (string, string, error) {
+func (t *FFDownloader) GetFirefoxUpdaterForLang(ietf string) (string, string, error) {
 	return t.GetLatestFirefoxVersionURL(t.OS, ietf), t.GetLatestFirefoxVersionLinuxSigURL(t.OS, ietf), nil
 }
 
 // SendFirefoxVersionHEADRequest sends a HEAD request to the Firefox version URL
-func (t *TBDownloader) SendFirefoxVersionHEADRequest() (string, error) {
+func (t *FFDownloader) SendFirefoxVersionHEADRequest() (string, error) {
 	url := t.GetLatestFirefoxVersionURL(t.OS, t.Lang)
 	req, err := http.NewRequest("HEAD", url, nil)
 	if err != nil {
@@ -80,7 +88,7 @@ func (t *TBDownloader) SendFirefoxVersionHEADRequest() (string, error) {
 }
 
 // ExtractFirefoxVersion extracts the Firefox version from the updater URL
-func (t *TBDownloader) ExtractFirefoxVersion() (string, error) {
+func (t *FFDownloader) ExtractFirefoxVersion() (string, error) {
 	url, err := t.SendFirefoxVersionHEADRequest()
 	if err != nil {
 		return "", fmt.Errorf("t.ExtractFirefoxVersion: %s", err)
@@ -99,7 +107,7 @@ func (t *TBDownloader) ExtractFirefoxVersion() (string, error) {
 }
 
 // NamePerPlatformFirefox returns the name of the Firefox package per platform.
-func (t *TBDownloader) NamePerPlatformFirefox(ietf string) string {
+func (t *FFDownloader) NamePerPlatformFirefox(ietf string) string {
 	extension := "tar.bz2"
 	windowsonly := ""
 	switch t.OS {
@@ -113,12 +121,18 @@ func (t *TBDownloader) NamePerPlatformFirefox(ietf string) string {
 }
 
 // FirefoxBrowserDir returns the path to the directory where the Firefox browser is installed.
-func (t *TBDownloader) FirefoxBrowserDir() string {
+func (t *FFDownloader) FirefoxBrowserDir() string {
 	return filepath.Join(t.UnpackPath, "firefox_"+t.Lang)
 }
 
+func (t *FFDownloader) Log(function, message string) {
+	if t.Verbose {
+		log.Println(fmt.Sprintf("%s: %s", function, message))
+	}
+}
+
 // UnpackFirefox unpacks the Firefox package to the t.FirefoxBrowserDir()
-func (t *TBDownloader) UnpackFirefox(binpath string) (string, error) {
+func (t *FFDownloader) UnpackFirefox(binpath string) (string, error) {
 	t.Log("UnpackFirefox()", fmt.Sprintf("Unpacking %s", binpath))
 	if t.OS == "win" {
 		installPath := t.FirefoxBrowserDir()
@@ -196,14 +210,19 @@ func (t *TBDownloader) UnpackFirefox(binpath string) (string, error) {
 // DownloadFirefoxUpdater downloads the updater for the t.Lang. It returns
 // the path to the downloaded updater and the downloaded detatched signature,
 // or an error if one is encountered.
-func (t *TBDownloader) DownloadFirefoxUpdater() (string, string, error) {
+func (t *FFDownloader) DownloadFirefoxUpdater() (string, string, error) {
 	return t.DownloadFirefoxUpdaterForLang(t.Lang)
+}
+
+func (t FFDownloader) SingleFileDownload(dl, name string, rangebottom int64) (string, error) {
+	tbd := TBDownloader(t)
+	return tbd.SingleFileDownload(dl, name, rangebottom)
 }
 
 // DownloadFirefoxUpdaterForLang downloads the updater for the given language, overriding
 // t.Lang. It returns the path to the downloaded updater and the downloaded
 // detatched signature, or an error if one is encountered.
-func (t *TBDownloader) DownloadFirefoxUpdaterForLang(ietf string) (string, string, error) {
+func (t *FFDownloader) DownloadFirefoxUpdaterForLang(ietf string) (string, string, error) {
 	binary, sig, err := t.GetFirefoxUpdaterForLang(ietf)
 	if err != nil {
 		return "", "", fmt.Errorf("DownloadUpdater: %s", err)
@@ -225,7 +244,7 @@ func (t *TBDownloader) DownloadFirefoxUpdaterForLang(ietf string) (string, strin
 // CheckFirefoxSignature checks the signature of the updater.
 // it returns an error if one is encountered. If not, it
 // runs the updater and returns an error if one is encountered.
-func (t *TBDownloader) CheckFirefoxSignature(binpath, sigpath string) (string, error) {
+func (t *FFDownloader) CheckFirefoxSignature(binpath, sigpath string) (string, error) {
 	if t.OS == "linux" {
 		var err error
 		pk := filepath.Join(t.DownloadPath, "TPO-signing-key.pub")
@@ -239,7 +258,7 @@ func (t *TBDownloader) CheckFirefoxSignature(binpath, sigpath string) (string, e
 }
 
 // BoolCheckFirefoxSignature turns CheckFirefoxSignature into a bool.
-func (t *TBDownloader) BoolCheckFirefoxSignature(binpath, sigpath string) bool {
+func (t *FFDownloader) BoolCheckFirefoxSignature(binpath, sigpath string) bool {
 	_, err := t.CheckFirefoxSignature(binpath, sigpath)
 	return err == nil
 }
