@@ -1,5 +1,11 @@
 FROM debian:stable-backports
 ENV GOPATH /go
+# set the locale to en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+# set the timezone to UTC
+ENV TZ UTC
 RUN echo "deb http://deb.debian.org/debian oldstable main" >> /etc/apt/sources.list &&  \
     apt-get update && apt-get dist-upgrade -y && \
     apt-get install -y --no-install-recommends \

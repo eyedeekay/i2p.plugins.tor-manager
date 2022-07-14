@@ -2,7 +2,9 @@ Docker Usage
 ============
 
 It is also possible to run this from within a Docker container to avoid
-interacting with your base system(for the most part).
+interacting with your base system(for the most part). Use these commands
+to build the container. It will take a while, I need to work on reducing
+the number of dependencies it installs.
 
 ```sh
 git clone https://i2pgit.org/idk/i2p.plugins.tor-manager.git i2p.plugins.tor-manager && i2p.plugins.tor-manager
