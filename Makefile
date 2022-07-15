@@ -22,6 +22,21 @@ PLUGIN=$(HOME)/.i2p/plugins/$(BINARY)-$(GOOS)-$(GOARCH)
 
 PREFIX?=/usr/local
 
+version-file:
+	@echo "package main" | tee version.go
+	@echo "" | tee -a version.go
+	@echo 'import (' | tee -a version.go
+	@echo '	"fmt"' | tee -a version.go
+	@echo '	"os"' | tee -a version.go
+	@echo ')' | tee -a version.go
+	@echo "" | tee -a version.go
+	@echo 'var VERSION string = "$(VERSION)"' | tee -a version.go
+	@echo "" | tee -a version.go
+	@echo "func printversion() {" | tee -a version.go
+	@echo "	fmt.Fprintf(os.Stdout, VERSION)" | tee -a version.go
+	@echo "}" | tee -a version.go
+	#@echo "" | tee -a version.go
+
 binary:
 	go build $(ARG) -tags="netgo osusergo systray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
 
