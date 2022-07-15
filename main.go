@@ -141,6 +141,7 @@ var (
 	mirrorall  = flag.Bool("mirrorall", false, "Download and mirror every language and OS/arch combination")
 	nevertor   = flag.Bool("nevertor", false, "Never use Tor for downloading Tor Browser")
 	license    = flag.Bool("license", false, "Print the license and exit")
+	rsystray   = flag.Bool("systray", false, "Create a systray icon")
 )
 
 func Clearnet() bool {
@@ -468,7 +469,9 @@ func main() {
 			client.Onion.UnpackSite()
 			go ServeOnion()
 		}
-		go runSysTray(false)
+		if *rsystray {
+			go runSysTray(false)
+		}
 		if err := client.Serve(); err != nil {
 			log.Fatal(err)
 		}
