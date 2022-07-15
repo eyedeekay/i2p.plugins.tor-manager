@@ -352,7 +352,7 @@ usagemd:
 	@echo "### Options:" | tee -a USAGE.md
 	@echo "" | tee -a USAGE.md
 	@echo '```sh' | tee -a USAGE.md
-	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager --p2p=false --help=true 2>&1 | grep -v $(DATE) | grep -v $(HOME) | tee -a USAGE.md
+	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager --p2p=false --help=true | tee -a USAGE.md
 	@echo '```' | tee -a USAGE.md
 	@echo "" | tee -a USAGE.md
 
