@@ -1,4 +1,4 @@
-VERSION=0.0.14
+VERSION=0.0.15
 CGO_ENABLED=0
 export CGO_ENABLED=0
 export PKG_CONFIG_PATH=/usr/lib/$(uname -m)-linux-musl/pkgconfig
@@ -6,9 +6,9 @@ export PKG_CONFIG_PATH=/usr/lib/$(uname -m)-linux-musl/pkgconfig
 GOOS?=$(shell uname -s | tr A-Z a-z)
 GOARCH?="amd64"
 
-ARG=-v -tags "netgo osusergo nosystray" -ldflags '-w -extldflags "-static"'
+ARG=-v -tags "netgo osusergo " -ldflags '-w -extldflags "-static"'
 #FLAGS=/usr/lib/x86_64-linux-gnu/libboost_system.a /usr/lib/x86_64-linux-gnu/libboost_date_time.a /usr/lib/x86_64-linux-gnu/libboost_filesystem.a /usr/lib/x86_64-linux-gnu/libboost_program_options.a /usr/lib/x86_64-linux-gnu/libssl.a /usr/lib/x86_64-linux-gnu/libcrypto.a /usr/lib/x86_64-linux-gnu/libz.a
-STATIC=-v -tags "netgo osusergo nosystray" -ldflags '-w -extldflags "-static"'
+STATIC=-v -tags "netgo osusergo " -ldflags '-w -extldflags "-static"'
 OSXFLAGS=-v -tags "netgo osusergo systray" -ldflags '-w -extldflags "-static"' 
 # -gcflags='-DDARWIN -x objective-c -fobjc-arc -ldflags=framework=Cocoa'
 #NOSTATIC=-v -tags netgo -ldflags '-w -extldflags "-ldl $(FLAGS)"'
@@ -29,12 +29,6 @@ winbinary:
 	CC=/usr/bin/x86_64-w64-mingw32-gcc \
 		CXX=/usr/bin/x86_64-w64-mingw32-g++ \
 		GOOS=windows go build $(WINGUI) -tags="netgo osusergo systray" -o $(BINARY)-$(GOOS)-$(GOARCH) .
-
-nosystray:
-	CGO_ENABLED=0 go build $(STATIC) -o $(BINARY)-$(GOOS)-$(GOARCH)-static .
-	cp i2p.plugins.tor-manager-linux-386-static i2p.plugins.tor-manager-linux-386; true
-	cp i2p.plugins.tor-manager-darwin-amd64-static i2p.plugins.tor-manager-darwin-amd64; true
-	cp i2p.plugins.tor-manager-darwin-arm64-static i2p.plugins.tor-manager-darwin-arm64; true
 
 osxsystray:
 	export CGO_ENABLED=1 && \
@@ -84,7 +78,7 @@ clean: clean-flatpak
 	rm -f *.su3 *.zip $(BINARY)-$(GOOS)-$(GOARCH) $(BINARY)-*
 	git clean -df
 
-all: clean windows linux osx bsd portable.zip
+all: clean windows linux osx bsd portable.zip appimage flatpak
 
 portable.zip:
 	zip -r portable.zip browse.cmd README-PORTABLE.txt \
@@ -117,9 +111,6 @@ winplugin:
 linplugin: 
 	GOOS=linux make backup-embed build unbackup-embed
 
-linplugin-nosystray: 
-	GOOS=linux make backup-embed nosystray unbackup-embed
-
 osxplugin:
 	GOOS=darwin make backup-embed osxsystray unbackup-embed
 
@@ -131,11 +122,11 @@ linux:
 	GOOS=linux GOARCH=amd64 make build su3
 #	linplugin su3 unembed-windows build unbackup-embed
 #	GOOS=linux GOARCH=arm64 make linplugin su3 unembed-windows build unbackup-embed
-	PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig GOOS=linux GOARCH=386 make linplugin-nosystray su3 unembed-windows nosystray unbackup-embed
+	PKG_CONFIG_PATH=/usr/lib/i386-linux-gnu/pkgconfig GOOS=linux GOARCH=386 make su3 unembed-windows  unbackup-embed
 
 osx:
-	GOOS=darwin GOARCH=amd64 make osxplugin su3 unembed-windows unembed-linux nosystray unbackup-embed
-	GOOS=darwin GOARCH=arm64 make osxplugin su3 unembed-windows unembed-linux nosystray unbackup-embed
+	GOOS=darwin GOARCH=amd64 make osxplugin su3 unembed-windows unembed-linux  unbackup-embed
+	GOOS=darwin GOARCH=arm64 make osxplugin su3 unembed-windows unembed-linux  unbackup-embed
 
 bsd:
 #	GOOS=freebsd GOARCH=amd64 make build su3
@@ -219,11 +210,7 @@ upload-bsd:
 #	GOOS=freebsd GOARCH=amd64 make upload
 #	GOOS=openbsd GOARCH=amd64 make upload
 
-upload-appimage:
-	GOOS=linux GOARCH=amd64 make appimage
-	gothub upload -R -u eyedeekay -r $(BINARY) -t "$(VERSION)" -f I2P_in_Tor_Browser-x86_64.AppImage -n I2P_in_Tor_Browser-x86_64.AppImage -l "`sha256sum I2P_in_Tor_Browser-x86_64.AppImage`"
-
-upload-all: upload-windows upload-linux upload-osx upload-bsd upload-portable-zip
+upload-all: upload-windows upload-linux upload-osx upload-bsd upload-portable-zip appimage-upload flatpak-upload
 
 download-su3s:
 	GOOS=windows GOARCH=amd64 make download-single-su3
@@ -394,7 +381,7 @@ index-usage:
 	@echo "</html>" >> usage.html
 
 example:
-	go build -x -v --tags=netgo,nosystray \
+	go build -x -v --tags=netgo, \
 		-ldflags '-w -linkmode=external -extldflags "-static -ldl $(FLAGS)"'
 
 xhost:
@@ -478,6 +465,7 @@ clean-appimage:
 	rm -rf AppDir
 
 appimage: clean-appimage
+	wget -c https://github.com/AppImage/AppImageKit/releases/download/continuous/runtime-x86_64
 	mkdir -p AppDir/usr/bin AppDir/usr/lib AppDir/usr/share/applications AppDir/usr/share/icons AppDir/var/lib/i2pbrowser/icons
 	cp -v i2p.plugins.tor-manager AppDir/usr/bin/i2p.plugins.tor-manager
 	cp -v i2ptorbrowser.desktop AppDir/usr/share/applications/i2p.plugins.tor-manager.desktop
@@ -489,3 +477,7 @@ appimage: clean-appimage
 	find AppDir -name '*.desktop' -exec sed -i 's|garliconion.png|garliconion|g' {} \;
 	chmod +x AppDir/AppRun
 	~/Downloads/appimagetool-x86_64.AppImage --runtime-file runtime-x86_64 AppDir/
+
+appimage-upload: appimage
+	gothub upload -R -u eyedeekay -r $(BINARY) -t "$(VERSION)" -f "I2P_in_Tor_Browser-x86_64.AppImage" -n "I2P in Tor Browser x86_64 AppImage" -l "`sha256sum I2P in Tor Browser x86_64 AppImage`"
+

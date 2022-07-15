@@ -1,6 +1,3 @@
-//go:build !nosystray
-// +build !nosystray
-
 package main
 
 import (
