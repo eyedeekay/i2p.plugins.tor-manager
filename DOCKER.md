@@ -19,8 +19,10 @@ other means of isolating the browser from the host.
 
 ```sh
 docker run -it --rm \
+    --net=host \
     --env="DISPLAY" \
     --volume="$HOME/.Xauthority:/root/.Xauthority:rw" \
+    --volume="$HOME/i2p.plugins.tor-manager/unpack:/go/src/i2pgit.org/idk/i2p.plugins.tor-manager/unpack" \
     idk/i2p.plugins.tor-manager
 ```
 

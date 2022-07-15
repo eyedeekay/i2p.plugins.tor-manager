@@ -258,7 +258,9 @@ func main() {
 	args, trailers := CleanupArgs()
 	log.Printf("Args: %v\n", args)
 	log.Printf("Trailers: %v\n", trailers)
-	os.Args = args
+	if len(args) > 0 {
+		os.Args = args
+	}
 	flag.Parse()
 	if *nevertor {
 		err := os.Setenv("TOR_MANAGER_NEVER_USE_TOR", "true")

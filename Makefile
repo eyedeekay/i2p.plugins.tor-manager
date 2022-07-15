@@ -219,6 +219,10 @@ upload-bsd:
 #	GOOS=freebsd GOARCH=amd64 make upload
 #	GOOS=openbsd GOARCH=amd64 make upload
 
+upload-appimage:
+	GOOS=linux GOARCH=amd64 make appimage
+	gothub upload -R -u eyedeekay -r $(BINARY) -t "$(VERSION)" -f I2P_in_Tor_Browser-x86_64.AppImage -n I2P_in_Tor_Browser-x86_64.AppImage -l "`sha256sum I2P_in_Tor_Browser-x86_64.AppImage`"
+
 upload-all: upload-windows upload-linux upload-osx upload-bsd upload-portable-zip
 
 download-su3s:
@@ -485,4 +489,4 @@ appimage: clean-appimage
 	cp -v i2p.plugins.tor-manager AppDir/AppRun
 	find AppDir -name '*.desktop' -exec sed -i 's|garliconion.png|garliconion|g' {} \;
 	chmod +x AppDir/AppRun
-	~/Downloads/appimagetool-x86_64.AppImage AppDir/
+	~/Downloads/appimagetool-x86_64.AppImage --runtime-file runtime-x86_64 AppDir/
