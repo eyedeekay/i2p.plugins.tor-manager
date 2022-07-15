@@ -5,8 +5,7 @@ usable on Windows, Linux, and OSX, as is the freestanding binary.
 This also functions as a freestanding update for the Tor Browser
 Bundle and is capable of configuring Tor Browser from the terminal
 and updating it without running it, should the user choose to operate
-this way. This is now more like a fully-fledged browser management
-tool that also manages a long-running Tor process if it needs it.
+this way.
 
 This project explicitly views I2P and Tor as complementary privacy
 tools and explores good ways of combining them in a user-facing tool.
@@ -21,17 +20,19 @@ it acts as a cross-platform Tor Browser installer and wrapper, which adds
 non-Tor specific options.
 
 [HTML version](usage.html)
+
 Plugin:
 -------
 
-Clearnet visitor? You'll need to use the [Github Releases Mirror](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/).
+Clearnet visitor? You'll need to use the [Github Releases Mirror](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/0.0.15).
 
-- [i2p.plugins.tor-manager-linux-386](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/0.0.12/i2p.plugins.tor-manager-linux-386.su3)
-- [i2p.plugins.tor-manager-windows-amd64](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/0.0.12/i2p.plugins.tor-manager-windows-amd64.su3)
-- [i2p.plugins.tor-manager-darwin-arm64](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/0.0.12/i2p.plugins.tor-manager-darwin-arm64.su3)
-- [i2p.plugins.tor-manager-linux-amd64](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/0.0.12/i2p.plugins.tor-manager-linux-amd64.su3)
-- [i2p.plugins.tor-manager-windows-386](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/0.0.12/i2p.plugins.tor-manager-windows-386.su3)
-- [i2p.plugins.tor-manager-darwin-amd64](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/download/0.0.12/i2p.plugins.tor-manager-darwin-amd64.su3)
+- [i2p.plugins.tor-manager-linux-386](i2p.plugins.tor-manager-linux-386.su3)
+- [i2p.plugins.tor-manager-windows-amd64](i2p.plugins.tor-manager-windows-amd64.su3)
+- [i2p.plugins.tor-manager-darwin-arm64](i2p.plugins.tor-manager-darwin-arm64.su3)
+- [i2p.plugins.tor-manager-linux-amd64](i2p.plugins.tor-manager-linux-amd64.su3)
+- [i2p.plugins.tor-manager-windows-386](i2p.plugins.tor-manager-windows-386.su3)
+- [i2p.plugins.tor-manager-darwin-amd64](i2p.plugins.tor-manager-darwin-amd64.su3)
+
 
 Status:
 -------
