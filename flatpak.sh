@@ -4,6 +4,6 @@ export TOR_MANAGER_REQUIRE_PASSWORD=false
 export TOR_MANAGER_NEVER_USE_TOR=true
 export APP_ID=org.i2pgit.idk.i2p.plugins.tor-manager
 /app/bin/i2p.plugins.tor-manager \
-    -nevertor \
-    -i2pbrowser \
-    -directory ~/.var/app/org.i2pgit.idk.i2p.plugins.tor-manager
+    --nevertor \
+    --i2pbrowser \
+    --directory ~/.var/app/org.i2pgit.idk.i2p.plugins.tor-manager
