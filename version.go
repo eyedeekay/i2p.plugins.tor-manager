@@ -8,5 +8,5 @@ import (
 var VERSION string = "0.0.15"
 
 func printversion() {
-	fmt.Fprintf(os.Stdout, VERSION)
+	fmt.Fprintf(os.Stdout, "Version: ", VERSION)
 }

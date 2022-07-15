@@ -243,6 +243,8 @@ func main() {
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stdout, "Usage: %s %s\n", filename, "[options]")
 		fmt.Fprintf(os.Stdout, "\n")
+		printversion()
+		fmt.Fprintf(os.Stdout, "\n")
 		fmt.Fprintf(os.Stdout, "Downloads, verifies and unpacks Tor Browser. Manages the Tor Browser\n")
 		fmt.Fprintf(os.Stdout, "system in environments where Tor is not in use. Monitors a long-running\n")
 		fmt.Fprintf(os.Stdout, "Tor process and downloads updates when Tor is not available.\n")
