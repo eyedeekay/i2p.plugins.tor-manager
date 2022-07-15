@@ -57,7 +57,7 @@ func LICENSE() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(string(license_bytes))
+	fmt.Fprintf(os.Stderr, string(license_bytes))
 	I2P.PrintLicenses()
 	os.Exit(0)
 }
@@ -190,36 +190,36 @@ func Password() string {
 
 func Mirror() string {
 	if mir := os.Getenv("TOR_MANAGER_MIRROR"); mir != "" {
-		fmt.Println("Using environment mirror", mir)
+		fmt.Fprintf(os.Stderr, "Using environment mirror %s", mir)
 		return mir
 	}
 	if runtime.GOOS == "linux" && runtime.GOARCH == "arm64" {
-		fmt.Println("Using arm64 mirror")
+		fmt.Fprintf(os.Stderr, "Using arm64 mirror")
 		return "https://sourceforge.net/projects/tor-browser-ports/files"
 	}
 	clear := os.Getenv("TOR_MANAGER_CLEARNET")
 	switch clear {
 	case "1", "true", "yes", "on":
-		fmt.Println("Using clearnet mirror")
+		fmt.Fprintf(os.Stderr, "Using clearnet mirror")
 		return "https://dist.torproject.org/torbrowser/"
 	}
 	clearmirror := os.Getenv("TOR_MANAGER_CLEARNET_MIRROR")
 	switch clearmirror {
 	case "1", "true", "yes", "on":
-		fmt.Println("Using clearnet mirror")
+		fmt.Fprintf(os.Stderr, "Using clearnet mirror")
 		return "https://dist.torproject.org/torbrowser/"
 	}
 	if tbget.Torrent(*lang, OS()+ARCH()) {
-		fmt.Println("Using torrent mirror")
+		fmt.Fprintf(os.Stderr, "Using torrent mirror")
 		return "http://localhost:7657/i2psnark/"
 	}
 	if tbget.TestHTTPDefaultProxy() {
-		//fmt.Println("Using I2P mirror")
+		//fmt.Fprintf(os.Stderr,"Using I2P mirror")
 		//return "http://dist.torproject.i2p/torbrowser/"
-		fmt.Println("Using clearnet mirror instead of I2P mirror due to hash sum mismatch issue")
+		fmt.Fprintf(os.Stderr, "Using clearnet mirror instead of I2P mirror due to hash sum mismatch issue")
 		return "https://dist.torproject.org/torbrowser/"
 	}
-	fmt.Println("Using clearnet mirror")
+	fmt.Fprintf(os.Stderr, "Using clearnet mirror")
 	return "https://dist.torproject.org/torbrowser/"
 }
 
@@ -241,20 +241,24 @@ func main() {
 	SnowflakeFlag()
 	usage := flag.Usage
 	flag.Usage = func() {
-		fmt.Printf("Usage: %s %s\n", filename, "[options]")
-		fmt.Printf("\n")
-		fmt.Printf("Downloads, verifies and unpacks Tor Browser. Manages the Tor Browser\n")
-		fmt.Printf("system in environments where Tor is not in use. Monitors a long-running\n")
-		fmt.Printf("Tor process and downloads updates when Tor is not available.\n")
-		fmt.Printf("\n")
-		fmt.Printf("Options:\n")
-		fmt.Printf("\n")
+		fmt.Fprintf(os.Stdout, "Usage: %s %s\n", filename, "[options]")
+		fmt.Fprintf(os.Stdout, "\n")
+		fmt.Fprintf(os.Stdout, "Downloads, verifies and unpacks Tor Browser. Manages the Tor Browser\n")
+		fmt.Fprintf(os.Stdout, "system in environments where Tor is not in use. Monitors a long-running\n")
+		fmt.Fprintf(os.Stdout, "Tor process and downloads updates when Tor is not available.\n")
+		fmt.Fprintf(os.Stdout, "\n")
+		fmt.Fprintf(os.Stdout, "Options:\n")
+		fmt.Fprintf(os.Stdout, "\n")
+		// redirect stderr to stdout
+		flag.CommandLine.SetOutput(os.Stdout)
 		usage()
-		fmt.Printf("\nAvailable Languages:\n\n")
+		// redirect stderr back to stderr
+		flag.CommandLine.SetOutput(os.Stderr)
+		fmt.Fprintf(os.Stdout, "\nAvailable Languages:\n\n")
 		for _, l := range tbget.Languages() {
-			fmt.Printf("  - %s\n", l)
+			fmt.Fprintf(os.Stdout, "  - %s\n", l)
 		}
-		fmt.Printf("\n")
+		fmt.Fprintf(os.Stdout, "\n")
 	}
 	args, trailers := CleanupArgs()
 	log.Printf("Args: %v\n", args)
@@ -285,7 +289,7 @@ func main() {
 		if err != nil {
 			log.Panicln(err)
 		}
-		fmt.Println(torbrowserversion)
+		fmt.Fprintf(os.Stderr, torbrowserversion)
 		os.Exit(0)
 	}
 	if *ptop {
@@ -405,7 +409,9 @@ func main() {
 	}
 	//	log.Fatalf("%s", client.TBS.PassThroughArgs)
 	if *help {
+		log.Println("Usage:")
 		flag.Usage()
+
 		if err := client.TBS.RunTBHelpWithLang(); err != nil {
 			log.Fatal(err)
 		}

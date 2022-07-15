@@ -1,12 +1,6 @@
-Tor(And sometimes Firefox) Manager for I2P
-===========================================
-
-## Usage: i2p.plugins.tor-manager [options]
-
-### Options:
-
-```sh
-Using clearnet mirror
+TorrentDownloaded: Torrent Download complete: tor-browser-linux64-11.5_en-US.tar.xz 110909932 110909932 9 9
+UnpackSite:  /home/idk/go/src/i2pgit.org/idk/i2p.plugins.tor-manager/tmp-i2pbrowser/tor-browser/www
+comparing sizes: 1109 1109
 Usage: i2p.plugins.tor-manager [options]
 
 Downloads, verifies and unpacks Tor Browser. Manages the Tor Browser
@@ -15,120 +9,88 @@ Tor process and downloads updates when Tor is not available.
 
 Options:
 
-Usage of ./i2p.plugins.tor-manager:
-  -apparmor
-    	Generate apparmor rules
-  -arch string
-    	OS/arch to download (default "64")
-  -bemirror
-    	Act as an in-I2P mirror when you're done downloading
-  -chat
-    	Open a WebChat client
-  -clearnet
-    	Use clearnet (no Tor or I2P) in Tor Browser
-  -destruct
-    	Destructively delete the working directory when finished
-  -directory string
-    	Directory operate in (default "tmp-i2pbrowser")
-  -help
-    	Print help and quit
-  -host string
-    	Host to serve on (default "127.0.0.1")
-  -i2pbrowser
-    	Open I2P in Tor Browser
-  -i2pconfig
-    	Open I2P routerconsole in Tor Browser with javscript enabled and non-routerconsole sites disabled
-  -lang string
-    	Language to download
-  -mirror string
-    	Mirror to use. I2P will be used if an I2P proxy is present, if system Tor is available, it will be downloaded over the Tor proxy. (default "https://dist.torproject.org/torbrowser/")
-  -notor
-    	Do not automatically start Tor
-  -nounpack
-    	Do not unpack the Tor Browser
-  -offline
-    	Work offline. Differs from Firefox's offline mode in that cannot be disabled until the browser is closed.
-  -onion
-    	Serve an onion site which shows some I2P propaganda
-  -os string
-    	OS/arch to download (default "linux")
-  -p2p
-    	Use bittorrent over I2P to download the initial copy of Tor Browser (default true)
-  -password string
-    	Password to encrypt the working directory with. Implies -destruct, only the encrypted container will be saved.
-  -port int
-    	Port to serve on (default 7695)
-  -profile string
-    	use a custom profile path, normally blank
-  -shortcuts
-    	Create desktop shortcuts
-  -snowflake
-    	Offer a Snowflake to other Tor Browser users
-  -snowflake-broker string
-    	broker URL (default "https://snowflake-broker.torproject.net/")
-  -snowflake-capacity uint
-    	maximum concurrent clients
-  -snowflake-directory string
-    	directory with a page to serve locally for your snowflake. If empty, no local page is served.
-  -snowflake-keep-local-addresses
-    	keep local LAN address ICE candidates
-  -snowflake-log string
-    	log filename
-  -snowflake-port string
-    	port to serve info page(directory) on (default "7676")
-  -snowflake-relay string
-    	websocket relay URL (default "wss://snowflake.bamsoftware.com/")
-  -snowflake-stun string
-    	broker URL (default "stun:stun.stunprotocol.org:3478")
-  -snowflake-unsafe-logging
-    	prevent logs from being scrubbed
-  -torbrowser
-    	Open Tor Browser
-  -torrent
-    	Create a torrent of the downloaded files and seed it over I2P using an Open Tracker (default true)
-  -verbose
-    	Verbose output
-  -watch-profiles string
-    	Monitor and control these Firefox profiles. Temporarily Unused.
+      --apparmor                         Generate apparmor rules
+      --arch string                      OS/arch to download (default "64")
+      --bemirror                         Act as an in-I2P mirror when you're done downloading
+      --chat                             Open a WebChat client
+      --clearnet                         Use clearnet (no Tor or I2P) in Tor Browser
+      --destruct                         Destructively delete the working directory when finished
+      --directory string                 Directory operate in (default "tmp-i2pbrowser")
+      --help                             Print help and quit
+      --host string                      Host to serve on (default "127.0.0.1")
+      --i2pbrowser                       Open I2P in Tor Browser
+      --i2pconfig                        Open I2P routerconsole in Tor Browser with javscript enabled and non-routerconsole sites disabled
+      --i2peditor                        Open I2P Site Editor in Tor Browser
+      --lang string                      Language to download (default "en-US")
+      --license                          Print the license and exit
+      --mirror string                    Mirror to use. I2P will be used if an I2P proxy is present, if system Tor is available, it will be downloaded over the Tor proxy. (default "https://dist.torproject.org/torbrowser/")
+      --mirrorall                        Download and mirror every language and OS/arch combination
+      --nevertor                         Never use Tor for downloading Tor Browser
+      --notor                            Do not automatically start Tor
+      --nounpack                         Do not unpack the Tor Browser
+      --offline                          Work offline. Differs from Firefox's offline mode in that cannot be disabled until the browser is closed.
+      --onion                            Serve an onion site which shows some I2P propaganda (default true)
+      --os string                        OS/arch to download (default "linux")
+      --p2p                              Use bittorrent over I2P to download the initial copy of Tor Browser (default true)
+      --password string                  Password to encrypt the working directory with. Implies -destruct, only the encrypted container will be saved.
+      --port int                         Port to serve on (default 7695)
+      --profile string                   use a custom profile path, normally blank
+      --shortcuts                        Create desktop shortcuts
+      --snowflake                        Offer a Snowflake to other Tor Browser users
+      --snowflake-broker string          broker URL (default "https://snowflake-broker.torproject.net/")
+      --snowflake-capacity uint          maximum concurrent clients
+      --snowflake-directory string       directory with a page to serve locally for your snowflake. If empty, no local page is served.
+      --snowflake-keep-local-addresses   keep local LAN address ICE candidates
+      --snowflake-log string             log filename
+      --snowflake-port string            port to serve info page(directory) on (default "7676")
+      --snowflake-relay string           websocket relay URL (default "wss://snowflake.bamsoftware.com/")
+      --snowflake-stun string            broker URL (default "stun:stun.stunprotocol.org:3478")
+      --snowflake-unsafe-logging         prevent logs from being scrubbed
+      --systray                          Create a systray icon
+      --torbrowser                       Open Tor Browser
+      --torrent                          Create a torrent of the downloaded files and seed it over I2P using an Open Tracker (default true)
+      --torversion                       Print the version of Tor Browser that will be downloaded and exit
+      --verbose                          Verbose output
+      --watch-profiles string            Monitor and control these Firefox profiles. Temporarily Unused.
 
 Available Languages:
 
-  - ar
-  - my
+  - cs
+  - en-US
+  - id
   - nl
   - ro
-  - tr
+  - zh-TW
+  - ar
+  - de
+  - es-AR
   - it
-  - ms
-  - pt-BR
-  - da
-  - es-ES
+  - ka
+  - nb-NO
+  - zh-CN
   - fa
   - is
-  - ja
-  - nb-NO
   - lt
-  - ka
-  - ko
-  - pl
-  - vi
-  - zh-TW
-  - ca
   - fr
-  - id
-  - mk
-  - zh-CN
-  - cs
-  - de
-  - el
-  - en-US
-  - th
-  - es-AR
-  - ga-IE
   - he
-  - hu
+  - ko
+  - vi
+  - ca
+  - el
+  - es-ES
+  - mk
+  - ms
+  - pt-BR
+  - th
+  - ga-IE
+  - my
+  - pl
   - ru
+  - da
   - sv-SE
+  - tr
+  - hu
+  - ja
 
 Usage: ./firefox.real [ options ... ] [URL]
        where options include:
@@ -168,7 +130,8 @@ Firefox options
   --search <term>    Search <term> with your default search engine.
   --setDefaultBrowser Set this app as the default browser.
   --first-startup    Run post-install actions before opening a new window.
-  --kiosk Start the browser in kiosk mode.
+  --kiosk            Start the browser in kiosk mode.
+  --disable-pinch    Disable touch-screen and touch-pad pinch gestures.
   --jsconsole        Open the Browser Console.
   --jsdebugger [<path>] Open the Browser Toolbox. Defaults to the local build
                      but can be overridden by a firefox path.
@@ -191,5 +154,3 @@ Tor Browser Script Options
   --detach          Detach from terminal and run Tor Browser in the background.
   --register-app    Register Tor Browser as a desktop app for this user
   --unregister-app  Unregister Tor Browser as a desktop app for this user
-```
-

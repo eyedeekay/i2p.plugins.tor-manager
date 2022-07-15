@@ -167,7 +167,7 @@ func (ios *I2POnionService) ListenAndServe() error {
 
 func (ios *I2POnionService) UnpackSite() error {
 	docroot := ios.ServeDir
-	fmt.Println("UnpackSite: ", docroot)
+	fmt.Fprintf(os.Stderr, "UnpackSite: %s", docroot)
 	if dir, err := os.Stat(docroot); err == nil && dir.IsDir() {
 		return nil
 	}

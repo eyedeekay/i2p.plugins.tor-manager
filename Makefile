@@ -311,18 +311,6 @@ tor-browser/unpack/i2p.firefox:
 tor-browser/unpack/i2p.firefox.config:
 	@echo "TODO"
 
-#refresh-tor-keys: clean-tor-keys tor-browser/TPO-signing-key.pub
-
-#tor-keys: tor-browser/TPO-signing-key.pub
-
-#clean-tor-keys:
-#	rm -f tor-browser/TPO-signing-key.pub
-
-#tor-browser/TPO-signing-key.pub:
-#	gpg --armor --output ./tor-browser/TPO-signing-key.pub --export 
-#	0xEF6E286DDA85EA2A4BA7DE684E2C6E8793298290
-#	gpg --show-key ./tor-browser/TPO-signing-key.pub
-
 deb: clean
 	./changelog.sh
 	rm ../i2p.plugins.tor-manager_$(VERSION).orig.tar.gz -f
@@ -353,7 +341,7 @@ debsrc: clean
 DATE=`date +%Y/%m/%d`
 
 usage:
-	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager --ptop=false --help
+	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager --p2p=false --help=true
 
 usagemd:
 	@echo "Tor(And sometimes Firefox) Manager for I2P" | tee USAGE.md
@@ -364,7 +352,7 @@ usagemd:
 	@echo "### Options:" | tee -a USAGE.md
 	@echo "" | tee -a USAGE.md
 	@echo '```sh' | tee -a USAGE.md
-	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager --help 2>&1 | grep -v $(DATE) | grep -v $(HOME) | tee -a USAGE.md
+	TOR_MANAGER_CLEARNET_MIRROR=true TOR_MANAGER_REQUIRE_PASSWORD=false ./i2p.plugins.tor-manager --p2p=false --help=true 2>&1 | grep -v $(DATE) | grep -v $(HOME) | tee -a USAGE.md
 	@echo '```' | tee -a USAGE.md
 	@echo "" | tee -a USAGE.md
 

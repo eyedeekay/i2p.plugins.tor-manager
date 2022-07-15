@@ -292,11 +292,11 @@ func TorrentDownloaded(ietf, rtpair string) bool {
 									if info.Size() == int64(cmpsize) {
 										sizeString := fmt.Sprintf("%d", info.Size())
 										cmpString := fmt.Sprintf("%d", cmpsize)
-										fmt.Println("TorrentDownloaded: Torrent Download complete:", path, info.Size(), int64(cmpsize), len(sizeString), len(cmpString))
+										fmt.Fprintf(os.Stderr, "TorrentDownloaded: Torrent Download complete:", path, info.Size(), int64(cmpsize), len(sizeString), len(cmpString))
 										found = true
 										return nil
 									} else {
-										fmt.Println("TorrentDownloaded: Torrent Download incomplete:", path, info.Size(), int64(cmpsize))
+										fmt.Fprintf(os.Stderr, "TorrentDownloaded: Torrent Download incomplete:", path, info.Size(), int64(cmpsize))
 										return fmt.Errorf("TorrentDownloaded: Torrent Download found but size is too small: %s", path)
 									}
 								}

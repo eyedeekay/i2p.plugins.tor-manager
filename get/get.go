@@ -350,8 +350,8 @@ func (wc *WriteCounter) Write(p []byte) (int, error) {
 }
 
 func (wc WriteCounter) PrintProgress() {
-	fmt.Printf("\r%s", strings.Repeat(" ", 35))
-	fmt.Printf("\rDownloading... %s complete", humanize.Bytes(wc.Total))
+	fmt.Fprintf(os.Stderr, "\r%s", strings.Repeat(" ", 35))
+	fmt.Fprintf(os.Stderr, "\rDownloading... %s complete", humanize.Bytes(wc.Total))
 }
 
 func (t *TBDownloader) StartConf() *tor.StartConf {
@@ -609,13 +609,13 @@ func (t *TBDownloader) BotherToDownload(dl, name string) bool {
 		}
 		lenString := strconv.Itoa(int(contentLength))[:l]
 		lenSize := strconv.Itoa(int(stat.Size()))[:l]
-		fmt.Println("comparing sizes:", lenString, lenSize)
+		fmt.Fprintf(os.Stderr, "comparing sizes: %v %v", lenString, lenSize)
 
 		if stat.Size() == contentLength {
 			//if lenString != lenSize {
 			//	return true
 			//} else {
-			fmt.Printf("BotherToDownload(): %s is fully downloaded\n", name)
+			fmt.Fprintf(os.Stderr, "BotherToDownload(): %s is fully downloaded\n", name)
 			return false
 			//}
 		}
@@ -794,7 +794,7 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 		}
 		return t.BrowserDir(), nil
 	}
-	fmt.Printf("Unpacking %s %s\n", binpath, t.UnpackPath)
+	fmt.Fprintf(os.Stderr, "Unpacking %s %s\n", binpath, t.UnpackPath)
 	os.MkdirAll(t.UnpackPath, 0755)
 	UNPACK_DIRECTORY, err := os.Open(t.UnpackPath)
 	if err != nil {
@@ -834,7 +834,7 @@ func (t *TBDownloader) UnpackUpdater(binpath string) (string, error) {
 		//remember to chmod the file afterwards
 		file.Chmod(mode)
 		if t.Verbose {
-			fmt.Printf("Unpacked %s\n", header.Name)
+			fmt.Fprintf(os.Stderr, "Unpacked %s\n", header.Name)
 		}
 	}
 	if !FileExists(t.I2PBrowserDir()) {

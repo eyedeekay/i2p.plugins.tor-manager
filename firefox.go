@@ -10,6 +10,7 @@ import (
 
 func CleanupArgs() (args []string, trailers []string) {
 	// get a list of all possible flags from the flag package
+	args = []string{os.Args[0]}
 	for i, arg := range os.Args[1:] {
 		log.Printf("arg %d: %s", i, arg)
 		trailer := true
