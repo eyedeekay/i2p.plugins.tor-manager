@@ -450,7 +450,7 @@ flatpak-repo: flatpak
 	flatpak-builder --gpg-sign="$(signer)" --repo=repo --force-clean build-dir org.i2pgit.idk.i2p.plugins.tor-manager.yml
 
 flatpak-add:
-	flatpak --user remote-add --no-gpg-verify org.i2pgit.idk.i2p.plugins.tor-manager-dev repo
+	flatpak --user remote-add --no-gpg-verify org.i2pgit.idk.i2p.plugins.tor-manager-dev repo; true
 
 flatpak-remote-add:
 	gpg --export D75C03B39B5E14E1 > org.i2pgit.idk.i2p.plugins.tor-manager/key.gpg
@@ -463,7 +463,7 @@ flatpak-remote-install:
 	flatpak --user install org.i2pgit.idk.i2p.plugins.tor-manager org.i2pgit.idk.i2p.plugins.tor-manager
 
 flatpak-update: flatpak-repo
-	flatpak --user update org.i2pgit.idk.i2p.plugins.tor-manager
+	flatpak --user update org.i2pgit.idk.i2p.plugins.tor-manager-dev
 
 run-flatpak:
 	flatpak run org.i2pgit.idk.i2p.plugins.tor-manager

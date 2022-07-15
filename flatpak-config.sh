@@ -7,4 +7,4 @@ export APP_ID=org.i2pgit.idk.i2p.plugins.tor-manager
     --nevertor \
     --p2p=false \
     --i2pconfig \
-    --directory ~/.var/app/org.i2pgit.idk.i2p.plugins.tor-manager
+    --directory=~/.var/app/org.i2pgit.idk.i2p.plugins.tor-manager
