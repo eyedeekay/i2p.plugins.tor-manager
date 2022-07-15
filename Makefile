@@ -463,7 +463,7 @@ flatpak-remote-install:
 	flatpak --user install org.i2pgit.idk.i2p.plugins.tor-manager org.i2pgit.idk.i2p.plugins.tor-manager
 
 flatpak-update: flatpak-repo
-	flatpak --user update org.i2pgit.idk.i2p.plugins.tor-manager-dev
+	flatpak --user update org.i2pgit.idk.i2p.plugins.tor-manager
 
 run-flatpak:
 	flatpak run org.i2pgit.idk.i2p.plugins.tor-manager

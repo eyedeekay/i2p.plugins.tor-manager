@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 	"strings"
-	"time"
 
 	flag "github.com/spf13/pflag"
 )
@@ -18,7 +17,7 @@ func CleanupArgs() (args []string, trailers []string) {
 		flag.VisitAll(func(f *flag.Flag) {
 			//log.Printf("testing f.Name: %s against %s", f.Name, trimmed)
 			if f.Name == trimmed {
-				log.Printf("found flag: %s", f.Name)
+				log.Printf("found known flag: %s", f.Name)
 				// if the next arg is not a flag(does not start with '-'), add it to the end of arg before
 				// appending arg to args
 				if i+1 < len(os.Args) && os.Args[i+1][0] != '-' {
@@ -40,7 +39,6 @@ func CleanupArgs() (args []string, trailers []string) {
 				i++
 			}
 		}
-		time.Sleep(time.Second)
 	}
 	return
 }
