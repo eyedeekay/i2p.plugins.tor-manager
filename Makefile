@@ -103,22 +103,22 @@ portable.zip:
 		#$(BINARY)-darwin-arm64 \
 
 backup-embed:
-	mkdir -p ../../../github.com/eyedeekay/go-I2P-jpackage.bak
-	cp ../../../github.com/eyedeekay/go-I2P-jpackage/* ../../../github.com/eyedeekay/go-I2P-jpackage.bak -r;true
-	rm -f ../../../github.com/eyedeekay/go-I2P-jpackage/*.tar.xz
-	tar -cvJf ../../../github.com/eyedeekay/go-I2P-jpackage/build.windows.I2P.tar.xz README.md LICENSE
-	tar -cvJf ../../../github.com/eyedeekay/go-I2P-jpackage/build.linux.I2P.tar.xz README.md LICENSE
+#	mkdir -p ../../../github.com/eyedeekay/go-I2P-jpackage.bak
+#	cp ../../../github.com/eyedeekay/go-I2P-jpackage/* ../../../github.com/eyedeekay/go-I2P-jpackage.bak -r;true
+#	rm -f ../../../github.com/eyedeekay/go-I2P-jpackage/*.tar.xz
+#	tar -cvJf ../../../github.com/eyedeekay/go-I2P-jpackage/build.windows.I2P.tar.xz README.md LICENSE
+#	tar -cvJf ../../../github.com/eyedeekay/go-I2P-jpackage/build.linux.I2P.tar.xz README.md LICENSE
 
 unbackup-embed:
-	cp ../../../github.com/eyedeekay/go-I2P-jpackage.bak/*.tar.xz ../../../github.com/eyedeekay/go-I2P-jpackage/
+#	cp ../../../github.com/eyedeekay/go-I2P-jpackage.bak/*.tar.xz ../../../github.com/eyedeekay/go-I2P-jpackage/
 
 unembed-windows:
-	mv ../../../github.com/eyedeekay/go-I2P-jpackage/build.windows.I2P.tar.xz ../../../github.com/eyedeekay/
-	tar -cvJf ../../../github.com/eyedeekay/go-I2P-jpackage/build.windows.I2P.tar.xz README.md LICENSE
+#	mv ../../../github.com/eyedeekay/go-I2P-jpackage/build.windows.I2P.tar.xz ../../../github.com/eyedeekay/
+#	tar -cvJf ../../../github.com/eyedeekay/go-I2P-jpackage/build.windows.I2P.tar.xz README.md LICENSE
 
 unembed-linux:
-	mv ../../../github.com/eyedeekay/go-I2P-jpackage/build.linux.I2P.tar.xz ../../../github.com/eyedeekay/
-	tar -cvJf ../../../github.com/eyedeekay/go-I2P-jpackage/build.linux.I2P.tar.xz README.md LICENSE
+#	mv ../../../github.com/eyedeekay/go-I2P-jpackage/build.linux.I2P.tar.xz ../../../github.com/eyedeekay/
+#	tar -cvJf ../../../github.com/eyedeekay/go-I2P-jpackage/build.linux.I2P.tar.xz README.md LICENSE
 
 winplugin: 
 	GOOS=windows make backup-embed build unbackup-embed
@@ -171,7 +171,7 @@ su3:
 		-command="$(BINARY)-$(GOOS)-$(GOARCH)" \
 		-license=MIT \
 		-res=tor-browser/
-	unzip -o $(BINARY)-$(GOOS)-$(GOARCH).zip -d $(BINARY)-$(GOOS)-$(GOARCH)-zip
+	#unzip -o $(BINARY)-$(GOOS)-$(GOARCH).zip -d $(BINARY)-$(GOOS)-$(GOARCH)-zip
 
 su3-mirror:
 	i2p.plugin.native -name=$(BINARY)-$(GOOS)-$(GOARCH)-Mirrorkit \
