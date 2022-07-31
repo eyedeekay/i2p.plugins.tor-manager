@@ -469,6 +469,7 @@ clean-appimage:
 	rm -rf AppDir
 
 appimage: clean-appimage
+	go build $(ARG)
 	wget -c https://github.com/AppImage/AppImageKit/releases/download/continuous/runtime-x86_64
 	mkdir -p AppDir/usr/bin AppDir/usr/lib AppDir/usr/share/applications AppDir/usr/share/icons AppDir/var/lib/i2pbrowser/icons
 	cp -v i2p.plugins.tor-manager AppDir/usr/bin/i2p.plugins.tor-manager
