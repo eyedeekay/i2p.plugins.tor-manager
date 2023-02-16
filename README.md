@@ -24,7 +24,7 @@ non-Tor specific options.
 Plugin:
 -------
 
-Clearnet visitor? You'll need to use the [Github Releases Mirror](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/0.0.15).
+Clearnet visitor? You'll need to use the [Github Releases Mirror](https://github.com/eyedeekay/i2p.plugins.tor-manager/releases/0.0.14).
 
 - [i2p.plugins.tor-manager-linux-386](i2p.plugins.tor-manager-linux-386.su3)
 - [i2p.plugins.tor-manager-windows-amd64](i2p.plugins.tor-manager-windows-amd64.su3)
