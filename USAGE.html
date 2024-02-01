@@ -4,156 +4,188 @@
       i2p.plugins.tor-...
     </title>
     <meta name="author" content="eyedeekay" />
-    <meta name="description" content="i2p.plugins.tor-manager.git" />
+    <meta name="description" content="i2p.plugins.tor-manager" />
     <meta name="keywords" content="main" />
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="showhider.css" />
+    <link rel="stylesheet" type="text/css" href="darklight.css" />
   </head>
   <body>
-    <div id="navbar">
-      <a href="#shownav">
-        Show navigation
-      </a>
-      <div id="shownav">
-        <div id="hidenav">
-          <ul>
-            <li>
-              <a href="index.html">
-                index
-              </a>
-            </li>
-            <li>
-              <a href="AGNOSTIC.html">
-                AGNOSTIC
-              </a>
-            </li>
-            <li>
-              <a href="AT-LAST-I2PBROWSER.html">
-                AT-LAST-I2PBROWSER
-              </a>
-            </li>
-            <li>
-              <a href="DOCKER.html">
-                DOCKER
-              </a>
-            </li>
-            <li>
-              <a href="FIREFOX.html">
-                FIREFOX
-              </a>
-            </li>
-            <li>
-              <a href="OFFLINE.html">
-                OFFLINE
-              </a>
-            </li>
-            <li>
-              <a href="ONION.html">
-                ONION
-              </a>
-            </li>
-            <li>
-              <a href="PLUGINS.html">
-                PLUGINS
-              </a>
-            </li>
-            <li>
-              <a href="PREMISE.html">
-                PREMISE
-              </a>
-            </li>
-            <li>
-              <a href="UNBLOCKABLE.html">
-                UNBLOCKABLE
-              </a>
-            </li>
-            <li>
-              <a href="USAGE.html">
-                USAGE
-              </a>
-            </li>
-            <li>
-              <a href="bottom.html">
-                bottom
-              </a>
-            </li>
-            <li>
-              <a href="plugins.html">
-                plugins
-              </a>
-            </li>
-            <li>
-              <a href="top.html">
-                top
-              </a>
-            </li>
-          </ul>
-          <br>
-          <a href="#hidenav">
-            Hide Navigation
-          </a>
+    <input type="checkbox" id="checkboxDarkLight">
+    <div class="container">
+      <div id="navbar">
+        <a href="#shownav">
+          Show navigation
+        </a>
+        <div id="shownav">
+          <div id="hidenav">
+            <ul>
+              <li>
+                <a href="..">
+                  Up one level ^
+                </a>
+              </li>
+              <li>
+                <a href="index.html">
+                  index
+                </a>
+              </li>
+              <li>
+                <a href="AGNOSTIC.html">
+                  AGNOSTIC
+                </a>
+              </li>
+              <li>
+                <a href="AT-LAST-I2PBROWSER.html">
+                  AT-LAST-I2PBROWSER
+                </a>
+              </li>
+              <li>
+                <a href="DOCKER.html">
+                  DOCKER
+                </a>
+              </li>
+              <li>
+                <a href="FIREFOX.html">
+                  FIREFOX
+                </a>
+              </li>
+              <li>
+                <a href="OFFLINE.html">
+                  OFFLINE
+                </a>
+              </li>
+              <li>
+                <a href="ONION.html">
+                  ONION
+                </a>
+              </li>
+              <li>
+                <a href="PLUGINS.html">
+                  PLUGINS
+                </a>
+              </li>
+              <li>
+                <a href="PREMISE.html">
+                  PREMISE
+                </a>
+              </li>
+              <li>
+                <a href="UNBLOCKABLE.html">
+                  UNBLOCKABLE
+                </a>
+              </li>
+              <li>
+                <a href="USAGE.html">
+                  USAGE
+                </a>
+              </li>
+              <li>
+                <a href="bottom.html">
+                  bottom
+                </a>
+              </li>
+              <li>
+                <a href="firefox.html">
+                  firefox.html
+                </a>
+              </li>
+              <li>
+                <a href="index.html">
+                  index.html
+                </a>
+              </li>
+              <li>
+                <a href="offline.html">
+                  offline.html
+                </a>
+              </li>
+              <li>
+                <a href="plugins.html">
+                  plugins
+                </a>
+              </li>
+              <li>
+                <a href="top.html">
+                  top
+                </a>
+              </li>
+              <li>
+                <a href="usage.html">
+                  usage.html
+                </a>
+              </li>
+            </ul>
+            <br>
+            <a href="#hidenav">
+              Hide Navigation
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-    <h1>
-      Tor(And sometimes Firefox) Manager for I2P
-    </h1>
-    <h2>
-      Usage: i2p.plugins.tor-manager [options]
-    </h2>
-    <h3>
-      Options:
-    </h3>
-    <p>
-      ”`sh
-    </p>
-    <p>
-      Usage: i2p.plugins.tor-manager [options]
-    </p>
-    <p>
-      Version: %!(EXTRA string=0.0.15)
-      Downloads, verifies and unpacks Tor Browser. Manages the Tor Browser
-      system in environments where Tor is not in use. Monitors a long-running
-      Tor process and downloads updates when Tor is not available.
-    </p>
-    <p>
-      Options:
-    </p>
-    <pre><code>  --apparmor                         Generate apparmor rules
-  --arch string                      OS/arch to download (default &#34;64&#34;)
-  --bemirror                         Act as an in-I2P mirror when you&#39;re done downloading
+      <a id="returnhome" href="/">
+        /
+      </a>
+      <h1>
+        Tor(And sometimes Firefox) Manager for I2P
+      </h1>
+      <h2>
+        Usage: i2p.plugins.tor-manager [options]
+      </h2>
+      <h3>
+        Options:
+      </h3>
+      <p>
+        &rdquo;`sh
+      </p>
+      <p>
+        Usage: i2p.plugins.tor-manager [options]
+      </p>
+      <p>
+        Version: %!(EXTRA string=0.0.15)
+        Downloads, verifies and unpacks Tor Browser. Manages the Tor Browser
+        system in environments where Tor is not in use. Monitors a long-running
+        Tor process and downloads updates when Tor is not available.
+      </p>
+      <p>
+        Options:
+      </p>
+      <pre><code>  --apparmor                         Generate apparmor rules
+  --arch string                      OS/arch to download (default &quot;64&quot;)
+  --bemirror                         Act as an in-I2P mirror when you're done downloading
   --chat                             Open a WebChat client
   --clearnet                         Use clearnet (no Tor or I2P) in Tor Browser
   --destruct                         Destructively delete the working directory when finished
-  --directory string                 Directory operate in (default &#34;tmp-i2pbrowser&#34;)
+  --directory string                 Directory operate in (default &quot;tmp-i2pbrowser&quot;)
   --help                             Print help and quit
-  --host string                      Host to serve on (default &#34;127.0.0.1&#34;)
+  --host string                      Host to serve on (default &quot;127.0.0.1&quot;)
   --i2pbrowser                       Open I2P in Tor Browser
   --i2pconfig                        Open I2P routerconsole in Tor Browser with javscript enabled and non-routerconsole sites disabled
   --i2peditor                        Open I2P Site Editor in Tor Browser
-  --lang string                      Language to download (default &#34;en-US&#34;)
+  --lang string                      Language to download (default &quot;en-US&quot;)
   --license                          Print the license and exit
-  --mirror string                    Mirror to use. I2P will be used if an I2P proxy is present, if system Tor is available, it will be downloaded over the Tor proxy. (default &#34;https://dist.torproject.org/torbrowser/&#34;)
+  --mirror string                    Mirror to use. I2P will be used if an I2P proxy is present, if system Tor is available, it will be downloaded over the Tor proxy. (default &quot;https://dist.torproject.org/torbrowser/&quot;)
   --mirrorall                        Download and mirror every language and OS/arch combination
   --nevertor                         Never use Tor for downloading Tor Browser
   --notor                            Do not automatically start Tor
   --nounpack                         Do not unpack the Tor Browser
-  --offline                          Work offline. Differs from Firefox&#39;s offline mode in that cannot be disabled until the browser is closed.
+  --offline                          Work offline. Differs from Firefox's offline mode in that cannot be disabled until the browser is closed.
   --onion                            Serve an onion site which shows some I2P propaganda (default true)
-  --os string                        OS/arch to download (default &#34;linux&#34;)
+  --os string                        OS/arch to download (default &quot;linux&quot;)
   --p2p                              Use bittorrent over I2P to download the initial copy of Tor Browser (default true)
   --password string                  Password to encrypt the working directory with. Implies -destruct, only the encrypted container will be saved.
   --port int                         Port to serve on (default 7695)
   --profile string                   use a custom profile path, normally blank
   --shortcuts                        Create desktop shortcuts
   --snowflake                        Offer a Snowflake to other Tor Browser users
-  --snowflake-broker string          broker URL (default &#34;https://snowflake-broker.torproject.net/&#34;)
+  --snowflake-broker string          broker URL (default &quot;https://snowflake-broker.torproject.net/&quot;)
   --snowflake-capacity uint          maximum concurrent clients
   --snowflake-directory string       directory with a page to serve locally for your snowflake. If empty, no local page is served.
   --snowflake-keep-local-addresses   keep local LAN address ICE candidates
   --snowflake-log string             log filename
-  --snowflake-port string            port to serve info page(directory) on (default &#34;7676&#34;)
-  --snowflake-relay string           websocket relay URL (default &#34;wss://snowflake.bamsoftware.com/&#34;)
-  --snowflake-stun string            broker URL (default &#34;stun:stun.stunprotocol.org:3478&#34;)
+  --snowflake-port string            port to serve info page(directory) on (default &quot;7676&quot;)
+  --snowflake-relay string           websocket relay URL (default &quot;wss://snowflake.bamsoftware.com/&quot;)
+  --snowflake-stun string            broker URL (default &quot;stun:stun.stunprotocol.org:3478&quot;)
   --snowflake-unsafe-logging         prevent logs from being scrubbed
   --systray                          Create a systray icon
   --torbrowser                       Open Tor Browser
@@ -162,197 +194,259 @@
   --verbose                          Verbose output
   --watch-profiles string            Monitor and control these Firefox profiles. Temporarily Unused.
 </code></pre>
-    <p>
-      Available Languages:
-    </p>
-    <ul>
-      <li>
-        fr
-      </li>
-      <li>
-        id
-      </li>
-      <li>
-        el
-      </li>
-      <li>
-        ko
-      </li>
-      <li>
-        ms
-      </li>
-      <li>
-        cs
-      </li>
-      <li>
-        it
-      </li>
-      <li>
-        ja
-      </li>
-      <li>
-        my
-      </li>
-      <li>
-        fa
-      </li>
-      <li>
-        hu
-      </li>
-      <li>
-        is
-      </li>
-      <li>
-        nb-NO
-      </li>
-      <li>
-        pl
-      </li>
-      <li>
-        vi
-      </li>
-      <li>
-        da
-      </li>
-      <li>
-        ro
-      </li>
-      <li>
-        ru
-      </li>
-      <li>
-        tr
-      </li>
-      <li>
-        ar
-      </li>
-      <li>
-        de
-      </li>
-      <li>
-        es-AR
-      </li>
-      <li>
-        nl
-      </li>
-      <li>
-        th
-      </li>
-      <li>
-        zh-CN
-      </li>
-      <li>
-        ca
-      </li>
-      <li>
-        en-US
-      </li>
-      <li>
-        mk
-      </li>
-      <li>
-        pt-BR
-      </li>
-      <li>
-        sv-SE
-      </li>
-      <li>
-        zh-TW
-      </li>
-      <li>
-        es-ES
-      </li>
-      <li>
-        ga-IE
-      </li>
-      <li>
-        he
-      </li>
-      <li>
-        ka
-      </li>
-      <li>
-        lt
-      </li>
-    </ul>
-    <p>
-      Usage: ./firefox.real [ options … ] [URL]
-      where options include:
-    </p>
-    <p>
-      X11 options
-      –display=DISPLAY  X display to use
-      –sync             Make X calls synchronous
-      –g-fatal-warnings Make all warnings fatal
-    </p>
-    <p>
-      Firefox options
-      -h or –help       Print this message.
-      -v or –version    Print Firefox version.
-      –full-version     Print Firefox version, build and platform build ids.
-      -P        Start with .
-      –profile    Start with profile at .
-      –migration        Start with migration wizard.
-      –ProfileManager   Start with ProfileManager.
-      –no-remote        (default) Do not accept or send remote commands; implies
-      –new-instance.
-      –allow-remote     Accept and send remote commands.
-      –new-instance     Open new instance, not a new window in running instance.
-      –safe-mode        Disables extensions and themes for this session.
-      –MOZ_LOG= Treated as MOZ_LOG= environment variable,
-      overrides it.
-      –MOZ_LOG_FILE= Treated as MOZ_LOG_FILE= environment variable,
-      overrides it. If MOZ_LOG_FILE is not specified as an
-      argument or as an environment variable, logging will be
-      written to stdout.
-      –headless         Run without a GUI.
-      –browser          Open a browser window.
-      –new-window  Open  in a new window.
-      –new-tab     Open  in a new tab.
-      –private-window  Open  in a new private window.
-      –preferences      Open Preferences dialog.
-      –screenshot [] Save screenshot to  or in working directory.
-      –window-size width[,height] Width and optionally height of screenshot.
-      –search     Search  with your default search engine.
-      –setDefaultBrowser Set this app as the default browser.
-      –first-startup    Run post-install actions before opening a new window.
-      –kiosk            Start the browser in kiosk mode.
-      –disable-pinch    Disable touch-screen and touch-pad pinch gestures.
-      –jsconsole        Open the Browser Console.
-      –jsdebugger [] Open the Browser Toolbox. Defaults to the local build
-      but can be overridden by a firefox path.
-      –wait-for-jsdebugger Spin event loop until JS debugger connects.
-      Enables debugging (some) application startup code paths.
-      Only has an effect when
-      <code>
-        --jsdebugger
-      </code>
-      is also supplied.
-      –devtools         Open DevTools on initial load.
-      –start-debugger-server [ws:][  |  ] Start the devtools server on
-      a TCP port or Unix domain socket path. Defaults to TCP port
-      6000. Use WebSocket protocol if ws: prefix is specified.
-      –recording  Record drawing for a given URL.
-      –recording-output  Specify destination file for a drawing recording.
-      –remote-debugging-port [] Start the Firefox remote agent,
-      which is a low-level debugging interface based on the CDP protocol.
-      Defaults to listen on localhost:9222.
-    </p>
-    <p>
-      Tor Browser Script Options
-      –verbose         Display Tor and Firefox output in the terminal
-      –log [file]      Record Tor and Firefox output in file (default: tor-browser.log)
-      –detach          Detach from terminal and run Tor Browser in the background.
-      –register-app    Register Tor Browser as a desktop app for this user
-      –unregister-app  Unregister Tor Browser as a desktop app for this user
-    </p>
-    <div>
-      <a href="#show">
-        Show license
-      </a>
-      <div id="show">
-        <div id="hide">
-          <pre><code>MIT License
+      <p>
+        Available Languages:
+      </p>
+      <ul>
+        <li>
+          fr
+        </li>
+        <li>
+          id
+        </li>
+        <li>
+          el
+        </li>
+        <li>
+          ko
+        </li>
+        <li>
+          ms
+        </li>
+        <li>
+          cs
+        </li>
+        <li>
+          it
+        </li>
+        <li>
+          ja
+        </li>
+        <li>
+          my
+        </li>
+        <li>
+          fa
+        </li>
+        <li>
+          hu
+        </li>
+        <li>
+          is
+        </li>
+        <li>
+          nb-NO
+        </li>
+        <li>
+          pl
+        </li>
+        <li>
+          vi
+        </li>
+        <li>
+          da
+        </li>
+        <li>
+          ro
+        </li>
+        <li>
+          ru
+        </li>
+        <li>
+          tr
+        </li>
+        <li>
+          ar
+        </li>
+        <li>
+          de
+        </li>
+        <li>
+          es-AR
+        </li>
+        <li>
+          nl
+        </li>
+        <li>
+          th
+        </li>
+        <li>
+          zh-CN
+        </li>
+        <li>
+          ca
+        </li>
+        <li>
+          en-US
+        </li>
+        <li>
+          mk
+        </li>
+        <li>
+          pt-BR
+        </li>
+        <li>
+          sv-SE
+        </li>
+        <li>
+          zh-TW
+        </li>
+        <li>
+          es-ES
+        </li>
+        <li>
+          ga-IE
+        </li>
+        <li>
+          he
+        </li>
+        <li>
+          ka
+        </li>
+        <li>
+          lt
+        </li>
+      </ul>
+      <p>
+        Usage: ./firefox.real [ options &hellip; ] [URL]
+        where options include:
+      </p>
+      <p>
+        X11 options
+        &ndash;display=DISPLAY  X display to use
+        &ndash;sync             Make X calls synchronous
+        &ndash;g-fatal-warnings Make all warnings fatal
+      </p>
+      <p>
+        Firefox options
+        -h or &ndash;help       Print this message.
+        -v or &ndash;version    Print Firefox version.
+        &ndash;full-version     Print Firefox version, build and platform build ids.
+        -P
+        <profile>
+        Start with
+        <profile>
+        .
+        &ndash;profile
+        <path>
+        Start with profile at
+        <path>
+        .
+        &ndash;migration        Start with migration wizard.
+        &ndash;ProfileManager   Start with ProfileManager.
+        &ndash;no-remote        (default) Do not accept or send remote commands; implies
+        &ndash;new-instance.
+        &ndash;allow-remote     Accept and send remote commands.
+        &ndash;new-instance     Open new instance, not a new window in running instance.
+        &ndash;safe-mode        Disables extensions and themes for this session.
+        &ndash;MOZ_LOG=
+        <modules>
+        Treated as MOZ_LOG=
+        <modules>
+        environment variable,
+        overrides it.
+        &ndash;MOZ_LOG_FILE=
+        <file>
+        Treated as MOZ_LOG_FILE=
+        <file>
+        environment variable,
+        overrides it. If MOZ_LOG_FILE is not specified as an
+        argument or as an environment variable, logging will be
+        written to stdout.
+        &ndash;headless         Run without a GUI.
+        &ndash;browser          Open a browser window.
+        &ndash;new-window
+        <url>
+        Open
+        <url>
+        in a new window.
+        &ndash;new-tab
+        <url>
+        Open
+        <url>
+        in a new tab.
+        &ndash;private-window
+        <url>
+        Open
+        <url>
+        in a new private window.
+        &ndash;preferences      Open Preferences dialog.
+        &ndash;screenshot [
+        <path>
+        ] Save screenshot to
+        <path>
+        or in working directory.
+        &ndash;window-size width[,height] Width and optionally height of screenshot.
+        &ndash;search
+        <term>
+        Search
+        <term>
+        with your default search engine.
+        &ndash;setDefaultBrowser Set this app as the default browser.
+        &ndash;first-startup    Run post-install actions before opening a new window.
+        &ndash;kiosk            Start the browser in kiosk mode.
+        &ndash;disable-pinch    Disable touch-screen and touch-pad pinch gestures.
+        &ndash;jsconsole        Open the Browser Console.
+        &ndash;jsdebugger [
+        <path>
+        ] Open the Browser Toolbox. Defaults to the local build
+        but can be overridden by a firefox path.
+        &ndash;wait-for-jsdebugger Spin event loop until JS debugger connects.
+        Enables debugging (some) application startup code paths.
+        Only has an effect when
+        <code>
+          --jsdebugger
+        </code>
+        is also supplied.
+        &ndash;devtools         Open DevTools on initial load.
+        &ndash;start-debugger-server [ws:][
+        <port>
+        |
+        <path>
+        ] Start the devtools server on
+        a TCP port or Unix domain socket path. Defaults to TCP port
+        6000. Use WebSocket protocol if ws: prefix is specified.
+        &ndash;recording
+        <file>
+        Record drawing for a given URL.
+        &ndash;recording-output
+        <file>
+        Specify destination file for a drawing recording.
+        &ndash;remote-debugging-port [
+        <port>
+        ] Start the Firefox remote agent,
+        which is a low-level debugging interface based on the CDP protocol.
+        Defaults to listen on localhost:9222.
+      </p>
+      <p>
+        Tor Browser Script Options
+        &ndash;verbose         Display Tor and Firefox output in the terminal
+        &ndash;log [file]      Record Tor and Firefox output in file (default: tor-browser.log)
+        &ndash;detach          Detach from terminal and run Tor Browser in the background.
+        &ndash;register-app    Register Tor Browser as a desktop app for this user
+        &ndash;unregister-app  Unregister Tor Browser as a desktop app for this user
+      </p>
+      <div id="sourcecode">
+        <span id="sourcehead">
+          <strong>
+            Get the source code:
+          </strong>
+        </span>
+        <ul>
+          <li>
+            <a href="https://github.com/eyedeekay/i2p.plugins.tor-manager.git">
+              Source Repository: (https://github.com/eyedeekay/i2p.plugins.tor-manager.git)
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <a href="#show">
+          Show license
+        </a>
+        <div id="show">
+          <div id="hide">
+            <pre><code>MIT License
 
 Copyright (c) 2022 idk, The Invisible Internet Project
 
@@ -7683,9 +7777,10 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
   This Source Code Form is "Incompatible With Secondary Licenses", as
   defined by the Mozilla Public License, v. 2.0.
 </code></pre>
-          <a href="#hide">
-            Hide license
-          </a>
+            <a href="#hide">
+              Hide license
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -7694,6 +7789,7 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
     </div>
     <div>
       <a href="https://geti2p.net/">
+        <img class="i2plogo" src="i2plogo.png"></img>
         I2P
       </a>
     </div>

@@ -4,372 +4,418 @@
       i2p.plugins.tor-...
     </title>
     <meta name="author" content="eyedeekay" />
-    <meta name="description" content="i2p.plugins.tor-manager.git" />
+    <meta name="description" content="i2p.plugins.tor-manager" />
     <meta name="keywords" content="main" />
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="showhider.css" />
+    <link rel="stylesheet" type="text/css" href="darklight.css" />
   </head>
   <body>
-    <div id="navbar">
-      <a href="#shownav">
-        Show navigation
-      </a>
-      <div id="shownav">
-        <div id="hidenav">
-          <ul>
-            <li>
-              <a href="index.html">
-                index
-              </a>
-            </li>
-            <li>
-              <a href="AGNOSTIC.html">
-                AGNOSTIC
-              </a>
-            </li>
-            <li>
-              <a href="AT-LAST-I2PBROWSER.html">
-                AT-LAST-I2PBROWSER
-              </a>
-            </li>
-            <li>
-              <a href="DOCKER.html">
-                DOCKER
-              </a>
-            </li>
-            <li>
-              <a href="FIREFOX.html">
-                FIREFOX
-              </a>
-            </li>
-            <li>
-              <a href="OFFLINE.html">
-                OFFLINE
-              </a>
-            </li>
-            <li>
-              <a href="ONION.html">
-                ONION
-              </a>
-            </li>
-            <li>
-              <a href="PLUGINS.html">
-                PLUGINS
-              </a>
-            </li>
-            <li>
-              <a href="PREMISE.html">
-                PREMISE
-              </a>
-            </li>
-            <li>
-              <a href="UNBLOCKABLE.html">
-                UNBLOCKABLE
-              </a>
-            </li>
-            <li>
-              <a href="USAGE.html">
-                USAGE
-              </a>
-            </li>
-            <li>
-              <a href="bottom.html">
-                bottom
-              </a>
-            </li>
-            <li>
-              <a href="plugins.html">
-                plugins
-              </a>
-            </li>
-            <li>
-              <a href="top.html">
-                top
-              </a>
-            </li>
-          </ul>
-          <br>
-          <a href="#hidenav">
-            Hide Navigation
-          </a>
+    <input type="checkbox" id="checkboxDarkLight">
+    <div class="container">
+      <div id="navbar">
+        <a href="#shownav">
+          Show navigation
+        </a>
+        <div id="shownav">
+          <div id="hidenav">
+            <ul>
+              <li>
+                <a href="..">
+                  Up one level ^
+                </a>
+              </li>
+              <li>
+                <a href="index.html">
+                  index
+                </a>
+              </li>
+              <li>
+                <a href="AGNOSTIC.html">
+                  AGNOSTIC
+                </a>
+              </li>
+              <li>
+                <a href="AT-LAST-I2PBROWSER.html">
+                  AT-LAST-I2PBROWSER
+                </a>
+              </li>
+              <li>
+                <a href="DOCKER.html">
+                  DOCKER
+                </a>
+              </li>
+              <li>
+                <a href="FIREFOX.html">
+                  FIREFOX
+                </a>
+              </li>
+              <li>
+                <a href="OFFLINE.html">
+                  OFFLINE
+                </a>
+              </li>
+              <li>
+                <a href="ONION.html">
+                  ONION
+                </a>
+              </li>
+              <li>
+                <a href="PLUGINS.html">
+                  PLUGINS
+                </a>
+              </li>
+              <li>
+                <a href="PREMISE.html">
+                  PREMISE
+                </a>
+              </li>
+              <li>
+                <a href="UNBLOCKABLE.html">
+                  UNBLOCKABLE
+                </a>
+              </li>
+              <li>
+                <a href="USAGE.html">
+                  USAGE
+                </a>
+              </li>
+              <li>
+                <a href="bottom.html">
+                  bottom
+                </a>
+              </li>
+              <li>
+                <a href="firefox.html">
+                  firefox.html
+                </a>
+              </li>
+              <li>
+                <a href="index.html">
+                  index.html
+                </a>
+              </li>
+              <li>
+                <a href="offline.html">
+                  offline.html
+                </a>
+              </li>
+              <li>
+                <a href="plugins.html">
+                  plugins
+                </a>
+              </li>
+              <li>
+                <a href="top.html">
+                  top
+                </a>
+              </li>
+              <li>
+                <a href="usage.html">
+                  usage.html
+                </a>
+              </li>
+            </ul>
+            <br>
+            <a href="#hidenav">
+              Hide Navigation
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-    <h1>
-      Rationale for Non-Standard modifications to Tor Browser for I2P Browsing and Local Administration
-    </h1>
-    <p>
-      This system prefers the Tor Browser for browsing the I2P network because any sane assessment of the
-      situation indicates that Tor Browser is the best choice for browsing HTTP/S services(web sites) in
-      a secure and private way at this time. However, we must make non-recommended changes to the Tor Browser
-      to make it work with I2P. This document concerns those changes and why they make sense for I2P Browsing,
-      Mixed I2P/Tor browsing, and I2P/Outproxy browsing.
-    </p>
-    <h2>
-      The Basics:
-    </h2>
-    <p>
-      The bare-minimum requirement to browse I2P using the Tor Browser is to add the following items to the
-      <code>
-        user.js
-      </code>
-      file in your profile directory.
-    </p>
-    <pre><code>user_pref(&#34;network.proxy.no_proxies_on&#34;, &#34;127.0.0.1:7657,localhost:7657,127.0.0.1:7662,localhost:7662,127.0.0.1:7669,localhost:7669&#34;);
-user_pref(&#34;extensions.torbutton.use_nontor_proxy&#34;, true);
-user_pref(&#34;extensions.torlauncher.start_tor&#34;, false);
-user_pref(&#34;extensions.torlauncher.prompt_at_startup&#34;, false);
-user_pref(&#34;network.proxy.type&#34;, 1);
-user_pref(&#34;network.proxy.http&#34;, &#34;127.0.0.1&#34;);
-user_pref(&#34;network.proxy.http_port&#34;, 4444);
-user_pref(&#34;network.proxy.ssl&#34;, &#34;127.0.0.1&#34;);
-user_pref(&#34;network.proxy.ssl_port&#34;, 4444);
-user_pref(&#34;network.proxy.ftp&#34;, &#34;127.0.0.1&#34;);
-user_pref(&#34;network.proxy.ftp_port&#34;, 4444);
-user_pref(&#34;network.proxy.socks&#34;, &#34;127.0.0.1&#34;);
-user_pref(&#34;network.proxy.socks_port&#34;, 4444);
-user_pref(&#34;network.proxy.share_proxy_settings&#34;, true);
-user_pref(&#34;browser.startup.homepage&#34;, &#34;about:blank&#34;);
-</code></pre>
-    <p>
-      However, to do so would then break your Tor Browser’s ability to connect to Tor in normal, non-I2P cirumstances.
-      This is not desirable, so instead we place a
-      <code>
-        user.js
-      </code>
-      and
-      <code>
-        prefs.js
-      </code>
-      file in a fresh profile directory, in advance
-      of the user starting the Tor Browser. Which brings us to the most important thing:
-    </p>
-    <h3>
-      RULE ZERO: Preserve Normal Tor Browser Functionality when the user requests Tor Browser
-    </h3>
-    <p>
-      If the user requests Tor Browser, we do not interfere in any way. We just start Tor Browser normally. I2P operation
-      is always separated to it’s own profile.
-    </p>
-    <p>
-      Beside that, we make the remaining changes which are specified in the
-      <a href="https://i2pgit.org/i2p-hackers/i2p.firefox" rel="nofollow">
-        i2p.firefox
+      <a id="returnhome" href="/">
+        /
       </a>
-      <code>
-        user.js
-      </code>
-      and
-      <code>
-        prefs.js
-      </code>
-      file. This is a decision made to match the
-      <code>
-        i2p.firefox
-      </code>
-      profile as closely as possible,
-      however it may not be advisable. The question is “When running in I2P mode, are we trying to look like Tor Browser?”
-      If so, then we need to cut the user.js down to
-      <em>
-        just this section
-      </em>
-      but if not, then we should probably leave it alone.
-    </p>
-    <p>
-      IMO, it is not feasible to make our modifications to Tor Browser entirely invisible. I2P
-    </p>
-    <h2>
-      Defending from Attacks Unique to Mixed Tor/I2P Environment:
-    </h2>
-    <p>
-      The major risk with using I2P and Tor together in the same browser is that the identify of a user on one network
-      may leak across the networks, i.e. an onion site learns the identify of an I2P client tunnel or an I2P site learns
-      the identity of a Tor client. This can mean A) Cryptographic identity or B) ISP identity. ISP identity is largely
-      defended against by Tor Browser’s extensive attention to proxy obedience, but we must be careful not to break this.
-      Cryptographic identity, as presented by
-      <code>
-        X-I2P-*
-      </code>
-      headers in I2P for example, is easier for an attacker to gain.
-    </p>
-    <p>
-      In order to defend against these kinds of attacks, when running in I2P mode this system adds several extensions to
-      the Tor Browser. In addition to NoScript and HTTPS Everywhere, which are offered by Tor Browser, in I2P mode the
-      following extensions will be added:
-    </p>
-    <ol>
-      <li>
-        I2P in Private Browsing
-      </li>
-      <li>
-        Onion in Container Browsing
-      </li>
-      <li>
-        JS Restrictor
-      </li>
-      <li>
-        uBlock Origin
-      </li>
-      <li>
-        LocalCDN - Fork of Decentraleyes
-        and optionally,
-      </li>
-      <li>
-        Actually Work Offline
-      </li>
-    </ol>
-    <h4>
-      Extensions? Isn’t it bad to add extensions to Tor Browser?
-    </h4>
-    <blockquote>
+      <h1>
+        Rationale for Non-Standard modifications to Tor Browser for I2P Browsing and Local Administration
+      </h1>
       <p>
-        Well yes, if you’re browsing Tor or the Web, and you’re sure that you are starting with a common fingerprint.
-        However I2P has a
-        <em>
-          “fragmented”
-        </em>
-        fingerprint, and mixed Tor/I2P browsing creates an intrinsically
-        <em>
-          uncommon
-        </em>
-        fingerprint. We can only benefit, in terms of security, from unifying upon a configuration(and thus a common
-        fingerprint).
+        This system prefers the Tor Browser for browsing the I2P network because any sane assessment of the
+        situation indicates that Tor Browser is the best choice for browsing HTTP/S services(web sites) in
+        a secure and private way at this time. However, we must make non-recommended changes to the Tor Browser
+        to make it work with I2P. This document concerns those changes and why they make sense for I2P Browsing,
+        Mixed I2P/Tor browsing, and I2P/Outproxy browsing.
+      </p>
+      <h2>
+        The Basics:
+      </h2>
+      <p>
+        The bare-minimum requirement to browse I2P using the Tor Browser is to add the following items to the
+        <code>
+          user.js
+        </code>
+        file in your profile directory.
+      </p>
+      <pre><code class="language-javascript">user_pref(&quot;network.proxy.no_proxies_on&quot;, &quot;127.0.0.1:7657,localhost:7657,127.0.0.1:7662,localhost:7662,127.0.0.1:7669,localhost:7669&quot;);
+user_pref(&quot;extensions.torbutton.use_nontor_proxy&quot;, true);
+user_pref(&quot;extensions.torlauncher.start_tor&quot;, false);
+user_pref(&quot;extensions.torlauncher.prompt_at_startup&quot;, false);
+user_pref(&quot;network.proxy.type&quot;, 1);
+user_pref(&quot;network.proxy.http&quot;, &quot;127.0.0.1&quot;);
+user_pref(&quot;network.proxy.http_port&quot;, 4444);
+user_pref(&quot;network.proxy.ssl&quot;, &quot;127.0.0.1&quot;);
+user_pref(&quot;network.proxy.ssl_port&quot;, 4444);
+user_pref(&quot;network.proxy.ftp&quot;, &quot;127.0.0.1&quot;);
+user_pref(&quot;network.proxy.ftp_port&quot;, 4444);
+user_pref(&quot;network.proxy.socks&quot;, &quot;127.0.0.1&quot;);
+user_pref(&quot;network.proxy.socks_port&quot;, 4444);
+user_pref(&quot;network.proxy.share_proxy_settings&quot;, true);
+user_pref(&quot;browser.startup.homepage&quot;, &quot;about:blank&quot;);
+</code></pre>
+      <p>
+        However, to do so would then break your Tor Browser&rsquo;s ability to connect to Tor in normal, non-I2P cirumstances.
+        This is not desirable, so instead we place a
+        <code>
+          user.js
+        </code>
+        and
+        <code>
+          prefs.js
+        </code>
+        file in a fresh profile directory, in advance
+        of the user starting the Tor Browser. Which brings us to the most important thing:
+      </p>
+      <h3>
+        RULE ZERO: Preserve Normal Tor Browser Functionality when the user requests Tor Browser
+      </h3>
+      <p>
+        If the user requests Tor Browser, we do not interfere in any way. We just start Tor Browser normally. I2P operation
+        is always separated to it&rsquo;s own profile.
       </p>
       <p>
-        The danger in adding extensions to Tor Browser lies in the fact that you become a unique character among Tor
-        Browser users for using that extension. If
+        Beside that, we make the remaining changes which are specified in the
+        <a href="https://i2pgit.org/i2p-hackers/i2p.firefox">
+          i2p.firefox
+        </a>
+        <code>
+          user.js
+        </code>
+        and
+        <code>
+          prefs.js
+        </code>
+        file. This is a decision made to match the
+        <code>
+          i2p.firefox
+        </code>
+        profile as closely as possible,
+        however it may not be advisable. The question is &ldquo;When running in I2P mode, are we trying to look like Tor Browser?&rdquo;
+        If so, then we need to cut the user.js down to
         <em>
-          everyone
+          just this section
         </em>
-        in your anonymity set, i.e. mixed Tor/I2P users uses the
-        same extensions when browsing I2P in Tor Browser, then you are not more unique for using the extensions.
+        but if not, then we should probably leave it alone.
       </p>
       <p>
-        This experimental extension set is therefore designed to prevent known attacks on mixed I2P/Tor Browser users
-        and optimize Tor Browser running in Mixed Tor/I2P mode for I2P use. You should assume that it makes you look
-        like other users of this configuration,
-        <strong>
-          not
-        </strong>
-        like the Tor Browser.
+        IMO, it is not feasible to make our modifications to Tor Browser entirely invisible. I2P
       </p>
-    </blockquote>
-    <h3>
-      Protecting Network Boundaries:
-    </h3>
-    <p>
-      I2P is normally administered via a WebUI(The “Router Console”), which the user sometimes views in the same
-      browser they use to visit remote sites. It is essential to prevent sites from being able to access information
-      from this WebUI and other locally running sites.
-    </p>
-    <p>
-      Clearnet sites will remain in the
-      <code>
-        firefox-default
-      </code>
-      container, but as soon as the firefox-default container
-      requests a
-      <code>
-        *.onion
-      </code>
-      or
-      <code>
-        *.i2p
-      </code>
-      site, it will be instantly containerized. Tor Browser’s identity management
-      tooling controls clearnet tabs, and they are proxied using the default I2P outproxy or outproxy plugin.
-    </p>
-    <h4>
-      Implemented in Extensions:
-    </h4>
-    <ul>
-      <li>
-        JS Restrictor: Prevents any non-local host from using Javascript to connect to the localhost.
-      </li>
-      <li>
-        I2P in Private Browsing: Places I2P browsing into it’s own Container Tab where requests to
+      <h2>
+        Defending from Attacks Unique to Mixed Tor/I2P Environment:
+      </h2>
+      <p>
+        The major risk with using I2P and Tor together in the same browser is that the identify of a user on one network
+        may leak across the networks, i.e. an onion site learns the identify of an I2P client tunnel or an I2P site learns
+        the identity of a Tor client. This can mean A) Cryptographic identity or B) ISP identity. ISP identity is largely
+        defended against by Tor Browser&rsquo;s extensive attention to proxy obedience, but we must be careful not to break this.
+        Cryptographic identity, as presented by
+        <code>
+          X-I2P-*
+        </code>
+        headers in I2P for example, is easier for an attacker to gain.
+      </p>
+      <p>
+        In order to defend against these kinds of attacks, when running in I2P mode this system adds several extensions to
+        the Tor Browser. In addition to NoScript and HTTPS Everywhere, which are offered by Tor Browser, in I2P mode the
+        following extensions will be added:
+      </p>
+      <ol>
+        <li>
+          I2P in Private Browsing
+        </li>
+        <li>
+          Onion in Container Browsing
+        </li>
+        <li>
+          JS Restrictor
+        </li>
+        <li>
+          uBlock Origin
+        </li>
+        <li>
+          LocalCDN - Fork of Decentraleyes
+          and optionally,
+        </li>
+        <li>
+          Actually Work Offline
+        </li>
+      </ol>
+      <h4>
+        Extensions? Isn&rsquo;t it bad to add extensions to Tor Browser?
+      </h4>
+      <blockquote>
+        <p>
+          Well yes, if you&rsquo;re browsing Tor or the Web, and you&rsquo;re sure that you are starting with a common fingerprint.
+          However I2P has a
+          <em>
+            &ldquo;fragmented&rdquo;
+          </em>
+          fingerprint, and mixed Tor/I2P browsing creates an intrinsically
+          <em>
+            uncommon
+          </em>
+          fingerprint. We can only benefit, in terms of security, from unifying upon a configuration(and thus a common
+          fingerprint).
+        </p>
+        <p>
+          The danger in adding extensions to Tor Browser lies in the fact that you become a unique character among Tor
+          Browser users for using that extension. If
+          <em>
+            everyone
+          </em>
+          in your anonymity set, i.e. mixed Tor/I2P users uses the
+          same extensions when browsing I2P in Tor Browser, then you are not more unique for using the extensions.
+        </p>
+        <p>
+          This experimental extension set is therefore designed to prevent known attacks on mixed I2P/Tor Browser users
+          and optimize Tor Browser running in Mixed Tor/I2P mode for I2P use. You should assume that it makes you look
+          like other users of this configuration,
+          <strong>
+            not
+          </strong>
+          like the Tor Browser.
+        </p>
+      </blockquote>
+      <h3>
+        Protecting Network Boundaries:
+      </h3>
+      <p>
+        I2P is normally administered via a WebUI(The &ldquo;Router Console&rdquo;), which the user sometimes views in the same
+        browser they use to visit remote sites. It is essential to prevent sites from being able to access information
+        from this WebUI and other locally running sites.
+      </p>
+      <p>
+        Clearnet sites will remain in the
+        <code>
+          firefox-default
+        </code>
+        container, but as soon as the firefox-default container
+        requests a
         <code>
           *.onion
         </code>
-        resources
-        are automatically dropped.
-      </li>
-      <li>
-        Onion in Container Tabs: Places .onion browsing into it’s own Container Tab where requests to
+        or
         <code>
           *.i2p
         </code>
-        resources
-        are automatically dropped.
-      </li>
-    </ul>
-    <h3>
-      Limiting Clearnet Accesses
-    </h3>
-    <p>
-      I2P has been designed primarily with an in-network approach. It therefore makes sense to limit the use
-      of a “Backup” clearnet access like Tor or an outproxy. This should have the added benefit of an improved UX for
-      I2P browser users by blocking ads and speeding up access to resources that would normally be hosted by CDN’s.
-    </p>
-    <h4>
-      Implemented in Extensions
-    </h4>
-    <ul>
-      <li>
-        uBlock Origin: Block ads, and by extension much malvertising. Reduce the potential of an attacker using an
-        advertising network to deliver an attack to I2P users. Prevent ad networks from using their reach to build
-        profiles of I2P users. And there’s no point serving ads to I2P users through an outproxy.
-      </li>
-      <li>
-        LocalCDN - Fork of Decentraleyes: LocalCDN is an extension in your browsing that acts as a cache of resources
-        which would normally be provided by CDN’s operated by companies that operate on the clearnet. Using LocalCDN
-        for our browsing prevents a malfunctioning outproxy from affecting site functionality, decreases the load on
-        outproxy operators, and improves UX by making sites load faster.
-      </li>
-      <li>
-        Actually Work Offline: It is possible to pass the
-        <code>
-          -offline
-        </code>
-        flag
-        <code>
-          -i2pconfig
-        </code>
-        flag to load an additonal
-        extension wherein
-        <em>
-          all non-localhost requests
-        </em>
-        are immediately dropped and the browser cannot reach remote sites
-        until restarted.
-      </li>
-    </ul>
-    <h2>
-      Other Reasons to put Extensions in Tor Browser for Our Purposes
-    </h2>
-    <ul>
-      <li>
-        <p>
-          Announce our non-default configuration loudly to the user by making changes to the UI.
-        </p>
-      </li>
-      <li>
-        <p>
-          Unrelated to extensions: Additionally, apply the environment variable:
+        site, it will be instantly containerized. Tor Browser&rsquo;s identity management
+        tooling controls clearnet tabs, and they are proxied using the default I2P outproxy or outproxy plugin.
+      </p>
+      <h4>
+        Implemented in Extensions:
+      </h4>
+      <ul>
+        <li>
+          JS Restrictor: Prevents any non-local host from using Javascript to connect to the localhost.
+        </li>
+        <li>
+          I2P in Private Browsing: Places I2P browsing into it&rsquo;s own Container Tab where requests to
           <code>
-            TOR_HIDE_BROWSER_LOGO=1
+            *.onion
           </code>
-          for all non-Tor
-          uses.
-        </p>
-      </li>
-    </ul>
-    <div>
-      <a href="#show">
-        Show license
-      </a>
-      <div id="show">
-        <div id="hide">
-          <pre><code>MIT License
+          resources
+          are automatically dropped.
+        </li>
+        <li>
+          Onion in Container Tabs: Places .onion browsing into it&rsquo;s own Container Tab where requests to
+          <code>
+            *.i2p
+          </code>
+          resources
+          are automatically dropped.
+        </li>
+      </ul>
+      <h3>
+        Limiting Clearnet Accesses
+      </h3>
+      <p>
+        I2P has been designed primarily with an in-network approach. It therefore makes sense to limit the use
+        of a &ldquo;Backup&rdquo; clearnet access like Tor or an outproxy. This should have the added benefit of an improved UX for
+        I2P browser users by blocking ads and speeding up access to resources that would normally be hosted by CDN&rsquo;s.
+      </p>
+      <h4>
+        Implemented in Extensions
+      </h4>
+      <ul>
+        <li>
+          uBlock Origin: Block ads, and by extension much malvertising. Reduce the potential of an attacker using an
+          advertising network to deliver an attack to I2P users. Prevent ad networks from using their reach to build
+          profiles of I2P users. And there&rsquo;s no point serving ads to I2P users through an outproxy.
+        </li>
+        <li>
+          LocalCDN - Fork of Decentraleyes: LocalCDN is an extension in your browsing that acts as a cache of resources
+          which would normally be provided by CDN&rsquo;s operated by companies that operate on the clearnet. Using LocalCDN
+          for our browsing prevents a malfunctioning outproxy from affecting site functionality, decreases the load on
+          outproxy operators, and improves UX by making sites load faster.
+        </li>
+        <li>
+          Actually Work Offline: It is possible to pass the
+          <code>
+            -offline
+          </code>
+          flag
+          <code>
+            -i2pconfig
+          </code>
+          flag to load an additonal
+          extension wherein
+          <em>
+            all non-localhost requests
+          </em>
+          are immediately dropped and the browser cannot reach remote sites
+          until restarted.
+        </li>
+      </ul>
+      <h2>
+        Other Reasons to put Extensions in Tor Browser for Our Purposes
+      </h2>
+      <ul>
+        <li>
+          <p>
+            Announce our non-default configuration loudly to the user by making changes to the UI.
+          </p>
+        </li>
+        <li>
+          <p>
+            Unrelated to extensions: Additionally, apply the environment variable:
+            <code>
+              TOR_HIDE_BROWSER_LOGO=1
+            </code>
+            for all non-Tor
+            uses.
+          </p>
+        </li>
+      </ul>
+      <div id="sourcecode">
+        <span id="sourcehead">
+          <strong>
+            Get the source code:
+          </strong>
+        </span>
+        <ul>
+          <li>
+            <a href="https://github.com/eyedeekay/i2p.plugins.tor-manager.git">
+              Source Repository: (https://github.com/eyedeekay/i2p.plugins.tor-manager.git)
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <a href="#show">
+          Show license
+        </a>
+        <div id="show">
+          <div id="hide">
+            <pre><code>MIT License
 
 Copyright (c) 2022 idk, The Invisible Internet Project
 
@@ -7700,9 +7746,10 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
   This Source Code Form is "Incompatible With Secondary Licenses", as
   defined by the Mozilla Public License, v. 2.0.
 </code></pre>
-          <a href="#hide">
-            Hide license
-          </a>
+            <a href="#hide">
+              Hide license
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -7711,6 +7758,7 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
     </div>
     <div>
       <a href="https://geti2p.net/">
+        <img class="i2plogo" src="i2plogo.png"></img>
         I2P
       </a>
     </div>

@@ -4,184 +4,230 @@
       i2p.plugins.tor-...
     </title>
     <meta name="author" content="eyedeekay" />
-    <meta name="description" content="i2p.plugins.tor-manager.git" />
+    <meta name="description" content="i2p.plugins.tor-manager" />
     <meta name="keywords" content="main" />
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="showhider.css" />
+    <link rel="stylesheet" type="text/css" href="darklight.css" />
   </head>
   <body>
-    <div id="navbar">
-      <a href="#shownav">
-        Show navigation
-      </a>
-      <div id="shownav">
-        <div id="hidenav">
-          <ul>
-            <li>
-              <a href="index.html">
-                index
-              </a>
-            </li>
-            <li>
-              <a href="AGNOSTIC.html">
-                AGNOSTIC
-              </a>
-            </li>
-            <li>
-              <a href="AT-LAST-I2PBROWSER.html">
-                AT-LAST-I2PBROWSER
-              </a>
-            </li>
-            <li>
-              <a href="DOCKER.html">
-                DOCKER
-              </a>
-            </li>
-            <li>
-              <a href="FIREFOX.html">
-                FIREFOX
-              </a>
-            </li>
-            <li>
-              <a href="OFFLINE.html">
-                OFFLINE
-              </a>
-            </li>
-            <li>
-              <a href="ONION.html">
-                ONION
-              </a>
-            </li>
-            <li>
-              <a href="PLUGINS.html">
-                PLUGINS
-              </a>
-            </li>
-            <li>
-              <a href="PREMISE.html">
-                PREMISE
-              </a>
-            </li>
-            <li>
-              <a href="UNBLOCKABLE.html">
-                UNBLOCKABLE
-              </a>
-            </li>
-            <li>
-              <a href="USAGE.html">
-                USAGE
-              </a>
-            </li>
-            <li>
-              <a href="bottom.html">
-                bottom
-              </a>
-            </li>
-            <li>
-              <a href="plugins.html">
-                plugins
-              </a>
-            </li>
-            <li>
-              <a href="top.html">
-                top
-              </a>
-            </li>
-          </ul>
-          <br>
-          <a href="#hidenav">
-            Hide Navigation
-          </a>
+    <input type="checkbox" id="checkboxDarkLight">
+    <div class="container">
+      <div id="navbar">
+        <a href="#shownav">
+          Show navigation
+        </a>
+        <div id="shownav">
+          <div id="hidenav">
+            <ul>
+              <li>
+                <a href="..">
+                  Up one level ^
+                </a>
+              </li>
+              <li>
+                <a href="index.html">
+                  index
+                </a>
+              </li>
+              <li>
+                <a href="AGNOSTIC.html">
+                  AGNOSTIC
+                </a>
+              </li>
+              <li>
+                <a href="AT-LAST-I2PBROWSER.html">
+                  AT-LAST-I2PBROWSER
+                </a>
+              </li>
+              <li>
+                <a href="DOCKER.html">
+                  DOCKER
+                </a>
+              </li>
+              <li>
+                <a href="FIREFOX.html">
+                  FIREFOX
+                </a>
+              </li>
+              <li>
+                <a href="OFFLINE.html">
+                  OFFLINE
+                </a>
+              </li>
+              <li>
+                <a href="ONION.html">
+                  ONION
+                </a>
+              </li>
+              <li>
+                <a href="PLUGINS.html">
+                  PLUGINS
+                </a>
+              </li>
+              <li>
+                <a href="PREMISE.html">
+                  PREMISE
+                </a>
+              </li>
+              <li>
+                <a href="UNBLOCKABLE.html">
+                  UNBLOCKABLE
+                </a>
+              </li>
+              <li>
+                <a href="USAGE.html">
+                  USAGE
+                </a>
+              </li>
+              <li>
+                <a href="bottom.html">
+                  bottom
+                </a>
+              </li>
+              <li>
+                <a href="firefox.html">
+                  firefox.html
+                </a>
+              </li>
+              <li>
+                <a href="index.html">
+                  index.html
+                </a>
+              </li>
+              <li>
+                <a href="offline.html">
+                  offline.html
+                </a>
+              </li>
+              <li>
+                <a href="plugins.html">
+                  plugins
+                </a>
+              </li>
+              <li>
+                <a href="top.html">
+                  top
+                </a>
+              </li>
+              <li>
+                <a href="usage.html">
+                  usage.html
+                </a>
+              </li>
+            </ul>
+            <br>
+            <a href="#hidenav">
+              Hide Navigation
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-    <h1>
-      Hello from I2P, OnionSpace! Thought I’d try to do something we’d both enjoy
-    </h1>
-    <p>
-      This
-      <code>
-        .onion
-      </code>
-      site corresponds to an I2P user who is helping to distribute
-      the Tor Browser bundle in a somewhat unique way. These users have downloaded
-      the Tor Browser for their platform, and they have chosen to share it over
-      I2P, using both the I2P Web and I2P Bittorrent. The goal is twofold, to provide
-      a large number of ad-hoc mirrors of the latest offical Tor Browser Bundle, and
-      provide a means for I2P users to download and configure the Tor Browser without
-      initially retrieving Tor over the clearnet.
-    </p>
-    <p>
-      I2P is another anonymous network, it works slightly differently than Tor, it’s
-      designed in such a way that every router in the network is also a relay. This
-      has advantages and disadvantages, which is why we try to encourage people to
-      consider I2P and Tor separate, complementary, and not necessarily competitive
-      tools. I2P can be quite good at distributing Tor and Tor Browser, and Tor Browser
-      can be an effective tool for browsing I2P.
-    </p>
-    <h2>
-      <a href="https://geti2p.net" rel="nofollow">
-        Want to learn more about I2P? Visit our website(Clearnet link)
+      <a id="returnhome" href="/">
+        /
       </a>
-    </h2>
-    <ul>
-      <li>
-        The author of this software is an I2P developer,
+      <h1>
+        Hello from I2P, OnionSpace! Thought I&rsquo;d try to do something we&rsquo;d both enjoy
+      </h1>
+      <p>
+        This
         <code>
-          idk
+          .onion
         </code>
-        .
-        <a href="http://idk.i2p" rel="nofollow">
-          You can see some of his other projects here(I2P Link)
+        site corresponds to an I2P user who is helping to distribute
+        the Tor Browser bundle in a somewhat unique way. These users have downloaded
+        the Tor Browser for their platform, and they have chosen to share it over
+        I2P, using both the I2P Web and I2P Bittorrent. The goal is twofold, to provide
+        a large number of ad-hoc mirrors of the latest offical Tor Browser Bundle, and
+        provide a means for I2P users to download and configure the Tor Browser without
+        initially retrieving Tor over the clearnet.
+      </p>
+      <p>
+        I2P is another anonymous network, it works slightly differently than Tor, it&rsquo;s
+        designed in such a way that every router in the network is also a relay. This
+        has advantages and disadvantages, which is why we try to encourage people to
+        consider I2P and Tor separate, complementary, and not necessarily competitive
+        tools. I2P can be quite good at distributing Tor and Tor Browser, and Tor Browser
+        can be an effective tool for browsing I2P.
+      </p>
+      <h2>
+        <a href="https://geti2p.net">
+          Want to learn more about I2P? Visit our website(Clearnet link)
         </a>
-      </li>
-      <li>
-        I2P has many applications. One of the most popular is MuWire, by zlatinb.
-        <a href="https://muwire.com" rel="nofollow">
-          MuWire is available here(Clearnet link)
+      </h2>
+      <ul>
+        <li>
+          The author of this software is an I2P developer,
+          <code>
+            idk
+          </code>
+          .
+          <a href="http://idk.i2p">
+            You can see some of his other projects here(I2P Link)
+          </a>
+        </li>
+        <li>
+          I2P has many applications. One of the most popular is MuWire, by zlatinb.
+          <a href="https://muwire.com">
+            MuWire is available here(Clearnet link)
+          </a>
+          and
+          <a href="http://muwire.i2p">
+            here(I2P Link)
+          </a>
+          .
+        </li>
+        <li>
+          Want to discuss I2P? Join us on
+          <a href="https://old.reddit.com/r/i2p">
+            Reddit
+          </a>
+          ,
+          <a href="http://i2pforum.i2p">
+            Our community forums
+          </a>
+          , or our
+          <a href="http://zzz.i2p">
+            Developer forums
+          </a>
+          .
+        </li>
+        <li>
+          Want to work on I2P or use I2P in your application? Join us at
+          <a href="https://i2pgit.org">
+            i2pgit.org
+          </a>
+          ,
+          <a href="http://git.idk.i2p">
+            git.idk.i2p
+          </a>
+          , or
+          <a href="https://github.com/i2p">
+            our Github
+          </a>
+        </li>
+      </ul>
+      <div id="sourcecode">
+        <span id="sourcehead">
+          <strong>
+            Get the source code:
+          </strong>
+        </span>
+        <ul>
+          <li>
+            <a href="https://github.com/eyedeekay/i2p.plugins.tor-manager.git">
+              Source Repository: (https://github.com/eyedeekay/i2p.plugins.tor-manager.git)
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <a href="#show">
+          Show license
         </a>
-        and
-        <a href="http://muwire.i2p" rel="nofollow">
-          here(I2P Link)
-        </a>
-        .
-      </li>
-      <li>
-        Want to discuss I2P? Join us on
-        <a href="https://old.reddit.com/r/i2p" rel="nofollow">
-          Reddit
-        </a>
-        ,
-        <a href="http://i2pforum.i2p" rel="nofollow">
-          Our community forums
-        </a>
-        , or our
-        <a href="http://zzz.i2p" rel="nofollow">
-          Developer forums
-        </a>
-        .
-      </li>
-      <li>
-        Want to work on I2P or use I2P in your application? Join us at
-        <a href="https://i2pgit.org" rel="nofollow">
-          i2pgit.org
-        </a>
-        ,
-        <a href="http://git.idk.i2p" rel="nofollow">
-          git.idk.i2p
-        </a>
-        , or
-        <a href="https://github.com/i2p" rel="nofollow">
-          our Github
-        </a>
-      </li>
-    </ul>
-    <div>
-      <a href="#show">
-        Show license
-      </a>
-      <div id="show">
-        <div id="hide">
-          <pre><code>MIT License
+        <div id="show">
+          <div id="hide">
+            <pre><code>MIT License
 
 Copyright (c) 2022 idk, The Invisible Internet Project
 
@@ -7512,9 +7558,10 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
   This Source Code Form is "Incompatible With Secondary Licenses", as
   defined by the Mozilla Public License, v. 2.0.
 </code></pre>
-          <a href="#hide">
-            Hide license
-          </a>
+            <a href="#hide">
+              Hide license
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -7523,6 +7570,7 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
     </div>
     <div>
       <a href="https://geti2p.net/">
+        <img class="i2plogo" src="i2plogo.png"></img>
         I2P
       </a>
     </div>

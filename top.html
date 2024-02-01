@@ -4,140 +4,186 @@
       i2p.plugins.tor-...
     </title>
     <meta name="author" content="eyedeekay" />
-    <meta name="description" content="i2p.plugins.tor-manager.git" />
+    <meta name="description" content="i2p.plugins.tor-manager" />
     <meta name="keywords" content="main" />
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="showhider.css" />
+    <link rel="stylesheet" type="text/css" href="darklight.css" />
   </head>
   <body>
-    <div id="navbar">
-      <a href="#shownav">
-        Show navigation
-      </a>
-      <div id="shownav">
-        <div id="hidenav">
-          <ul>
-            <li>
-              <a href="index.html">
-                index
-              </a>
-            </li>
-            <li>
-              <a href="AGNOSTIC.html">
-                AGNOSTIC
-              </a>
-            </li>
-            <li>
-              <a href="AT-LAST-I2PBROWSER.html">
-                AT-LAST-I2PBROWSER
-              </a>
-            </li>
-            <li>
-              <a href="DOCKER.html">
-                DOCKER
-              </a>
-            </li>
-            <li>
-              <a href="FIREFOX.html">
-                FIREFOX
-              </a>
-            </li>
-            <li>
-              <a href="OFFLINE.html">
-                OFFLINE
-              </a>
-            </li>
-            <li>
-              <a href="ONION.html">
-                ONION
-              </a>
-            </li>
-            <li>
-              <a href="PLUGINS.html">
-                PLUGINS
-              </a>
-            </li>
-            <li>
-              <a href="PREMISE.html">
-                PREMISE
-              </a>
-            </li>
-            <li>
-              <a href="UNBLOCKABLE.html">
-                UNBLOCKABLE
-              </a>
-            </li>
-            <li>
-              <a href="USAGE.html">
-                USAGE
-              </a>
-            </li>
-            <li>
-              <a href="bottom.html">
-                bottom
-              </a>
-            </li>
-            <li>
-              <a href="plugins.html">
-                plugins
-              </a>
-            </li>
-            <li>
-              <a href="top.html">
-                top
-              </a>
-            </li>
-          </ul>
-          <br>
-          <a href="#hidenav">
-            Hide Navigation
-          </a>
+    <input type="checkbox" id="checkboxDarkLight">
+    <div class="container">
+      <div id="navbar">
+        <a href="#shownav">
+          Show navigation
+        </a>
+        <div id="shownav">
+          <div id="hidenav">
+            <ul>
+              <li>
+                <a href="..">
+                  Up one level ^
+                </a>
+              </li>
+              <li>
+                <a href="index.html">
+                  index
+                </a>
+              </li>
+              <li>
+                <a href="AGNOSTIC.html">
+                  AGNOSTIC
+                </a>
+              </li>
+              <li>
+                <a href="AT-LAST-I2PBROWSER.html">
+                  AT-LAST-I2PBROWSER
+                </a>
+              </li>
+              <li>
+                <a href="DOCKER.html">
+                  DOCKER
+                </a>
+              </li>
+              <li>
+                <a href="FIREFOX.html">
+                  FIREFOX
+                </a>
+              </li>
+              <li>
+                <a href="OFFLINE.html">
+                  OFFLINE
+                </a>
+              </li>
+              <li>
+                <a href="ONION.html">
+                  ONION
+                </a>
+              </li>
+              <li>
+                <a href="PLUGINS.html">
+                  PLUGINS
+                </a>
+              </li>
+              <li>
+                <a href="PREMISE.html">
+                  PREMISE
+                </a>
+              </li>
+              <li>
+                <a href="UNBLOCKABLE.html">
+                  UNBLOCKABLE
+                </a>
+              </li>
+              <li>
+                <a href="USAGE.html">
+                  USAGE
+                </a>
+              </li>
+              <li>
+                <a href="bottom.html">
+                  bottom
+                </a>
+              </li>
+              <li>
+                <a href="firefox.html">
+                  firefox.html
+                </a>
+              </li>
+              <li>
+                <a href="index.html">
+                  index.html
+                </a>
+              </li>
+              <li>
+                <a href="offline.html">
+                  offline.html
+                </a>
+              </li>
+              <li>
+                <a href="plugins.html">
+                  plugins
+                </a>
+              </li>
+              <li>
+                <a href="top.html">
+                  top
+                </a>
+              </li>
+              <li>
+                <a href="usage.html">
+                  usage.html
+                </a>
+              </li>
+            </ul>
+            <br>
+            <a href="#hidenav">
+              Hide Navigation
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-    <h1>
-      i2p.plugins.tor-updater
-    </h1>
-    <p>
-      A Tor package updater and runner as an I2P Plugin. This plugin is
-      usable on Windows, Linux, and OSX, as is the freestanding binary.
-      This also functions as a freestanding update for the Tor Browser
-      Bundle and is capable of configuring Tor Browser from the terminal
-      and updating it without running it, should the user choose to operate
-      this way.
-    </p>
-    <p>
-      This project explicitly views I2P and Tor as complementary privacy
-      tools and explores good ways of combining them in a user-facing tool.
-      It is especially useful when combined with a SOCKS Outproxy plugin
-      like the one written by zzz. You can obtain it within I2P:
-      <a href="http://zzz.i2p/topics/3219" rel="nofollow">
-        http://zzz.i2p/topics/3219
+      <a id="returnhome" href="/">
+        /
       </a>
-    </p>
-    <h2>
-      Usage:
-    </h2>
-    <p>
-      See
-      <a href="USAGE.md" rel="nofollow">
-        Usage
-      </a>
-      for command-line usage. When used from the Terminal,
-      it acts as a cross-platform Tor Browser installer and wrapper, which adds
-      non-Tor specific options.
-    </p>
-    <p>
-      <a href="usage.html" rel="nofollow">
-        HTML version
-      </a>
-    </p>
-    <div>
-      <a href="#show">
-        Show license
-      </a>
-      <div id="show">
-        <div id="hide">
-          <pre><code>MIT License
+      <h1>
+        i2p.plugins.tor-updater
+      </h1>
+      <p>
+        A Tor package updater and runner as an I2P Plugin. This plugin is
+        usable on Windows, Linux, and OSX, as is the freestanding binary.
+        This also functions as a freestanding update for the Tor Browser
+        Bundle and is capable of configuring Tor Browser from the terminal
+        and updating it without running it, should the user choose to operate
+        this way.
+      </p>
+      <p>
+        This project explicitly views I2P and Tor as complementary privacy
+        tools and explores good ways of combining them in a user-facing tool.
+        It is especially useful when combined with a SOCKS Outproxy plugin
+        like the one written by zzz. You can obtain it within I2P:
+        <a href="http://zzz.i2p/topics/3219">
+          http://zzz.i2p/topics/3219
+        </a>
+      </p>
+      <h2>
+        Usage:
+      </h2>
+      <p>
+        See
+        <a href="USAGE.md">
+          Usage
+        </a>
+        for command-line usage. When used from the Terminal,
+        it acts as a cross-platform Tor Browser installer and wrapper, which adds
+        non-Tor specific options.
+      </p>
+      <p>
+        <a href="usage.html">
+          HTML version
+        </a>
+      </p>
+      <div id="sourcecode">
+        <span id="sourcehead">
+          <strong>
+            Get the source code:
+          </strong>
+        </span>
+        <ul>
+          <li>
+            <a href="https://github.com/eyedeekay/i2p.plugins.tor-manager.git">
+              Source Repository: (https://github.com/eyedeekay/i2p.plugins.tor-manager.git)
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <a href="#show">
+          Show license
+        </a>
+        <div id="show">
+          <div id="hide">
+            <pre><code>MIT License
 
 Copyright (c) 2022 idk, The Invisible Internet Project
 
@@ -7468,9 +7514,10 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
   This Source Code Form is "Incompatible With Secondary Licenses", as
   defined by the Mozilla Public License, v. 2.0.
 </code></pre>
-          <a href="#hide">
-            Hide license
-          </a>
+            <a href="#hide">
+              Hide license
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -7479,6 +7526,7 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
     </div>
     <div>
       <a href="https://geti2p.net/">
+        <img class="i2plogo" src="i2plogo.png"></img>
         I2P
       </a>
     </div>

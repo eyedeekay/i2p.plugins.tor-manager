@@ -36,6 +36,7 @@ img {
     left: 5%;
     max-width: 60%;
     display: inline;
+    padding-right: 2%;
 }
 
 .inline {
@@ -74,8 +75,6 @@ iframe {
 }
 
 .container {
-    width: 36vw;
-    height: 64vh;
     display: inline-block;
     margin: 0;
     padding: 0;
@@ -153,5 +152,12 @@ input {
 
 #navbar {
 	float: right;
-	width: 10%;
+	width: 15%;
+}
+#returnhome {
+    font-size: xxx-large;
+    display: inline;
+}
+h1 {
+    display: inline;
 }

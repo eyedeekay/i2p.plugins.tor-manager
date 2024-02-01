@@ -4,142 +4,188 @@
       i2p.plugins.tor-...
     </title>
     <meta name="author" content="eyedeekay" />
-    <meta name="description" content="i2p.plugins.tor-manager.git" />
+    <meta name="description" content="i2p.plugins.tor-manager" />
     <meta name="keywords" content="main" />
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="showhider.css" />
+    <link rel="stylesheet" type="text/css" href="darklight.css" />
   </head>
   <body>
-    <div id="navbar">
-      <a href="#shownav">
-        Show navigation
-      </a>
-      <div id="shownav">
-        <div id="hidenav">
-          <ul>
-            <li>
-              <a href="index.html">
-                index
-              </a>
-            </li>
-            <li>
-              <a href="AGNOSTIC.html">
-                AGNOSTIC
-              </a>
-            </li>
-            <li>
-              <a href="AT-LAST-I2PBROWSER.html">
-                AT-LAST-I2PBROWSER
-              </a>
-            </li>
-            <li>
-              <a href="DOCKER.html">
-                DOCKER
-              </a>
-            </li>
-            <li>
-              <a href="FIREFOX.html">
-                FIREFOX
-              </a>
-            </li>
-            <li>
-              <a href="OFFLINE.html">
-                OFFLINE
-              </a>
-            </li>
-            <li>
-              <a href="ONION.html">
-                ONION
-              </a>
-            </li>
-            <li>
-              <a href="PLUGINS.html">
-                PLUGINS
-              </a>
-            </li>
-            <li>
-              <a href="PREMISE.html">
-                PREMISE
-              </a>
-            </li>
-            <li>
-              <a href="UNBLOCKABLE.html">
-                UNBLOCKABLE
-              </a>
-            </li>
-            <li>
-              <a href="USAGE.html">
-                USAGE
-              </a>
-            </li>
-            <li>
-              <a href="bottom.html">
-                bottom
-              </a>
-            </li>
-            <li>
-              <a href="plugins.html">
-                plugins
-              </a>
-            </li>
-            <li>
-              <a href="top.html">
-                top
-              </a>
-            </li>
-          </ul>
-          <br>
-          <a href="#hidenav">
-            Hide Navigation
-          </a>
+    <input type="checkbox" id="checkboxDarkLight">
+    <div class="container">
+      <div id="navbar">
+        <a href="#shownav">
+          Show navigation
+        </a>
+        <div id="shownav">
+          <div id="hidenav">
+            <ul>
+              <li>
+                <a href="..">
+                  Up one level ^
+                </a>
+              </li>
+              <li>
+                <a href="index.html">
+                  index
+                </a>
+              </li>
+              <li>
+                <a href="AGNOSTIC.html">
+                  AGNOSTIC
+                </a>
+              </li>
+              <li>
+                <a href="AT-LAST-I2PBROWSER.html">
+                  AT-LAST-I2PBROWSER
+                </a>
+              </li>
+              <li>
+                <a href="DOCKER.html">
+                  DOCKER
+                </a>
+              </li>
+              <li>
+                <a href="FIREFOX.html">
+                  FIREFOX
+                </a>
+              </li>
+              <li>
+                <a href="OFFLINE.html">
+                  OFFLINE
+                </a>
+              </li>
+              <li>
+                <a href="ONION.html">
+                  ONION
+                </a>
+              </li>
+              <li>
+                <a href="PLUGINS.html">
+                  PLUGINS
+                </a>
+              </li>
+              <li>
+                <a href="PREMISE.html">
+                  PREMISE
+                </a>
+              </li>
+              <li>
+                <a href="UNBLOCKABLE.html">
+                  UNBLOCKABLE
+                </a>
+              </li>
+              <li>
+                <a href="USAGE.html">
+                  USAGE
+                </a>
+              </li>
+              <li>
+                <a href="bottom.html">
+                  bottom
+                </a>
+              </li>
+              <li>
+                <a href="firefox.html">
+                  firefox.html
+                </a>
+              </li>
+              <li>
+                <a href="index.html">
+                  index.html
+                </a>
+              </li>
+              <li>
+                <a href="offline.html">
+                  offline.html
+                </a>
+              </li>
+              <li>
+                <a href="plugins.html">
+                  plugins
+                </a>
+              </li>
+              <li>
+                <a href="top.html">
+                  top
+                </a>
+              </li>
+              <li>
+                <a href="usage.html">
+                  usage.html
+                </a>
+              </li>
+            </ul>
+            <br>
+            <a href="#hidenav">
+              Hide Navigation
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-    <h1>
-      Docker Usage
-    </h1>
-    <p>
-      It is also possible to run this from within a Docker container to avoid
-      interacting with your base system(for the most part). Use these commands
-      to build the container. It will take a while, I need to work on reducing
-      the number of dependencies it installs.
-    </p>
-    <pre><code>git clone https://i2pgit.org/idk/i2p.plugins.tor-manager.git i2p.plugins.tor-manager &amp;&amp; i2p.plugins.tor-manager
+      <a id="returnhome" href="/">
+        /
+      </a>
+      <h1>
+        Docker Usage
+      </h1>
+      <p>
+        It is also possible to run this from within a Docker container to avoid
+        interacting with your base system(for the most part). Use these commands
+        to build the container. It will take a while, I need to work on reducing
+        the number of dependencies it installs.
+      </p>
+      <pre><code class="language-sh">git clone https://i2pgit.org/idk/i2p.plugins.tor-manager.git i2p.plugins.tor-manager &amp;&amp; i2p.plugins.tor-manager
 docker build -t idk/i2p.plugins.tor-manager .
 </code></pre>
-    <p>
-      This example shares the X Server with the host, and shares the network with
-      the host, for the sake of simplicity. A more complex setup might extend this
-      container with a VNC server and allow the user to connect to it as if it were
-      a remote server and avoid directly connecting to the host’s X Server or some
-      other means of isolating the browser from the host.
-    </p>
-    <pre><code>docker run -it --rm \
+      <p>
+        This example shares the X Server with the host, and shares the network with
+        the host, for the sake of simplicity. A more complex setup might extend this
+        container with a VNC server and allow the user to connect to it as if it were
+        a remote server and avoid directly connecting to the host&rsquo;s X Server or some
+        other means of isolating the browser from the host.
+      </p>
+      <pre><code class="language-sh">docker run -it --rm \
     --net=host \
-    --env=&#34;DISPLAY&#34; \
-    --volume=&#34;$HOME/.Xauthority:/root/.Xauthority:rw&#34; \
-    --volume=&#34;$HOME/i2p.plugins.tor-manager/unpack:/go/src/i2pgit.org/idk/i2p.plugins.tor-manager/unpack&#34; \
+    --env=&quot;DISPLAY&quot; \
+    --volume=&quot;$HOME/.Xauthority:/root/.Xauthority:rw&quot; \
+    --volume=&quot;$HOME/i2p.plugins.tor-manager/unpack:/go/src/i2pgit.org/idk/i2p.plugins.tor-manager/unpack&quot; \
     idk/i2p.plugins.tor-manager
 </code></pre>
-    <p>
-      If you use this without passing the
-      <code>
-        --net=host
-      </code>
-      flag, it will always start
-      a new I2P router inside of the Docker container. If you would like to use an I2P
-      router running on the host system, then you will need to pass the
-      <code>
-        --net=host
-      </code>
-      flag.
-    </p>
-    <div>
-      <a href="#show">
-        Show license
-      </a>
-      <div id="show">
-        <div id="hide">
-          <pre><code>MIT License
+      <p>
+        If you use this without passing the
+        <code>
+          --net=host
+        </code>
+        flag, it will always start
+        a new I2P router inside of the Docker container. If you would like to use an I2P
+        router running on the host system, then you will need to pass the
+        <code>
+          --net=host
+        </code>
+        flag.
+      </p>
+      <div id="sourcecode">
+        <span id="sourcehead">
+          <strong>
+            Get the source code:
+          </strong>
+        </span>
+        <ul>
+          <li>
+            <a href="https://github.com/eyedeekay/i2p.plugins.tor-manager.git">
+              Source Repository: (https://github.com/eyedeekay/i2p.plugins.tor-manager.git)
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <a href="#show">
+          Show license
+        </a>
+        <div id="show">
+          <div id="hide">
+            <pre><code>MIT License
 
 Copyright (c) 2022 idk, The Invisible Internet Project
 
@@ -7470,9 +7516,10 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
   This Source Code Form is "Incompatible With Secondary Licenses", as
   defined by the Mozilla Public License, v. 2.0.
 </code></pre>
-          <a href="#hide">
-            Hide license
-          </a>
+            <a href="#hide">
+              Hide license
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -7481,6 +7528,7 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
     </div>
     <div>
       <a href="https://geti2p.net/">
+        <img class="i2plogo" src="i2plogo.png"></img>
         I2P
       </a>
     </div>

@@ -4,469 +4,515 @@
       i2p.plugins.tor-...
     </title>
     <meta name="author" content="eyedeekay" />
-    <meta name="description" content="i2p.plugins.tor-manager.git" />
+    <meta name="description" content="i2p.plugins.tor-manager" />
     <meta name="keywords" content="main" />
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="showhider.css" />
+    <link rel="stylesheet" type="text/css" href="darklight.css" />
   </head>
   <body>
-    <div id="navbar">
-      <a href="#shownav">
-        Show navigation
-      </a>
-      <div id="shownav">
-        <div id="hidenav">
-          <ul>
-            <li>
-              <a href="index.html">
-                index
-              </a>
-            </li>
-            <li>
-              <a href="AGNOSTIC.html">
-                AGNOSTIC
-              </a>
-            </li>
-            <li>
-              <a href="AT-LAST-I2PBROWSER.html">
-                AT-LAST-I2PBROWSER
-              </a>
-            </li>
-            <li>
-              <a href="DOCKER.html">
-                DOCKER
-              </a>
-            </li>
-            <li>
-              <a href="FIREFOX.html">
-                FIREFOX
-              </a>
-            </li>
-            <li>
-              <a href="OFFLINE.html">
-                OFFLINE
-              </a>
-            </li>
-            <li>
-              <a href="ONION.html">
-                ONION
-              </a>
-            </li>
-            <li>
-              <a href="PLUGINS.html">
-                PLUGINS
-              </a>
-            </li>
-            <li>
-              <a href="PREMISE.html">
-                PREMISE
-              </a>
-            </li>
-            <li>
-              <a href="UNBLOCKABLE.html">
-                UNBLOCKABLE
-              </a>
-            </li>
-            <li>
-              <a href="USAGE.html">
-                USAGE
-              </a>
-            </li>
-            <li>
-              <a href="bottom.html">
-                bottom
-              </a>
-            </li>
-            <li>
-              <a href="plugins.html">
-                plugins
-              </a>
-            </li>
-            <li>
-              <a href="top.html">
-                top
-              </a>
-            </li>
-          </ul>
-          <br>
-          <a href="#hidenav">
-            Hide Navigation
-          </a>
+    <input type="checkbox" id="checkboxDarkLight">
+    <div class="container">
+      <div id="navbar">
+        <a href="#shownav">
+          Show navigation
+        </a>
+        <div id="shownav">
+          <div id="hidenav">
+            <ul>
+              <li>
+                <a href="..">
+                  Up one level ^
+                </a>
+              </li>
+              <li>
+                <a href="index.html">
+                  index
+                </a>
+              </li>
+              <li>
+                <a href="AGNOSTIC.html">
+                  AGNOSTIC
+                </a>
+              </li>
+              <li>
+                <a href="AT-LAST-I2PBROWSER.html">
+                  AT-LAST-I2PBROWSER
+                </a>
+              </li>
+              <li>
+                <a href="DOCKER.html">
+                  DOCKER
+                </a>
+              </li>
+              <li>
+                <a href="FIREFOX.html">
+                  FIREFOX
+                </a>
+              </li>
+              <li>
+                <a href="OFFLINE.html">
+                  OFFLINE
+                </a>
+              </li>
+              <li>
+                <a href="ONION.html">
+                  ONION
+                </a>
+              </li>
+              <li>
+                <a href="PLUGINS.html">
+                  PLUGINS
+                </a>
+              </li>
+              <li>
+                <a href="PREMISE.html">
+                  PREMISE
+                </a>
+              </li>
+              <li>
+                <a href="UNBLOCKABLE.html">
+                  UNBLOCKABLE
+                </a>
+              </li>
+              <li>
+                <a href="USAGE.html">
+                  USAGE
+                </a>
+              </li>
+              <li>
+                <a href="bottom.html">
+                  bottom
+                </a>
+              </li>
+              <li>
+                <a href="firefox.html">
+                  firefox.html
+                </a>
+              </li>
+              <li>
+                <a href="index.html">
+                  index.html
+                </a>
+              </li>
+              <li>
+                <a href="offline.html">
+                  offline.html
+                </a>
+              </li>
+              <li>
+                <a href="plugins.html">
+                  plugins
+                </a>
+              </li>
+              <li>
+                <a href="top.html">
+                  top
+                </a>
+              </li>
+              <li>
+                <a href="usage.html">
+                  usage.html
+                </a>
+              </li>
+            </ul>
+            <br>
+            <a href="#hidenav">
+              Hide Navigation
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-    <h2>
-      Status:
-    </h2>
-    <p>
-      <img src="screenshot-console.png" alt="Screenshot 2"/>
-    </p>
-    <p>
-      Linux: Usable, everything implemented works.
-      Windows: Usable, everything implemented works.
-      OSX: Usable, everything implemented works.
-    </p>
-    <p>
-      Other systems are not targeted and should use a Tor binary built from source,
-      provided by TPO or, their prefered package management system and not this plugin.
-      The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
-    </p>
-    <p>
-      <img src="screenshot-i2pbrowser.png" alt="Screenshot"/>
-    </p>
-    <h3>
-      Primary Goals(Done):
-    </h3>
-    <ol>
-      <li>
-        Ship known-good public keys, download a current Tor for the platform in the background, authenticate it, and launch it only if necessary.
-        <ul>
-          <li>
-            Works on Windows, Linux, OSX
-          </li>
-        </ul>
-      </li>
-      <li>
-        Supervise Tor as a ShellService plugin to I2P
-        <ul>
-          <li>
-            Works on Linux, Windows, OSX
-          </li>
-        </ul>
-      </li>
-      <li>
-        Keep Tor up-to-date
-        <ul>
-          <li>
-            Works on Windows, Linux, OSX
-          </li>
-        </ul>
-      </li>
-      <li>
-        Work as an I2P Plugin OR as a freestanding app to be compatible with all I2P distributions
-        <ul>
-          <li>
-            Works on Linux, Windows, OSX
-          </li>
-        </ul>
-      </li>
-      <li>
-        Download Tor Browser from an in-I2P mirror(or one of a network of in-I2P mirrors)
-        <ul>
-          <li>
-            Works on Linux, Windows, OSX
-          </li>
-        </ul>
-      </li>
-    </ol>
-    <h3>
-      Secondary Goals(Also done):
-    </h3>
-    <ol>
-      <li>
-        Launch Tor Browser
-        <ul>
-          <li>
-            Works on Linux, Windows, OSX
-          </li>
-        </ul>
-      </li>
-      <li>
-        Configure and launch Tor browser for use with I2P
-        <ul>
-          <li>
-            Works on Linux, Windows, OSX
-          </li>
-        </ul>
-      </li>
-    </ol>
-    <h4>
-      Optional Features I might add if there is interest(Not much stopping me…):
-    </h4>
-    <ol>
-      <li>
-        Mirror the files which it downloads to an I2P Site
-        <ul>
-          <li>
-            Works on Windows, Linux, OSX
-          </li>
-        </ul>
-      </li>
-      <li>
-        Mirror the files which it downloads to I2P torrents
-        <ul>
-          <li>
-            Works on Windows and Linux, might work on OSX but unsure.
-          </li>
-        </ul>
-      </li>
-      <li>
-        Set up an onion site which announces an I2P mirror exists
-        <ul>
-          <li>
-            Works on Windows, Linux, OSX
-          </li>
-        </ul>
-      </li>
-      <li>
-        Use Bittorrent-over-I2P to download the Tor Browser software
-        <ul>
-          <li>
-            Worksish. Still a little janky. Usable on any platform if you’re a little patient.
-          </li>
-        </ul>
-      </li>
-      <li>
-        Embed jpackaged I2P routers and manage them internally
-        <ul>
-          <li>
-            Works on Windows and Linux. Can be done on OSX but needs to be different. AMD64 only.
-          </li>
-        </ul>
-      </li>
-      <li>
-        Encrypt the “Working directory” with all the plugin data using a password.
-        <ul>
-          <li>
-            Works on Windows, Linux, and OSX.
-          </li>
-        </ul>
-      </li>
-      <li>
-        Use a transparently encrypted filesystem to interact with the host system.
-        <ul>
-          <li>
-            Not done.
-          </li>
-        </ul>
-      </li>
-      <li>
-        Option to use BRB in a thread as an in-I2P replacement for
-        <code>
-          mibbit
-        </code>
-        IRC client.
-        <ul>
-          <li>
-            Works on Windows, Linux, OSX
-          </li>
-        </ul>
-      </li>
-    </ol>
-    <h3>
-      Usage as a Library
-    </h3>
-    <p>
-      <a href="https://pkg.go.dev/i2pgit.org/idk/i2p.plugins.tor-manager" rel="nofollow">
-        More information at the GoDoc
+      <a id="returnhome" href="/">
+        /
       </a>
-    </p>
-    <p>
-      This is also useful as a library for downloading a Tor Browser Bundle. This API
-      isn’t really stable, more “stabilizing.” Feel free to use it, but it may still
-      change a little.
-    </p>
-    <p>
-      To create a new instance, use:
-    </p>
-    <pre><code>client, err = tbserve.NewClient(*verbose, *lang, *system, *arch, &amp;content)
+      <h2>
+        Status:
+      </h2>
+      <p>
+        <img src="screenshot-console.png" alt="Screenshot 2" />
+      </p>
+      <p>
+        Linux: Usable, everything implemented works.
+        Windows: Usable, everything implemented works.
+        OSX: Usable, everything implemented works.
+      </p>
+      <p>
+        Other systems are not targeted and should use a Tor binary built from source,
+        provided by TPO or, their prefered package management system and not this plugin.
+        The plugin will not start a Tor instance if a SOCKS proxy is open on port 9050.
+      </p>
+      <p>
+        <img src="screenshot-i2pbrowser.png" alt="Screenshot" />
+      </p>
+      <h3>
+        Primary Goals(Done):
+      </h3>
+      <ol>
+        <li>
+          Ship known-good public keys, download a current Tor for the platform in the background, authenticate it, and launch it only if necessary.
+          <ul>
+            <li>
+              Works on Windows, Linux, OSX
+            </li>
+          </ul>
+        </li>
+        <li>
+          Supervise Tor as a ShellService plugin to I2P
+          <ul>
+            <li>
+              Works on Linux, Windows, OSX
+            </li>
+          </ul>
+        </li>
+        <li>
+          Keep Tor up-to-date
+          <ul>
+            <li>
+              Works on Windows, Linux, OSX
+            </li>
+          </ul>
+        </li>
+        <li>
+          Work as an I2P Plugin OR as a freestanding app to be compatible with all I2P distributions
+          <ul>
+            <li>
+              Works on Linux, Windows, OSX
+            </li>
+          </ul>
+        </li>
+        <li>
+          Download Tor Browser from an in-I2P mirror(or one of a network of in-I2P mirrors)
+          <ul>
+            <li>
+              Works on Linux, Windows, OSX
+            </li>
+          </ul>
+        </li>
+      </ol>
+      <h3>
+        Secondary Goals(Also done):
+      </h3>
+      <ol>
+        <li>
+          Launch Tor Browser
+          <ul>
+            <li>
+              Works on Linux, Windows, OSX
+            </li>
+          </ul>
+        </li>
+        <li>
+          Configure and launch Tor browser for use with I2P
+          <ul>
+            <li>
+              Works on Linux, Windows, OSX
+            </li>
+          </ul>
+        </li>
+      </ol>
+      <h4>
+        Optional Features I might add if there is interest(Not much stopping me&hellip;):
+      </h4>
+      <ol>
+        <li>
+          Mirror the files which it downloads to an I2P Site
+          <ul>
+            <li>
+              Works on Windows, Linux, OSX
+            </li>
+          </ul>
+        </li>
+        <li>
+          Mirror the files which it downloads to I2P torrents
+          <ul>
+            <li>
+              Works on Windows and Linux, might work on OSX but unsure.
+            </li>
+          </ul>
+        </li>
+        <li>
+          Set up an onion site which announces an I2P mirror exists
+          <ul>
+            <li>
+              Works on Windows, Linux, OSX
+            </li>
+          </ul>
+        </li>
+        <li>
+          Use Bittorrent-over-I2P to download the Tor Browser software
+          <ul>
+            <li>
+              Worksish. Still a little janky. Usable on any platform if you&rsquo;re a little patient.
+            </li>
+          </ul>
+        </li>
+        <li>
+          Embed jpackaged I2P routers and manage them internally
+          <ul>
+            <li>
+              Works on Windows and Linux. Can be done on OSX but needs to be different. AMD64 only.
+            </li>
+          </ul>
+        </li>
+        <li>
+          Encrypt the &ldquo;Working directory&rdquo; with all the plugin data using a password.
+          <ul>
+            <li>
+              Works on Windows, Linux, and OSX.
+            </li>
+          </ul>
+        </li>
+        <li>
+          Use a transparently encrypted filesystem to interact with the host system.
+          <ul>
+            <li>
+              Not done.
+            </li>
+          </ul>
+        </li>
+        <li>
+          Option to use BRB in a thread as an in-I2P replacement for
+          <code>
+            mibbit
+          </code>
+          IRC client.
+          <ul>
+            <li>
+              Works on Windows, Linux, OSX
+            </li>
+          </ul>
+        </li>
+      </ol>
+      <h3>
+        Usage as a Library
+      </h3>
+      <p>
+        <a href="https://pkg.go.dev/i2pgit.org/idk/i2p.plugins.tor-manager">
+          More information at the GoDoc
+        </a>
+      </p>
+      <p>
+        This is also useful as a library for downloading a Tor Browser Bundle. This API
+        isn&rsquo;t really stable, more &ldquo;stabilizing.&rdquo; Feel free to use it, but it may still
+        change a little.
+      </p>
+      <p>
+        To create a new instance, use:
+      </p>
+      <pre><code class="language-Go">client, err = tbserve.NewClient(*verbose, *lang, *system, *arch, &amp;content)
 </code></pre>
-    <p>
-      Customize the client using the exposed variables and methods:
-    </p>
-    <pre><code>client.Host = *host
+      <p>
+        Customize the client using the exposed variables and methods:
+      </p>
+      <pre><code class="language-Go">client.Host = *host
 client.Port = *port
 client.TBS.Profile = &amp;content
 client.TBS.PassThroughArgs = flag.Args()
 </code></pre>
-    <p>
-      And serve the controller:
-    </p>
-    <pre><code>if err := client.Serve(); err != nil {
+      <p>
+        And serve the controller:
+      </p>
+      <pre><code class="language-Go">if err := client.Serve(); err != nil {
   log.Fatal(err)
 }
 </code></pre>
-    <h3>
-      Similar Projects:
-    </h3>
-    <ul>
-      <li>
-        <a href="https://github.com/micahflee/torbrowser-launcher" rel="nofollow">
-          https://github.com/micahflee/torbrowser-launcher
+      <h3>
+        Similar Projects:
+      </h3>
+      <ul>
+        <li>
+          <a href="https://github.com/micahflee/torbrowser-launcher">
+            https://github.com/micahflee/torbrowser-launcher
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/whonix/tb-updater">
+            https://github.com/whonix/tb-updater
+          </a>
+        </li>
+        <li>
+          Probably about 200 or so bespoke scripts written and abandoned by hackers over the years, search github
+        </li>
+      </ul>
+      <h4>
+        Why this is Better than those projects(A.K.A Why didn&rsquo;t you just use&hellip;)
+      </h4>
+      <h5>
+        <a href="https://github.com/micahfleee/torbrowser-launcher">
+          TorBrowser Launcher
         </a>
-      </li>
-      <li>
-        <a href="https://github.com/whonix/tb-updater" rel="nofollow">
-          https://github.com/whonix/tb-updater
-        </a>
-      </li>
-      <li>
-        Probably about 200 or so bespoke scripts written and abandoned by hackers over the years, search github
-      </li>
-    </ul>
-    <h4>
-      Why this is Better than those projects(A.K.A Why didn’t you just use…)
-    </h4>
-    <h5>
-      <a href="https://github.com/micahfleee/torbrowser-launcher" rel="nofollow">
-        TorBrowser Launcher
-      </a>
-    </h5>
-    <p>
-      i2p.plugins.tor-manager is in many ways a clone of Tor Browser Launcher by Micah Lee,
-      it reproduces all of TBL’s functionality for downloading, verifying, and running
-      Tor Browser. In particular Micah’s project deserves credit for the AppArmor profiles,
-      which were used in the apparmor profile generator functionality and will probably
-      continue to be the upstream example which I use in my code. Micah’s also already got
-      a PPA, a FlatPak, a Snap, an
-      <code>
-        .rpm
-      </code>
-      and a bunch of other stuff that provides, through
-      packaging, a better way to deal with updates to his software and a better way to deal
-      with the supply chain for many users. There is no reason that
-      <code>
-        i2p.plugins.tor-manager
-      </code>
-      cannot do this, in fact it’s easier for us than it is for Micah, but this project is
-      about a month and a half old and his is several years old. I haven’t done a bunch of
-      packages yet.
-    </p>
-    <p>
-      Improvements on Tor Browser Launcher include:
-    </p>
-    <ul>
-      <li>
-        Does not require GPG to be in the
+      </h5>
+      <p>
+        i2p.plugins.tor-manager is in many ways a clone of Tor Browser Launcher by Micah Lee,
+        it reproduces all of TBL&rsquo;s functionality for downloading, verifying, and running
+        Tor Browser. In particular Micah&rsquo;s project deserves credit for the AppArmor profiles,
+        which were used in the apparmor profile generator functionality and will probably
+        continue to be the upstream example which I use in my code. Micah&rsquo;s also already got
+        a PPA, a FlatPak, a Snap, an
         <code>
-          $PATH
+          .rpm
         </code>
-        or on the system at all
-      </li>
-      <li>
-        Capable of managing a long-running Tor service without also running the Tor Browser
-      </li>
-      <li>
-        Works everywhere Tor Browser does, not just Linux. Including:
-        Linux, Mac, Windows, AMD64, X86, and M1
-      </li>
-      <li>
-        Embeds all required resources into a single binary which unpacks itself to a directory
-        of the user’s choice. Never touches any other directory(in ~/.cache or ~/.local, etc),
-        unless specifically instructed to.
-      </li>
-      <li>
-        Easy to package by placing a single static binary into a boilerplate package.
-      </li>
-      <li>
-        Automatically generate an AppArmor profile which works for custom installation directory
-      </li>
-      <li>
-        Accepts a custom profile argument without interfering with normal Tor Browser
-        functionality.
-      </li>
-      <li>
-        Bundles a “Extra” profiles for I2P browsing, non-Anonymous browsing, and
-        offline/localhost-only browsing.
-      </li>
-      <li>
-        Automatically organize multiple Tor Browser profiles for different networks(I2P,
-        Clearnet) and discourage accidental mixing.
-      </li>
-      <li>
-        Optional TAILS mode, adds uBlock Origin to Tor Browser
-      </li>
-      <li>
-        Embeds an I2P router in case the host system doesn’t have an I2P router
-      </li>
-      <li>
-        Encrypt the working directory automatically when it’s not in use.
-      </li>
-      <li>
-        No python. Language wars are stupid, but so is python.
-      </li>
-    </ul>
-    <p>
-      Things Tor Browser Launcher does that this does not(yet):
-    </p>
-    <ul>
-      <li>
-        Micah went to far greater effort to assure that TPO’s HTTPS certificate was
-        authentic and avoid the Certificate Authority/PKI system. As a result, CA’s are
-        untrusted entities when downloading from the default Tor Project site. This is
-        probably a pretty good idea.
-      </li>
-      <li>
-        This application does not offer a choice of downloading Tor Browser over the
-        clearnet if there is literally any other option available to it. This is roughly equivalent
-        to downloading Tor Browser over system Tor being always on in Tor Browser Launcher.
-      </li>
-      <li>
-        This application does not play dial-up noises.
-      </li>
-    </ul>
-    <h4>
-      <a href="https://github.com/whonix/tb-updater" rel="nofollow">
-        TB-Updater(Whonix)
-      </a>
-    </h4>
-    <p>
-      tb-updater is generally only useful on Linux systems and especially Debian-based systems,
-      and only recieves serious testing within the Whonix system itself. It’s a highly specialized
-      tool in some ways, depending on packages which must be installed and repositories which must
-      be configured. For their purposes, this is probably a good thing, Whonix’s raison d’etre is
-      to carefully configure every aspect of their system to be as anonymous and secure as possible,
-      and their approach deals with supply-chain issues which
-      <code>
-        i2p.plugins.tor-manager
-      </code>
-      can only
-      deal with in
-      <strong>
-        packaging
-      </strong>
-      and not by adding features to the launcher itself. Therefore, while
-      most of the improvements on Tor Browser Launcher also apply to TB-Updater, the
-      <code>
-        i2p.plugins.tor-manager
-      </code>
-      and
-      <code>
-        tb-launcher
-      </code>
-      are actually less directly comparable.
-    </p>
-    <p>
-      <a href="https://www.flaticon.com/free-icons/garlic" title="garlic icons" rel="nofollow">
-        Garlic icons created by Icongeek26 - Flaticon
-      </a>
-      <a href="https://www.flaticon.com/free-icons/onion" title="onion icons" rel="nofollow">
-        Onion icons created by Freepik - Flaticon
-      </a>
-      <a href="https://www.flaticon.com/free-icons/search" title="search icons" rel="nofollow">
-        Search icons created by Freepik - Flaticon
-      </a>
-      <a href="https://www.flaticon.com/free-icons/offline" title="offline icons" rel="nofollow">
-        Offline icons created by Flat Icons - Flaticon
-      </a>
-    </p>
-    <h3>
-      More Screenshots:
-    </h3>
-    <ul>
-      <li>
-        <img src="screenshot.png" alt="Screenshot"/>
-      </li>
-      <li>
-        <img src="screenshot-dark.png" alt="Screenshot"/>
-      </li>
-    </ul>
-    <div>
-      <a href="#show">
-        Show license
-      </a>
-      <div id="show">
-        <div id="hide">
-          <pre><code>MIT License
+        and a bunch of other stuff that provides, through
+        packaging, a better way to deal with updates to his software and a better way to deal
+        with the supply chain for many users. There is no reason that
+        <code>
+          i2p.plugins.tor-manager
+        </code>
+        cannot do this, in fact it&rsquo;s easier for us than it is for Micah, but this project is
+        about a month and a half old and his is several years old. I haven&rsquo;t done a bunch of
+        packages yet.
+      </p>
+      <p>
+        Improvements on Tor Browser Launcher include:
+      </p>
+      <ul>
+        <li>
+          Does not require GPG to be in the
+          <code>
+            $PATH
+          </code>
+          or on the system at all
+        </li>
+        <li>
+          Capable of managing a long-running Tor service without also running the Tor Browser
+        </li>
+        <li>
+          Works everywhere Tor Browser does, not just Linux. Including:
+          Linux, Mac, Windows, AMD64, X86, and M1
+        </li>
+        <li>
+          Embeds all required resources into a single binary which unpacks itself to a directory
+          of the user&rsquo;s choice. Never touches any other directory(in ~/.cache or ~/.local, etc),
+          unless specifically instructed to.
+        </li>
+        <li>
+          Easy to package by placing a single static binary into a boilerplate package.
+        </li>
+        <li>
+          Automatically generate an AppArmor profile which works for custom installation directory
+        </li>
+        <li>
+          Accepts a custom profile argument without interfering with normal Tor Browser
+          functionality.
+        </li>
+        <li>
+          Bundles a &ldquo;Extra&rdquo; profiles for I2P browsing, non-Anonymous browsing, and
+          offline/localhost-only browsing.
+        </li>
+        <li>
+          Automatically organize multiple Tor Browser profiles for different networks(I2P,
+          Clearnet) and discourage accidental mixing.
+        </li>
+        <li>
+          Optional TAILS mode, adds uBlock Origin to Tor Browser
+        </li>
+        <li>
+          Embeds an I2P router in case the host system doesn&rsquo;t have an I2P router
+        </li>
+        <li>
+          Encrypt the working directory automatically when it&rsquo;s not in use.
+        </li>
+        <li>
+          No python. Language wars are stupid, but so is python.
+        </li>
+      </ul>
+      <p>
+        Things Tor Browser Launcher does that this does not(yet):
+      </p>
+      <ul>
+        <li>
+          Micah went to far greater effort to assure that TPO&rsquo;s HTTPS certificate was
+          authentic and avoid the Certificate Authority/PKI system. As a result, CA&rsquo;s are
+          untrusted entities when downloading from the default Tor Project site. This is
+          probably a pretty good idea.
+        </li>
+        <li>
+          This application does not offer a choice of downloading Tor Browser over the
+          clearnet if there is literally any other option available to it. This is roughly equivalent
+          to downloading Tor Browser over system Tor being always on in Tor Browser Launcher.
+        </li>
+        <li>
+          This application does not play dial-up noises.
+        </li>
+      </ul>
+      <h4>
+        <a href="https://github.com/whonix/tb-updater">
+          TB-Updater(Whonix)
+        </a>
+      </h4>
+      <p>
+        tb-updater is generally only useful on Linux systems and especially Debian-based systems,
+        and only recieves serious testing within the Whonix system itself. It&rsquo;s a highly specialized
+        tool in some ways, depending on packages which must be installed and repositories which must
+        be configured. For their purposes, this is probably a good thing, Whonix&rsquo;s raison d&rsquo;etre is
+        to carefully configure every aspect of their system to be as anonymous and secure as possible,
+        and their approach deals with supply-chain issues which
+        <code>
+          i2p.plugins.tor-manager
+        </code>
+        can only
+        deal with in
+        <strong>
+          packaging
+        </strong>
+        and not by adding features to the launcher itself. Therefore, while
+        most of the improvements on Tor Browser Launcher also apply to TB-Updater, the
+        <code>
+          i2p.plugins.tor-manager
+        </code>
+        and
+        <code>
+          tb-launcher
+        </code>
+        are actually less directly comparable.
+      </p>
+      <p>
+        <a href="https://www.flaticon.com/free-icons/garlic" title="garlic icons">
+          Garlic icons created by Icongeek26 - Flaticon
+        </a>
+        <a href="https://www.flaticon.com/free-icons/onion" title="onion icons">
+          Onion icons created by Freepik - Flaticon
+        </a>
+        <a href="https://www.flaticon.com/free-icons/search" title="search icons">
+          Search icons created by Freepik - Flaticon
+        </a>
+        <a href="https://www.flaticon.com/free-icons/offline" title="offline icons">
+          Offline icons created by Flat Icons - Flaticon
+        </a>
+      </p>
+      <h3>
+        More Screenshots:
+      </h3>
+      <ul>
+        <li>
+          <img src="screenshot.png" alt="Screenshot" />
+        </li>
+        <li>
+          <img src="screenshot-dark.png" alt="Screenshot" />
+        </li>
+      </ul>
+      <div id="sourcecode">
+        <span id="sourcehead">
+          <strong>
+            Get the source code:
+          </strong>
+        </span>
+        <ul>
+          <li>
+            <a href="https://github.com/eyedeekay/i2p.plugins.tor-manager.git">
+              Source Repository: (https://github.com/eyedeekay/i2p.plugins.tor-manager.git)
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <a href="#show">
+          Show license
+        </a>
+        <div id="show">
+          <div id="hide">
+            <pre><code>MIT License
 
 Copyright (c) 2022 idk, The Invisible Internet Project
 
@@ -7797,9 +7843,10 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
   This Source Code Form is "Incompatible With Secondary Licenses", as
   defined by the Mozilla Public License, v. 2.0.
 </code></pre>
-          <a href="#hide">
-            Hide license
-          </a>
+            <a href="#hide">
+              Hide license
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -7808,6 +7855,7 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
     </div>
     <div>
       <a href="https://geti2p.net/">
+        <img class="i2plogo" src="i2plogo.png"></img>
         I2P
       </a>
     </div>
