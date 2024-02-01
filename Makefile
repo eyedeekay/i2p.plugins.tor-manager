@@ -228,18 +228,6 @@ upload-bsd:
 upload-all: upload-windows upload-linux upload-osx upload-bsd upload-portable-zip appimage-upload flatpak-upload
 
 download-su3s:
-	GOOS=windows GOARCH=amd64 make download-single-su3
-	GOOS=windows GOARCH=386 make download-single-su3
-	GOOS=linux GOARCH=amd64 make download-single-su3
-	GOOS=linux GOARCH=arm64 make download-single-su3
-	GOOS=linux GOARCH=386 make download-single-su3
-	GOOS=darwin GOARCH=amd64 make download-single-su3
-	GOOS=darwin GOARCH=arm64 make download-single-su3
-#	GOOS=freebsd GOARCH=amd64 make download-single-su3
-#	GOOS=openbsd GOARCH=amd64 make download-single-su3
-
-download-single-su3:
-	wget-ds "https://github.com/$(USER_GH)/$(BINARY)/releases/download/$(VERSION)/$(BINARY)-$(GOOS)-$(GOARCH).su3"
 
 early-release: clean linux windows version upload-linux upload-windows
 
